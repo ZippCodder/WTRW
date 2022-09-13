@@ -8,11 +8,23 @@ Welcome to the real world: An open world game where players can participate in v
 
 
 ### Laws and Legislation
-  The in-game society runs by realistic laws. If broken the player will face realistic penalties based on the law broken. Laws are ranked by levels based on severity and each level entails the same fine for each law under it's umbrella, however jail time may vary. All laws and their ranks are listed below.
+  The in-game society runs by realistic laws. If broken the player will face realistic penalties based on the law broken. Laws are ranked by levels based on severity and each level entails the same fine for each law under it's umbrella, however jail time may vary. If the corresponding fine is paid by the player who broke it, they will be completely absolved of all related penalties. Otherwise the player is required to serve the corresponding time in jail based on the crime committed. All laws, their ranks and their penalties are listed below.
 
-1. Level One
-- Theft (6 Months)
-- Selling or use of illegal drugs
-- Tresspassing
+1. Level One: (25000 dollar fine)
 
-2. Level Two
+- Theft (3 months)
+- Selling or use of illegal drugs (5 months)
+- Tresspassing (7 Months)
+
+2. Level Two: (50000 dollar fine)
+
+- Breaking and entering (10 months)
+- Carrying illegal wepons (1 year)
+- Harassment and Stalking (2 years)
+
+3. Level Three: (100000 dollar fine)
+
+- Fraud (3 years)
+- False crime reporting (3 years) 
+- Battery (5 years)
+- Murder (10 years)
