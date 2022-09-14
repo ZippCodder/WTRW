@@ -8,6 +8,12 @@ Welcome to the real world: An open world game where players can participate in v
   
 Each class has a specific amount of "study hours" that the player must spend being in the classroom of that class inside the college. The player can attend class whenever and however long they desire in intervals, however wont be granted the diploma for that class unless they eventually complete the required study hours for that class. Within these classrooms the player will find textbooks corresponding to the associated subject, which they can read. Once the required amount of study hours is completed the player will be required to take a test with questions related to subjects found in the textbooks. If the player passes the test, they will be granted a diploma. Otherwise, they will have to redo the study hours and retake the test. The amount of study hours needed and the amount of questions on the final test vary depending on the subject. Below is a list of all college classes, their corresponding job oportunities and their study hours.
 
+1. English
+2. Math
+3. Science
+4. Social Studies
+5. Technology 
+
 ### Jobs and Employment
 
   Player's have the ability to earn money, the primary way of doing this is by applying to a job. Within a player's phone they can find a job listing application. By opening this app the player will have a list of all avaliable jobs in the city, their locations, their worker requirements, job description, salary and their required credentials, such as a diploma or driver's license. The player can then apply to any of the jobs listed in the app by going to it's building and speaking with the designated NPC at the front desk. There the player can request to apply for the job and submit their CV. 
@@ -21,6 +27,11 @@ Once a player is hired, the will receive a "contract", which will contain inform
 - Minimum tasks 
 
 The "daily work hours" is the minimum amount of in-game hours the player must spend in their place of work per day in order to stay employeed. If the player misses 24 work hours after any given period of time, they will be terminated. Players will received their respective salary (specified in the contract) everyday after completing their work hours, however the precentage they receive of their salary once the work hours are completed depends on the amount of tasks they do that day compared to the job's "minimum tasks". Each job has a minimum amount of tasks per day, which specifies the minimum amount of times the player must complete their task (specified in the job description) in order to receive their full salary for that day. If the "minimum tasks" isn't met on a given day, the player's pay will decrease based on the percentage of the minimum tasks they completed. Below is a list of all job types (there can be multiple jobs with the same type).
+
+- English
+- Math 
+- Science
+-  
 
 1. Food Service
 2. Retail
