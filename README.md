@@ -74,7 +74,7 @@ PIN changes are required in the case that another player steals the PIN number o
  
 15. **No murder**. This law prohibits players from killing other players without justification. This will be detected by the server and the appropiate bounty will be set on the offending player. This law dosen't apply to self defense.
   
-
+In the event that any of these laws are broken by a player, a "crime report" will be created either by the server, or by another player.
 
 1. **Level One**: (25000 dollar maximum fine)
 
