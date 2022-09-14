@@ -7,7 +7,7 @@ Welcome to the real world: An open world game where players can participate in v
 
   Players can enroll into an in-game college where they can study to gain credentials (a diploma) for a specific job title, allowing access to higher paying jobs within the game. The college consists of a number of subjects, each allowing access to certain types of jobs in the society that require a diploma in that subject. To enroll into the college under a certain subject, a player must physically enter the collage, and speak with the designated NPC at the front desk. The Player can optionally view information on the different subjects and the oportunities which they provide. They can then decide to enroll, where they can then select the class/subject they would like to enroll in, and fill out an application form.
   
-Each class has a specific amount of "study hours" that the player must spend being in the classroom of that class inside the college. The player can attend class whenever and however long they desire in intervals, however wont be granted the diploma for that class unless they eventually complete the required study hours for that class. Within these classrooms the player will find textbooks corresponding to the associated subject, which they can read. Once the required amount of study hours is completed the player will be required to take a test with questions related to subjects found in the textbooks. If the player passes the test, they will be granted a diploma. Otherwise, they will have to redo the study hours and retake the test. The amount of study hours needed and the amount of questions on the final test vary depending on the subject. Below is a list of all college classes, and their study hours.
+Each class has a specific amount of "study hours" that the player must spend being in the classroom of that class inside the college. The player can attend class whenever and however long they desire in intervals, however wont be granted the diploma for that class unless they eventually complete the required study hours for that class. Within these classrooms the player will find textbooks corresponding to the associated subject, which they can read. Once the required amount of study hours is completed the player will be required to take a test with questions related to subjects found in the textbooks. If the player passes the test, they will be granted a diploma. Otherwise, they will have to redo the study hours and retake the test. The amount of study hours needed and the amount of questions on the final test vary depending on the subject. Below is a list of all college classes, and their study hours. Classes with higher study hours will grant more valuble diplomas, allowing access to higher paying jobs.
 
 1. English - (15 hours)
 3. Social Studies - (25 hours)
@@ -29,15 +29,7 @@ Once a player is hired, the will receive a "contract", which will contain inform
 
 The "daily work hours" is the minimum amount of in-game hours the player must spend in their place of work per day in order to stay employeed. If the player misses 24 work hours after any given period of time, they will be terminated. Players will received their respective salary (specified in the contract) everyday after completing their work hours, however the precentage they receive of their salary once the work hours are completed depends on the amount of tasks they do that day compared to the job's "minimum tasks". Each job has a minimum amount of tasks per day, which specifies the minimum amount of times the player must complete their task (specified in the job description) in order to receive their full salary for that day. If the "minimum tasks" isn't met on a given day, the player's pay will decrease based on the percentage of the minimum tasks they completed. Below is a list of all job types (there can be multiple jobs with the same type).
 
-1. Food Service
-2. Retail
-3. General Service
-5. Law Enforcment
-6. Teaching
-7. Law
-8. Tech
-9. Software
-10. Writing
+
 
 ### Currency and Banking
   The in-game society runs on a currency (dollars) which each player is designated a certain amount of (5000) at conception. Each player has the ability to sell objects to other players through a personal store, in which they can display some of their belongings to be viewed and bought by other players. Players can also earn money by applying to a job and complying with it's nesessary requirments. 
