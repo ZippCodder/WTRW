@@ -74,9 +74,11 @@ PIN changes are required in the case that another player steals the PIN number o
  
 15. **No murder**. This law prohibits players from killing other players without justification. This will be detected by the server and the appropiate bounty will be set on the offending player. This law dosen't apply to self defense.
   
-In the event that any of these laws are broken by a player, a "crime report" will be created either by the server, or by another player.
+In the event that any of these laws are broken by a player, a "crime report" will be created either by the server, or by another player. Crime reports describe the crime committed and the player who commited them, and are sent to the "crime database" at the police station so that the reports can be processed by law enforcment. The game itself dosen't take action on crimes, but rather documents them through the mechanism of crime reports. Crime reports are stored in the crime database at the police station, where they will be distributed among players in law enforcment for them to take action on the crime. Once arrested by a player in law enforcment, an offending player will be prompted with the acusation against them, and the option plead either "innocent" or "guilty". 
 
-1. **Level One**: (25000 dollar maximum fine)
+If the player pleads "guilty" they will be sent to a jail cell, and will then have the option to pay a fine, or serve time in jail. If the fine is paid, the player is immediatley released and all charges are dropped, otherwise is they aren't able to pay the fine they must serve half the maximum jail time for the crime commited. However if the player pleads "guilty" they're sent to court where they'll be sentenced by a judge. If the player is truly innocent (in the case that a false crime report was filed against the player) the game will declare the player as innocent and immediately release them and drop all charges. If guilty the player will be prompted with the option to pay the fine, or serve a randomly generated amount of jail time between 0 and the maximum jail time for the crime.
+
+1. **Level One**: (25000 dollars)
 
 - Excessive public profanity (5 days)
 - Theft (3 weeks)
@@ -84,7 +86,7 @@ In the event that any of these laws are broken by a player, a "crime report" wil
 - Tresspassing (7 months)
 - Unlawful encarceration (7 months)
 
-2. **Level Two**: (50000 dollar maximum fine)
+2. **Level Two**: (50000 dollars)
 
 - Breaking and entering (10 months)
 - Carrying illegal wepons (1 year)
@@ -92,7 +94,7 @@ In the event that any of these laws are broken by a player, a "crime report" wil
 - Harassment and stalking (2 years)
 - Identity theft (2 years)
 
-3. **Level Three**: (100000 dollar maximum fine)
+3. **Level Three**: (100000 dollars)
 
 - Abuse of power (2 years)
 - False crime reporting (3 years) 
