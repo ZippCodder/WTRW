@@ -29,8 +29,6 @@ Once a player is hired, the will receive a "contract", which will contain inform
 
 The "daily work hours" is the minimum amount of in-game hours the player must spend in their place of work per day in order to stay employeed. If the player misses 24 work hours after any given period of time, they will be terminated. Players will received their respective salary (specified in the contract) everyday after completing their work hours, however the precentage they receive of their salary once the work hours are completed depends on the amount of tasks they do that day compared to the job's "minimum tasks". Each job has a minimum amount of tasks per day, which specifies the minimum amount of times the player must complete their task (specified in the job description) in order to receive their full salary for that day. If the "minimum tasks" isn't met on a given day, the player's pay will decrease based on the percentage of the minimum tasks they completed. Below is a list of all job types (there can be multiple jobs with the same type).
 
-
-
 ### Currency and Banking
   The in-game society runs on a currency (dollars) which each player is designated a certain amount of (5000) at conception. Each player has the ability to sell objects to other players through a personal store, in which they can display some of their belongings to be viewed and bought by other players. Players can also earn money by applying to a job and complying with it's nesessary requirments. 
   
@@ -76,9 +74,9 @@ PIN changes are required in the case that another player steals the PIN number o
  
 15. **No murder**. This law prohibits players from killing other players without justification. This will be detected by the server and the appropiate bounty will be set on the offending player. This law dosen't apply to self defense.
   
-Crimes are ranked by levels based on severity and each level entails the same fine for each crime under it's umbrella, however jail time may vary. If the corresponding fine is paid by the player who broke it, they will be completely absolved of all related penalties. Otherwise the player is required to serve the corresponding time in jail based on the crime committed. The legality of all crimes, their penalties and their fines can be changed by any player with the correct credentials who is trained in law with an in-game degree. All crimes their ranks and their penalties if broken are listed below. 
 
-1. **Level One**: (25000 dollar fine)
+
+1. **Level One**: (25000 dollar maximum fine)
 
 - Excessive public profanity (5 days)
 - Theft (3 weeks)
@@ -86,7 +84,7 @@ Crimes are ranked by levels based on severity and each level entails the same fi
 - Tresspassing (7 months)
 - Unlawful encarceration (7 months)
 
-2. **Level Two**: (50000 dollar fine)
+2. **Level Two**: (50000 dollar maximum fine)
 
 - Breaking and entering (10 months)
 - Carrying illegal wepons (1 year)
@@ -94,12 +92,10 @@ Crimes are ranked by levels based on severity and each level entails the same fi
 - Harassment and stalking (2 years)
 - Identity theft (2 years)
 
-3. **Level Three**: (100000 dollar fine)
+3. **Level Three**: (100000 dollar maximum fine)
 
 - Abuse of power (2 years)
 - False crime reporting (3 years) 
 - Battery (3 years)
 - Error of law (8 years)
 - Murder (10 years)
-
-Crime in the society is managed using a report system. Special reports called "crime reports" can be submitted if the game detects a law break, and can also be created by players by going to the police station and creating a crime report. The game will acknowledge and document these crimes, however no action will be taken on them by the game itself. These reports are listed in the crime database stored at the police station, and will be distributed among officers so that they can take action on the crimes. At the time of being arrested an offending player will be prompted with the option to plead "innocent" or "guilty". If the player pleads as guilty they will then have the option of paying the corresponding fine or serving time in jail. If the player pleads "innocent" they will then be subject to a court trial.
