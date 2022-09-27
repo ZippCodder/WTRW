@@ -101,3 +101,14 @@ If the player pleads "guilty" they will be sent to a jail cell, and will then ha
 - Battery (3 years)
 - Error of law (8 years)
 - Murder (10 years)
+
+## Misc
+
+### Objects and Props
+
+The game, as an open world features a number of objects that the player can collect and interect with to preform different activities, and each has their own significance or use. Below is a list of all interactable obejcts and collectable (can be placed in the player's inventory) objects in the game.
+
+* Chips
+* Soda 
+* Water 
+* Candy Bar
