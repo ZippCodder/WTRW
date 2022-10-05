@@ -1,0 +1,1216 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+       <meta meta name="viewport" content=
+            "width=device-width, user-scalable=no, initial-scale=1.0" />
+    <rel link="icon" href="/favicon.ico" />
+    <title>WTRW</title>
+    <style>
+        html,body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 0;
+        }
+
+        img {
+            display: none;
+        }
+
+        textarea {
+            position: absolute;
+            background: none;
+            top: 0;
+            left: 0;
+            border: none;
+            outline: none;
+            display: none;
+            color: black;
+            z-index: 1;
+            width: 25%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Make sure texture images are loaded -->
+    <img src="textures/MAIN_AVATAR_DEFAULT.png" id="avatar" />
+    <img src="textures/NXR_44_MAG.png" id="nxr44mag" />
+    <img src="textures/GP_K100.png" id="gpk100" />
+    <img src="textures/USP_45.png" id="usp45" />
+    <img src="textures/GLOCK_20.png" id="glock20" />
+    <img src="textures/KC_357.png" id="kc357" />
+    <img src="textures/joystick_disc.png" id="joystick_disc" />
+    <img src="textures/CAFE.png" id="cafe" />
+    <img src="textures/SUPERMARKET.png" id="supermarket" />
+    <img src="textures/GENERIC_APARTMENT.png" id="genericapartment" />
+    <img src="textures/MAIN_AVATAR_BLINKING.png" id="avatarblinking" />
+    <img src="textures/MAIN_AVATAR_WALKING_1.png" id="avatarwalking1" />
+    <img src="textures/MAIN_AVATAR_WALKING_2.png" id="avatarwalking2" />
+    <textarea></textarea>
+    <canvas></canvas>
+</body>
+<script type="module">
+    import {
+        draw,
+        distance,
+        aofb,
+        aisofb,
+        genObjectId,
+        random
+    } from "./lib.js";
+
+    // Setup...
+    window.onload = () => {
+        
+        /* MAIN SETUP */
+
+        const canvas = document.querySelector("canvas");
+        const gl = canvas.getContext("webgl");
+        gl.viewport(0, 0, window.innerWidth, window.innerHeight);
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        let log = document.querySelector("textarea");
+
+        // Main setup...
+        let vw = window.innerWidth,
+        vh = window.innerHeight;
+        let ma = Math.max(vw, vh);
+        let mi = Math.min(vw, vh);
+        let ra = ma/mi;
+        let xPercent;
+        let yPercent;
+        let movementDivFactor = 4;
+        let mapAnchor = {
+            x: 0,
+            y: 0
+        };
+
+        if (ma == vw) {
+            xPercent = 0.01+(0.01/ra);
+            yPercent = 0.01+(0.01*ra);
+        } else {
+            xPercent = 0.01+(0.01*ra);
+            yPercent = 0.01+(0.01/ra);
+        }
+
+        let pWidth = 2/xPercent;
+        let pHeight = 2/yPercent;
+
+        console.log(gl.getSupportedExtensions());
+        const ext = gl.getExtension("OES_vertex_array_object");
+
+        gl.enable(gl.BLEND);
+        gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+        const textureSources = {
+            avatar: document.querySelector("#avatar"),
+            joystick_disc: document.querySelector("#joystick_disc"),
+            building: document.querySelector("#building"),
+            glock43x: document.querySelector("#glock43x"),
+            krissvector: document.querySelector("#krissvector"),
+            nxr44mag: document.querySelector("#nxr44mag"),
+            gpk100: document.querySelector("#gpk100"),
+            usp45: document.querySelector("#usp45"),
+            glock20: document.querySelector("#glock20"),
+            kc357: document.querySelector("#kc357"),
+            cafe: document.querySelector("#cafe"),
+            supermarket: document.querySelector("#supermarket"),
+            genericapartment: document.querySelector("#genericapartment"),
+            avatarblinking: document.querySelector("#avatarblinking"),
+            avatarwalking1: document.querySelector("#avatarwalking1"),
+            avatarwalking2: document.querySelector("#avatarwalking2")
+        }
+
+        // main program
+
+        let vShaderSrc = `
+        #version 100
+
+        precision highp float;
+
+        attribute vec3 coords;
+        attribute vec2 tcoords;
+        attribute float textrUnit;
+
+        varying vec2 textrCoords;
+        varying float textr;
+
+        uniform float vw;
+        uniform float vh;
+
+        float ma = max(vw,vh);
+        float mi = min(vw,vh);
+        float ra = ma/mi;
+        float xPercent;
+        float yPercent;
+        float x;
+        float y;
+        mat2 rm;
+
+        uniform vec2 translation;
+        uniform float rotation;
+
+        void translate() {
+        x += translation.x;
+        y += translation.y;
+        }
+
+        void rotate() {
+
+        float tempX = x;
+
+        x = (cos(rotation)*x)+(-sin(rotation)*y);
+        y = (sin(rotation)*tempX)+(cos(rotation)*y);
+        }
+
+        void main() {
+
+        x = coords.x;
+        y = coords.y;
+
+        if (ma == vw) {
+        xPercent = 0.01+(0.01/ra);
+        yPercent = 0.01+(0.01*ra);
+        } else {
+        xPercent = 0.01+(0.01*ra);
+        yPercent = 0.01+(0.01/ra);
+        }
+
+        /* Pipeline Functions */
+
+        rotate();
+        translate();
+
+        x *= xPercent;
+        y *= yPercent;
+
+        gl_Position = vec4(x,y,coords.z,1.0);
+        textrCoords = tcoords;
+        textr = textrUnit;
+        }
+        `;
+
+        let fShaderSrc = `
+        #version 100
+
+        precision highp float;
+
+        uniform sampler2D textr1;
+        uniform sampler2D textr2;
+        varying vec2 textrCoords;
+        varying float textr;
+        int thing;
+
+        void main() {
+        vec4 texture = texture2D(textr1,textrCoords);
+        
+        if (textr == 0.0) {
+         texture = texture2D(textr1,textrCoords);
+        } else if (textr == 1.0) {
+            texture = texture2D(textr2,textrCoords);
+        }
+                   
+        gl_FragColor = texture;
+        }
+        `;
+
+        const vShader = gl.createShader(gl.VERTEX_SHADER);
+        gl.shaderSource(vShader, vShaderSrc);
+        gl.compileShader(vShader);
+        let vsLog = gl.getShaderInfoLog(vShader);
+        if (vsLog.length > 0) console.log(vsLog);
+
+        const fShader = gl.createShader(gl.FRAGMENT_SHADER);
+        gl.shaderSource(fShader, fShaderSrc);
+        gl.compileShader(fShader);
+        let fsLog = gl.getShaderInfoLog(fShader);
+        if (fsLog.length > 0) console.log(fsLog);
+
+        let program = gl.createProgram();
+        gl.attachShader(program, vShader);
+        gl.attachShader(program, fShader);
+
+        gl.linkProgram(program);
+        gl.useProgram(program);
+
+        const locations = {
+            vw: gl.getUniformLocation(program, "vw"),
+            vh: gl.getUniformLocation(program, "vh"),
+            textr1: gl.getUniformLocation(program, "textr1"),
+            textr2: gl.getUniformLocation(program, "textr2"),
+            coords: gl.getAttribLocation(program, "coords"),
+            tcoords: gl.getAttribLocation(program, "tcoords"),
+            textrUnit: gl.getAttribLocation(program, "textrUnit"),
+            translation: gl.getUniformLocation(program, "translation"),
+            rotation: gl.getUniformLocation(program, "rotation"),
+        }
+
+        gl.uniform1f(locations.vw, window.innerWidth);
+        gl.uniform1f(locations.vh, window.innerHeight);
+        gl.uniform1i(locations.textr2, 1);
+
+        /* CLASSES FOR CONSTRUCTING GAME ELEMENTS */
+
+        // Game element base class
+        class _Object_ {
+            constructor(vertices, imp, render = function() {}, width, height, initialX, initialY, initialRotation, type, name) {
+                this.vao = ext.createVertexArrayOES();
+                this.vertices = new Float32Array(vertices);
+                this.imp = imp.bind(this);
+                this.render = function () {
+                    if (this.preRender) this.preRender();
+                    render.bind(this)();
+                }
+                this.trans = {
+                    offsetX: initialX || 0,
+                    offsetY: initialY || 0,
+                    rotation: (initialRotation*Math.PI/180) || 0
+                }
+                this.width = width;
+                this.height = height;
+                this.id = genObjectId();
+                this.type = type;
+                this.name = name;
+                this.textures = [];
+
+                ext.bindVertexArrayOES(this.vao);
+                this.imp();
+            }
+
+            texture;
+            buffer;
+            segments;
+            obstacle;
+            pickup;
+
+            translate(x, y) {
+                this.trans.offsetX += x;
+                this.trans.offsetY += y;
+                gl.uniform2fv(locations.translation, [this.trans.offsetX, this.trans.offsetY]);
+            }
+
+            rotate(a) {
+                a = a*Math.PI/180;
+                this.trans.rotation = a;
+                gl.uniform1f(locations.rotation, this.trans.rotation);
+            }
+        }
+        
+             class Avatar {
+            constructor(initialX, initialY, initialRotation) {
+                this.vao = ext.createVertexArrayOES();
+                this.body = [[-4.46,4.48,1,0.10703125,0,0,4.1000000000000005,4.48,1,0.44140625000000006,0,0,-4.46,-4.08,1,0.10703125,0.66875,0,4.1000000000000005,4.48,1,0.44140625000000006,0,0,-4.46,-4.08,1,0.10703125,0.66875,0,4.1000000000000005,-4.08,1,0.44140625000000006,0.66875,0,3.7199999999999998,1.8800000000000008,1,0.4265625,0.203125,0,6.840000000000001,1.8800000000000008,1,0.5484375,0.203125,0,3.7199999999999998,-1.2399999999999998,1,0.4265625,0.446875,0,6.840000000000001,1.8800000000000008,1,0.5484375,0.203125,0,3.7199999999999998,-1.2399999999999998,1,0.4265625,0.446875,0,6.840000000000001,-1.2399999999999998,1,0.5484375,0.446875,0,-7.2,1.8800000000000008,1,0,0.203125,0,-4.08,1.8800000000000008,1,0.12187500000000001,0.203125,0,-7.2,-1.2399999999999998,1,0,0.446875,0,-4.08,1.8800000000000008,1,0.12187500000000001,0.203125,0,-7.2,-1.2399999999999998,1,0,0.446875,0,-4.08,-1.2399999999999998,1,0.12187500000000001,0.446875,0],[-4.46,4.48,1,0.10703125,0,0,4.1000000000000005,4.48,1,0.44140625000000006,0,0,-4.46,-4.08,1,0.10703125,0.66875,0,4.1000000000000005,4.48,1,0.44140625000000006,0,0,-4.46,-4.08,1,0.10703125,0.66875,0,4.1000000000000005,-4.08,1,0.44140625000000006,0.66875,0,3.7199999999999998,0.8800000000000008,1,0.4265625,0.28125,0,6.840000000000001,0.8800000000000008,1,0.5484375,0.28125,0,3.7199999999999998,-2.2399999999999998,1,0.4265625,0.525,0,6.840000000000001,0.8800000000000008,1,0.5484375,0.28125,0,3.7199999999999998,-2.2399999999999998,1,0.4265625,0.525,0,6.840000000000001,-2.2399999999999998,1,0.5484375,0.525,0,-7.2,2.880000000000001,1,0,0.125,0,-4.08,2.880000000000001,1,0.12187500000000001,0.125,0,-7.2,-0.2400000000000002,1,0,0.36875,0,-4.08,2.880000000000001,1,0.12187500000000001,0.125,0,-7.2,-0.2400000000000002,1,0,0.36875,0,-4.08,-0.2400000000000002,1,0.12187500000000001,0.36875,0],[-4.46,4.48,1,0.10703125,0,0,4.1000000000000005,4.48,1,0.44140625000000006,0,0,-4.46,-4.08,1,0.10703125,0.66875,0,4.1000000000000005,4.48,1,0.44140625000000006,0,0,-4.46,-4.08,1,0.10703125,0.66875,0,4.1000000000000005,-4.08,1,0.44140625000000006,0.66875,0,3.7199999999999998,2.880000000000001,1,0.4265625,0.125,0,6.840000000000001,2.880000000000001,1,0.5484375,0.125,0,3.7199999999999998,-0.2400000000000002,1,0.4265625,0.36875,0,6.840000000000001,2.880000000000001,1,0.5484375,0.125,0,3.7199999999999998,-0.2400000000000002,1,0.4265625,0.36875,0,6.840000000000001,-0.2400000000000002,1,0.5484375,0.36875,0,-7.2,0.8800000000000008,1,0,0.28125,0,-4.08,0.8800000000000008,1,0.12187500000000001,0.28125,0,-7.2,-2.2399999999999998,1,0,0.525,0,-4.08,0.8800000000000008,1,0.12187500000000001,0.28125,0,-7.2,-2.2399999999999998,1,0,0.525,0,-4.08,-2.2399999999999998,1,0.12187500000000001,0.525,0]];
+                
+                this.eyes = [[-2.88,3.58,1,0.16875,0.0703125,0,-0.6799999999999997,3.58,1,0.2546875,0.0703125,0,-2.88,1.6800000000000006,1,0.16875,0.21875,0,-0.6799999999999997,3.58,1,0.2546875,0.0703125,0,-2.88,1.6800000000000006,1,0.16875,0.21875,0,-0.6799999999999997,1.6800000000000006,1,0.2546875,0.21875,0,0.3200000000000003,3.58,1,0.29375,0.0703125,0,2.5200000000000005,3.58,1,0.3796875,0.0703125,0,0.3200000000000003,1.6800000000000006,1,0.29375,0.21875,0,2.5200000000000005,3.58,1,0.3796875,0.0703125,0,0.3200000000000003,1.6800000000000006,1,0.29375,0.21875,0,2.5200000000000005,1.6800000000000006,1,0.3796875,0.21875,0],[-2.88,3.58,1,0.16875,0.0703125,1,-0.6799999999999997,3.58,1,0.2546875,0.0703125,1,-2.88,1.6800000000000006,1,0.16875,0.21875,1,-0.6799999999999997,3.58,1,0.2546875,0.0703125,1,-2.88,1.6800000000000006,1,0.16875,0.21875,1,-0.6799999999999997,1.6800000000000006,1,0.2546875,0.21875,1,0.3200000000000003,3.58,1,0.29375,0.0703125,1,2.5200000000000005,3.58,1,0.3796875,0.0703125,1,0.3200000000000003,1.6800000000000006,1,0.29375,0.21875,1,2.5200000000000005,3.58,1,0.3796875,0.0703125,1,0.3200000000000003,1.6800000000000006,1,0.29375,0.21875,1,2.5200000000000005,1.6800000000000006,1,0.3796875,0.21875,1]];
+                
+                this.trans = {
+                    offsetX: initialX || 0,
+                    offsetY: initialY || 0,
+                    rotation: (initialRotation*Math.PI/180) || 0
+                }
+                this.width = 14.4;
+                this.height = 8.96;
+                this.bounds = {
+                    width: this.height,
+                    height: this.height
+                };
+
+                this.id = genObjectId();
+                this.playerId = genObjectId(20);
+                this.type = "avatar";
+                this.name = "avatar";
+                this.state = {
+                    speed: 1,
+                    walking: false,
+                    walkingInterval: undefined,
+                    blinkingInterval: setInterval(() => {
+                  if (this.state.position.eyes.texture === 0) {
+                      this.state.position.eyes.texture = 1;
+                      this.state.position.eyes.vertices = 1;
+                  } else {
+                      this.state.position.eyes.texture = 0;
+                      this.state.position.eyes.vertices = 0;
+                  }
+                }, 2000),
+                  position: {
+                    body: {
+                      texture: 0,
+                      vertices: 0
+                    },
+                    eyes: {
+                      texture: 0,
+                      vertices: 0
+                    }
+                  }
+                }
+                
+                this.textures = [];
+
+                ext.bindVertexArrayOES(this.vao);
+                
+                 this.buffer = gl.createBuffer();
+                gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
+                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([...this.body[this.state.position.body.vertices],...this.eyes[this.state.position.eyes.vertices]]), gl.STATIC_DRAW);
+
+                this.textures[0] = gl.createTexture();
+
+                gl.activeTexture(gl.TEXTURE0);
+                gl.bindTexture(gl.TEXTURE_2D, this.textures[0]);  
+                gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, textureSources.avatar);
+                gl.generateMipmap(gl.TEXTURE_2D);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+                
+                this.textures[1] = gl.createTexture();
+                
+                  gl.activeTexture(gl.TEXTURE1);
+                  gl.bindTexture(gl.TEXTURE_2D, this.textures[1]);
+                gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, textureSources.avatarblinking);
+                gl.generateMipmap(gl.TEXTURE_2D);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+                
+                 this.textures[2] = gl.createTexture();
+                 
+                  gl.activeTexture(gl.TEXTURE2);
+                  gl.bindTexture(gl.TEXTURE_2D, this.textures[2]);
+                gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, textureSources.avatarwalking1);
+                gl.generateMipmap(gl.TEXTURE_2D);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+                
+                 this.textures[3] = gl.createTexture();
+                 
+                  gl.activeTexture(gl.TEXTURE3);
+                  gl.bindTexture(gl.TEXTURE_2D, this.textures[3]);
+                gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, textureSources.avatarwalking2);
+                gl.generateMipmap(gl.TEXTURE_2D);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE); 
+
+                gl.vertexAttribPointer(locations.coords, 3, gl.FLOAT, false, 24, 0); // 20
+                gl.vertexAttribPointer(locations.tcoords, 2, gl.FLOAT, false, 24, 12);
+                gl.vertexAttribPointer(locations.textrUnit, 1, gl.FLOAT, false, 24, 20);
+                gl.enableVertexAttribArray(0);
+                gl.enableVertexAttribArray(1);
+                gl.enableVertexAttribArray(2);
+                gl.useProgram(program);
+            }
+
+            translate(x, y) {
+                this.trans.offsetX += x;
+                this.trans.offsetY += y;
+                gl.uniform2fv(locations.translation, [this.trans.offsetX, this.trans.offsetY]);
+            }
+
+            rotate(a) {
+                a = a*Math.PI/180;
+                this.trans.rotation = a;
+                gl.uniform1f(locations.rotation, this.trans.rotation);
+            }
+            
+            render() {
+                if (this.state.walking && !this.state.walkingInterval) { 
+                    this.state.walkingInterval = setInterval(() => {
+                        setTimeout(() => {
+                            this.state.position.body = {
+                                texture: 2,
+                                vertices: 1
+                            }
+                            setTimeout(() => {
+                            this.state.position.body = {
+                                texture: 0,
+                                vertices: 0
+                            }
+                            setTimeout(() => {
+                            this.state.position.body = {
+                                texture: 3,
+                                vertices: 2
+                            }
+                            setTimeout(() => {
+                            this.state.position.body = {
+                                texture: 0,
+                                vertices: 0
+                            }
+                        },80/this.state.speed);
+                        },80/this.state.speed);
+                        },80/this.state.speed);
+                        },80/this.state.speed);
+                    },320/this.state.speed);
+                } else if (!this.state.walking && this.state.walkingInterval) {
+                    clearInterval(this.state.walkingInterval);
+                    this.state.walkingInterval = undefined;
+                }
+                
+                 gl.uniform2fv(locations.translation, [this.trans.offsetX, this.trans.offsetY]);
+                gl.uniform1f(locations.rotation, this.trans.rotation);
+                ext.bindVertexArrayOES(this.vao);
+                gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
+                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([...this.body[this.state.position.body.vertices],...this.eyes[this.state.position.eyes.vertices]]), gl.STATIC_DRAW);
+                
+                gl.activeTexture(gl.TEXTURE0);
+                gl.bindTexture(gl.TEXTURE_2D, this.textures[this.state.position.body.texture]);
+                gl.activeTexture(gl.TEXTURE1);
+                gl.bindTexture(gl.TEXTURE_2D, this.textures[this.state.position.eyes.texture]);
+                gl.useProgram(program);
+                gl.drawArrays(gl.TRIANGLES, 0, 30);
+            }
+        }
+        
+        // Class for invisible barriers
+        class Barrier {
+            constructor(x,y,width,height) {
+                this.segments = [[0,0,width,height]];
+                
+                  this.trans = {
+                    offsetX: 0,
+                    offsetY: 0
+                  }
+                  
+                this.width = width;
+                this.height = height;
+                this.obstacle = true;
+                this.id = genObjectId();
+                
+                this.translate = function(x, y) {
+                this.trans.offsetX += x;
+                this.trans.offsetY += y;
+                }
+                
+                this.translate(x,y);
+            }
+        }
+        
+        // Invisible sensor for event triggers
+        class Sensor extends Barrier {
+            constructor(x,y,width,height,action) {
+              super(x,y,width,height);
+              this.action = action;
+            }
+        }
+        
+        // class for map creation
+        class _Map_ {
+            constructor(width, height, centerX = 0, centerY = 0) {
+                this.width = width;
+                this.height = height;
+                this.centerX = centerX;
+                this.centerY = centerY;
+
+                this.objects = {};
+                this.obstacles = {};
+                this.locations = {};
+                
+                this.barriers = [new Barrier(-(width/2),(height/2)+20,width,20),new Barrier(-(width/2),-(height/2),width,20),new Barrier(-(width/2)-20,height/2,20,height),new Barrier((width/2),height/2,20,height)];
+                
+                for (let i in this.barriers) {
+                    this.objects[this.barriers[i].id] = this.barriers[i];
+                    this.obstacles[this.barriers[i].id] = this.barriers[i];
+                }
+                
+                } 
+
+            render() {
+                for (let i in this.objects) {
+                   if (!(this.objects[i] instanceof Barrier)) this.objects[i].render();
+                }
+            }
+
+            link(obj) {
+                obj.map = this;
+                this.objects[obj.id] = obj;
+                if (obj.obstacle) this.obstacles[obj.id] = obj;
+            }
+
+            unlink(id) {
+                this.objects[id].map = undefined;
+                delete this.objects[id];
+                delete this.obstacles[id];
+            }
+
+            translate(x, y) {
+
+                for (let i in this.obstacles) {
+                    for (let segment of this.obstacles[i].segments) {
+
+                        let [ox,
+                            oy,
+                            ow,
+                            oh] = segment;
+
+                        ox = (0+ox)+this.obstacles[i].trans.offsetX;
+                        ox += ow/2;
+                        oy = (0-oy)+this.obstacles[i].trans.offsetY;
+                        oy += oh/2;
+                        oy -= Math.abs(oh);
+
+                         if ((Math.round(Math.abs($AVATAR.trans.offsetY-(oy))) < Math.round(($AVATAR.bounds.height/2)+(oh/2))) && (Math.abs($AVATAR.trans.offsetX-(ox-x)) < ($AVATAR.bounds.width/2)+(ow/2))) {
+                             if (!(this.obstacles[i] instanceof Sensor)) {
+                            let negative = (x < 0);
+                            x += Math.abs($AVATAR.trans.offsetX-ox)-(($AVATAR.bounds.width/2)+(ow/2)+x);
+                
+                            x = (negative) ? -x: x;
+                             } else {
+                                this.obstacles[i].action();
+                             }
+                        }                        
+            
+                        if ((Math.round(Math.abs($AVATAR.trans.offsetX-(ox))) < Math.round(($AVATAR.bounds.width/2)+(ow/2))) && (Math.abs($AVATAR.trans.offsetY-(oy-y)) < ($AVATAR.bounds.height/2)+(oh/2))) {
+                           if (!(this.obstacles[i] instanceof Sensor)) {
+                            let negative = (y < 0);
+                            y += Math.abs($AVATAR.trans.offsetY-oy)-(($AVATAR.bounds.height/2)+(oh/2)+y);
+                
+                            y = (negative) ? -y: y;
+                           } else {
+                              this.obstacles[i].action(); 
+                           }
+                        }
+                    }
+                }
+
+                 
+                 this.centerX += x;
+                 this.centerY += y;
+                 
+                for (let i in this.objects) {
+                    this.objects[i].translate(-x, -y);
+                }
+            }
+        }
+
+        class _Building_ extends _Object_ {
+            constructor(vertices, width, height, textureSrc, segments, initialX, initialY) {
+                super(vertices, function() {
+  
+                    this.buffer = gl.createBuffer();
+                    gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
+                    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);
+
+                    this.texture = gl.createTexture();
+
+                    gl.bindTexture(gl.TEXTURE_2D, this.texture);
+                    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureSrc);
+                    gl.generateMipmap(gl.TEXTURE_2D);
+                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+                    gl.vertexAttribPointer(locations.coords, 3, gl.FLOAT, false, 20, 0); // 20
+                    gl.vertexAttribPointer(locations.tcoords, 2, gl.FLOAT, false, 20, 12);
+                    gl.enableVertexAttribArray(0);
+                    gl.enableVertexAttribArray(1);
+                    gl.useProgram(program);
+                }, function() {
+
+                    gl.uniform2fv(locations.translation, [this.trans.offsetX, this.trans.offsetY]);
+                    gl.uniform1f(locations.rotation, this.trans.rotation);
+
+                    ext.bindVertexArrayOES(this.vao);
+                    gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
+                    gl.activeTexture(gl.TEXTURE0);
+                    gl.bindTexture(gl.TEXTURE_2D, this.texture);
+                    gl.useProgram(program);
+                    gl.drawArrays(gl.TRIANGLES, 0, this.vertices.length/5);
+                }, width, height, initialX, initialY);
+                this.textureSrc = textureSrc;
+                this.obstacle = true;
+                this.segments = segments;
+                this.type = "building";
+            }
+        }
+
+        class _Pickup_ extends _Object_ {
+            constructor(vertices, width, height, textureSrc, initialX, initialY) {
+                super(vertices, function() {
+                    
+                    this.buffer = gl.createBuffer();
+                    gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
+                    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);
+
+                    this.texture = gl.createTexture();
+
+                    gl.bindTexture(gl.TEXTURE_2D, this.texture);
+                    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureSrc);
+                    gl.generateMipmap(gl.TEXTURE_2D);
+                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+                    gl.vertexAttribPointer(locations.coords, 3, gl.FLOAT, false, 20, 0); // 20
+                    gl.vertexAttribPointer(locations.tcoords, 2, gl.FLOAT, false, 20, 12);
+                    gl.enableVertexAttribArray(0);
+                    gl.enableVertexAttribArray(1);
+                    gl.useProgram(program);
+                }, function() {
+                    gl.uniform2fv(locations.translation, [this.trans.offsetX, this.trans.offsetY]);
+                    gl.uniform1f(locations.rotation, this.trans.rotation);
+
+                    ext.bindVertexArrayOES(this.vao);
+                    gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
+                    gl.activeTexture(gl.TEXTURE0);
+                    gl.bindTexture(gl.TEXTURE_2D, this.texture);
+                    gl.useProgram(program);
+
+                    gl.drawArrays(gl.TRIANGLES, 0, this.vertices.length/5);
+                }, width, height, initialX, initialY, random(360));
+                this.type = "pickup";
+                this.textureSrc = textureSrc;
+                this.pickup = true;
+            }
+        }
+        
+          class _Prop_ extends _Object_ {
+            constructor(vertices, width, height, textureSrc, initialX, initialY, initialRotation) {
+                super(vertices, function() {
+                    
+                    this.buffer = gl.createBuffer();
+                    gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
+                    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);
+
+                    this.texture = gl.createTexture();
+
+                    gl.bindTexture(gl.TEXTURE_2D, this.texture);
+                    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureSrc);
+                    gl.generateMipmap(gl.TEXTURE_2D);
+                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+                    gl.vertexAttribPointer(locations.coords, 3, gl.FLOAT, false, 20, 0); // 20
+                    gl.vertexAttribPointer(locations.tcoords, 2, gl.FLOAT, false, 20, 12);
+                    gl.enableVertexAttribArray(0);
+                    gl.enableVertexAttribArray(1);
+                    gl.useProgram(program);
+                }, function() {
+                    gl.uniform2fv(locations.translation, [this.trans.offsetX, this.trans.offsetY]);
+                    gl.uniform1f(locations.rotation, this.trans.rotation);
+
+                    ext.bindVertexArrayOES(this.vao);
+                    gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
+                    gl.activeTexture(gl.TEXTURE0);
+                    gl.bindTexture(gl.TEXTURE_2D, this.texture);
+                    gl.useProgram(program);
+
+                    gl.drawArrays(gl.TRIANGLES, 0, this.vertices.length/5);
+                }, width, height, initialX, initialY, initialRotation);
+                this.textureSrc = textureSrc;
+                this.pickup = true;
+                this.type = "prop";
+            }
+        }
+        
+        /* GAME ELEMENTS */
+        
+        class Cafe extends _Building_ {
+            constructor(x, y) {
+                super([-40.2,30.2,1,0,0,40.2,30.2,1,0.78515625,0,-40.2,-12.2,1,0,0.4140625,40.2,30.2,1,0.78515625,0,-40.2,-12.2,1,0,0.4140625,40.2,-12.2,1,0.78515625,0.4140625,-38.2,-9.8,1,0.01953125,0.390625,38.2,-9.8,1,0.765625,0.390625,-38.2,-30.2,1,0.01953125,0.58984375,38.2,-9.8,1,0.765625,0.390625,-38.2,-30.2,1,0.01953125,0.58984375,38.2,-30.2,1,0.765625,0.58984375],80.4,60.4,textureSources.cafe,[[-40.2,-30.2,80.4,42.4],[-38.2,9.8,76.4,20.4]], x, y);
+                this.name = "cafe";
+            }
+        }
+        
+          class Supermarket extends _Building_ {
+            constructor(x, y) {
+                super([-62.2,26.2,1,0,0,62.2,26.2,1,0.607421875,0,-62.2,-8.2,1,0,0.3359375,62.2,26.2,1,0.607421875,0,-62.2,-8.2,1,0,0.3359375,62.2,-8.2,1,0.607421875,0.3359375,-60.2,-7.800000000000001,1,0.009765625,0.33203125,60.2,-7.800000000000001,1,0.59765625,0.33203125,-60.2,-26.2,1,0.009765625,0.51171875,60.2,-7.800000000000001,1,0.59765625,0.33203125,-60.2,-26.2,1,0.009765625,0.51171875,60.2,-26.2,1,0.59765625,0.51171875],124.4,52.4,textureSources.supermarket,[[-62.2,-26.2,124.4,34.4],[-60.2,7.8,120.4,18.4]], x, y);
+                this.name = "supermarket";
+            }
+        }
+        
+          class GenericApartment extends _Building_ {
+            constructor(x, y) {
+                super([-32.2,23,1,0,0,32.2,23,1,0.62890625,0,-32.2,-7.4,1,0,0.59375,32.2,23,1,0.62890625,0,-32.2,-7.4,1,0,0.59375,32.2,-7.4,1,0.62890625,0.59375,-30.200000000000003,-7,1,0.01953125,0.5859375,30.199999999999996,-7,1,0.609375,0.5859375,-30.200000000000003,-21.4,1,0.01953125,0.8671875,30.199999999999996,-7,1,0.609375,0.5859375,-30.200000000000003,-21.4,1,0.01953125,0.8671875,30.199999999999996,-21.4,1,0.609375,0.8671875,12.799999999999997,-21,1,0.439453125,0.859375,25.199999999999996,-21,1,0.560546875,0.859375,12.799999999999997,-26.4,1,0.439453125,0.96484375,25.199999999999996,-21,1,0.560546875,0.859375,12.799999999999997,-26.4,1,0.439453125,0.96484375,25.199999999999996,-26.4,1,0.560546875,0.96484375],64.4,46,textureSources.genericapartment,[[-32.2,-23,64.4,30.4],[-30.2,7,60.4,14.4]], x, y);
+                this.name = "generic apartment";
+            }
+        }
+        
+        class NXR_44_MAG extends _Pickup_ {
+            constructor(x, y) {
+                super([-6.85,3.4,1,0,0,6.85,3.4,1,0.53515625,0,-6.85,-3.4,1,0,0.53125,6.85,3.4,1,0.53515625,0,-6.85,-3.4,1,0,0.53125,6.85,-3.4,1,0.53515625,0.53125],13.7,6.8,textureSources.nxr44mag, x, y);
+                this.name = "nxr 44 mag";
+            }
+        }
+        
+         class GP_K100 extends _Pickup_ {
+            constructor(x, y) {
+                super([-7.35,3.05,1,0,0,7.35,3.05,1,0.57421875,0,-7.35,-3.05,1,0,0.953125,7.35,3.05,1,0.57421875,0,-7.35,-3.05,1,0,0.953125,7.35,-3.05,1,0.57421875,0.953125],14.7,6.1,textureSources.gpk100, x, y);
+                this.name = "gp k100";
+            }
+        }
+        
+         class USP_45 extends _Pickup_ {
+            constructor(x, y) {
+                super([-8.1,3.8800000000000003,1,0,0,8.1,3.8800000000000003,1,0.6328125,0,-8.1,-3.8800000000000003,1,0,0.6062500000000001,8.1,3.8800000000000003,1,0.6328125,0,-8.1,-3.8800000000000003,1,0,0.6062500000000001,8.1,-3.8800000000000003,1,0.6328125,0.6062500000000001],16.2,7.760000000000001,textureSources.usp45, x, y);
+                this.name = "usp 45";
+            }
+        }
+        
+          class GLOCK_20 extends _Pickup_ {
+            constructor(x, y) {
+                super([-4.33,3.05,1,0,0,4.33,3.05,1,0.6765625,0,-4.33,-3.05,1,0,0.953125,4.33,3.05,1,0.6765625,0,-4.33,-3.05,1,0,0.953125,4.33,-3.05,1,0.6765625,0.953125],8.66,6.1,textureSources.glock20, x, y);
+                this.name = "glock 20";
+            }
+        }
+        
+         class KC_357 extends _Pickup_ {
+            constructor(x, y) {
+                super([-4.2,2.75,1,0,0,4.2,2.75,1,0.65625,0,-4.2,-2.75,1,0,0.859375,4.2,2.75,1,0.65625,0,-4.2,-2.75,1,0,0.859375,4.2,-2.75,1,0.65625,0.859375],8.4,5.5,textureSources.kc357, x, y);
+                this.name = "kc 357";
+            }
+        }
+        
+        /* GAME CONTROL ELEMENTS */
+
+        class _Joystick_ extends _Object_ {
+            constructor(vertices, thumbVertices, imp, render, width, height, bWidth, bHeight) {
+                super(vertices, imp, render, width, height);
+                this.base = {
+                    x: 0,
+                    y: 0,
+                    width: width,
+                    height: height,
+                    anchored: false,
+                    radius: width/2
+                };
+                this.thumb = {
+                    x: 0,
+                    y: 0,
+                    width: bWidth,
+                    height: bHeight
+                };
+                this.thumbVertices = new Float32Array(thumbVertices);
+                this.distance = {
+                    x: 0,
+                    y: 0
+                };
+                this.rotation = undefined;
+                this.ratio = 0;
+                this.id = undefined;
+            }
+
+            unanchor() {
+                this.base.anchored = false;
+            }
+
+            translate(x, y) {
+                if (!this.base.anchored) {
+                    this.base.x = x - this.base.width/2;
+                    this.base.y = y - this.base.height/2;
+                    this.base.anchored = true;
+                }
+                this.thumb.x = x - this.thumb.width/2;
+                this.thumb.y = y - this.thumb.height/2;
+                this.distance.x = ((this.thumb.x+(this.thumb.width/2)) - (this.base.x+(this.base.width/2)))/movementDivFactor;
+                this.distance.y = ((this.thumb.y+(this.thumb.height/2)) - (this.base.y+(this.base.height/2)))/movementDivFactor;
+                this.rotation = Math.atan2((this.thumb.y+this.thumb.width/2)-(this.base.y+this.base.height/2), (this.thumb.x+this.thumb.width/2)-(this.base.x+this.base.width/2))-1.5708;
+                this.ratio = this.distance.x/this.distance.y;
+            }
+        }
+
+        // Left joystick
+        const $JOYSTICK_L = new _Joystick_([
+            0, 0, 1, 0, 0, 30, 0, 1, 1, 0, 0, 30, 1, 0, 1, 30, 0, 1, 1, 0, 0, 30, 1, 0, 1, 30, 30, 1, 1, 1
+        ], [0, 0, 1, 0, 0, 16.666666666666668, 0, 1, 1, 0, 0, 16.666666666666668, 1, 0, 1, 16.666666666666668, 0, 1, 1, 0, 0, 16.666666666666668, 1, 0, 1, 16.666666666666668, 16.666666666666668, 1, 1, 1], function() {
+
+            this.buffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
+
+            this.texture = gl.createTexture();
+            gl.bindTexture(gl.TEXTURE_2D, this.texture);
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureSources.joystick_disc);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+            gl.vertexAttribPointer(locations.coords, 3, gl.FLOAT, false, 20, 0);
+            gl.vertexAttribPointer(locations.tcoords, 2, gl.FLOAT, false, 20, 12);
+
+            gl.enableVertexAttribArray(0);
+            gl.enableVertexAttribArray(1);
+
+        }, function() {
+            if (this.base.anchored) {
+                ext.bindVertexArrayOES(this.vao);
+                gl.uniform2fv(locations.translation, [this.base.x, this.base.y]);
+                gl.uniform1f(locations.rotation, 0);
+    
+                gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
+                gl.bufferData(gl.ARRAY_BUFFER, this.vertices, gl.DYNAMIC_DRAW);
+                gl.activeTexture(gl.TEXTURE0);
+                gl.bindTexture(gl.TEXTURE_2D, this.texture);
+                gl.useProgram(program);
+                gl.drawArrays(gl.TRIANGLES, 0, 6);
+
+                gl.uniform2fv(locations.translation, [this.thumb.x, this.thumb.y]);
+                gl.bufferData(gl.ARRAY_BUFFER, this.thumbVertices, gl.DYNAMIC_DRAW);
+                gl.drawArrays(gl.TRIANGLES, 0, 6);
+
+                _MAP_.translate(this.distance.x/movementDivFactor, this.distance.y/movementDivFactor);
+                $AVATAR.trans.rotation = this.rotation;
+
+            }
+        },
+            30,
+            30,
+            16.66,
+            16.66);
+
+        // Right joystick
+        const $JOYSTICK_R = new _Joystick_([
+            0,
+            0,
+            1,
+            0,
+            0,
+            30,
+            0,
+            1,
+            1,
+            0,
+            0,
+            30,
+            1,
+            0,
+            1,
+            30,
+            0,
+            1,
+            1,
+            0,
+            0,
+            30,
+            1,
+            0,
+            1,
+            30,
+            30,
+            1,
+            1,
+            1
+        ],
+            [0,
+                0,
+                1,
+                0,
+                0,
+                16.666666666666668,
+                0,
+                1,
+                1,
+                0,
+                0,
+                16.666666666666668,
+                1,
+                0,
+                1,
+                16.666666666666668,
+                0,
+                1,
+                1,
+                0,
+                0,
+                16.666666666666668,
+                1,
+                0,
+                1,
+                16.666666666666668,
+                16.666666666666668,
+                1,
+                1,
+                1],
+            function() {
+
+                this.buffer = gl.createBuffer();
+                gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
+
+                this.texture = $JOYSTICK_L.texture;
+                gl.bindTexture(gl.TEXTURE_2D, this.texture);
+
+                gl.vertexAttribPointer(locations.coords, 3, gl.FLOAT, false, 20, 0);
+                gl.vertexAttribPointer(locations.tcoords, 2, gl.FLOAT, false, 20, 12);
+
+                gl.enableVertexAttribArray(0);
+                gl.enableVertexAttribArray(1);
+
+            },
+            function() {
+                if (this.base.anchored) {
+                    ext.bindVertexArrayOES(this.vao);
+                    gl.uniform2fv(locations.translation, [this.base.x, this.base.y]);
+                    gl.uniform1f(locations.rotation, 0);
+
+                    gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
+                    gl.bufferData(gl.ARRAY_BUFFER, this.vertices, gl.DYNAMIC_DRAW);
+                    gl.activeTexture(gl.TEXTURE0);
+                    gl.bindTexture(gl.TEXTURE_2D, this.texture);
+                    gl.useProgram(program);
+                    gl.drawArrays(gl.TRIANGLES, 0, 6);
+
+                    gl.uniform2fv(locations.translation, [this.thumb.x, this.thumb.y]);
+                    gl.bufferData(gl.ARRAY_BUFFER, this.thumbVertices, gl.DYNAMIC_DRAW);
+                    gl.drawArrays(gl.TRIANGLES, 0, 6);
+
+                    $AVATAR.trans.rotation = this.rotation;
+                }
+            },
+            30,
+            30,
+            16.66,
+            16.66);
+            
+        /* MAIN ELEMENT CLASSES */
+
+       let $AVATAR = new Avatar();
+
+        /* INSTANTIATE INITIAL MAP */
+
+        let $CURRENT_MAP = new _Map_(500,
+            500);
+
+        /* RENDERING PIPELINE FUNCTIONS */
+
+        const _CONTROLS_ = [];
+        _CONTROLS_.push($JOYSTICK_L);
+        _CONTROLS_.push($JOYSTICK_R);
+
+        let _MAP_ = $CURRENT_MAP;
+
+        const _OBJECTS_ = [];
+        _OBJECTS_.push($AVATAR);
+
+        function renderObjects() {
+            _OBJECTS_.forEach(v => {
+                v.render();
+            });
+        }
+
+        function renderControls() {
+            _CONTROLS_.forEach(v => {
+                v.render();
+            });
+        }
+
+        function init() {
+            gl.clear(gl.COLOR_BUFFER_BIT);
+            _MAP_?.render();
+            renderObjects();
+            renderControls();
+            requestAnimationFrame(init);
+        }
+
+         init();
+
+        /* MOVEMENT PROCESSING */
+
+        function moveJoystick(e) {
+
+            // keep joystick thumb in bounds...
+
+            /*
+        FORMULA FOR FINDING POINT ALONG SEGMENT GIVEN distance
+        dt = distance between first point and middle point
+        d = distance between original points of segment
+        t = dt/d
+        xt = ((1-t)*x0 + (t*x1))
+        yt = ((1-t)*y0 + (t*y1))
+        */
+
+            let coords0 = e.touches[0], coords1 = e.touches[1];
+
+            if ($JOYSTICK_L.anchored) {
+                configure($JOYSTICK_L);
+            } else {
+                for (let i = 0; i < 2; i++) {
+                    if (e.touches[i]?.clientX < window.innerWidth/2 && (e.touches[i]?.identifier !== $JOYSTICK_R.id)) {
+                        // activate avatar walking
+                        $AVATAR.state.walking = true;
+                        
+                        $JOYSTICK_L.id = e.touches[i].identifier;
+                        configure($JOYSTICK_L);
+                        break;
+                    }
+                }
+            }
+
+            if ($JOYSTICK_R.anchored) {
+                configure($JOYSTICK_R);
+            } else {
+                for (let i = 0; i < 2; i++) {
+                    if (e.touches[i]?.clientX > window.innerWidth/2 && (e.touches[i]?.identifier !== $JOYSTICK_L.id)) {
+                        $JOYSTICK_R.id = e.touches[i].identifier;
+                        configure($JOYSTICK_R);
+                        break;
+                    }
+                }
+            }
+
+            function configure(stick) {
+
+                let touch;
+
+                for (let i = 0; i < 2; i++) {
+                    if (e.touches[i]?.identifier === stick.id) {
+                        touch = e.touches[i];
+                        break;
+                    }
+                }
+
+                let pageX = touch.clientX;
+                let pageY = touch.clientY;
+                let pX = aofb(aisofb(pageX, window.innerWidth), pWidth)-(pWidth/2);
+                let pY = aofb(100-aisofb(pageY, window.innerHeight), pHeight)-(pHeight/2);
+
+                if (stick.base.anchored) {
+                    let {
+                        width,
+                        height,
+                        x,
+                        y,
+                        radius
+                    } = stick.base;
+                    x += width/2;
+                    y += height/2;
+
+                    let d = distance(x, y, pX, pY),
+                    t = radius/d;
+
+                    if (d > radius) {
+                        pX = (((1-t)*x)+(t*pX));
+                        pY = (((1-t)*y)+(t*pY));
+                    }
+                }
+
+                stick.translate(pX, pY);
+            }
+
+        }
+
+        window.addEventListener("touchstart", moveJoystick);
+        window.addEventListener("touchmove", moveJoystick);
+
+        window.addEventListener("touchend", (e) => {
+            let uL = false, uR = false;
+
+            for (let i = 0; i < 2; i++) {
+                if (e.touches[i]?.identifier === $JOYSTICK_L.id) {
+                    uL = true;
+                }
+                if (e.touches[i]?.identifier === $JOYSTICK_R.id) {
+                    uR = true;
+                }
+            }
+
+            if (!uL) {
+                // deactivate avatar walking
+                $AVATAR.state.walking = false;
+                $JOYSTICK_L.unanchor();
+                $JOYSTICK_L.id = undefined;
+            }
+            if (!uR) {
+                $JOYSTICK_R.unanchor();
+                $JOYSTICK_R.id = undefined;
+            }
+        });
+
+        /* DEVELOPER COMMAND CONSOLE */
+        
+        function enableConsole() {
+            let comms = [], commIndex, inputs = [];
+
+            function activateConsole() {
+                log.addEventListener("keydown",
+                    (e) => {
+                        if (e.key === "Enter") {
+                            e.preventDefault();
+                            comms.push(log.value.split(">").at(-1));
+                            inputs.push(log.value.split(">").at(-1));
+                            log.value = "";
+                            commIndex = inputs.length;
+
+                            if (inputs.at(-1).trim() === "clear") {
+                                comms = [];
+                                log.value = "";
+                                log.value += "\n>";
+                                comms.push("\n>");
+                                log.setSelectionRange(log.value.length, log.value.length, "forward");
+                            } else {
+                                try {
+                                    let output = "\n"+JSON.stringify(eval(comms.at(-1)));
+                                    comms.push(output);
+                                    console.log(comms);
+                                } catch (err) {
+                                    comms.push("\n"+err);
+                                }
+
+                                for (let i of comms) {
+                                    log.value += i;
+                                }
+
+                                log.value += "\n>";
+                                comms.push("\n>");
+                                log.setSelectionRange(log.value.length, log.value.length, "forward");
+                            }
+                        } else if (e.key === "ArrowUp") {
+                            e.preventDefault();
+                            commIndex--;
+
+                            log.value = "";
+                            for (let i of comms) {
+                                log.value += i;
+                            }
+                            log.value += inputs[commIndex];
+                        } else if (e.key === "ArrowDown") {
+                            e.preventDefault();
+                            commIndex++;
+
+                            log.value = "";
+                            for (let i of comms) {
+                                log.value += i;
+                            }
+                            log.value += inputs[commIndex];
+                        }
+                    });
+            }
+
+            activateConsole();
+
+            window.addEventListener("keydown",
+                (e) => {
+                    if (e.key === "`") {
+                        console.log("Developer console active.");
+                        if (log.style.display === "block") {
+                            log.style.display = "none";
+                            log.blur();
+                        } else {
+                            log.style.display = "block";
+                            log.focus();
+                            log.value += "\n>";
+                            comms.push("\n>");
+                        }
+                    }
+                });
+        }
+
+        enableConsole();
+    }
+</script>
+</html>
