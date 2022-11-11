@@ -112,3 +112,26 @@ The game, as an open world features a number of objects that the player can coll
 * Soda 
 * Water 
 * Candy Bar
+* Steak and peas
+* Fish and chips
+* Pork and beans
+* Book 
+* Pen 
+* Pencil
+* Spoon 
+* Fork
+* Kitchen Knife
+* Assassin's Knife
+* Combat Knife
+* KS_244 Pistol 
+* USD_67 Pistol
+* NX_82_MAG Pistol
+* RIDGE 20 Pistol
+* GP_245 Pistol
+* TXC Assault Rifle 
+* SS_95 Assault Rifle
+* KC_50 Assault Rifle 
+* HP5 Assault Rifle 
+* BB9 Assault Rifle 
+* Split_5 Sniper Rifle 
+* Get'm Sniper Rifle
