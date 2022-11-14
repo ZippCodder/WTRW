@@ -106,7 +106,7 @@ If the player pleads "guilty" they will be sent to a jail cell, and will then ha
 
 ### Objects and Collectables
 
-The game, as an open world features a number of objects that the player can collect and interect with to preform different activities, and each has their own significance or use. Below is a list of all interactable obejcts and collectable (can be placed in the player's inventory) objects in the game.
+The game, as an open world features a number of objects that the player can collect and interect with to preform different activities, and each has their own significance or use. Below is a list of all interactable obejcts and collectable (can be placed in the player's inventory) objects in the game. Note that the use of some objects can change depending on the behavior mode of the player.
 
 1. Food and Drinks - (Provide energy and health when consumed) 
 
@@ -147,20 +147,32 @@ The game, as an open world features a number of objects that the player can coll
 * Plate 
 * Bowl 
 * Cup
+* First aid kit
+* Key
 
-3. Accessories 
+3. Accessories - (Items that add to a players visual appearance)
 
 * Jacket
 * Coat
 * Glasses 
 * Sunglasses
-* 
+* Cap
+* Gloves
+* Headphones 
+* Headband
+* Fedora
+* Sombrero
+
+4. Weapons - (Objects used in combat with pther players)
 
 * Kitchen knife
 * Assassin's knife
 * Combat knife
-* Brass knuckles 
+* Brass knuckles
+* Katana 
 * Taser
+* KSI_5 Shotgun
+* T9 Sawed-Off Shotgun
 * KS_244 Pistol 
 * USD_67 Pistol
 * NX_82_MAG Pistol
@@ -174,7 +186,6 @@ The game, as an open world features a number of objects that the player can coll
 * Split_5 Sniper Rifle 
 * Get'm Sniper Rifle
 
+5. Special Items - (Items that give the player special abilities or have special uses)
 
-
-* Military turret
-* Military killbot
+* 
