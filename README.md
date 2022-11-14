@@ -104,25 +104,63 @@ If the player pleads "guilty" they will be sent to a jail cell, and will then ha
 
 ## Misc
 
-### Objects and Props
+### Objects and Collectables
 
 The game, as an open world features a number of objects that the player can collect and interect with to preform different activities, and each has their own significance or use. Below is a list of all interactable obejcts and collectable (can be placed in the player's inventory) objects in the game.
 
+1. Food and Drinks - (Provide energy and health when consumed) 
+
 * Chips
+* Popcorn
 * Soda 
 * Water 
-* Candy Bar
+* Coffee
+* Milk
+* Cereal
+* Orange juice
+* Tea
+* Candy bar
+* Chocolate sundae
 * Steak and peas
 * Fish and chips
 * Pork and beans
+* Chicken curry
+* Beef pasta
+
+2. General items - (Items used to complete specific actions)
+
 * Book 
 * Pen 
 * Pencil
+* RC car
 * Spoon 
 * Fork
-* Kitchen Knife
-* Assassin's Knife
-* Combat Knife
+* Laptop
+* Phone
+* Binoculars
+* Shoes
+* Tennis shoes
+* Running shoes
+* Money 
+* Boombox
+* Mug 
+* Plate 
+* Bowl 
+* Cup
+
+3. Accessories 
+
+* Jacket
+* Coat
+* Glasses 
+* Sunglasses
+* 
+
+* Kitchen knife
+* Assassin's knife
+* Combat knife
+* Brass knuckles 
+* Taser
 * KS_244 Pistol 
 * USD_67 Pistol
 * NX_82_MAG Pistol
@@ -135,3 +173,8 @@ The game, as an open world features a number of objects that the player can coll
 * BB9 Assault Rifle 
 * Split_5 Sniper Rifle 
 * Get'm Sniper Rifle
+
+
+
+* Military turret
+* Military killbot
