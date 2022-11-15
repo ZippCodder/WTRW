@@ -111,7 +111,6 @@ The game, as an open world features a number of objects that the player can coll
 1. Food and Drinks - (Provide energy and health when consumed) 
 
 * Chips
-* Popcorn
 * Soda 
 * Water 
 * Coffee
@@ -150,7 +149,7 @@ The game, as an open world features a number of objects that the player can coll
 * First aid kit
 * Key
 
-3. Accessories - (Items that add to a players visual appearance)
+3. Accessories - (Items that add to a players visual appearance or may have special functions)
 
 * Jacket
 * Coat
@@ -160,8 +159,8 @@ The game, as an open world features a number of objects that the player can coll
 * Gloves
 * Headphones 
 * Headband
-* Fedora
-* Sombrero
+* Backpack
+* Watch
 
 4. Weapons - (Objects used in combat with pther players)
 
@@ -185,7 +184,22 @@ The game, as an open world features a number of objects that the player can coll
 * BB9 Assault Rifle 
 * Split_5 Sniper Rifle 
 * Get'm Sniper Rifle
+* Military turret
 
 5. Special Items - (Items that give the player special abilities or have special uses)
 
-* 
+* Death glare 
+* Force feild
+* Jetpack
+* Keyhacker
+* Lightstick
+* HYPR shoes
+* Shrink gum
+* Developer's console 
+* Faze Ray
+* Genie's lamp
+* Weapons editor kit
+* Bullet watch
+* Invisibility suit
+* Z-glove
+* Killbot squad
