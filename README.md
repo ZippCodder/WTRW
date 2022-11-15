@@ -131,32 +131,43 @@ The game, as an open world features a number of objects that the player can coll
 * Book 
 * Pen 
 * Pencil
-* RC car
 * Spoon 
 * Fork
 * Laptop
 * Phone
 * Binoculars
-* Shoes
-* Tennis shoes
-* Running shoes
 * Money 
 * Boombox
 * Mug 
 * Plate 
 * Bowl 
 * Cup
+* Ammo box
 * First aid kit
 * Key
+* Gold Coin
+* Diamond
+* Gem
+* Lockpick
+* Radar
 
 3. Accessories - (Items that add to a players visual appearance or may have special functions)
 
+* Shoes
+* Tennis shoes
+* Running shoes
+* T-shirt
 * Jacket
+* Bullet-proof vest
 * Coat
-* Glasses 
+* Glasses
+* Military pants 
 * Sunglasses
 * Cap
+* Church pants
+* Military boots 
 * Gloves
+* Jeans
 * Headphones 
 * Headband
 * Backpack
@@ -165,7 +176,6 @@ The game, as an open world features a number of objects that the player can coll
 4. Weapons - (Objects used in combat with pther players)
 
 * Kitchen knife
-* Assassin's knife
 * Combat knife
 * Brass knuckles
 * Katana 
@@ -184,6 +194,7 @@ The game, as an open world features a number of objects that the player can coll
 * BB9 Assault Rifle 
 * Split_5 Sniper Rifle 
 * Get'm Sniper Rifle
+* Remote explosive
 * Military turret
 
 5. Special Items - (Items that give the player special abilities or have special uses)
@@ -191,11 +202,11 @@ The game, as an open world features a number of objects that the player can coll
 * Death glare 
 * Force feild
 * Jetpack
-* Keyhacker
+* Invinsibility cream
 * Lightstick
 * HYPR shoes
 * Shrink gum
-* Developer's console 
+* Developer's console
 * Faze Ray
 * Genie's lamp
 * Weapons editor kit
