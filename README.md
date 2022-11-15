@@ -118,6 +118,7 @@ The game, as an open world features a number of objects that the player can coll
 * Cereal
 * Orange juice
 * Tea
+* Milkshake
 * Candy bar
 * Chocolate sundae
 * Steak and peas
@@ -150,6 +151,7 @@ The game, as an open world features a number of objects that the player can coll
 * Gem
 * Lockpick
 * Radar
+* Sticky note
 
 3. Accessories - (Items that add to a players visual appearance or may have special functions)
 
@@ -180,6 +182,7 @@ The game, as an open world features a number of objects that the player can coll
 * Brass knuckles
 * Katana 
 * Taser
+* SW Crossbow
 * KSI_5 Shotgun
 * T9 Sawed-Off Shotgun
 * KS_244 Pistol 
@@ -213,4 +216,4 @@ The game, as an open world features a number of objects that the player can coll
 * Bullet watch
 * Invisibility suit
 * Z-glove
-* Killbot squad
+* Killbot
