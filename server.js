@@ -9,7 +9,7 @@ server.on("request",async (req,res) => {
 	let file;
 	try {
 		console.log(path.resolve(req.url));
- file = await fs.readFileSync(path.resolve("./WTRW"+req.url));
+ file = await fs.readFileSync(path.resolve("./src"+req.url));
 } catch (err) {
  file = false;
 	}
