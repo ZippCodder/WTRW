@@ -1,0 +1,451 @@
+html,body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        
+        :root {
+            --main-font: 'Geo', sans-serif;
+            --light-green: #baffa1;   
+            --light-red: #ff928a;
+            --gun-theme: url("cover.png");
+            --main-color: #aaff96;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 0;
+        }
+
+        .texture {
+            display: none;
+        }
+        
+        .loading-img {
+          display: block;
+          position: relative;
+          width: 10vmax;
+          height: 10vmax;
+          margin: auto;
+          transform: scale(1.2);
+          top: calc(40%);
+          animation: pulse 1s infinite;
+          border-radius: 3px;
+          border: 3px solid white;
+        }
+        
+        .loading-title {
+            color: white;
+            text-align: center;
+            font-size: 240%;
+            position: relative;
+            top: 60vh;
+            margin: 0;
+            font-family: var(--main-font);
+        }
+        
+          #loading-screen {
+            width: 100%;
+            height: 100%;
+            z-index: 3;
+            background: #3C3C3C;
+            background-image: var(--gun-theme);
+            background-size: cover;
+          }
+          
+          .loader-filter {
+              width: 100%;
+              height: 100%;
+              background: rgba(0,0,0,0.5);
+          }
+        
+        #loader {
+          width: 2vmax;
+          height: 2vmax;
+          margin: 20px;
+          border-radius: 100%;
+          border: 5px solid white;
+          border-color: rgba(0,0,0,0);
+          border-top-color: white;
+          animation: loader-spin 0.3s linear infinite;
+          position: absolute;
+          right: 0;
+          background-image: none;
+          background: none;
+          bottom: 0;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1.2);
+            }
+            50% {
+                transform: scale(1.5);
+            }
+            100% {
+                transform: scale(1.2);
+            }
+        }
+        
+        @keyframes fade-in {
+            0% {
+                opacity: 0.0;
+            }
+            
+            50% {
+               opacity: 0.0;    
+            }
+            
+            100%{
+                opacity: 1.0;
+            }
+        }
+        
+        @keyframes loader-spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        textarea {
+            position: absolute;
+            background: none;
+            top: 0;
+            left: 0;
+            border: none;
+            outline: none;
+            display: none;
+            z-index: 1;
+            width: 25%;
+            height: 92%;
+            color: black;
+        }
+          
+          /* style for onscreen controls and content */
+          
+          #controls-container {
+              position: absolute;
+              width: 100vw;
+              height: 100vh;
+              display: block;
+              z-index: 2;
+              top: 0;
+              left: 0;
+              padding: 1em;
+              box-sizing: border-box;
+          }
+          
+          .controls-container__inv {
+            position: absolute;
+            top: calc((100vh - 7vmax) - 1em);
+            width: 35vmax;
+            height: 7vmax;
+            left: calc((50% - 17.5vmax) - 4vmin);
+            display: grid;
+            grid-template-columns: 20% 20% 20% 20% 20%;
+            grid-template-rows: 100%;
+            grid-gap: 2vmin;
+            font-family: var(--main-font);
+            counter-set: active-item 0;
+          }
+          
+          .controls-container__item {
+            width: auto;
+            height: auto;
+            background: rgba(1,1,1,0.3);
+            border-bottom: 5px solid rgba(0,0,0,0.5);
+          }
+          
+          .controls-container__item::after {
+              counter-increment: active-item;
+              content: counter(active-item);
+              width: 10px;
+              height: 10px;
+              background: none;
+              margin-left: 5px;
+          }
+             
+          .controls-container__item:nth-child(1) {
+             background-image: url("./images/glock_20_icon.png");
+             background-size: contain;
+          }
+          
+           .controls-container__item:nth-child(2) {
+             background-image: url("./images/usp_45_icon.png");
+             background-size: contain;
+          }
+          
+           .controls-container__item:nth-child(3) {
+             background-image: url("./images/kitchen_knife_icon.png");
+             background-size: contain;
+          }
+          
+           .controls-container__item:nth-child(4) {
+             background-image: url("./images/white_book_icon.png");
+             background-size: contain;
+          }
+          
+           .controls-container__item:nth-child(5) {
+             background-image: url("./images/kc_357_icon.png");
+             background-size: contain;
+          }
+          
+          .controls-container__item {
+            background-image: none !important; 
+          }
+          
+          .controls-container__buttons {
+              float: right;
+              background: rgba(1,1,1,0.5);
+              height: 2.4em;
+              position: absolute;
+              top: 0;
+              right: 0;
+              margin: 1em;
+          }
+          
+          .controls-container__button {
+            border: none;
+            color: white;
+            padding: none;
+            border-bottom: 5px solid #1e1e1e;
+            background: #3C3C3C;
+            font-size: 1.5em;
+            vertical-align: middle;
+            opacity: 0.8;
+            height: 100%;
+            font-family: var(--main-font);
+          }
+          
+          .controls-container__button:active {
+              opacity: 1;
+          }
+          
+          .controls-container__buttons img {
+              vertical-align: middle;
+              display: inline-block;
+              height: 1.8em;
+              padding-left: 0.5em;
+              padding-right: 0.5em;
+              opacity: 0.7;
+          }
+          
+          .controls-container__stats {
+              background: rgba(1,1,1,0.5);
+              display: block;
+              width: 30vmax;
+              height: 2.4em;
+              white-space: nowrap;
+              position: absolute;
+              margin: 1em;
+              left: 0;
+              top: 0;
+          }
+          
+          .controls-container__stats img {
+              height: 100%;
+              display: inline-block;
+          }
+          
+          .controls-container__health {
+              display: inline-flex;
+              height: 100%;
+              width: calc(100% - 2.4em);
+              border-bottom: 5px solid rgba(1,1,1,0.5);
+              padding-right: 0.5em;
+              align-items: center;
+              box-sizing: border-box;
+              vertical-align: top;
+          }
+          
+          .controls-container__healthbar {
+              display: block;
+              width: 50%;
+              height: 30%;
+              background: rgba(0,0,0,0.5);
+          }
+          
+          .controls-container__healthbar div {
+              height: 100%;
+              width: 100%;
+              background: var(--main-color);
+          }
+          
+          .controls-container__health .icon {
+              display: block;
+              opacity: 0.7;
+              transform: scale(0.5);
+          }
+          
+          #map {
+              z-index: 5;
+              border: solid black;
+              width: 25vmin;
+              height: 25vmin;
+              background: white;
+              position: absolute;
+              top: 0vmin;
+              left: 0;
+              margin: 1em;
+          }
+          
+          #hunger, #thirst {
+              color: white;
+              font-family: var(--main-font);
+          }
+          
+          #main-inventory {
+              background: #3C3C3C;
+              width: 80vw;
+              height: 90vh;
+              position: absolute;
+              left: 10vw;
+              top: 5vh;
+              font-family: var(--main-font);
+              color: white;
+              display: grid;
+              grid-template-columns: 40% 60%;
+              grid-template-rows: 10% 80% 10%;
+              display: none;
+              box-shadow: 0px 0px 10px black;
+          }
+          
+          .main-inventory__title {
+              background: #222222;
+              width: 100%;
+              height: 100%;
+              margin: 0;
+              grid-area: 1/1/2/3;
+              line-height: 100%;
+              font-size: 6vh;
+              box-sizing: border-box;
+              padding: 0.3em;
+              padding-left: 10px;
+              padding-right: 10px;
+          }
+          
+          .main-inventory__close {
+            font-family: inherit;
+            font-size: 5vh;
+            background: var(--light-red);
+            float: right;
+            color: inherit;
+            border: none;
+            border-bottom: 5px solid #c40d00;
+          }
+          
+          .main-inventory__items {
+              box-sizing: border-box;
+              border: 10px solid #222222;
+              border-left: none;
+              grid-area: 2/2/4/2;
+              padding: 0.5em;
+          }
+          
+          .main-inventory__items-container {
+              width: 100%;
+              height: 70%;
+              display: grid;
+              justify-content: center;
+              grid-template-columns: repeat(5, 20%);
+              grid-auto-rows: auto;
+              margin-top: 0.5em;
+              overflow-y: scroll;
+              counter-set: item-index 0;
+          }
+          
+          .main-inventory__item {
+              background: rgba(1,1,1,0.2);
+              aspect-ratio: 1/1;
+              margin: 5%;
+          }
+          
+          .main-inventory__description {
+               box-sizing: border-box;
+              border: 10px solid #222222;
+              grid-area: 2/1/4/2;
+              padding: 0.5em;
+          }
+          
+          .main-inventory__items h2, .main-inventory__description h2 {
+              text-align: center;
+              width: auto;
+              background: rgba(1,1,1,0.3);
+              margin-top: 0;
+          }
+          
+          .main-inventory__items h2 {
+              grid-area: 1/1/2/6;
+          }
+          
+          .main-inventory__description-content {
+              text-align: center;
+          }
+          
+          .main-inventory__item:nth-child(-n+5) {
+              border: 1px solid white;
+          }
+          
+          .main-inventory__item:nth-child(-n+5)::after {
+              color: white;
+              counter-increment: item-index;
+              content: counter(item-index);
+              width: 10px;
+              height: 10px;
+              background: none;
+              margin-left: 5px;
+          }
+          
+          .main-inventory__markers {
+              box-sizing: border-box;
+              grid-area: 3/1/4/3;
+          }
+          
+          .main-inventory__nav {
+              height: min-content;
+              width: 50%;
+              margin: auto;
+              margin-top: 1em;
+              text-align: center;
+          }
+          
+          #inv-prev, #inv-next {
+              font-size: 1em;
+              font-family: inherit;
+              color: white;
+              border: none;
+              background: rgba(1,1,1,0.3);
+              border-bottom: 5px solid #1e1e1e;
+          }
+          
+          #inv-next {
+              float: right;
+          }
+          
+          #inv-prev {
+              float: left;
+          }
+          
+          .main-inventory__page {
+              display: inline-block;
+              margin: 0;
+              height: 0;  
+              font-size: 1.5em;
+          }
+          
+          #game-stats {
+              color: black;
+              font-family: var(--main-font);
+              font-size: 1em;
+              position: absolute;
+              left: 0;
+              bottom: 0;
+              margin: 1em;
+          }
