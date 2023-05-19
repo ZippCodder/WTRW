@@ -145,7 +145,7 @@ export default class Graph {
     }     
 
     evalObstacle(x, y, width, height) {
-   
+ 
         let xAndWidth = (x + width)-1,
             yAndHeight = (y - height)+1;
 
