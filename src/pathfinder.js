@@ -70,8 +70,6 @@ export default class Graph {
             return (Math.abs(x1 - x2) + Math.abs(y1 - y2));
         }
 
-       if (this.nodes[g].blocked === true) return false;
-
         const start = s,
             goal = g,
             open = [s],
