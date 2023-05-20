@@ -1262,7 +1262,7 @@ window.onload = () => {
                 gl.uniform1f(locations.rotation, this.trans.rotation);
 
                 gl.uniform1f(locations.darkness, 1); 
-                gl.uniform4fv(locations.lightColor, [...fromRGB(this.color)]);
+                gl.uniform4fv(locations.lightColor, this._color);
                 gl.blendFuncSeparate(gl.DST_COLOR, gl.DST_ALPHA, gl.ONE, gl.ONE);
 
                 gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
@@ -1280,6 +1280,10 @@ window.onload = () => {
             this.name = "downward light";
             this.topLayer = true;
             this.color = color || [0, 0, 0, 0];
+        }
+
+        set color(code) {
+          this._color = fromRGB(code); 
         }
     }
 
@@ -1444,7 +1448,7 @@ window.onload = () => {
         constructor(initialX, initialY, initialRotation) {
             super(initialX, initialY, initialRotation);
 
-            this.lights = [new DownwardLight(this.trans.offsetX - 13, this.trans.offsetY - 11.5), new DownwardLight(this.trans.offsetX + 13, this.trans.offsetY - 11.5)];
+            this.lights = [new DownwardLight(this.trans.offsetX - 13, this.trans.offsetY - 11.5,0,[177,135,255,1]), new DownwardLight(this.trans.offsetX + 13, this.trans.offsetY - 11.5,0,[177,135,255,1])];
         }
 
         postLink() {
@@ -2500,6 +2504,8 @@ window.onload = () => {
 
         hit(damage, x, y) {
             this.state.vitals.health -= damage;
+            if (this.state.vitals.health <= 0) this.delete();
+
             if (Math.random() > 1) {
                 let r = Math.random();
                 (this.map ?? $CURRENT_MAP).link(new((r < 0.66) ? (r < 0.33) ? Blood2 : Blood1 : Blood3)(this.trans.offsetX, this.trans.offsetY));
@@ -2541,14 +2547,14 @@ window.onload = () => {
 
             if (this.state.recording.useRecording) this.state.recordAnimation.run();
             if (this.state.goto.engaged) this.state.gotoAnimation.run();
-
-            if (this.state.vitals.health < 0) this.delete();
-
+ 
             // walk to path
           walk: if (this.state.path.engaged && !this.state.goto.engaged) {
         let {x,y} = this.state.path.current[this.state.path.index];            
             if (this.map.GRAPH.find(x,y).blocked === false) { 
              this.goto(x+5,y-5);
+            } else if (this.state.path.index === 0) {
+              this.disengagePath();
             } else {
              this.findPathTo(this.state.path.end.x,this.state.path.end.y);
              break walk;
@@ -3288,7 +3294,7 @@ window.onload = () => {
                 gl.activeTexture(gl.TEXTURE0);
                 gl.bindTexture(gl.TEXTURE_2D, this.texture);
                 gl.useProgram(program);
-                gl.uniform4fv(locations.color, [...fromRGB(this.color)]);
+                gl.uniform4fv(locations.color, this._color);
                 gl.uniform1i(locations.textColor, 1);
 
                 gl.drawArrays(gl.TRIANGLES, 0, this.vertices.length / 5);
@@ -3315,6 +3321,10 @@ window.onload = () => {
             gl.vertexAttribPointer(locations.tcoords, 2, gl.FLOAT, false, 20, 12);
             gl.enableVertexAttribArray(locations.coords);
             gl.enableVertexAttribArray(locations.tcoords);
+        }
+
+        set color(code) {
+         this._color = fromRGB(code);
         }
     }
 
