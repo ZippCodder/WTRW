@@ -255,6 +255,7 @@ window.onload = () => {
         uniform vec4 color;
         uniform float darkness;
         uniform float transparency;
+        uniform vec4 lightColor;
         uniform int lines;
         uniform int textColor;
         
@@ -296,6 +297,12 @@ window.onload = () => {
           fragment[1] = fragment[1]/darkness;
           fragment[2] = fragment[2]/darkness;
           fragment[3] = fragment[3]*transparency;
+
+        if (lightColor[3] != 0.0 && !(fragment[0] == 0.0 && fragment[1] == 0.0 && fragment[2] == 0.0 && fragment[3] == 0.0)) {
+          fragment[0] = lightColor[0];
+          fragment[1] = lightColor[1];
+          fragment[2] = lightColor[2];
+        }
                    
         gl_FragColor = fragment;
         }
@@ -342,7 +349,8 @@ window.onload = () => {
         darkness: gl.getUniformLocation(program, "darkness"),
         transparency: gl.getUniformLocation(program, "transparency"),
         color: gl.getUniformLocation(program, "color"),
-        textColor: gl.getUniformLocation(program, "textColor")
+        textColor: gl.getUniformLocation(program, "textColor"),
+        lightColor: gl.getUniformLocation(program, "lightColor")
     }
 
     gl.uniform1f(locations.vw, window.innerWidth);
@@ -361,6 +369,7 @@ window.onload = () => {
     gl.uniform1i(locations.lines, 1);
     gl.uniform4fv(locations.color, [0, 0, 0, 0]);
     gl.uniform1i(locations.textColor, 0);
+    gl.uniform4fv(locations.lightColor, [0, 0, 0, 0]);
 
     gl.vertexAttrib3fv(locations.offset, new Float32Array([0, 0, 0.001]));
     gl.vertexAttrib1f(locations.textrUnit, 0);
@@ -1220,7 +1229,7 @@ window.onload = () => {
     }
 
     class DownwardLight extends _Object_ {
-        constructor(initialX, initialY, initialRotation) {
+        constructor(initialX, initialY, initialRotation, color) {
             super([], function() {
 
                 this.vertices = [-35, 35, 1, 0, 0, 35, 35, 1, 1, 0, -35, -35, 1, 0, 1, 35, 35, 1, 1, 0, -35, -35, 1, 0, 1, 35, -35, 1, 1, 1];
@@ -1252,7 +1261,8 @@ window.onload = () => {
                 gl.uniform2fv(locations.translation, [this.trans.offsetX, this.trans.offsetY]);
                 gl.uniform1f(locations.rotation, this.trans.rotation);
 
-                gl.uniform1f(locations.darkness, 1);
+                gl.uniform1f(locations.darkness, 1); 
+                gl.uniform4fv(locations.lightColor, [...fromRGB(this.color)]);
                 gl.blendFuncSeparate(gl.DST_COLOR, gl.DST_ALPHA, gl.ONE, gl.ONE);
 
                 gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
@@ -1264,10 +1274,12 @@ window.onload = () => {
 
                 gl.uniform1f(locations.darkness, this.map.darkness + globalDarkness);
                 gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+                gl.uniform4fv(locations.lightColor, [0, 0, 0, 0]);
             }, 70, 70, initialX, initialY, initialRotation);
             this.textureSrc = textureSources.downwardlight;
             this.name = "downward light";
             this.topLayer = true;
+            this.color = color || [0, 0, 0, 0];
         }
     }
 
