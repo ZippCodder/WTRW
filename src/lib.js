@@ -441,7 +441,10 @@ export class Inventory {
     }
 
     addItem(item, slot) {
+
         let result = true;
+
+        if (!item.pickup) return false;
 
         if (slot) {
             if (!this.items[slot] && slot < this.slots - 1) {
@@ -475,7 +478,7 @@ export class Inventory {
 
         if (result) {
             item.slot = slot ?? this.items.length - 1;
-            item.map.unlink(item.id);
+            if (item.map) item.map.unlink(item.id);
             this.count++;
         }
 
