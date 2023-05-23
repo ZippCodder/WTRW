@@ -14,6 +14,7 @@ import {
     offsetVertices,
     Inventory,
     fromRGB,
+    toRGB,
     rotate
 } from "./lib.js";
 
@@ -46,7 +47,7 @@ window.onload = () => {
 
     // MAIN GLOBAL ENTITIES
 
-    let $JOYSTICK_L, $JOYSTICK_R, $CURRENT_MAP, $ACTION_BUTTON, $AVATAR;
+    let $JOYSTICK_L, $JOYSTICK_R, $CURRENT_MAP, $ACTION_BUTTON, $AVATAR, $USER_MESSAGE;
 
     // STORAGE FOR GAME ELEMENTS AND ONSCREEN CONTROLS 
     const _OBJECTS_ = [];
@@ -1261,7 +1262,7 @@ window.onload = () => {
                 gl.uniform2fv(locations.translation, [this.trans.offsetX, this.trans.offsetY]);
                 gl.uniform1f(locations.rotation, this.trans.rotation);
 
-                gl.uniform1f(locations.darkness, 1); 
+                gl.uniform1f(locations.darkness, 1);
                 gl.uniform4fv(locations.lightColor, this._color);
                 gl.blendFuncSeparate(gl.DST_COLOR, gl.DST_ALPHA, gl.ONE, gl.ONE);
 
@@ -1283,7 +1284,7 @@ window.onload = () => {
         }
 
         set color(code) {
-          this._color = fromRGB(code); 
+            this._color = fromRGB(code);
         }
     }
 
@@ -1445,10 +1446,17 @@ window.onload = () => {
         topLayer = true;
         on = false;
 
-        constructor(initialX, initialY, initialRotation) {
+        constructor(initialX, initialY, initialRotation, color) {
             super(initialX, initialY, initialRotation);
+            this._color = color || [255, 255, 255, 1];
+            this.lights = [new DownwardLight(this.trans.offsetX - 13, this.trans.offsetY - 11.5, 0, this._color), new DownwardLight(this.trans.offsetX + 13, this.trans.offsetY - 11.5, 0, this._color)];
+        }
 
-            this.lights = [new DownwardLight(this.trans.offsetX - 13, this.trans.offsetY - 11.5,0,[177,135,255,1]), new DownwardLight(this.trans.offsetX + 13, this.trans.offsetY - 11.5,0,[177,135,255,1])];
+        set color(c) {
+            this._color = c;
+            for (let i of this.lights) {
+                i.color = this._color;
+            }
         }
 
         postLink() {
@@ -1559,11 +1567,12 @@ window.onload = () => {
 
         action() {
             if (this.map.darkness <= 1) {
+                this.map.lighting = true;
                 this.map.darkness = 5;
                 this.on = false;
                 return;
             }
-
+            this.map.lighting = false;
             this.map.darkness = 1;
         }
     }
@@ -1845,7 +1854,7 @@ window.onload = () => {
         segments = [
             [-7.3, -0.2, 14.6, 9.4]
         ];
-        topLayer = true;
+        topLayer = false;
         interactable = true;
         minDistance = 17;
 
@@ -2054,6 +2063,8 @@ window.onload = () => {
         }
 
         pickup = true;
+        interactable = true;
+        minDistance = 5;
 
         postLink() {
             this.map.link(this.ring);
@@ -2061,6 +2072,10 @@ window.onload = () => {
 
         clean() {
             this.ring.delete();
+        }
+
+        action() {
+            $AVATAR.addItem(this);
         }
 
         translate(x, y, rotation = false, translateVertices) {
@@ -2140,6 +2155,15 @@ window.onload = () => {
 
     class GLOCK_20 extends _Gun_ {
 
+        static _properties = {
+            fireRate: 1,
+            bulletSpeed: 2,
+            damage: 10,
+            accuracy: 5,
+            nozzelLength: 13,
+            capacity: 15
+        }
+
         static _defaultVertices = [-4.390000000000001, 3.0900000000000003, 1, 0, 0, 4.390000000000001, 3.0900000000000003, 1, 0.6859375000000001, 0, -4.390000000000001, -3.0900000000000003, 1, 0, 0.965625, 4.390000000000001, 3.0900000000000003, 1, 0.6859375000000001, 0, -4.390000000000001, -3.0900000000000003, 1, 0, 0.965625, 4.390000000000001, -3.0900000000000003, 1, 0.6859375000000001, 0.965625];
 
         width = 8.780000000000001;
@@ -2148,8 +2172,9 @@ window.onload = () => {
         clusterName = "glock 20";
         texture = textureSources.glock20;
 
-        constructor(initialX, initialY, initialRotation) {
+        constructor(initialX, initialY, initialRotation, bullets) {
             super(initialX, initialY, initialRotation);
+            this.bullets = bullets ?? 15;
         }
     }
 
@@ -2275,6 +2300,7 @@ window.onload = () => {
             };
             this.id = genObjectId();
             this.playerId = genObjectId(20);
+            this.inventory = new Inventory();
             this.type = "avatar";
             this.name = "avatar";
             this.state = {
@@ -2295,11 +2321,11 @@ window.onload = () => {
                     engaged: false
                 },
                 path: {
-                current: [],
-                index: 0,
-                engaged: false,
-                start: undefined,
-                end: undefined
+                    current: [],
+                    index: 0,
+                    engaged: false,
+                    start: undefined,
+                    end: undefined
                 },
                 recording: {
                     useRecording: false,
@@ -2307,15 +2333,11 @@ window.onload = () => {
                     frame: 0
                 },
                 walking: false,
-                armed: true,
+                armed: false,
                 draw: false,
                 fire: false,
-                weapon: {
-                    fireRate: 1,
-                    bulletSpeed: 2,
-                    damage: 10,
-                    accuracy: 5,
-                    nozzelLength: 13
+                equippedItems: {
+                    mainTool: undefined
                 },
                 gotoAnimation: new LoopAnimation(function() {
                     let tx = 0,
@@ -2489,17 +2511,20 @@ window.onload = () => {
 
         postLink() {
             this.state.fireAnimation = new LoopAnimation(function() {
+
                 this.state.recoilAnimation.start();
 
-                let r = random(this.state.weapon.accuracy);
+                let r = random(this.state.equippedItems.mainTool.constructor._properties.accuracy || 0);
                 r = (Math.random() < 0.5) ? -r : r;
 
                 let [x, y, ro] = rotate($JOYSTICK_R.distance.x, $JOYSTICK_R.distance.y, r);
-                let [nx, ny] = rotate(0, this.state.weapon.nozzelLength, ($JOYSTICK_R.rotation) * 180 / Math.PI);
+                let [nx, ny] = rotate(0, this.state.equippedItems.mainTool.constructor._properties.nozzelLength, ($JOYSTICK_R.rotation) * 180 / Math.PI);
 
-                $CURRENT_MAP.link(new Bullet(nx, ny, ($JOYSTICK_R.rotation + 1.5708 + ro) * (180 / Math.PI), (x) * this.state.weapon.bulletSpeed, (y) * this.state.weapon.bulletSpeed, this.state.weapon.damage));
+                $CURRENT_MAP.link(new Bullet(nx, ny, ($JOYSTICK_R.rotation + 1.5708 + ro) * (180 / Math.PI), (x) * this.state.equippedItems.mainTool.constructor._properties.bulletSpeed, (y) * this.state.equippedItems.mainTool.constructor._properties.bulletSpeed, this.state.equippedItems.mainTool.constructor._properties.damage));
 
-            }, this, 0.5 / this.state.weapon.fireRate);
+                this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo--;
+
+            }, this, 0.5 / (this.state.equippedItems.mainTool?.constructor._properties.fireRate) || 0);
         }
 
         hit(damage, x, y) {
@@ -2513,15 +2538,61 @@ window.onload = () => {
         }
 
         drawWeapon() {
-            if (this.state.armed) this.state.draw = true;
-            this.state.position.body.texture = 4;
-            this.state.position.body.vertices = 1;
+            if (this.state.armed) {
+                this.state.draw = true;
+                this.state.position.body.texture = 4;
+                this.state.position.body.vertices = 1;
+            }
         }
 
         holsterWeapon() {
-            this.state.draw = false;
-            this.state.position.body.texture = 0;
-            this.state.position.body.vertices = 0;
+            if (this.state.armed) {
+                this.state.draw = false;
+                this.state.position.body.texture = 0;
+                this.state.position.body.vertices = 0;
+            }
+        }
+
+        addItem(item, slot) {
+            let r = this.inventory.addItem(item, slot);
+            if (this.inventory.count === 1) this.equipItem(slot ?? this.inventory.count - 1);
+            return r;
+        }
+
+
+
+        removeItem(slot) {
+            let item = this.inventory.ejectItem(slot);
+
+            switch (item.type) {
+                case "gun": {
+                    if (item.slot === this.state.equippedItems.mainTool.slot) {
+                        this.state.armed = false;
+                        this.state.equippedItems.mainTool = undefined;
+                    }
+                };
+                break;
+            }
+
+            return true;
+        }
+
+        equipItem(slot) {
+            let item = this.inventory.items[slot];
+
+            if (item) {
+                switch (item.type) {
+                    case "gun": {
+                        this.state.armed = true;
+                        this.state.equippedItems.mainTool = item;
+                        this.state.fireAnimation.rate = 0.5 / this.state.equippedItems.mainTool.constructor._properties.fireRate;
+                    }
+                    break;
+                }
+
+                return true;
+            }
+            return false;
         }
 
         preRender() {
@@ -2539,30 +2610,33 @@ window.onload = () => {
                 this.state.position.body.vertices = 1;
             }
 
-            if (this.state.fire) {
+            if (this.state.fire && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo) {
                 this.state.fireAnimation.run();
+                this.state.recoilAnimation.run();
             }
-
-            this.state.recoilAnimation.run();
 
             if (this.state.recording.useRecording) this.state.recordAnimation.run();
             if (this.state.goto.engaged) this.state.gotoAnimation.run();
- 
+
             // walk to path
-          walk: if (this.state.path.engaged && !this.state.goto.engaged) {
-        let {x,y} = this.state.path.current[this.state.path.index];            
-            if (this.map.GRAPH.find(x,y).blocked === false) { 
-             this.goto(x+5,y-5);
-            } else if (this.state.path.index === 0) {
-              this.disengagePath();
-            } else {
-             this.findPathTo(this.state.path.end.x,this.state.path.end.y);
-             break walk;
+            walk: if (this.state.path.engaged && !this.state.goto.engaged) {
+                let {
+                    x,
+                    y
+                } = this.state.path.current[this.state.path.index];
+                if (this.map.GRAPH.find(x, y).blocked === false) {
+                    this.goto(x + 5, y - 5);
+                } else if (this.state.path.index === 0) {
+                    this.disengagePath();
+                } else {
+                    this.findPathTo(this.state.path.end.x, this.state.path.end.y);
+                    break walk;
+                }
+
+                this.state.path.index++;
+                if (this.state.path.index === this.state.path.current.length) this.disengagePath();
             }
 
-             this.state.path.index++; 
-             if (this.state.path.index === this.state.path.current.length) this.disengagePath();
-              }
         }
 
         render() {
@@ -2622,39 +2696,42 @@ window.onload = () => {
             this.state.walking = false;
         }
 
-        findPathTo(x,y) {
+        findPathTo(x, y) {
 
-          this.disengagePath();
-          let p = false;
+            this.disengagePath();
+            let p = false;
 
-           if ((x >= -this.map.width/2 && x < this.map.width/2) && (y <= this.map.height/2 && y > -this.map.height/2)) {
-           this.state.path.start = this.map.GRAPH.getPoint(this.trans.offsetX+this.map.centerX,this.trans.offsetY+this.map.centerY);
-           this.state.path.end = this.map.GRAPH.getPoint(x,y);
-           
-           p = this.map.GRAPH.getPath(this.state.path.start.unit, this.state.path.end.unit);
-           if (!p) return p; 
+            if ((x >= -this.map.width / 2 && x < this.map.width / 2) && (y <= this.map.height / 2 && y > -this.map.height / 2)) {
+                this.state.path.start = this.map.GRAPH.getPoint(this.trans.offsetX + this.map.centerX, this.trans.offsetY + this.map.centerY);
+                this.state.path.end = this.map.GRAPH.getPoint(x, y);
 
-           this.state.path.current = p.path;
-           this.state.path.current.unshift({x: this.state.path.start.x, y: this.state.path.start.y});
-    
-           if (p.result) { 
-             this.state.path.index = 0;
-             this.state.path.engaged = true;
-           }
-}
-         return p;
+                p = this.map.GRAPH.getPath(this.state.path.start.unit, this.state.path.end.unit);
+                if (!p) return p;
+
+                this.state.path.current = p.path;
+                this.state.path.current.unshift({
+                    x: this.state.path.start.x,
+                    y: this.state.path.start.y
+                });
+
+                if (p.result) {
+                    this.state.path.index = 0;
+                    this.state.path.engaged = true;
+                }
+            }
+            return p;
         }
 
         disengagePath() {
-         this.state.path.start = undefined;
-         this.state.path.end = undefined;
-         this.state.path.current = [];
-         this.state.path.index = 0;
-         this.state.path.engaged = false;
+            this.state.path.start = undefined;
+            this.state.path.end = undefined;
+            this.state.path.current = [];
+            this.state.path.index = 0;
+            this.state.path.engaged = false;
         }
 
         gotoAvatar() {
-         return this.findPathTo(this.map.centerX,this.map.centerY);
+            return this.findPathTo(this.map.centerX, this.map.centerY);
         }
 
         delete() {
@@ -2935,11 +3012,11 @@ window.onload = () => {
                 if (obj.isCluster) obj.linked = true;
 
                 if (obj.postLink) obj.postLink();
-              
+
                 if (obj.obstacle && obj.name !== "avatar") {
-                 for (let i of obj.segments) { 
-                  this.GRAPH.evalObstacle((i[0]+obj.trans.offsetX)+this.centerX,(-(i[1])+obj.trans.offsetY)+this.centerY,i[2],i[3]);
-                 }
+                    for (let i of obj.segments) {
+                        this.GRAPH.evalObstacle((i[0] + obj.trans.offsetX) + this.centerX, (-(i[1]) + obj.trans.offsetY) + this.centerY, i[2], i[3]);
+                    }
                 }
 
                 this.objectCount++;
@@ -2956,7 +3033,7 @@ window.onload = () => {
                     this.objects[id].cluster.unlink(this.objects[id].clusterIndex);
                     this.objects[id].cluster = undefined;
                 }
-                this.objects[id].map = undefined;
+                if (!this.objects[id].pickup) this.objects[id].map = undefined;
 
                 delete this.interactables[id];
                 delete this.objects[id];
@@ -3030,13 +3107,16 @@ window.onload = () => {
                             frame = frame.concat([ob.character, ob.trans.offsetX, ob.trans.offsetY, ob.trans.rotation * (180 / Math.PI)]);
                             break;
                         case "text":
-                            frame = frame.concat([ob.text, ob.size, ob.color, ob.trans.offsetX, ob.trans.offsetY, ob.trans.rotation * (180 / Math.PI), false]);
+                            frame = frame.concat([ob.text, ob.size, toRGB(ob._color), ob.trans.offsetX, ob.trans.offsetY, ob.trans.rotation * (180 / Math.PI), false]);
                             break;
                         case "door":
                             frame = frame.concat([ob.text, ob.roomIndex, ob.trans.offsetX, ob.trans.offsetY, ob.trans.rotation * (180 / Math.PI)]);
                             break;
                         case "visible barrier":
                             frame = frame.concat([ob.trans.offsetX, ob.trans.offsetY, ob.width, ob.height, ob.color]);
+                            break;
+                        case "street light":
+                            frame = frame.concat([ob.trans.offsetX, ob.trans.offsetY, ob.trans.rotation, ob._color]);
                             break;
                         default:
                             frame = frame.concat([ob.trans.offsetX, ob.trans.offsetY, ob.trans.rotation]);
@@ -3167,7 +3247,7 @@ window.onload = () => {
         pause() {
             _Map_._recording.isRecording = false;
         }
- 
+
         resume() {
             _Map_._recording.isRecording = true;
         }
@@ -3241,8 +3321,6 @@ window.onload = () => {
                 exit.exclude = true;
                 let light = new LightSwitch(25, (this.height / 2) + 12);
                 light.exclude = true;
-
-                exit.topLayer = false;
 
                 this.link(exit);
                 this.link(light);
@@ -3324,7 +3402,7 @@ window.onload = () => {
         }
 
         set color(code) {
-         this._color = fromRGB(code);
+            this._color = fromRGB(code);
         }
     }
 
@@ -3517,22 +3595,38 @@ window.onload = () => {
 
     /* INSTANTIATE INITIAL MAP */
 
-    let _MAP_ = new _Map_(780,280).init();
-      $CURRENT_MAP = _MAP_;
-    _MAP_.showGeometry();
-    //_MAP_.parseLayoutScript(Map1);
-    _MAP_.parseLayoutScript("{\"layout\":[[\"UrbanFence\",271.0879889290113,58.4303482215369,0],[\"UrbanFence\",223.09077455916594,58.454031036094236,0],[\"UrbanFenceVertical\",197.1575979493274,44.454083635397126,0],[\"UrbanFenceVertical\",197.10959854155715,16.453220833196177,0],[\"UrbanFenceVertical\",197.1190721233146,-11.712250337980525,0],[\"UrbanFenceVertical\",297.082211278594,44.48119585448097,0],[\"PicnicTable\",267.7276327795769,25.260583276242556,0],[\"PicnicTable\",224.64378527853523,25.124816188076608,0],[\"UrbanFenceHalf\",207.15109088429176,-26.068661460664842,0],[\"GenericApartment\",251.10047513706772,-33.341612662214,0],[\"UrbanFenceHalf\",307.0323938166791,30.16454022089072,0],[\"SmallPlant\",267.6656358570169,29.080583276242617,0],[\"SmallPlant\",224.33134907530456,28.944816188076636,0],[\"UrbanFenceVertical\",317.00210200262796,13.924327857998254,0],[\"Tile\",301.0752649614296,-10.227442696403983,0],[\"Tile\",300.3654721065678,-25.57562440456322,0],[\"Tile\",295.55949940753015,-38.755592488004616,0],[\"Tile\",302.6918126672202,-50.26225580717597,0],[\"Tile\",292.96384545356517,3.9282759896617847,0],[\"Road\",204.6983405466222,-88.40415197180101,0],[\"Road\",254.22158778892398,-88.40966118118814,0],[\"Road\",303.77327003850365,-88.41092221272805,0],[\"Road\",166.1203582653094,-49.76866417641816,90],[\"Road\",342.5103568691757,-49.76419471140367,90],[\"Road\",342.45996849261866,-0.16451344589125938,90],[\"RoadTriCorner\",166.1429582841762,-88.39946128316143,0],[\"Road\",166.13765212980877,-0.1802166434571859,90],[\"Road\",166.13180344058026,49.33197281632447,90],[\"Road\",342.4239839747268,49.3779575374902,90],[\"RoadCorner\",342.4139752770387,88.08677426263009,90],[\"Road\",303.66697959570814,88.04237787411125,0],[\"Road\",254.10522980346727,88.04799449363327,0],[\"Road\",204.75656182335098,88.02824597881477,0],[\"RoadSign\",189.2244508946215,-54.51198076301248,0],[\"Road\",127.42549574699115,-88.43478162603816,0],[\"UrbanFence\",17.267547062624956,58.4024416776238,0],[\"UrbanFence\",-30.729667307216012,58.42612449218113,0],[\"UrbanFenceVertical\",-56.662843917055824,44.42617709148403,0],[\"UrbanFenceVertical\",-56.710843324825845,16.4253142892833,0],[\"UrbanFenceVertical\",-56.7013697430684,-11.740156881892947,0],[\"UrbanFenceVertical\",43.261769412221085,44.45328931056787,0],[\"PicnicTable\",13.907190913191943,25.232676732329907,0],[\"PicnicTable\",-29.176656587848427,25.096909644163958,0],[\"UrbanFenceHalf\",-46.66935098208951,-26.096568004577264,0],[\"GenericApartment\",-2.7199667293140237,-33.36951920612656,0],[\"UrbanFenceHalf\",53.211951950307,30.1366336769781,0],[\"SmallPlant\",13.84519399063186,29.05267673232974,0],[\"SmallPlant\",-29.489092791078434,28.91690964416373,0],[\"UrbanFenceVertical\",63.18166013625846,13.896421314085831,0],[\"Tile\",47.25482309505491,-10.255349240316647,0],[\"Tile\",46.54503024019527,-25.603530948475644,0],[\"Tile\",41.73905754115687,-38.78349903191704,0],[\"Tile\",48.87137080084634,-50.29016235108862,0],[\"Tile\",39.14340358718954,3.900369445749135,0],[\"Road\",-49.122101319759054,-88.43205851571355,0],[\"Road\",0.40114592254317927,-88.43756772510079,0],[\"Road\",49.952828172128676,-88.43882875664059,0],[\"RoadTriCorner\",88.66411902735753,-88.42117541176145,0],[\"Road\",-87.70008360108062,-49.796570720330585,90],[\"Road\",88.68991500280289,-49.79210125531609,90],[\"Road\",88.63952662624537,-0.19241998980390917,90],[\"RoadTriCorner\",-87.67748358221314,-88.42736782707397,0],[\"Road\",-87.68278973658101,-0.20812318736960833,90],[\"Road\",-87.68863842580976,49.30406627241182,90],[\"Road\",88.60354210835374,49.35005099357732,90],[\"Road\",49.84653772933328,88.01447133019792,0],[\"Road\",0.2847879370860724,88.02008794971971,0],[\"Road\",-49.06388004303005,88.00033943490143,0],[\"RoadSign\",-64.59599097175987,-54.53988730692513,0],[\"Road\",127.36059296890141,87.92040828431459,0],[\"RoadTriCorner\",166.10032647752337,87.98431951522753,180],[\"RoadTriCorner\",88.57804230183262,87.9915993242214,180],[\"Bench\",126.98951486903172,38.49882652280307,0],[\"Bench\",126.98951486903172,-1.501173477200652,0],[\"Bench\",126.98951486903172,-41.50117347719749,0],[\"StreetLight\",108.44001110539418,43.69858806052727,0],[\"StreetLight\",-66.29346885334317,68.36153553462458,0],[\"StreetLight\",318.9679408550326,-42.124296086119706,0],[\"Grass\",249.03716640102522,3.2321422720557464,0],[\"Grass\",213.82029122736168,-6.589934589736799,0],[\"Grass\",210.28234998617995,-3.7814944239056025,0],[\"Grass\",206.2568613250902,37.72051333121206,0],[\"Grass\",308.3205888170632,9.261608144381139,0],[\"Grass\",310.3221020026286,-1.7896943752439967,0],[\"Grass\",293.05593279957355,-55.70225438834505,0],[\"Grass\",313.78794085503097,-65.94897678781217,0],[\"Grass\",230.15055437720775,-65.9454079677331,0],[\"Grass\",196.2777939910809,-50.40572596155801,0],[\"Grass\",186.09928924296122,51.46669042820177,0],[\"Grass\",142.4434458057978,65.48505189152223,0],[\"Grass\",115.10356509559594,51.508185109851965,0],[\"Grass\",107.10036364426807,5.833838599361027,0],[\"Grass\",108.67807910833287,-4.709125743513301,0],[\"Grass\",147.25623018524539,-55.718268834481115,0],[\"Grass\",113.62001110539325,-70.49204929696506,0],[\"Grass\",66.67789163846584,64.6377539355392,0],[\"Grass\",69.28568057327595,-35.08172980304697,0],[\"Grass\",47.44479230591513,-67.6234052387853,0],[\"Grass\",-59.315990971758254,-66.06016273682718,0],[\"Grass\",-49.56904409289774,-57.684371691840376,0],[\"Grass\",-67.12507019770064,-1.703115147865958,0],[\"Grass\",-70.23962082400732,61.72337774401541,0],[\"Grass\",52.7879576456499,9.568702598262679,0],[\"Grass\",-7.473220240228777,-3.6306099410740735,0],[\"Grass\",-7.965925621431964,39.31502663618517,0],[\"Grass\",-42.46002828995846,3.9438558057001103,0],[\"Grass\",-37.733522420514745,2.311300660121752,0],[\"Rocks1\",232.90409519477203,1.6183692185883487,205],[\"Rocks2\",289.42468185407375,39.49145178007422,56],[\"Rocks2\",299.8929449628601,-1.121275184747219,75],[\"Rocks1\",292.5835483436219,-7.2297318258758025,54],[\"Rocks1\",303.2297391180219,-40.27439561235086,73],[\"Rocks2\",256.64407807349215,-61.36811693740217,232],[\"Rocks1\",183.24740407080515,-50.878846892171005,289],[\"Rocks2\",185.29308573277171,34.107631775730745,80],[\"Rocks2\",128.21408205864532,62.67154307276043,291],[\"Rocks1\",136.03131662279665,15.072832361261433,209],[\"Rocks2\",140.52359065223192,-23.776268069781473,257],[\"Rocks1\",112.81924443449589,-57.02141193947558,337],[\"Rocks1\",59.98619802111106,-61.408118790835694,72],[\"Rocks2\",-37.39996672931805,-45.2495192061276,85],[\"Rocks1\",-65.56387860863472,39.28153553462568,230],[\"Rocks2\",57.67480892685323,58.19099568634148,54],[\"Rocks1\",69.86166013625765,3.8159277152113873,124],[\"Rocks2\",52.58746445534581,-36.571837782311476,289],[\"Rocks2\",42.02392932216778,-51.91331296428559,279],[\"Rocks1\",36.61719207652169,-2.685136598274614,83],[\"Rocks2\",36.53195195030531,34.34617270233275,202],[\"Rocks1\",-10.062937485729321,16.803277095695,319],[\"Rocks1\",-39.34265845724728,-5.889519206130089,327],[\"Grass2\",250.81484865068896,0.25792495293217144,0],[\"Grass2\",297.1825983461021,-62.173697985867285,0],[\"Grass2\",194.3028944687423,-56.780885998032495,0],[\"Grass2\",140.24445596014294,60.175343459984965,0],[\"Grass2\",116.83253131397501,-66.48354707569214,0],[\"Grass2\",49.66085618299809,-62.774819361575034,0],[\"Grass2\",-41.59281267606734,-1.9522637398124942,0],[\"Grass2\",-6.437125119890631,37.35085739805099,0],[\"Grass2\",-50.85863309267086,-65.27336910146522,0],[\"RoadCorner\",342.47157253868664,-88.41368718125415,0],[\"RoadTriCorner\",-87.72999721012837,88.0442051422774,180],[\"Road\",-126.46458114047752,88.02546500132371,0],[\"Road\",-126.38704488878372,-88.4372203470819,0],[\"UrbanFence\",-236.54305875936512,58.38012218788735,0],[\"UrbanFence\",-284.5402731292094,58.40380500244491,0],[\"UrbanFenceVertical\",-310.4734497390477,44.40385760174713,0],[\"UrbanFenceVertical\",-310.5214491468177,16.402994799545034,0],[\"UrbanFenceVertical\",-310.51197556506,-11.762476371632577,0],[\"UrbanFenceVertical\",-210.54883640978233,44.430969820830974,0],[\"PicnicTable\",-239.90341490879996,25.210357242591186,0],[\"PicnicTable\",-282.9872624098422,25.074590154425238,0],[\"UrbanFenceHalf\",-300.4799568040834,-26.11888749431735,0],[\"GenericApartment\",-256.5305725513094,-33.391838695865054,0],[\"UrbanFenceHalf\",-200.59865387169702,30.114314187239835,0],[\"SmallPlant\",-239.96541183135992,29.030357242591244,0],[\"SmallPlant\",-283.29969861307234,28.894590154425465,0],[\"UrbanFenceVertical\",-190.62894568574814,13.87410182434712,0],[\"Tile\",-206.55578272694845,-10.27766873005605,0],[\"Tile\",-207.26557558180775,-25.625850438215956,0],[\"Tile\",-212.071548280846,-38.80581852165508,0],[\"Tile\",-204.93923502115706,-50.312481840828134,0],[\"Tile\",-214.66720223481008,3.878049956011097,0],[\"Road\",-302.9327071417526,-88.45437800545261,0],[\"Road\",-253.40945989945112,-88.45988721483974,0],[\"Road\",-203.85777764987375,-88.46114824637954,0],[\"RoadTriCorner\",-165.14648679464437,-88.4434949015004,0],[\"Road\",-341.5106894230634,-49.818890210069874,90],[\"Road\",-165.120690819199,-49.81442074505538,90],[\"Road\",-165.17107919575608,-0.21473947954240202,90],[\"Road\",-341.49339555856403,-0.23044267710832855,90],[\"Road\",-341.4992442477923,49.28174678267559,90],[\"Road\",-165.2070637136477,49.32773150384133,90],[\"Road\",-203.96406809266887,87.99215184046034,0],[\"Road\",-253.5258178849076,87.99776845998235,0],[\"Road\",-302.8744858650238,87.97801994516362,0],[\"RoadCorner\",-341.4614764687198,88.01342298136888,180],[\"RoadSign\",-318.40659679375,-54.56220679666499,0],[\"RoadTriCorner\",-165.22166170240178,88.01287804934532,180],[\"RoadCorner\",-341.5406534296491,-88.4821389271512,-90],[\"Grass\",309.9550341918867,62.93574567206247,0],[\"Grass2\",316.4722470497912,56.7711424042327,0],[\"Grass\",-12.526808916676693,-67.68734099051107,0],[\"Bench\",-126.49048513096952,-41.519853036196146,0],[\"Bench\",-126.49048513096906,-0.7632602957119161,0],[\"Bench\",-126.49048513096929,38.9620498132261,0],[\"StreetLight\",-145.15235645850157,43.54930960785683,0],[\"StreetLight\",108.24667634039972,-36.34651103075093,0],[\"StreetLight\",-145.54046656498758,-36.34591210179774,0],[\"StreetLight\",-319.9424936977825,68.26877651753594,0],[\"Grass\",-108.99770498840061,-62.4376168712598,0],[\"Grass\",-122.1694730457848,-55.17947051315242,0],[\"Grass2\",-116.19637477162598,-65.00163319258382,0],[\"Grass\",-136.20251517427448,-20.437337578921365,0],[\"Grass\",-109.14089284304745,-11.936003404940738,0],[\"Grass2\",-109.04171156622155,-20.166188372924303,0],[\"Grass2\",-123.22651007836956,22.09707908161346,0],[\"Grass\",-133.64768005414797,14.170497086018838,0],[\"Grass\",-111.05892021285263,64.98929161774262,0],[\"Grass\",-117.37997015670376,59.495229380368414,0],[\"Grass2\",-137.67427453995566,59.08757872436729,0],[\"Rocks1\",-108.0568483480418,41.29989857775735,161],[\"Rocks2\",-143.1704851309674,-29.762183791215378,225],[\"Rocks2\",-199.73068531586296,-57.32051309763481,205],[\"Rocks1\",-202.54040558287642,-35.70589352524691,242],[\"Rocks1\",-219.4107586654851,-15.870743766788753,181],[\"Rocks1\",-203.68386816706658,-1.4171494672639398,354],[\"Rocks1\",-214.34850283824466,11.434314187235032,147],[\"Grass\",-219.33256151617286,39.70012218788459,0],[\"Grass2\",-224.0771218978902,35.99035724259335,0],[\"Grass\",-261.90642432214764,4.672710253542078,0],[\"Grass\",-246.25248709548532,-3.257287735485665,0],[\"Grass\",-272.7303985671109,39.72380500244216,0],[\"Grass2\",-264.3072624098434,33.990944056817526,0],[\"Rocks1\",-303.83197556505996,-4.1486441955427615,17],[\"Rocks2\",-303.3758615149313,37.82962407259389,79],[\"Rocks2\",-258.5834149087988,18.816682857970612,138],[\"Grass\",-197.17400863813054,-24.407922101346458,0],[\"Grass\",-185.98557614783596,-59.56458214853101,0],[\"Grass\",-190.77933106630644,-63.92375679171446,0],[\"Grass2\",-183.5249805256529,-65.07432592986135,0],[\"Grass\",-225.95626916230117,-63.33036852254512,0],[\"Grass\",-296.7357517409044,-50.51359868759494,0],[\"Grass\",-307.91689167050146,-57.67012308361959,0],[\"Grass2\",-294.7147815307272,-60.79270134075629,0],[\"Rocks2\",-309.8502602823257,-69.39753004608349,206],[\"Grass\",-322.0964655729319,23.592078705232268,0],[\"Grass2\",-317.29270037590965,17.34941236240642,0],[\"Rocks1\",-318.7907335000294,-18.45862339049321,20],[\"Grass\",-323.6301390327663,63.53450246294672,0],[\"Grass2\",-317.1534497390465,57.441301367865606,0],[\"Grass\",-190.5705299101552,53.8098032406888,0],[\"Grass2\",-197.069496717098,59.876441885716794,0],[\"Rocks2\",-187.01710497174173,68.25959134302016,300],[\"Rocks2\",-139.07185458102708,71.96668501162478,281],[\"StreetLight\",188.00871074273476,67.96699250544145,0],[\"RoadRail\",-369.0068767623215,133.4825086289895,0],[\"RoadRail\",-316.20687676232063,133.4825086289895,0],[\"RoadRail\",-289.80687676232225,133.4825086289895,0],[\"RoadRail\",-263.4068767623237,133.4825086289895,0],[\"RoadRail\",-342.6068767623198,133.4825086289895,0],[\"RoadRail\",-237.00687676232207,133.4825086289895,0],[\"RoadRail\",-210.60687676232436,133.4825086289895,0],[\"RoadRail\",-184.20687676232563,133.4825086289895,0],[\"RoadRail\",-157.80687676232668,133.4825086289895,0],[\"RoadRail\",-131.40687676233043,133.4825086289895,0],[\"RoadRail\",-105.00687676233309,133.4825086289895,0],[\"RoadRail\",-78.60687676233158,133.4825086289895,0],[\"RoadRail\",-52.2068767623268,133.4825086289895,0],[\"RoadRail\",-25.806876762322894,133.4825086289895,0],[\"RoadRail\",0.5931232376763766,133.4825086289895,0],[\"RoadRail\",26.993123237675277,133.4825086289895,0],[\"RoadRail\",53.393123237676434,133.4825086289895,0],[\"RoadRail\",79.79312323767596,133.4825086289895,0],[\"RoadRail\",106.19312323767389,133.4825086289895,0],[\"RoadRail\",132.59312323767094,133.4825086289895,0],[\"RoadRail\",158.99312323767538,133.4825086289895,0],[\"RoadRail\",185.39312323767467,133.4825086289895,0],[\"RoadRail\",211.7931232376759,133.4825086289895,0],[\"RoadRail\",238.19312323767195,133.4825086289895,0],[\"RoadRail\",264.59312323767443,133.4825086289895,0],[\"RoadRail\",290.9931232376717,133.4825086289895,0],[\"RoadRail\",317.3931232376694,133.4825086289895,0],[\"RoadRail\",343.79312323767414,133.4825086289895,0],[\"RoadRail\",370.19942227133384,133.4813501590863,0],[\"RoadRail\",-369.06770332300283,-135.5243156064059,0],[\"RoadRail\",-316.26770332300106,-135.5243156064059,0],[\"RoadRail\",-289.86770332300335,-135.5243156064059,0],[\"RoadRail\",-263.4677033230045,-135.5243156064059,0],[\"RoadRail\",-342.66770332300047,-135.5243156064059,0],[\"RoadRail\",-237.06770332300272,-135.5243156064059,0],[\"RoadRail\",-210.66770332300524,-135.5243156064059,0],[\"RoadRail\",-184.267703323008,-135.5243156064059,0],[\"RoadRail\",-157.8677033230078,-135.5243156064059,0],[\"RoadRail\",-131.46770332301045,-135.5243156064059,0],[\"RoadRail\",-105.06770332301284,-135.5243156064059,0],[\"RoadRail\",-78.66770332301093,-135.5243156064059,0],[\"RoadRail\",-52.267703323007225,-135.5243156064059,0],[\"RoadRail\",-25.86770332300351,-135.5243156064059,0],[\"RoadRail\",0.5322966769948287,-135.5243156064059,0],[\"RoadRail\",26.932296676995193,-135.5243156064059,0],[\"RoadRail\",53.33229667699604,-135.5243156064059,0],[\"RoadRail\",79.73229667699508,-135.5243156064059,0],[\"RoadRail\",106.13229667699233,-135.5243156064059,0],[\"RoadRail\",132.53229667699006,-135.5243156064059,0],[\"RoadRail\",158.93229667699507,-135.5243156064059,0],[\"RoadRail\",185.33229667699356,-135.5243156064059,0],[\"RoadRail\",211.73229667699468,-135.5243156064059,0],[\"RoadRail\",238.13229667699198,-135.5243156064059,0],[\"RoadRail\",264.53229667699446,-135.5243156064059,0],[\"RoadRail\",290.93229667699217,-135.5243156064059,0],[\"RoadRail\",317.33229667699055,-135.5243156064059,0],[\"RoadRail\",343.7322966769944,-135.5243156064059,0],[\"RoadRail\",370.13859571065296,-135.52547407630922,0],[\"Grass\",-348.44526140134184,-116.82447066935666,0],[\"Grass\",-320.03409111479476,-108.44153875578658,0],[\"Grass\",-317.64123636233995,-109.87127202632772,0],[\"Grass2\",-319.2892206547479,-115.33974656411041,0],[\"Grass\",-281.8579977608162,-109.24807479313546,0],[\"Grass\",-258.0868412371225,-116.10077307372913,0],[\"Grass\",-290.40569222360006,-124.25184643455921,0],[\"Grass2\",-286.0996852549189,-122.0087850994235,0],[\"Grass2\",-272.0017206596894,-117.64298581713504,0],[\"Grass2\",-363.29842352816644,-111.77843897949086,0],[\"Rocks1\",-333.85535638488597,-112.43204273028985,70],[\"Rocks1\",-226.4786695400311,-108.87882296382989,28],[\"Rocks1\",-120.76133047270906,-121.17604841253282,359],[\"Rocks2\",-187.97344183377976,-120.67584296026928,139],[\"Rocks2\",-304.3446950284206,-116.59159284170917,3],[\"Grass\",-211.0113210244744,-118.07854645091763,0],[\"Grass\",-224.39608685933086,-122.07359903457765,0],[\"Grass2\",-211.96039857689988,-111.30876070992477,0],[\"Grass\",-148.47817359803048,-106.23721313060219,0],[\"Grass\",-162.22790454776913,-112.46698153426104,0],[\"Grass2\",-145.67032514937114,-116.64477845521876,0],[\"Grass\",-78.17516166213935,-111.67532669943947,0],[\"Grass\",-48.69339860343996,-121.35066497062175,0],[\"Grass2\",-70.63199054890904,-118.89695322005721,0],[\"Rocks1\",-30.030297078714675,-109.27148357149406,126],[\"Rocks1\",30.181227141827566,-124.25741402413635,331],[\"Grass2\",-6.890335946420855,-120.03319655774297,0],[\"Grass\",5.79424681081937,-111.25415743334548,0],[\"Grass\",-22.2642736882123,-116.64041643330515,0],[\"Grass\",-260.5344929654963,-66.36737573554487,0],[\"Grass\",-107.99542253205783,12.749526482064402,0],[\"Grass\",-145.64899476655546,-67.00796532160848,0],[\"Grass\",-99.9365243356572,-110.01491156583427,0],[\"Grass\",94.29919105248229,-110.28112527297642,0],[\"Grass\",84.61149096372048,-120.49120446224225,0],[\"Grass2\",77.63402280608666,-109.3753383025471,0],[\"Grass\",57.88839923562584,-111.94465821150843,0],[\"Grass\",151.77468964147982,-111.85107993749668,0],[\"Grass\",126.70679553636373,-122.25675185881249,0],[\"Grass\",123.33816302442062,-112.87231635332492,0],[\"Grass2\",172.3811699983845,-117.36234668243952,0],[\"Rocks2\",146.25327204272418,-120.07136737066278,150],[\"Grass\",217.12549572068252,-110.7894567620998,0],[\"Grass\",202.21185746429006,-122.21490080979896,0],[\"Grass2\",194.49476781608615,-113.2072542318073,0],[\"Grass\",280.1616141789853,-107.60081175242308,0],[\"Grass\",243.34795270182832,-125.34431560640505,0],[\"Grass2\",242.67117093872633,-111.34131102611971,0],[\"Rocks1\",261.31843067115346,-118.14217024837782,250],[\"Grass\",330.954270533737,-110.47623975024555,0],[\"Grass\",287.28127737706467,-123.39726222892122,0],[\"Grass2\",305.7615186155945,-118.63007778375791,0],[\"Rocks1\",374.06548792858194,-122.26595774688354,210],[\"Grass\",346.5685558019024,-120.28034892520299,0],[\"Grass2\",371.9402855400779,-96.457851662239,0],[\"Grass\",367.14793458241655,-81.60893276668995,0],[\"Grass\",374.89572195792067,-70.81195836129925,0],[\"Grass2\",366.0908119121004,-50.98141591335034,0],[\"Grass\",375.4949058113321,-25.685329196865005,0],[\"Grass2\",363.5895917093887,-34.445583226294175,0],[\"Grass\",373.8408653948489,-38.35697748605872,0],[\"Rocks1\",367.49781436936513,-9.306527884815676,321],[\"Rocks1\",364.4263929665105,41.91283874887249,40],[\"Rocks2\",377.33796993141215,72.89475983996115,180],[\"Grass\",374.78275059101526,9.020086140927116,0],[\"Grass\",365.50497879425785,57.14944482711271,0],[\"Grass2\",376.57294124827587,31.685185006794356,0],[\"Grass\",365.1076622635954,117.56426222349558,0],[\"Grass2\",377.04862800267193,107.68577607521246,0],[\"Grass\",368.9923942530501,100.57644449578453,0],[\"Grass\",-360.0312302258449,-83.27425348441582,0],[\"Grass\",-374.1689742633076,-58.47301807372785,0],[\"Grass2\",-370.12332132909927,-71.43575971382026,0],[\"Rocks2\",-365.98291050645133,-93.59775582580136,73],[\"Grass\",-361.47171803839905,-35.76107734298928,0],[\"Grass\",-369.34119067893727,16.856016760535994,0],[\"Grass\",-361.05693349649704,7.208384850692101,0],[\"Grass2\",-369.00538376399294,3.0199534948572975,0],[\"Rocks2\",-369.25375019591314,-17.48913390699336,288],[\"Rocks1\",-359.95878358386796,34.4496222716602,68],[\"Grass\",-372.6547344008953,63.7837881508033,0],[\"Grass\",-361.9891857471918,54.90144379230137,0],[\"Grass2\",-370.13132794198367,53.030371352254676,0],[\"Grass\",-356.1170393346902,118.06579476825809,0],[\"Grass\",-366.52266333170525,102.58104782950261,0],[\"Grass2\",-367.4329721234039,118.71174349971199,0],[\"Rocks1\",-364.3193565504095,84.0541926071096,75],[\"Grass\",345.98021484190764,120.60805194783424,0],[\"Grass\",289.8158678618145,109.63808691674686,0],[\"Grass\",280.218173457143,117.63865495634928,0],[\"Grass2\",311.47042897870034,117.03456704207397,0],[\"Rocks1\",331.7439938534056,110.75427118601004,292],[\"Grass\",180.76361124038,121.08124340919093,0],[\"Grass\",193.63004774928226,108.6076729868154,0],[\"Grass2\",199.89698138676079,117.98029255413192,0],[\"Grass\",253.17374474847003,112.0873928705536,0],[\"Rocks1\",228.23368765411652,112.84528660705342,95],[\"Grass\",86.80149239853239,118.85912795635465,0],[\"Grass\",104.15192539400172,107.5987267281136,0],[\"Grass2\",111.90019663171051,117.55040579232781,0],[\"Rocks1\",149.85545034056824,111.89429295205801,35],[\"Rocks2\",122.54556828915878,123.30250862899075,61],[\"Grass2\",158.58389408681842,119.14006186692063,0],[\"Grass\",7.501608756844217,123.30250862899052,0],[\"Grass\",27.42708924240823,114.56988055247345,0],[\"Grass\",-15.668717699327267,113.01760286332973,0],[\"Grass2\",1.8757632875125694,111.94650823875932,0],[\"Rocks2\",64.44514400825003,110.91482779001399,48],[\"Grass\",-108.42849311017181,122.22034513163379,0],[\"Grass\",-90.17052438850254,106.588134545441,0],[\"Grass\",-46.01941532243406,117.07834262173984,0],[\"Grass2\",-54.15176748740197,112.32713140339175,0],[\"Grass2\",-81.85056937683191,117.61723809112033,0],[\"Rocks1\",-123.19776295065688,111.41083569493355,37],[\"Grass\",-217.76252974308358,119.75786755097386,0],[\"Grass\",-169.24941366678115,122.54097521230881,0],[\"Grass\",-192.84623713487974,113.97848186397039,0],[\"Grass\",-140.85592518795272,106.019920916519,0],[\"Grass2\",-140.8740698282162,122.92817583825507,0],[\"Grass2\",-173.436515075184,109.75481979647654,0],[\"Grass2\",-267.1247196740202,110.1539764766172,0],[\"Grass2\",-244.86878500590234,114.071247910735,0],[\"Grass2\",-252.5643789697412,121.39052256672133,0],[\"Grass\",-293.45254987948863,117.47422700726833,0],[\"Rocks1\",-261.3747948146326,115.76121052360136,128],[\"Rocks2\",-67.53116377275492,115.7638696485973,27],[\"Rocks2\",-343.41594681580506,110.05961960312047,185],[\"Grass\",-314.5764944360365,119.28577943122173,0],[\"Grass2\",-304.6191210411814,112.45779621016177,0],[\"RoadRailVertical\",-383.88761473285575,126.47446521333848,0],[\"RoadRailVertical\",-383.88761473285575,109.4744652133389,0],[\"RoadRailVertical\",-383.88761473285575,92.47446521334012,0],[\"RoadRailVertical\",-383.88761473285575,75.4744652133403,0],[\"RoadRailVertical\",-383.88761473285575,58.47446521334179,0],[\"RoadRailVertical\",-383.88761473285575,41.47446521334112,0],[\"RoadRailVertical\",-383.88761473285575,24.474465213340068,0],[\"RoadRailVertical\",-383.88761473285575,7.474465213341406,0],[\"RoadRailVertical\",-383.88761473285575,-9.525534786658508,0],[\"RoadRailVertical\",-383.88761473285575,-26.525534786658035,0],[\"RoadRailVertical\",-383.88761473285575,-43.52553478665911,0],[\"RoadRailVertical\",-383.88761473285575,-60.525534786660366,0],[\"RoadRailVertical\",-383.88761473285575,-77.52553478666019,0],[\"RoadRailVertical\",-383.88761473285575,-94.52553478666053,0],[\"RoadRailVertical\",-383.88761473285575,-111.52553478666044,0],[\"RoadRailVertical\",-383.88761473285575,-128.5255347866616,0],[\"RoadRailVertical\",385.04817374033195,126.45248818034037,0],[\"RoadRailVertical\",385.04817374033195,109.45248818034082,0],[\"RoadRailVertical\",385.04817374033195,92.45248818034383,0],[\"RoadRailVertical\",385.04817374033195,75.45248818034395,0],[\"RoadRailVertical\",385.04817374033195,58.45248818034371,0],[\"RoadRailVertical\",385.04817374033195,41.45248818034298,0],[\"RoadRailVertical\",385.04817374033195,24.452488180342016,0],[\"RoadRailVertical\",385.04817374033195,7.452488180343596,0],[\"RoadRailVertical\",385.04817374033195,-9.547511819656446,0],[\"RoadRailVertical\",385.04817374033195,-26.54751181965586,0],[\"RoadRailVertical\",385.04817374033195,-43.54751181965693,0],[\"RoadRailVertical\",385.04817374033195,-60.54751181965813,0],[\"RoadRailVertical\",385.04817374033195,-77.54751181965801,0],[\"RoadRailVertical\",385.04817374033195,-94.54751181965847,0],[\"RoadRailVertical\",385.04817374033195,-111.54751181965821,0],[\"RoadRailVertical\",385.04817374033195,-128.54751181965938,0],[\"RoadSign\",102.09499356568483,120.9815314593109,0],[\"RoadSign\",-153.06336897708854,120.94969903188596,0],[\"Text\",\"Whatever\",3,[0,0,0,1],0,0,0,false],[\"StreetLight\",55.72755581445438,-37.80419354727961,0],[\"StreetLight\",86.72417631823903,-8.911297617405449,0],[\"VisibleBarrier\",76.05362283073086,-40.29870939047963,40,40,[12,134,235,0.4]],[\"VisibleBarrier\",125.62824238528933,-20.529325933134054,40,40,[68,134,235,0.4]],[\"VisibleBarrier\",91.70977612251784,-6.531138776773915,40,40,[68,134,235,0.4]],[\"Text\",\"Blah blah blahr megeddon\",1,[230,245,23,1],45.81205704307287,-29.718224018328627,0,false],[\"StreetLight\",-6.891326289547273,27.340388611738312,0],[\"StreetLight\",-50.182843917055806,39.94612449218111,0]],\"settings\":{\"groundColor\":[255,255,255,1],\"lighting\":true,\"darkness\":6},\"root\":true,\"nodes\":3,\"children\":[{\"layout\":[],\"settings\":{\"groundColor\":[255,255,255,1],\"lighting\":false,\"darkness\":1},\"root\":false,\"nodes\":0,\"children\":[]},{\"layout\":[],\"settings\":{\"groundColor\":[255,255,255,1],\"lighting\":false,\"darkness\":1},\"root\":false,\"nodes\":0,\"children\":[]},{\"layout\":[],\"settings\":{\"groundColor\":[255,255,255,1],\"lighting\":false,\"darkness\":1},\"root\":false,\"nodes\":0,\"children\":[]}]}");
+    let _MAP_ = new _Map_(780, 280).init();
+    $CURRENT_MAP = _MAP_;
+
+    // _MAP_.parseLayoutScript(Map1);
+
+    _MAP_.parseLayoutScript('{"layout":[["UrbanFence",271.0879889290084,58.43034822153565,0],["UrbanFence",223.09077455916437,58.454031036092985,0],["UrbanFenceVertical",197.15759794932524,44.454083635396316,0],["UrbanFenceVertical",197.109598541555,16.453220833195896,0],["UrbanFenceVertical",197.11907212331243,-11.712250337980901,0],["UrbanFenceVertical",297.08221127858917,44.48119585448016,0],["PicnicTable",267.72763277957375,25.260583276241825,0],["PicnicTable",224.6437852785337,25.124816188075876,0],["UrbanFenceHalf",207.15109088428957,-26.068661460666082,0],["GenericApartment",251.10047513706493,-33.34161266221511,0],["UrbanFenceHalf",307.0323938166734,30.164540220889602,0],["SmallPlant",267.6656358570138,29.080583276241615,0],["SmallPlant",224.33134907530297,28.944816188075645,0],["UrbanFenceVertical",317.0021020026218,13.924327857998033,0],["Tile",301.07526496142475,-10.227442696404443,0],["Tile",300.3654721065627,-25.57562440456454,0],["Tile",295.55949940752515,-38.75559248800612,0],["Tile",302.6918126672156,-50.262255807178036,0],["Tile",292.9638454535602,3.9282759896615747,0],["Road",204.69834054661993,-88.4041519718025,0],["Road",254.2215877889212,-88.40966118118963,0],["Road",303.7732700384985,-88.41092221272955,0],["Road",166.12035826530825,-49.768664176420145,90],["Road",342.51035686916856,-49.76419471140565,90],["Road",342.4599684926115,-0.16451344589124695,90],["RoadTriCorner",166.14295828417505,-88.39946128316292,0],["Road",166.13765212980763,-0.18021664345717303,90],["Road",166.13180344057912,49.33197281632345,90],["Road",342.42398397471965,49.3779575374892,90],["RoadCorner",342.4139752770315,88.08677426262857,90],["Road",303.6669795957031,88.04237787410973,0],["Road",254.10522980346448,88.04799449363175,0],["Road",204.7565618233487,88.02824597881325,0],["RoadSign",189.22445089461996,-54.51198076301458,0],["Road",127.42549574699066,-88.4347816260396,0],["UrbanFence",17.267547062625017,58.40244167762255,0],["UrbanFence",-30.729667307217248,58.42612449217988,0],["UrbanFenceVertical",-56.662843917055554,44.42617709148321,0],["UrbanFenceVertical",-56.710843324825575,16.42531428928302,0],["UrbanFenceVertical",-56.70136974306813,-11.740156881893324,0],["UrbanFenceVertical",43.26176941222053,44.45328931056706,0],["PicnicTable",13.90719091319205,25.232676732329175,0],["PicnicTable",-29.17665658784952,25.096909644163226,0],["UrbanFenceHalf",-46.669350982089576,-26.096568004578504,0],["GenericApartment",-2.719966729314283,-33.36951920612768,0],["UrbanFenceHalf",53.21195195030674,30.13663367697698,0],["SmallPlant",13.845193990631987,29.052676732328738,0],["SmallPlant",-29.489092791079543,28.91690964416274,0],["UrbanFenceVertical",63.1816601362581,13.896421314085611,0],["Tile",47.25482309505438,-10.255349240317095,0],["Tile",46.54503024019459,-25.603530948476962,0],["Tile",41.739057541156654,-38.783499031918545,0],["Tile",48.87137080084618,-50.290162351090686,0],["Tile",39.14340358718948,3.900369445748925,0],["Road",-49.122101319758876,-88.43205851571498,0],["Road",0.40114592254329295,-88.43756772510223,0],["Road",49.95282817212859,-88.43882875664202,0],["RoadTriCorner",88.6641190273575,-88.42117541176289,0],["Road",-87.70008360108069,-49.796570720332596,90],["Road",88.68991500280286,-49.79210125531807,90],["Road",88.63952662624534,-0.1924199898038963,90],["RoadTriCorner",-87.67748358221321,-88.4273678270754,0],["Road",-87.68278973658109,-0.20812318736959545,90],["Road",-87.68863842580983,49.30406627241083,90],["Road",88.60354210835366,49.350050993576296,90],["Road",49.846537729333164,88.0144713301964,0],["Road",0.284787937086179,88.02008794971819,0],["Road",-49.063880043029876,88.00033943489991,0],["RoadSign",-64.59599097175982,-54.53988730692723,0],["Road",127.36059296890096,87.92040828431307,0],["RoadTriCorner",166.10032647752223,87.984319515226,180],["RoadTriCorner",88.57804230183255,87.99159932421988,180],["Bench",126.98951486903132,38.4988265228022,0],["Bench",126.98951486903132,-1.501173477200623,0],["Bench",126.98951486903132,-41.501173477198854,0],["StreetLight",108.44001110539403,43.698588060526426,0,[255,255,255,1]],["StreetLight",-66.29346885334309,68.36153553462361,0,[100,25,255,1]],["StreetLight",318.9679408550266,-42.12429608612106,0,[255,255,255,1]],["Grass",249.03716640102252,3.2321422720556447,0],["Grass",213.82029122736003,-6.589934589736936,0],["Grass",210.28234998617796,-3.7814944239056585,0],["Grass",206.25686132508798,37.72051333121112,0],["Grass",308.3205888170574,9.261608144380986,0],["Grass",310.3221020026225,-1.7896943752439785,0],["Grass",293.0559327995687,-55.70225438834707,0],["Grass",313.7879408550246,-65.94897678781432,0],["Grass",230.1505543772064,-65.94540796773525,0],["Grass",196.27779399107874,-50.40572596156008,0],["Grass",186.09928924296042,51.466690428200515,0],["Grass",142.44344580579698,65.48505189152127,0],["Grass",115.10356509559577,51.50818510985071,0],["Grass",107.10036364426787,5.833838599360842,0],["Grass",108.6780791083327,-4.709125743513393,0],["Grass",147.2562301852447,-55.71826883448314,0],["Grass",113.62001110539313,-70.49204929696717,0],["Grass",66.67789163846538,64.63775393553819,0],["Grass",69.28568057327554,-35.081729803048276,0],["Grass",47.4447923059146,-67.62340523878736,0],["Grass",-59.31599097175814,-66.06016273682935,0],["Grass",-49.5690440928975,-57.68437169184251,0],["Grass",-67.12507019770058,-1.7031151478659718,0],["Grass",-70.23962082400729,61.723377744014236,0],["Grass",52.787957645649726,9.568702598262565,0],["Grass",-7.4732202402292565,-3.630609941074087,0],["Grass",-7.9659256214324365,39.31502663618435,0],["Grass",-42.46002828995892,3.943855805699904,0],["Grass",-37.73352242051562,2.3113006601216433,0],["Rocks1",232.90409519477038,1.618369218588295,205],["Rocks2",289.42468185407,39.491451780073376,56],["Rocks2",299.8929449628549,-1.1212751847472506,75],["Rocks1",292.5835483436171,-7.2297318258758505,54],["Rocks1",303.229739118017,-40.274395612352315,73],["Rocks2",256.6440780734892,-61.36811693740436,232],["Rocks1",183.247404070804,-50.878846892173044,289],["Rocks2",185.29308573277092,34.107631775729686,80],["Rocks2",128.21408205864472,62.67154307275937,291],["Rocks1",136.0313166227955,15.072832361261185,209],["Rocks2",140.52359065223092,-23.77626806978234,257],["Rocks1",112.81924443449574,-57.02141193947769,337],["Rocks1",59.986198021110624,-61.40811879083789,72],["Rocks2",-37.39996672931891,-45.24951920612941,85],["Rocks1",-65.56387860863464,39.28153553462486,230],["Rocks2",57.67480892685276,58.190995686340216,54],["Rocks1",69.86166013625724,3.8159277152112057,124],["Rocks2",52.58746445534564,-36.571837782312954,289],["Rocks2",42.023929322167476,-51.913312964287655,279],["Rocks1",36.61719207652166,-2.6851365982746387,83],["Rocks2",36.531951950305285,34.34617270233167,202],["Rocks1",-10.062937485729966,16.80327709569471,319],["Rocks1",-39.34265845724808,-5.889519206130116,327],["Grass2",250.81484865068617,0.2579249529321128,0],["Grass2",297.1825983460973,-62.17369798586955,0],["Grass2",194.3028944687403,-56.78088599803461,0],["Grass2",140.24445596014192,60.17534345998372,0],["Grass2",116.8325313139749,-66.48354707569429,0],["Grass2",49.66085618299802,-62.774819361577244,0],["Grass2",-41.59281267606791,-1.9522637398124503,0],["Grass2",-6.437125119891096,37.35085739805003,0],["Grass2",-50.85863309267057,-65.27336910146734,0],["RoadCorner",342.4715725386795,-88.41368718125564,0],["RoadTriCorner",-87.7299972101285,88.04420514227589,180],["Road",-126.4645811404787,88.02546500132219,0],["Road",-126.3870448887849,-88.43722034708334,0],["UrbanFence",-236.54305875936873,58.380122187886116,0],["UrbanFence",-284.5402731292143,58.40380500244366,0],["UrbanFenceVertical",-310.47344973905246,44.40385760174631,0],["UrbanFenceVertical",-310.5214491468225,16.402994799544754,0],["UrbanFenceVertical",-310.5119755650648,-11.762476371632953,0],["UrbanFenceVertical",-210.548836409784,44.43096982083016,0],["PicnicTable",-239.90341490880354,25.210357242590483,0],["PicnicTable",-282.9872624098469,25.074590154424477,0],["UrbanFenceHalf",-300.47995680408843,-26.118887494318574,0],["GenericApartment",-256.5305725513132,-33.3918386958662,0],["UrbanFenceHalf",-200.59865387169765,30.114314187238715,0],["SmallPlant",-239.9654118313635,29.030357242590245,0],["SmallPlant",-283.29969861307706,28.894590154424474,0],["UrbanFenceVertical",-190.62894568574882,13.87410182434692,0],["Tile",-206.5557827269499,-10.277668730056499,0],["Tile",-207.26557558180937,-25.625850438217245,0],["Tile",-212.07154828084734,-38.80581852165658,0],["Tile",-204.93923502115825,-50.3124818408302,0],["Tile",-214.6672022348116,3.8780499560108868,0],["Road",-302.9327071417576,-88.45437800545405,0],["Road",-253.4094598994546,-88.45988721484117,0],["Road",-203.85777764987478,-88.46114824638097,0],["RoadTriCorner",-165.1464867946439,-88.44349490150184,0],["Road",-341.5106894230698,-49.818890210071885,90],["Road",-165.12069081919842,-49.81442074505739,90],["Road",-165.1710791957556,-0.21473947954238914,90],["Road",-341.4933955585704,-0.23044267710831567,90],["Road",-341.4992442477987,49.28174678267458,90],["Road",-165.20706371364722,49.327731503840305,90],["Road",-203.96406809266995,87.99215184045882,0],["Road",-253.52581788491116,87.99776845998083,0],["Road",-302.8744858650288,87.9780199451621,0],["RoadCorner",-341.4614764687262,88.01342298136736,180],["RoadSign",-318.4065967937549,-54.562206796667084,0],["RoadTriCorner",-165.2216617024013,88.0128780493438,180],["RoadCorner",-341.5406534296555,-88.48213892715263,-90],["Grass",309.9550341918807,62.93574567206141,0],["Grass2",316.4722470497849,56.771142404231746,0],["Grass",-12.526808916677517,-67.6873409905131,0],["Bench",-126.4904851309707,-41.51985303619751,0],["Bench",-126.49048513097024,-0.7632602957119619,0],["Bench",-126.49048513097047,38.96204981322523,0],["StreetLight",-145.15235645850143,43.54930960785598,0,[0,255,255,1]],["StreetLight",108.24667634039957,-36.3465110307524,0,[255,0,255,1]],["StreetLight",-145.5404665649874,-36.34591210179921,0,[50,1005,100,1]],["StreetLight",-319.94249369778726,68.26877651753497,0,[255,255,255,1]],["Grass",-108.99770498840189,-62.437616871262065,0],["Grass",-122.16947304578594,-55.179470513154484,0],["Grass2",-116.19637477162725,-65.00163319258594,0],["Grass",-136.20251517427488,-20.437337578922183,0],["Grass",-109.14089284304873,-11.936003404941186,0],["Grass2",-109.04171156622283,-20.16618837292512,0],["Grass2",-123.22651007837075,22.097079081612765,0],["Grass",-133.64768005414865,14.17049708601867,0],["Grass",-111.05892021285398,64.98929161774164,0],["Grass",-117.37997015670491,59.49522938036718,0],["Grass2",-137.6742745399559,59.08757872436597,0],["Rocks1",-108.05684834804309,41.29989857775649,161],["Rocks2",-143.17048513096717,-29.762183791216444,225],["Rocks2",-199.73068531586352,-57.32051309763695,205],["Rocks1",-202.54040558287727,-35.7058935252483,242],["Rocks1",-219.41075866548724,-15.870743766789431,181],["Rocks1",-203.68386816706757,-1.417149467263911,354],["Rocks1",-214.3485028382463,11.434314187234914,147],["Grass",-219.332561516175,39.70012218788371,0],["Grass2",-224.07712189789325,35.990357242592275,0],["Grass",-261.90642432215134,4.672710253541892,0],["Grass",-246.25248709548902,-3.2572877354857033,0],["Grass",-272.7303985671154,39.72380500244127,0],["Grass2",-264.3072624098473,33.99094405681646,0],["Rocks1",-303.83197556506485,-4.148644195542798,17],["Rocks2",-303.37586151493616,37.82962407259298,79],["Rocks2",-258.5834149088026,18.816682857970104,138],["Grass",-197.17400863813134,-24.407922101347786,0],["Grass",-185.9855761478371,-59.56458214853316,0],["Grass",-190.77933106630712,-63.92375679171664,0],["Grass2",-183.5249805256541,-65.07432592986346,0],["Grass",-225.9562691623042,-63.33036852254735,0],["Grass",-296.7357517409096,-50.51359868759701,0],["Grass",-307.91689167050635,-57.670123083621725,0],["Grass2",-294.7147815307322,-60.792701340758505,0],["Rocks2",-309.85026028233045,-69.3975300460855,206],["Grass",-322.09646557293723,23.5920787052316,0],["Grass2",-317.29270037591454,17.34941236240605,0],["Rocks1",-318.79073350003426,-18.458623390494047,20],["Grass",-323.63013903277187,63.534502462945575,0],["Grass2",-317.1534497390514,57.441301367864675,0],["Grass",-190.57052991015587,53.809803240687636,0],["Grass2",-197.0694967170988,59.876441885715586,0],["Rocks2",-187.01710497174298,68.2595913430192,300],["Rocks2",-139.07185458102714,71.9666850116235,281],["StreetLight",188.00871074273346,67.9669925054405,0,[255,255,255,1]],["RoadRail",-369.00687676232684,133.48250862898686,0],["RoadRail",-316.2068767623254,133.48250862898686,0],["RoadRail",-289.80687676232714,133.48250862898686,0],["RoadRail",-263.40687676232744,133.48250862898686,0],["RoadRail",-342.60687676232595,133.48250862898686,0],["RoadRail",-237.00687676232553,133.48250862898686,0],["RoadRail",-210.606876762326,133.48250862898686,0],["RoadRail",-184.20687676232694,133.48250862898686,0],["RoadRail",-157.80687676232628,133.48250862898686,0],["RoadRail",-131.40687676233136,133.48250862898686,0],["RoadRail",-105.00687676233426,133.48250862898686,0],["RoadRail",-78.6068767623317,133.48250862898686,0],["RoadRail",-52.206876762326495,133.48250862898686,0],["RoadRail",-25.806876762323878,133.48250862898686,0],["RoadRail",0.5931232376765792,133.48250862898686,0],["RoadRail",26.993123237675224,133.48250862898686,0],["RoadRail",53.39312323767612,133.48250862898686,0],["RoadRail",79.79312323767563,133.48250862898686,0],["RoadRail",106.19312323767367,133.48250862898686,0],["RoadRail",132.59312323766986,133.48250862898686,0],["RoadRail",158.99312323767427,133.48250862898686,0],["RoadRail",185.39312323767388,133.48250862898686,0],["RoadRail",211.79312323767397,133.48250862898686,0],["RoadRail",238.19312323767005,133.48250862898686,0],["RoadRail",264.5931232376714,133.48250862898686,0],["RoadRail",290.99312323766765,133.48250862898686,0],["RoadRail",317.39312323766325,133.48250862898686,0],["RoadRail",343.793123237667,133.48250862898686,0],["RoadRail",370.19942227132645,133.48135015908366,0],["RoadRail",-369.0677033230082,-135.52431560640886,0],["RoadRail",-316.26770332300583,-135.52431560640886,0],["RoadRail",-289.86770332300824,-135.52431560640886,0],["RoadRail",-263.46770332300844,-135.52431560640886,0],["RoadRail",-342.6677033230066,-135.52431560640886,0],["RoadRail",-237.06770332300619,-135.52431560640886,0],["RoadRail",-210.66770332300678,-135.52431560640886,0],["RoadRail",-184.2677033230093,-135.52431560640886,0],["RoadRail",-157.8677033230074,-135.52431560640886,0],["RoadRail",-131.46770332301134,-135.52431560640886,0],["RoadRail",-105.067703323014,-135.52431560640886,0],["RoadRail",-78.66770332301101,-135.52431560640886,0],["RoadRail",-52.26770332300692,-135.52431560640886,0],["RoadRail",-25.86770332300453,-135.52431560640886,0],["RoadRail",0.532296676995017,-135.52431560640886,0],["RoadRail",26.93229667699514,-135.52431560640886,0],["RoadRail",53.33229667699575,-135.52431560640886,0],["RoadRail",79.73229667699475,-135.52431560640886,0],["RoadRail",106.13229667699211,-135.52431560640886,0],["RoadRail",132.53229667698898,-135.52431560640886,0],["RoadRail",158.93229667699396,-135.52431560640886,0],["RoadRail",185.33229667699277,-135.52431560640886,0],["RoadRail",211.73229667699275,-135.52431560640886,0],["RoadRail",238.13229667699008,-135.52431560640886,0],["RoadRail",264.53229667699145,-135.52431560640886,0],["RoadRail",290.9322966769882,-135.52431560640886,0],["RoadRail",317.3322966769844,-135.52431560640886,0],["RoadRail",343.73229667698723,-135.52431560640886,0],["RoadRail",370.1385957106456,-135.52547407631218,0],["Grass",-348.44526140134866,-116.82447066935941,0],["Grass",-320.03409111479965,-108.44153875578878,0],["Grass",-317.64123636234484,-109.8712720263301,0],["Grass2",-319.2892206547527,-115.33974656411294,0],["Grass",-281.857997760821,-109.2480747931378,0],["Grass",-258.0868412371262,-116.10077307373167,0],["Grass",-290.40569222360494,-124.25184643456204,0],["Grass2",-286.0996852549235,-122.00878509942636,0],["Grass2",-272.00172065969394,-117.64298581713783,0],["Grass2",-363.2984235281719,-111.77843897949317,0],["Rocks1",-333.855356384892,-112.43204273029225,70],["Rocks1",-226.4786695400342,-108.87882296383218,28],["Rocks1",-120.76133047271021,-121.1760484125356,359],["Rocks2",-187.97344183378078,-120.67584296027213,139],["Rocks2",-304.3446950284254,-116.5915928417118,3],["Grass",-211.01132102447588,-118.07854645092037,0],["Grass",-224.3960868593339,-122.07359903458048,0],["Grass2",-211.9603985769012,-111.30876070992714,0],["Grass",-148.47817359803025,-106.23721313060462,0],["Grass",-162.22790454776884,-112.46698153426347,0],["Grass2",-145.6703251493709,-116.64477845522138,0],["Grass",-78.17516166213943,-111.67532669944178,0],["Grass",-48.69339860343978,-121.35066497062452,0],["Grass2",-70.63199054890902,-118.89695322005997,0],["Rocks1",-30.03029707871587,-109.27148357149643,126],["Rocks1",30.181227141827375,-124.25741402413918,331],["Grass2",-6.890335946421363,-120.03319655774581,0],["Grass",5.794246810819416,-111.25415743334783,0],["Grass",-22.264273688213212,-116.64041643330778,0],["Grass",-260.5344929655002,-66.36737573554701,0],["Grass",-107.99542253205912,12.74952648206427,0],["Grass",-145.6489947665553,-67.00796532161053,0],["Grass",-99.93652433565764,-110.0149115658366,0],["Grass",94.29919105248236,-110.28112527297867,0],["Grass",84.61149096372029,-120.49120446224508,0],["Grass2",77.6340228060863,-109.37533830254942,0],["Grass",57.88839923562537,-111.94465821151083,0],["Grass",151.774689641479,-111.85107993749905,0],["Grass",126.70679553636333,-122.25675185881535,0],["Grass",123.33816302442057,-112.87231635332732,0],["Grass2",172.38116999838394,-117.36234668244225,0],["Rocks2",146.2532720427234,-120.07136737066561,150],["Grass",217.12549572068093,-110.78945676210206,0],["Grass",202.21185746428762,-122.21490080980182,0],["Grass2",194.49476781608416,-113.2072542318097,0],["Grass",280.16161417898167,-107.60081175242526,0],["Grass",243.3479527018263,-125.3443156064079,0],["Grass2",242.67117093872437,-111.34131102612203,0],["Rocks1",261.31843067115034,-118.14217024838057,250],["Grass",330.95427053373106,-110.4762397502478,0],["Grass",287.28127737706086,-123.39726222892413,0],["Grass2",305.761518615589,-118.63007778376058,0],["Rocks1",374.06548792857467,-122.2659577468864,210],["Grass",346.5685558018949,-120.28034892520579,0],["Grass2",371.94028554007053,-96.45785166224104,0],["Grass",367.14793458240905,-81.60893276669196,0],["Grass",374.8957219579135,-70.81195836130136,0],["Grass2",366.0908119120929,-50.98141591335235,0],["Grass",375.49490581132505,-25.685329196866295,0],["Grass2",363.5895917093813,-34.44558322629534,0],["Grass",373.8408653948416,-38.356977486060224,0],["Rocks1",367.4978143693576,-9.306527884816092,321],["Rocks1",364.4263929665031,41.912838748871586,40],["Rocks2",377.33796993140544,72.8947598399599,180],["Grass",374.7827505910081,9.020086140927013,0],["Grass",365.50497879425035,57.14944482711173,0],["Grass2",376.57294124826916,31.68518500679321,0],["Grass",365.1076622635879,117.5642622234933,0],["Grass2",377.0486280026651,107.68577607521024,0],["Grass",368.9923942530426,100.5764444957828,0],["Grass",-360.03123022585083,-83.27425348441778,0],["Grass",-374.1689742633126,-58.47301807373002,0],["Grass2",-370.1233213291045,-71.4357597138224,0],["Rocks2",-365.9829105064567,-93.59775582580329,73],["Grass",-361.47171803840473,-35.761077342990674,0],["Grass",-369.3411906789426,16.85601676053571,0],["Grass",-361.0569334965027,7.208384850691878,0],["Grass2",-369.0053837639983,3.019953494857155,0],["Rocks2",-369.2537501959185,-17.489133906994148,288],["Rocks1",-359.95878358387387,34.44962227165915,68],["Grass",-372.6547344009003,63.783788150802245,0],["Grass",-361.9891857471974,54.90144379230006,0],["Grass2",-370.1313279419889,53.03037135225335,0],["Grass",-356.1170393346966,118.06579476825578,0],["Grass",-366.5226633317106,102.58104782950103,0],["Grass2",-367.43297212340934,118.71174349970967,0],["Rocks1",-364.3193565504151,84.05419260710819,75],["Grass",345.98021484190025,120.60805194783178,0],["Grass",289.8158678618108,109.63808691674456,0],["Grass",280.21817345713936,117.63865495634701,0],["Grass2",311.4704289786942,117.03456704207173,0],["Rocks1",331.7439938533997,110.75427118600783,292],["Grass",180.76361124037868,121.08124340918845,0],["Grass",193.63004774928038,108.60767298681318,0],["Grass2",199.8969813867585,117.98029255412965,0],["Grass",253.17374474846744,112.08739287055127,0],["Rocks1",228.23368765411516,112.84528660705115,95],["Grass",86.80149239853228,118.85912795635231,0],["Grass",104.15192539400162,107.59872672811139,0],["Grass2",111.90019663171037,117.55040579232553,0],["Rocks1",149.85545034056756,111.89429295205568,35],["Rocks2",122.54556828915878,123.30250862898845,61],["Grass2",158.58389408681725,119.1400618669183,0],["Grass",7.501608756844291,123.30250862898822,0],["Grass",27.427089242408176,114.56988055247129,0],["Grass",-15.668717699328134,113.01760286332751,0],["Grass2",1.8757632875126191,111.94650823875699,0],["Rocks2",64.44514400824957,110.91482779001174,48],["Grass",-108.42849311017311,122.22034513163142,0],["Grass",-90.1705243885028,106.58813454543883,0],["Grass",-46.0194153224342,117.07834262173756,0],["Grass2",-54.15176748740164,112.32713140338947,0],["Grass2",-81.8505693768317,117.61723809111805,0],["Rocks1",-123.19776295065807,111.41083569493125,37],["Grass",-217.76252974308554,119.75786755097147,0],["Grass",-169.24941366678115,122.54097521230635,0],["Grass",-192.84623713488082,113.97848186396817,0],["Grass",-140.85592518795264,106.01992091651684,0],["Grass2",-140.8740698282161,122.92817583825267,0],["Grass2",-173.43651507518462,109.75481979647427,0],["Grass2",-267.1247196740243,110.15397647661499,0],["Grass2",-244.86878500590592,114.07124791073278,0],["Grass2",-252.56437896974487,121.39052256671876,0],["Grass",-293.4525498794936,117.47422700726605,0],["Rocks1",-261.3747948146364,115.7612105235992,128],["Rocks2",-67.53116377275495,115.76386964859515,27],["Rocks2",-343.4159468158112,110.05961960311825,185],["Grass",-314.5764944360413,119.2857794312194,0],["Grass2",-304.61912104118636,112.4577962101595,0],["RoadRailVertical",-383.8876147328611,126.47446521333605,0],["RoadRailVertical",-383.8876147328611,109.47446521333663,0],["RoadRailVertical",-383.8876147328611,92.47446521333877,0],["RoadRailVertical",-383.8876147328611,75.47446521333882,0],["RoadRailVertical",-383.8876147328611,58.47446521334054,0],["RoadRailVertical",-383.8876147328611,41.47446521334026,0],["RoadRailVertical",-383.8876147328611,24.47446521333938,0],["RoadRailVertical",-383.8876147328611,7.474465213341205,0],["RoadRailVertical",-383.8876147328611,-9.525534786658879,0],["RoadRailVertical",-383.8876147328611,-26.525534786659254,0],["RoadRailVertical",-383.8876147328611,-43.52553478666044,0],["RoadRailVertical",-383.8876147328611,-60.52553478666258,0],["RoadRailVertical",-383.8876147328611,-77.52553478666218,0],["RoadRailVertical",-383.8876147328611,-94.52553478666248,0],["RoadRailVertical",-383.8876147328611,-111.52553478666273,0],["RoadRailVertical",-383.8876147328611,-128.52553478666462,0],["RoadRailVertical",385.04817374032615,126.45248818033794,0],["RoadRailVertical",385.04817374032615,109.45248818033858,0],["RoadRailVertical",385.04817374032615,92.45248818034248,0],["RoadRailVertical",385.04817374032615,75.45248818034247,0],["RoadRailVertical",385.04817374032615,58.452488180342456,0],["RoadRailVertical",385.04817374032615,41.45248818034212,0],["RoadRailVertical",385.04817374032615,24.452488180341327,0],["RoadRailVertical",385.04817374032615,7.452488180343408,0],["RoadRailVertical",385.04817374032615,-9.547511819656817,0],["RoadRailVertical",385.04817374032615,-26.54751181965708,0],["RoadRailVertical",385.04817374032615,-43.54751181965826,0],["RoadRailVertical",385.04817374032615,-60.54751181966035,0],["RoadRailVertical",385.04817374032615,-77.54751181966,0],["RoadRailVertical",385.04817374032615,-94.54751181966041,0],["RoadRailVertical",385.04817374032615,-111.5475118196605,0],["RoadRailVertical",385.04817374032615,-128.5475118196624,0],["RoadSign",102.09499356568472,120.98153145930841,0],["RoadSign",-153.0633689770882,120.94969903188347,0],["Text","Whatever",3,[0,255,255,1],0,0,0,false],["StreetLight",55.72755581445399,-37.80419354728114,0,[0,255,255,1]],["StreetLight",86.72417631823888,-8.911297617405733,0,[255,255,255,1]],["VisibleBarrier",76.05362283073049,-40.298709390481086,40,40,[12,134,235,0.4]],["VisibleBarrier",125.62824238528907,-20.529325933134885,40,40,[68,134,235,0.4]],["VisibleBarrier",91.70977612251792,-6.531138776774041,40,40,[68,134,235,0.4]],["Text","Blah blah blahr megeddon",1,[0,0,0,1],45.81205704307217,-29.718224018329657,0,false],["StreetLight",-6.891326289547738,27.34038861173749,0,[255,255,0]],["StreetLight",-50.18284391705555,39.9461244921802,0,[255,0,0,1]],["StreetLight",96.29363901674724,-97.17350746516267,0,[0,255,0,1]]],"settings":{"groundColor":[255,255,255,1],"lighting":true,"darkness":6},"root":true,"nodes":3,"children":[{"layout":[],"settings":{"groundColor":[255,255,255,1],"lighting":false,"darkness":1},"root":false,"nodes":0,"children":[]},{"layout":[],"settings":{"groundColor":[255,255,255,1],"lighting":false,"darkness":1},"root":false,"nodes":0,"children":[]},{"layout":[],"settings":{"groundColor":[255,255,255,1],"lighting":false,"darkness":1},"root":false,"nodes":0,"children":[]}]}');
 
     /* RENDERING PIPELINE FUNCTIONS */
 
     // OBJECTS AND CONTROLS ARRAY AT TOP OF FILE
 
     $ACTION_BUTTON = new _Button_(textureSources.actionbutton, textureSources.actionbuttonactive, (pWidth / 2) - 15, 0, function(pX, pY) {
-        if ($CURRENT_MAP.interactables[$CURRENT_MAP.currentInteractable.id]) {
-            $CURRENT_MAP.currentInteractable.action();
-        }
+        const i = $CURRENT_MAP.interactables[$CURRENT_MAP.currentInteractable.id];
+        if (i) i.action();
     }, 8.5);
     $ACTION_BUTTON.hidden = true;
+
+    $USER_MESSAGE = new Text("messages will show here!", 30, [0, 0, 0, 1], 0, (pHeight / 2 - 15), 0);
+    $USER_MESSAGE.hidden = true;
+    $USER_MESSAGE.animation = new MultiFrameLinearAnimation([function() {
+        this.hidden = false;
+    }, function() {
+        this.hidden = true;
+    }], $USER_MESSAGE, [0, 2]);
+    $USER_MESSAGE.preRender = function() {
+        $USER_MESSAGE.animation.run();
+    }
+    $USER_MESSAGE.showMessage = function(message, color) {
+        $USER_MESSAGE.color = color || $USER_MESSAGE._color;
+        $USER_MESSAGE.update(message);
+        $USER_MESSAGE.animation.start();
+    }
 
     _OBJECTS_.push($AVATAR);
 
@@ -3545,6 +3639,13 @@ window.onload = () => {
 
     function renderControls() {
         gl.uniform1f(locations.darkness, 1);
+        $USER_MESSAGE.preRender();
+        if (!$USER_MESSAGE.hidden) {
+            gl.uniform1f(locations.scale, 1);
+            $USER_MESSAGE.render();
+            gl.uniform1f(locations.scale, scale);
+        }
+
         _CONTROLS_.forEach(v => {
             if (!v.hidden) {
                 v.render();
@@ -3556,7 +3657,6 @@ window.onload = () => {
     _CONTROLS_.push($JOYSTICK_L);
     _CONTROLS_.push($JOYSTICK_R);
     _CONTROLS_.push($ACTION_BUTTON);
-
 
     let globalFrameRun = 0;
     let frameRate = 0;

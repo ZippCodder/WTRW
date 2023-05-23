@@ -291,6 +291,11 @@ export function fromRGB(color) {
     return [aofb(aisofb(color[0], 255), 1), aofb(aisofb(color[1], 255), 1), aofb(aisofb(color[2], 255), 1), color[3]];
 }
 
+export function toRGB(color) {
+    if (!color) return;
+    return [aofb(aisofb(color[0], 1), 255), aofb(aisofb(color[1], 1), 255), aofb(aisofb(color[2], 1), 255), color[3]];
+}
+
 export function genObjectId(length = 10) {
     let cy = "abcdefghijklmnopqqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
     let res = [];
@@ -377,7 +382,7 @@ export class MultiFrameLinearAnimation {
         this.object = object;
         this.nextFrame = 0;
         this.running = false;
-        this.reset = true;
+        this.reset = false;
         this.animationMultFactor = animationMultFactor || 1;
         this.timingConfig = timingConfig;
         this.duration = timingConfig.reduce((p, c) => p + c, 0);
@@ -416,7 +421,7 @@ export class MultiFrameLinearAnimation {
     }
 
     end() {
-        this.endFunc();
+        if (this.endFunc) this.endFunc();
         this.nextFrame = 0;
         this.reset = false;
         this.running = false;
@@ -427,26 +432,93 @@ export class MultiFrameLinearAnimation {
 
 export class Inventory {
 
-    constructor(defaultItems) {
+    constructor(defaultItems = [], slots) {
         this.items = defaultItems;
-        this.slots = defaultItems?.length || 0;
+        this.weapons = {};
+        this.slots = slots || defaultItems.length || 3;
+        this.count = defaultItems.length;
+        this.activeSlot = 0;
     }
 
-    addItem(item) {
-        this.items.push(item);
-        this.slots++;
+    addItem(item, slot) {
+        let result = true;
+
+        if (slot) {
+            if (!this.items[slot] && slot < this.slots - 1) {
+                this.items[slot] = item;
+            } else {
+                result = false;
+            }
+        } else if (this.count < this.slots) {
+            this.items.push(item);
+        } else {
+            result = false;
+        }
+
+        switch (item.type) {
+            case "gun": {
+                if (result) {
+                    if (!this.weapons[item.name]) this.weapons[item.name] = {
+                        ammo: 0,
+                        count: 0
+                    };
+                    this.weapons[item.name].ammo += item.bullets;
+                    this.weapons[item.name].count++;
+                } else if (this.weapons[item.name].count) {
+                    this.weapons[item.name].ammo += item.bullets;
+                    item.bullets = 0;
+                    result = false;
+                }
+            };
+            break;
+        }
+
+        if (result) {
+            item.slot = slot ?? this.items.length - 1;
+            item.map.unlink(item.id);
+            this.count++;
+        }
+
+        return result;
     }
 
     swapItems(a, b) {
         let c = this.items[a];
         this.items[a] = this.items[b];
         this.items[b] = c;
+
+        this.items[a].slot = a;
+        this.items[b].slot = b;
     }
 
-    ejectItem(slot) {
-        let object = this.items[slot];
+    ejectItem(slot, newItem) {
+        let item = this.items[slot];
+
+        switch (item.type) {
+            case "gun": {
+                if (--this.weapons[this.items[slot].name].count === 0) {
+                    item.bullets = Math.min(item.constructor._properties.capacity, this.weapons[item.name].ammo);
+                    this.weapons[item.name].ammo = 0;
+                } else {
+                    item.bullets = 0;
+                }
+
+                item.ring.trans.offsetX = 0;
+                item.ring.trans.offsetY = 0;
+            };
+            break;
+        }
+
+        item.slot = undefined;
+        item.trans.offsetX = 0;
+        item.trans.offsetY = 0;
+        item.map.link(item);
+
+        let object = item;
         this.items[slot] = undefined;
-        this.slots--;
+        this.count--;
+
+        if (newItem) this.addItem(newItem, slot);
 
         return object;
     }

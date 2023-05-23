@@ -70,7 +70,7 @@ export default class Graph {
             return (Math.abs(x1 - x2) + Math.abs(y1 - y2));
         }
 
-       if (this.nodes[g].blocked === true) return false;
+        if (this.nodes[g].blocked === true) return false;
 
         const start = s,
             goal = g,
@@ -136,36 +136,41 @@ export default class Graph {
         return result;
     }
 
-    getPoint(x,y) {
-  
-  let p =  {
-            x: (this.width % 2 === 0) ? (Math.floor(x * 0.1) * 10) : (Math.round(x * 0.1) * 10) - 5,
-            y: (this.height % 2 === 0) ? (Math.ceil(y * 0.1) * 10) : (y % 5 === 0 && y % 2 !== 0) ? (Math.round(y * 0.1) * 10) - 5 : (Math.round(y * 0.1) * 10) + 5
-        }, unit = this.find(p.x,p.y);
+    getPoint(x, y) {
 
-    return (unit) ? {x: p.x, y: p.y, unit: unit.id}:false;
-    }     
+        let p = {
+                x: (this.width % 2 === 0) ? (Math.floor(x * 0.1) * 10) : (Math.round(x * 0.1) * 10) - 5,
+                y: (this.height % 2 === 0) ? (Math.ceil(y * 0.1) * 10) : (y % 5 === 0 && y % 2 !== 0) ? (Math.round(y * 0.1) * 10) - 5 : (Math.round(y * 0.1) * 10) + 5
+            },
+            unit = this.find(p.x, p.y);
 
-    evalObstacle(x, y, width, height) {
- 
-        let xAndWidth = (x + width)-1,
-            yAndHeight = (y - height)+1;
-
-             const cornerA = this.getPoint(x,y);        
-             const cornerB = this.getPoint(xAndWidth,y); 
-             const cornerC = this.getPoint(xAndWidth,yAndHeight);
-      
-     if (cornerA && cornerB && cornerC) {
-       for (let i = cornerA.x; i <= cornerB.x; i+=10) {
-           for (let j = cornerB.y; j >=cornerC.y; j-=10) {
-              let unit = this.find(i,j);
-               if (unit) unit.blocked = true;
-           }
-       }
-    } else {
-      return false;
+        return (unit) ? {
+            x: p.x,
+            y: p.y,
+            unit: unit.id
+        } : false;
     }
 
-     return true;
+    evalObstacle(x, y, width, height) {
+
+        let xAndWidth = (x + width) - 1,
+            yAndHeight = (y - height) + 1;
+
+        const cornerA = this.getPoint(x, y);
+        const cornerB = this.getPoint(xAndWidth, y);
+        const cornerC = this.getPoint(xAndWidth, yAndHeight);
+
+        if (cornerA && cornerB && cornerC) {
+            for (let i = cornerA.x; i <= cornerB.x; i += 10) {
+                for (let j = cornerB.y; j >= cornerC.y; j -= 10) {
+                    let unit = this.find(i, j);
+                    if (unit) unit.blocked = true;
+                }
+            }
+        } else {
+            return false;
+        }
+
+        return true;
     }
 }
