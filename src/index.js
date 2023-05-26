@@ -2304,7 +2304,7 @@ window.onload = () => {
             this.type = "avatar";
             this.name = "avatar";
             this.state = {
-                baseSpeed: 2,
+                baseSpeed: 1,
                 speed: 1,
                 armor: 0,
                 invinsible: false,
@@ -2332,7 +2332,7 @@ window.onload = () => {
                 targetId: undefined,
                 target: {
                     current: undefined,
-                    id: undefined,
+                    id: [],
                     engaged: false
                 },
                 attack: {
@@ -2342,13 +2342,15 @@ window.onload = () => {
                     disengageDistance: 200,
                     attackSpeed: 1,
                     multiple: false,
-                    forget: false
+                    forget: false,
+                    invertTargets: true
                 },
                 recording: {
                     useRecording: false,
                     data: undefined,
                     frame: 0
                 },
+                baseRotation: 0,
                 walking: false,
                 armed: false,
                 draw: false,
@@ -2357,6 +2359,11 @@ window.onload = () => {
                 equippedItems: {
                     mainTool: undefined
                 },
+                rotationAnimation: new LoopAnimation(function() {
+                  if (this.state.rotation < this.state.baseRotation) {
+                    this.state.rotation /= 2;
+                  }
+                },this,0.2), 
                 targetUpdateAnimation: new LoopAnimation(function() {
                   const map = (this.map || $CURRENT_MAP);
                                 
@@ -2366,22 +2373,23 @@ window.onload = () => {
                    for (let i in map.avatars) {
                      let {offsetX: targetX, offsetY: targetY} = map.avatars[i].trans;
                      let dist = distance(this.trans.offsetX, this.trans.offsetY, targetX, targetY);
-                     if (this.map.avatars[i].state.targetId === this.state.target.id && dist < targetDistance) {
+                     if (((this.state.target.id.includes(this.map.avatars[i].state.targetId) && !this.state.attack.invertTargets) || (!this.state.target.id.includes(this.map.avatars[i].state.targetId) && this.state.attack.invertTarets)) && dist < targetDistance) {
                        targetDistance = dist;
                        target = map.avatars[i];
                      }
                     }
-                   
-                   if (targetDistance === this.state.attack.engageDistance && this.state.target.engaged && this.state.attack.forget) this.disengageTarget();
+                 
+                   if ((targetDistance === this.state.attack.engageDistance && this.state.target.engaged && this.state.attack.forget) || target === undefined) this.disengageTarget();
+
                    if (this.state.target.current !== target) {
                   this.state.target.current = target;
                   this.state.target.engaged = true;
                    }
-                  } else {
-                     let {offsetX: targetX, offsetY: targetY} = map.avatars[this.state.target.id].trans;
+                  } else if (map.avatars[this.state.target.id[0]]) {
+                     let {offsetX: targetX, offsetY: targetY} = map.avatars[this.state.target.id[0]].trans;
                      let dist = distance(this.trans.offsetX, this.trans.offsetY, targetX, targetY);
 
-                     if (!this.state.target.engaged && dist < this.state.attack.engageDistance && !this.state.attack.forget) this.killTarget(this.state.target.id);
+                     if (!this.state.target.engaged && dist < this.state.attack.engageDistance && !this.state.attack.forget) this.killTarget(this.state.target.id[0]);
                   }
 
                 }, this, 1),
@@ -2688,9 +2696,10 @@ window.onload = () => {
 
             // attack target(s)
 
-            if (this.state.target.id) this.state.targetUpdateAnimation.run();
+            if (this.state.target.id.length > 0) this.state.targetUpdateAnimation.run();
   
             attack: if (this.state.target.current && this.state.target.engaged) {
+
                 const m = this.map || $CURRENT_MAP; 
                 if (this.map.avatars[this.state.target.current.id]) {
   
@@ -2788,16 +2797,22 @@ window.onload = () => {
             this.state.walking = false;
         }
 
-        killTarget(id) {
+        killTarget(ids,multiple, invert) {
             let map = (this.map || $CURRENT_MAP);
-            let target = map.avatars[id];
+            let target = map.avatars[ids[0]];
+            
+            this.state.attack.multiple = multiple;
+            this.state.attack.invertTargets = invert;
 
-            if (target) {
+            if (target && !this.state.attack.multiple) {
                 this.state.target.current = target;
-                this.state.target.id = id;
+                this.state.target.id = ids;
                 this.state.target.engaged = true;
 
                 return true;
+            } else if (this.state.attack.multiple) {
+                this.state.target.id = ids;
+                this.state.target.engaged = true;
             }
 
             return false;
@@ -3731,14 +3746,20 @@ window.onload = () => {
     let a = new Avatar("Borjij", -50, 0);
     let b = new Avatar("Alejandro", 0, 100);
     _MAP_.link(a);
-    _MAP_.link(b);    
-    
-    b.state.targetId = $AVATAR.id;
-    $AVATAR.state.targetId = $AVATAR.id;  
+    _MAP_.link(b);       
+ 
+    a.state.targetId = a.id;
+    b.state.targetId = b.id;
+    a.state.attack.attackSpeed=2;
  
     a.addItem(new GLOCK_20(0, 0, 0, 1000));
-    a.killTarget($AVATAR.id);
+    a.killTarget([b.id],false);
     a.inventory.weapons["glock 20"].ammo = 1000;
+    a.state.fireAnimation.rate = 0.5/10;
+ 
+    b.addItem(new GLOCK_20(0, 0, 0, 1000));
+    b.killTarget([a.id],false);
+    b.inventory.weapons["glock 20"].ammo = 1000;
 
    // _MAP_.parseLayoutScript(Map1);
 
