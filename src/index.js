@@ -2723,18 +2723,24 @@ window.onload = () => {
                     } else if (dist < this.state.attack.settleDistance) {
                         if (this.state.path.engaged) this.disengagePath();
                         this.trans.rotation = Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX)) - 1.5708;
+                        if (!this.state.draw) {
                         this.drawWeapon();
                         this.state.fire = true;
+                        }
                     } else if (dist < this.state.attack.slowdownDistance) {
                         this.trans.rotation = Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX)) - 1.5708;
+                        if (!this.state.draw) {
                         this.drawWeapon();
                         this.state.fire = true;
+                        }
                         this.state.speed = (this.state.baseSpeed / 3) * this.state.attack.attackSpeed;
                     } else if (dist < this.state.attack.engageDistance) {
                         this.state.speed = this.state.baseSpeed * this.state.attack.attackSpeed;
                         this.trans.rotation = Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX)) - 1.5708;
+                        if (!this.state.draw) {
                         this.drawWeapon();
                         this.state.fire = true;
+                        }
                         if (!this.state.path.engaged) this.findPathTo(targetX + m.centerX, targetY + m.centerY);
                     }
 
@@ -3757,23 +3763,23 @@ window.onload = () => {
      _MAP_.link(b);
      b.state.attack.engageDistance = 500;
      b.state.attack.disengageDistance = 500;
-     b.state.attack.attackSpeed = 1;
-     b.state.openCarry = true;
+     b.state.attack.attackSpeed = 5;
+     b.state.vitals.health = 4000;
      b.state.targetUpdateAnimation.rate = 0.2;
      b.addItem(new GLOCK_20(0,0,0,2000));
-     b.state.fireAnimation.rate = 0.5/30;
+     b.state.fireAnimation.rate = 0.5/10;
      b.killTarget([$AVATAR.id],true,true);
 
     for (let i = 0; i < 50; i++) {
      let a = new Avatar(String(i),random(250,true),random(250,true));
      _MAP_.link(a);
-     a.state.attack.engageDistance = 500;
+     a.state.attack.engageDistance = 300;
      a.state.attack.disengageDistance = 500;
      a.state.attack.attackSpeed = 1;
-     a.state.targetUpdateAnimation.rate = 0.2;
+     a.state.targetUpdateAnimation.rate = 1;
      a.addItem(new GLOCK_20(0,0,0,2000));
      a.state.fireAnimation.rate = 0.5/1;
-     a.killTarget([b.id],true,true);
+     a.killTarget([b.id]);
     }   
    
    // _MAP_.parseLayoutScript(Map1);
