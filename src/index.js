@@ -2831,7 +2831,7 @@ window.onload = () => {
             this.state.fire = false;
             this.disengagePath();
 
-            if (this.openCarry) {
+            if (this.state.openCarry) {
                 this.drawWeapon();
             } else {
                 this.holsterWeapon();
@@ -3757,7 +3757,8 @@ window.onload = () => {
      _MAP_.link(b);
      b.state.attack.engageDistance = 500;
      b.state.attack.disengageDistance = 500;
-     b.state.attack.attackSpeed = 10;
+     b.state.attack.attackSpeed = 1;
+     b.state.openCarry = true;
      b.state.targetUpdateAnimation.rate = 0.2;
      b.addItem(new GLOCK_20(0,0,0,2000));
      b.state.fireAnimation.rate = 0.5/30;
@@ -3768,7 +3769,7 @@ window.onload = () => {
      _MAP_.link(a);
      a.state.attack.engageDistance = 500;
      a.state.attack.disengageDistance = 500;
-     a.state.attack.attackSpeed = 5;
+     a.state.attack.attackSpeed = 1;
      a.state.targetUpdateAnimation.rate = 0.2;
      a.addItem(new GLOCK_20(0,0,0,2000));
      a.state.fireAnimation.rate = 0.5/1;
