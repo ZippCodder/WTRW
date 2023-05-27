@@ -306,10 +306,10 @@ export function genObjectId(length = 10) {
     return res.join("");
 }
 
-export function random(max,mirror) {
-   let n =  Math.floor(Math.random() * (max - 0)) + 0;
-   
-   return (!mirror) ? n:(Math.random() < 0.5) ? n:-n;
+export function random(max, mirror) {
+    let n = Math.floor(Math.random() * (max - 0)) + 0;
+
+    return (!mirror) ? n : (Math.random() < 0.5) ? n : -n;
 }
 
 // Animation creation objects
