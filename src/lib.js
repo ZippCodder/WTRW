@@ -437,7 +437,7 @@ export class Inventory {
     constructor(defaultItems = [], slots) {
         this.items = defaultItems;
         this.weapons = {};
-        this.slots = slots || defaultItems.length || 3;
+        this.slots = slots || defaultItems.length || 5;
         this.count = defaultItems.length;
         this.activeSlot = 0;
     }
@@ -517,7 +517,6 @@ export class Inventory {
         item.slot = undefined;
         item.trans.offsetX = 0;
         item.trans.offsetY = 0;
-        item.map.link(item);
 
         let object = item;
         this.items[slot] = undefined;
