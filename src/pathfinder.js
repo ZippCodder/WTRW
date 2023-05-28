@@ -1,6 +1,8 @@
 // A graph representation of the map with a built in pathfinder based on A*
 
-import { random } from "./lib.js";
+import {
+    random
+} from "./lib.js";
 
 export default class Graph {
     constructor(width, height, diagonal = false) {
@@ -152,14 +154,18 @@ export default class Graph {
             unit: unit.id
         } : false;
     }
- 
-    getRandomPoint() {
-     let p = this.nodes[random(this.nodeCount)]; 
-       while (p.blocked) {
-         p = this.nodes[random(this.nodeCount)];
-       }
 
-     return {x: p.position.x, y: p.position.y, unit: p.id};
+    getRandomPoint() {
+        let p = this.nodes[random(this.nodeCount)];
+        while (p.blocked) {
+            p = this.nodes[random(this.nodeCount)];
+        }
+
+        return {
+            x: p.position.x,
+            y: p.position.y,
+            unit: p.id
+        };
     }
 
     evalObstacle(x, y, width, height) {
