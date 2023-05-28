@@ -16,7 +16,7 @@
       fromRGB,
       toRGB,
       rotate
-  } from "./lib.js";
+  } from "/public/scripts/lib.js";
 
 
   let consoleActive = false;

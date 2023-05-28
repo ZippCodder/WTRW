@@ -16,9 +16,9 @@ import {
     fromRGB,
     toRGB,
     rotate
-} from "./lib.js";
+} from "/public/scripts/lib.js";
 
-import Graph from "./pathfinder.js";
+import Graph from "/public/scripts/pathfinder.js";
 
 window._Object_ = class {
     constructor(vertices, imp, render = function() {}, width, height, initialX, initialY, initialRotation, type, name) {

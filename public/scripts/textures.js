@@ -1,6 +1,6 @@
 import {
     draw
-} from "./lib.js";
+} from "/public/scripts/lib.js";
 
 // functions for drawing textures for downloading and vertex mapping
 

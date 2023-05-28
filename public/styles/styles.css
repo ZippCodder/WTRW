@@ -10,7 +10,6 @@ html,body {
             --main-font: 'Geo', sans-serif;
             --light-green: #baffa1;   
             --light-red: #ff928a;
-            --gun-theme: url("cover.png");
             --main-color: #aaff96;
         }
 
@@ -53,7 +52,6 @@ html,body {
             height: 100%;
             z-index: 3;
             background: #3C3C3C;
-            background-image: var(--gun-theme);
             background-size: cover;
           }
           

@@ -1,10 +1,4 @@
-import {
-    LoopAnimation
-} from "./lib.js";
-import {
-    Map1
-} from "./maps.js";
-import Graph from "./pathfinder.js";
+import { LoopAnimation } from "/public/scripts/lib.js"; 
 
 /*
 @TODO 
@@ -383,9 +377,9 @@ window.onload = async () => {
     gl.vertexAttrib3fv(locations.offset, new Float32Array([0, 0, 0.001]));
     gl.vertexAttrib1f(locations.textrUnit, 0);
 
-    await import("./objects.js");
-    await import("./game.js");
-    await import("./controls.js");
+      await import("/public/scripts/objects.js");
+      await import("/public/scripts/game.js");
+      await import("/public/scripts/controls.js");
 
     function renderObjects() {
         $OBJECTS.forEach(v => {

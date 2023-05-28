@@ -16,11 +16,11 @@
       fromRGB,
       toRGB,
       rotate
-  } from "./lib.js";
+  } from "/public/scripts/lib.js";
 
   import {
       Map2
-  } from "./maps.js";
+  } from "/public/scripts/maps.js";
 
   $AVATAR = new Avatar("R O B I N H O O D");
   $AVATAR.postLink();

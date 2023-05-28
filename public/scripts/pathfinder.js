@@ -2,7 +2,7 @@
 
 import {
     random
-} from "./lib.js";
+} from "/public/scripts/lib.js";
 
 export default class Graph {
     constructor(width, height, diagonal = false) {
