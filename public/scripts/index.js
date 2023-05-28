@@ -1,4 +1,6 @@
-import { LoopAnimation } from "/public/scripts/lib.js"; 
+import {
+    LoopAnimation
+} from "/public/scripts/lib.js";
 
 /*
 @TODO 
@@ -14,9 +16,6 @@ window.onload = async () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    let loadingScreen = document.querySelector("#loading-screen");
-    let gameStats = document.querySelector("#game-stats");
-    let info = document.querySelector("p");
     let transitioning = false;
     let transitionSpeed;
     let phase = 0;
@@ -60,37 +59,24 @@ window.onload = async () => {
     window.$ACTION_BUTTON = null;
     window.$AVATAR = null;
     window.$MAP = null;
-    window.vw = window.innerWidth;
-    window.vh = window.innerHeight;
-    window.ma = Math.max(vw, vh);
-    window.mi = Math.min(vw, vh);
+    window.viewportWidth = window.innerWidth;
+    window.viewportHeight = window.innerHeight;
+    window.maxViewport = Math.max(viewportWidth, viewportHeight);
+    window.minViewport = Math.min(viewportWidth, viewportHeight);
     window.scale = 1.2;
     window.joystickSizes = {
         left: 1.5,
         right: 1.5
     };
     window.bulletResolution = 0.001;
-    window.ra = ma / mi;
-    window.xPercent = null;
-    window.yPercent = null;
+    window.viewportRatio = maxViewport / minViewport;
+    window.worldUnitX = (maxViewport === viewportWidth) ? 0.01 + (0.01 / viewportRatio) : 0.01 + (0.01 * viewportRatio);
+    window.worldUnitY = (maxViewport === viewportWidth) ? 0.01 + (0.01 * viewportRatio) : 0.01 + (0.01 / viewportRatio);
     window.movementMultFactor = 0.05;
     window.globalDarkness = 0;
     window.useTransition = true;
-    window.mapAnchor = {
-        x: 0,
-        y: 0
-    };
-
-    if (ma == vw) {
-        xPercent = 0.01 + (0.01 / ra);
-        yPercent = 0.01 + (0.01 * ra);
-    } else {
-        xPercent = 0.01 + (0.01 * ra);
-        yPercent = 0.01 + (0.01 / ra);
-    }
-
-    window.pWidth = 2 / xPercent;
-    window.pHeight = 2 / yPercent;
+    window.worldWidth = 2 / worldUnitX;
+    window.worldHeight = 2 / worldUnitY;
     window.ext = gl.getExtension("OES_vertex_array_object");
     window.instExt = gl.getExtension("ANGLE_instanced_arrays");
 
@@ -377,9 +363,9 @@ window.onload = async () => {
     gl.vertexAttrib3fv(locations.offset, new Float32Array([0, 0, 0.001]));
     gl.vertexAttrib1f(locations.textrUnit, 0);
 
-      await import("/public/scripts/objects.js");
-      await import("/public/scripts/game.js");
-      await import("/public/scripts/controls.js");
+    await import("/public/scripts/objects.js");
+    await import("/public/scripts/game.js");
+    await import("/public/scripts/controls.js");
 
     function renderObjects() {
         $OBJECTS.forEach(v => {
@@ -402,6 +388,8 @@ window.onload = async () => {
     $CONTROLS.push($JOYSTICK_R);
     $CONTROLS.push($ACTION_BUTTON);
 
+    let loadingScreen = document.querySelector("#loading-screen");
+    let gameStats = document.querySelector("#game-stats");
     let globalFrameRun = 0;
     let frameRate = 0;
     let frameRateMarker = performance.now();

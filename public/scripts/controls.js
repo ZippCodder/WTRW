@@ -24,7 +24,7 @@
 
   $JOYSTICK_L = new _Joystick_(true, joystickSizes.left);
   $JOYSTICK_R = new _Joystick_(false, joystickSizes.right);
-  $ACTION_BUTTON = new _Button_(textures.actionbutton, textures.actionbuttonactive, (pWidth / 2) - 15, 0, function(pX, pY) {
+  $ACTION_BUTTON = new _Button_(textures.actionbutton, textures.actionbuttonactive, (worldWidth / 2) - 15, 0, function(pX, pY) {
       const i = $CURRENT_MAP.interactables[$CURRENT_MAP.currentInteractable.id];
       if (i) i.action();
   }, 8.5);
@@ -77,8 +77,8 @@
 
           let pageX = touch.clientX;
           let pageY = touch.clientY;
-          let pX = aofb(aisofb(pageX, window.innerWidth), pWidth) - (pWidth / 2);
-          let pY = aofb(100 - aisofb(pageY, window.innerHeight), pHeight) - (pHeight / 2);
+          let pX = aofb(aisofb(pageX, window.innerWidth), worldWidth) - (worldWidth / 2);
+          let pY = aofb(100 - aisofb(pageY, window.innerHeight), worldHeight) - (worldHeight / 2);
 
           if (stick.base.anchored) {
               let {
@@ -110,8 +110,8 @@
 
       let pageX = touch.clientX;
       let pageY = touch.clientY;
-      let pX = aofb(aisofb(pageX, window.innerWidth), pWidth) - (pWidth / 2);
-      let pY = aofb(100 - aisofb(pageY, window.innerHeight), pHeight) - (pHeight / 2);
+      let pX = aofb(aisofb(pageX, window.innerWidth), worldWidth) - (worldWidth / 2);
+      let pY = aofb(100 - aisofb(pageY, window.innerHeight), worldHeight) - (worldHeight / 2);
 
       let buttonPress = false;
 
