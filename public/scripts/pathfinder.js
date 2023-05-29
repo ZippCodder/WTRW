@@ -11,13 +11,14 @@ export default class Graph {
         this.height = height;
         this.nodeCount = width * height;
         this.diagonal = diagonal;
+        this.blocked = [];
         this.grid = new Map();
         this.find = (function(col, row) {
             return this.grid.get(`${col},${row}`);
         }).bind(this);
 
         class Node {
-            constructor(x, y, edges = [], blocked = false) {
+            constructor(x, y, edges = []) {
                 this.position = {
                     x: x,
                     y: y
@@ -28,7 +29,6 @@ export default class Graph {
                 this.edges = edges;
                 this.parent = undefined;
                 this.fresh = true;
-                this.blocked = blocked;
             }
         }
 
@@ -74,7 +74,7 @@ export default class Graph {
             return (Math.abs(x1 - x2) + Math.abs(y1 - y2));
         }
 
-        if (this.nodes[g].blocked === true) return false;
+        if (this.blocked.includes(g)) return false;
 
         const start = s,
             goal = g,
@@ -121,7 +121,7 @@ export default class Graph {
                 };
                 calc.f = calc.g + calc.h;
 
-                if (edge.blocked || closed.includes(edge.id)) continue;
+                if (this.blocked.includes(edge.id) || closed.includes(edge.id)) continue;
                 if (edge.parent === undefined || edge.fresh === true || calc.f < edge.f) {
                     edge.parent = current.id;
                     edge.f = calc.f;
@@ -157,7 +157,7 @@ export default class Graph {
 
     getRandomPoint() {
         let p = this.nodes[random(this.nodeCount)];
-        while (p.blocked) {
+        while (this.blocked.includes(p.id)) {
             p = this.nodes[random(this.nodeCount)];
         }
 
@@ -181,7 +181,7 @@ export default class Graph {
             for (let i = cornerA.x; i <= cornerB.x; i += 10) {
                 for (let j = cornerB.y; j >= cornerC.y; j -= 10) {
                     let unit = this.find(i, j);
-                    if (unit) unit.blocked = true;
+                    if (unit) this.blocked.push(unit.id);
                 }
             }
         } else {

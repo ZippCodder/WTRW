@@ -4,8 +4,8 @@ import {
 
 /*
 @TODO 
-- Fix bullets going through walls at high speeds
-- place objects animations and updates in preRender
+- Fix heavy lag with avatars 
+- Fix avatar stacking
 */
 
 window.onload = async () => {
@@ -362,6 +362,7 @@ window.onload = async () => {
     }
 
     function renderControls() {
+        gl.uniform1f(locations.darkness, 1);
         $CONTROLS.forEach(v => {
             if (!v.hidden) {
                 v.render();

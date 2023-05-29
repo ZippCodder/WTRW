@@ -2366,7 +2366,7 @@ window.Avatar = class {
                 x,
                 y
             } = this.state.path.current[this.state.path.index];
-            if (this.map.GRAPH.find(x, y).blocked === false) {
+            if (!this.map.GRAPH.blocked.includes(this.map.GRAPH.find(x, y).id)) {
                 this.goto(x + 5, y - 5);
             } else if (this.state.path.index === 0) {
                 this.disengagePath();
@@ -2546,6 +2546,7 @@ window.Avatar = class {
             this.state.path.end = this.map.GRAPH.getPoint(x, y);
 
             p = this.map.GRAPH.getPath(this.state.path.start.unit, this.state.path.end.unit);
+
             if (!p) return p;
 
             this.state.path.current = p.path;
@@ -2772,6 +2773,8 @@ window._Map_ = class {
 
         if (_Map_._recording.isRecording) _Map_._recording.recording.push($CURRENT_MAP.centerX, $CURRENT_MAP.centerY, $AVATAR.trans.rotation * 180 / Math.PI, $AVATAR.state.walking);
 
+        this.updateGraph();
+
         this.renderBottomLayer();
 
         for (let i in this.objects) {
@@ -2909,6 +2912,18 @@ window._Map_ = class {
             }
         }
         return result;
+    }
+
+    updateGraph() {
+        this.GRAPH.blocked = [];
+        for (let o in this.obstacles) {
+            let obj = this.obstacles[o];
+            if (obj.name !== "avatar") {
+                for (let i of obj.segments) {
+                    this.GRAPH.evalObstacle((i[0] + obj.trans.offsetX) + this.centerX, (-(i[1]) + obj.trans.offsetY) + this.centerY, i[2], i[3]);
+                }
+            }
+        }
     }
 
     getObject(index) {
