@@ -96,14 +96,9 @@ window.onload = async () => {
         varying vec2 textrCoords;
         varying float textr;
 
-        uniform float vw;
-        uniform float vh;
+        uniform float worldUnitX;
+        uniform float worldUnitY;
 
-        float ma = max(vw,vh);
-        float mi = min(vw,vh);
-        float ra = ma/mi;
-        float xPercent;
-        float yPercent;
         float x;
         float y;
         mat2 rm;
@@ -146,22 +141,14 @@ window.onload = async () => {
 
         x = coords.x;
         y = coords.y;
-
-        if (ma == vw) {
-        xPercent = 0.01+(0.01/ra);
-        yPercent = 0.01+(0.01*ra);
-        } else {
-        xPercent = 0.01+(0.01*ra);
-        yPercent = 0.01+(0.01/ra);
-        }
-
+ 
         /* Pipeline Functions */
 
         rotate();
         translate();
 
-        x *= xPercent;
-        y *= yPercent;
+        x *= worldUnitX;
+        y *= worldUnitY;
 
         gl_Position = vec4(x,y,coords.z,scale);
         textrCoords = tcoords;
@@ -258,8 +245,8 @@ window.onload = async () => {
     gl.useProgram(program);
 
     window.locations = {
-        vw: gl.getUniformLocation(program, "vw"),
-        vh: gl.getUniformLocation(program, "vh"),
+        worldUnitX: gl.getUniformLocation(program, "worldUnitX"),
+        worldUnitY: gl.getUniformLocation(program, "worldUnitY"),
         textr1: gl.getUniformLocation(program, "textr1"),
         textr2: gl.getUniformLocation(program, "textr2"),
         textr3: gl.getUniformLocation(program, "textr3"),
@@ -342,8 +329,8 @@ window.onload = async () => {
         avatardrawglock20pullback: document.querySelector("#avatardrawglock20pullback")
     }
 
-    gl.uniform1f(locations.vw, window.innerWidth);
-    gl.uniform1f(locations.vh, window.innerHeight);
+    gl.uniform1f(locations.worldUnitX, worldUnitX);
+    gl.uniform1f(locations.worldUnitY, worldUnitY);
     gl.uniform1i(locations.textr1, 0);
     gl.uniform1i(locations.textr2, 1);
     gl.uniform1i(locations.textr3, 2);
