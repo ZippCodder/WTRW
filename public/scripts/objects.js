@@ -2516,7 +2516,7 @@ window.Avatar = class {
         this.state.target.current = undefined;
         this.state.speed = this.state.baseSpeed;
         this.state.fire = false;
-        this.disengagePath();
+        if (this.state.path.engaged) this.disengagePath();
 
         if (this.state.openCarry) {
             this.drawWeapon();
@@ -2863,8 +2863,10 @@ window._Map_ = class {
 
             if (obj.postLink) obj.postLink();
 
-            if (obj.obstacle && obj.name !== "avatar") {
-                for (let i of obj.segments) {
+            if (obj.obstacle) {
+                for (let i of ((obj.type === "avatar") ? [
+                        [-0.5, -0.5, 1, 1]
+                    ] : obj.segments)) {
                     this.GRAPH.evalObstacle((i[0] + obj.trans.offsetX) + this.centerX, (-(i[1]) + obj.trans.offsetY) + this.centerY, i[2], i[3]);
                 }
             }
@@ -2918,10 +2920,10 @@ window._Map_ = class {
         this.GRAPH.blocked = [];
         for (let o in this.obstacles) {
             let obj = this.obstacles[o];
-            if (obj.name !== "avatar") {
-                for (let i of obj.segments) {
-                    this.GRAPH.evalObstacle((i[0] + obj.trans.offsetX) + this.centerX, (-(i[1]) + obj.trans.offsetY) + this.centerY, i[2], i[3]);
-                }
+            for (let i of ((obj.type === "avatar") ? [
+                    [-0.5, -0.5, 1, 1]
+                ] : obj.segments)) {
+                this.GRAPH.evalObstacle((i[0] + obj.trans.offsetX) + this.centerX, (-(i[1]) + obj.trans.offsetY) + this.centerY, i[2], i[3]);
             }
         }
     }
