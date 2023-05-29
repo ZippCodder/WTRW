@@ -1949,6 +1949,7 @@ window.Avatar = class {
         this.name = "avatar";
         this.state = {
             baseSpeed: 1,
+            runningSpeed: 2,
             speed: 1,
             armor: 0,
             invinsible: false,
@@ -2253,10 +2254,11 @@ window.Avatar = class {
                 if (a) a.state.kills += 1;
                 this.purgeItems(5);
                 this.delete();
+                return;
             }
         }
 
-        if (this.state.passive && !this.state.aggressive) {
+        if ((this.state.passive && !this.state.aggressive) || (this.state.fire && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo <= 0)) {
             this.run();
         } else if (!this.state.target.id.includes(owner.state.targetId) && ($CURRENT_MAP || this.map).avatars[owner.id] && this.state.aggressive) {
             this.state.target.id.push(owner.state.targetId);
@@ -2381,7 +2383,7 @@ window.Avatar = class {
 
         if (this.state.target.id.length > 0) this.state.targetUpdateAnimation.run();
 
-        attack: if (this.state.target.current && this.state.target.engaged) {
+        attack: if (this.state.target.current && this.state.target.engaged && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo > 0) {
 
             const m = this.map || $CURRENT_MAP;
             if (this.map.avatars[this.state.target.current.id]) {
@@ -2529,6 +2531,7 @@ window.Avatar = class {
                 x,
                 y
             } = ($CURRENT_MAP || this.map).GRAPH.getRandomPoint();
+            this.state.speed = this.state.runningSpeed * this.state.baseSpeed;
             this.findPathTo(x, y);
         }
     }
