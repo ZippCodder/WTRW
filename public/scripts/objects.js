@@ -2358,25 +2358,28 @@ window.Avatar = class {
         if (this.state.recording.useRecording) this.state.recordAnimation.run();
         if (this.state.goto.engaged) this.state.gotoAnimation.run();
 
-        // walk to path
+        // walk to destination
         walk: if (this.state.path.engaged && !this.state.goto.engaged) {
             if (this.state.recording.useRecording) this.pauseRecording();
-
+            
+            if (this.state.path.index === this.state.path.current.length) {
+              this.disengagePath();
+              break walk;
+            }
+   
             let {
                 x,
                 y
             } = this.state.path.current[this.state.path.index];
+
             if (!this.map.GRAPH.blocked.includes(this.map.GRAPH.find(x, y).id)) {
-                this.goto(x + 5, y - 5);
-            } else if (this.state.path.index === 0) {
-                this.disengagePath();
-            } else {
+               this.goto(x + 5, y - 5);
+            } else if (this.state.path.index !== 0) {
                 this.findPathTo(this.state.path.end.x, this.state.path.end.y);
                 break walk;
             }
-
+ 
             this.state.path.index++;
-            if (this.state.path.index === this.state.path.current.length) this.disengagePath();
         }
 
         // attack target(s)
@@ -2569,7 +2572,6 @@ window.Avatar = class {
         this.state.path.current = [];
         this.state.path.index = 0;
         this.state.path.engaged = false;
-
         this.disengageGoto();
     }
 
@@ -2864,9 +2866,7 @@ window._Map_ = class {
             if (obj.postLink) obj.postLink();
 
             if (obj.obstacle) {
-                for (let i of ((obj.type === "avatar") ? [
-                        [-0.5, -0.5, 1, 1]
-                    ] : obj.segments)) {
+                for (let i of obj.segments) {
                     this.GRAPH.evalObstacle((i[0] + obj.trans.offsetX) + this.centerX, (-(i[1]) + obj.trans.offsetY) + this.centerY, i[2], i[3]);
                 }
             }
@@ -2920,9 +2920,7 @@ window._Map_ = class {
         this.GRAPH.blocked = [];
         for (let o in this.obstacles) {
             let obj = this.obstacles[o];
-            for (let i of ((obj.type === "avatar") ? [
-                    [-0.5, -0.5, 1, 1]
-                ] : obj.segments)) {
+            for (let i of obj.segments) {
                 this.GRAPH.evalObstacle((i[0] + obj.trans.offsetX) + this.centerX, (-(i[1]) + obj.trans.offsetY) + this.centerY, i[2], i[3]);
             }
         }

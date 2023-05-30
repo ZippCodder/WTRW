@@ -4,8 +4,8 @@ import {
 
 /*
 @TODO 
+- Fix avatar nav issues with blocked start and end nodes
 - Fix heavy lag with avatars 
-- Fix avatar stacking
 */
 
 window.onload = async () => {

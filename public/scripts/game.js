@@ -40,7 +40,7 @@
 
   let id = genObjectId();
 
-  let b = new Avatar("Keanu Reeves", 10, 10);
+  let b = new Avatar("Keanu Reeves", 5, 5);
   $MAP.link(b);
   b.state.attack.engageDistance = 500;
   b.state.attack.disengageDistance = 500;
@@ -52,9 +52,13 @@
   b.addItem(new GLOCK_20(0, 0, 0, 1000));
   b.state.fireAnimation.rate = 0.5 / 10;
   b.state.targetId = b.id;
-  b.killTarget([id], true);
-
-  /*
+  console.log(b.findPathTo(-30,30));
+ // b.killTarget([id], true);
+ 
+ // $MAP.link(new VisibleBarrier(10,10,10,10));
+ // console.log(b.findPathTo(-30,-30));
+/*
+  
     let c = new Avatar("Trinity", -20, 0);
     $MAP.link(c);
     c.state.attack.engageDistance = 500;
@@ -67,23 +71,25 @@
     c.addItem(new GLOCK_20(0, 0, 0, 1000));
     c.state.fireAnimation.rate = 0.5 / 10;
     c.state.targetId = c.id;
-    c.killTarget([id], true);
+    c.killTarget([id], true); 
 
-    for (let i = 0; i <= 50; i++) {
+    for (let i = 0; i <= 10; i++) {
         let {
             x,
             y
         } = $MAP.GRAPH.getRandomPoint();
         let a = new Avatar(String(i), x, y);
         $MAP.link(a);
+        $MAP.updateGraph();
         a.state.attack.engageDistance = 300;
         a.state.attack.disengageDistance = 500;
         a.state.attack.attackSpeed = 1;
+        a.state.armor = 5000;
         a.state.aggressive = false;
         a.state.passive = false;
         a.state.targetUpdateAnimation.rate = 0.2;
         a.addItem(new GLOCK_20(0, 0, 0, 2000));
         a.state.fireAnimation.rate = 0.5 / 1;
         a.state.targetId = id;
-        a.killTarget([b.id, c.id], true);
+        a.killTarget([$AVATAR.id], true);
     } */
