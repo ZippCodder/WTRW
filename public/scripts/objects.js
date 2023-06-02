@@ -18,7 +18,7 @@ import {
     rotate
 } from "/public/scripts/lib.js";
 
-import Graph from "/public/scripts/pathfinder.js";
+import Graph from "/public/scripts/graph.js";
 
 window._Object_ = class {
     constructor(vertices, imp, render = function() {}, width, height, initialX, initialY, initialRotation, type, name) {
@@ -2361,7 +2361,7 @@ window.Avatar = class {
         // walk to destination
         walk: if (this.state.path.engaged && !this.state.goto.engaged) {
             if (this.state.recording.useRecording) this.pauseRecording();
-            
+         
             if (this.state.path.index === this.state.path.current.length) {
               this.disengagePath();
               break walk;
@@ -2371,7 +2371,7 @@ window.Avatar = class {
                 x,
                 y
             } = this.state.path.current[this.state.path.index];
-
+ 
             if (!this.map.GRAPH.blocked.includes(this.map.GRAPH.find(x, y).id)) {
                this.goto(x + 5, y - 5);
             } else if (this.state.path.index !== 0) {
@@ -2540,7 +2540,7 @@ window.Avatar = class {
     }
 
     findPathTo(x, y) {
-
+   
         this.disengagePath();
         let p = false;
 

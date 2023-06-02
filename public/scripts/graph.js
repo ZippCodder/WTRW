@@ -65,7 +65,7 @@ export default class Graph {
     }
 
     getPath(s, g) {
-
+        
         function euclideanDistance(x1, y1, x2, y2) {
             return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
         }
@@ -86,13 +86,14 @@ export default class Graph {
         };
 
         while (open.length > 0) {
-
+          
             current = open.reduce((a, v) => {
                 return ((this.nodes[v].f < a.f || (this.nodes[v].f === a.f && this.nodes[v].h < a.h)) ? this.nodes[v] : a)
             }, {
                 f: Infinity,
                 h: Infinity
             });
+
             open.splice(open.indexOf(current.id), 1);
             closed.push(current.id);
 
@@ -127,7 +128,7 @@ export default class Graph {
                     edge.f = calc.f;
                     edge.g = calc.g;
                     edge.h = calc.h;
-                    open.push(edge.id);
+                   if (!open.includes(edge.id)) open.push(edge.id); 
                 }
             }
 
@@ -156,9 +157,10 @@ export default class Graph {
     }
 
     getRandomPoint() {
-        let p = this.nodes[random(this.nodeCount)];
+        let p = this.nodes[random(this.nodeCount) || 1];
+       
         while (this.blocked.includes(p.id)) {
-            p = this.nodes[random(this.nodeCount)];
+            p = this.nodes[random(this.nodeCount) || 1];
         }
 
         return {

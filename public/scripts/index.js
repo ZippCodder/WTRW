@@ -4,8 +4,7 @@ import {
 
 /*
 @TODO 
-- Fix avatar nav issues with blocked start and end nodes
-- Fix heavy lag with avatars 
+- Fix heavy lag with avatars when obstacle assessment is enabled
 */
 
 window.onload = async () => {
@@ -411,7 +410,7 @@ window.onload = async () => {
 
         T2 = performance.now();
 
-        gameStats.innerHTML = `FPS: ${frameRate}`;
+        gameStats.innerHTML = `FPS: ${frameRate}, Time: ${T2-T1}`;
         globalFrameRun++;
         times.push(T2 - T1);
 
