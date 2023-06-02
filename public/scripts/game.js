@@ -28,23 +28,22 @@
 
   /* INSTANTIATE INITIAL MAP */
 
-   $MAP = new _Map_(780, 280).init();
- //$MAP = new _Map_(50, 50).init();
+  $MAP = new _Map_(780, 280).init();
+ // $MAP = new _Map_(200, 200).init();
   $MAP.parseLayoutScript(Map1);
   $CURRENT_MAP = $MAP;
   $MAP.showGeometry();
 
   $MAP.avatars[$AVATAR.id] = $AVATAR;
   $AVATAR.state.targetId = $AVATAR.id;
-  $AVATAR.addItem(new GLOCK_20(0, 0, 0, 0));
+  $AVATAR.addItem(new GLOCK_20(0, 0, 0, 1000));
   $AVATAR.state.fireAnimation.rate = 0.5 / 20;
 
   let id = genObjectId();
 
- let t1 = performance.now();
  //$MAP.GRAPH.blocked.push(8,12,13,14,18);
- $MAP.GRAPH.getPath(488,1857);
- console.log(performance.now()-t1);
+// $MAP.GRAPH.getPath(488,1857);
+// console.log(performance.now()-t1);
 /*
   let b = new Avatar("Keanu Reeves", 5, 5);
   $MAP.link(b);
@@ -77,9 +76,9 @@
     c.addItem(new GLOCK_20(0, 0, 0, 1000));
     c.state.fireAnimation.rate = 0.5 / 10;
     c.state.targetId = c.id;
-    c.killTarget([id], true); */ 
-
-    for (let i = 1; i <= 5; i++) {
+    c.killTarget([id], true); 
+*/
+    for (let i = 1; i <= 30; i++) {
         let {
             x,
             y
@@ -93,8 +92,8 @@
         a.state.aggressive = false;
         a.state.passive = false;
         a.state.targetUpdateAnimation.rate = 0.2;
-        a.addItem(new GLOCK_20(0, 0, 0, 2000));
+        a.addItem(new GLOCK_20(0, 0, 0, 0));
         a.state.fireAnimation.rate = 0.5 / 1;
         a.state.targetId = id;
-        a.killTarget([$AVATAR.id], true);
-    }
+        a.gotoAvatar();
+    } 

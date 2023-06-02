@@ -18,7 +18,15 @@ import {
     rotate
 } from "/public/scripts/lib.js";
 
-import Graph from "/public/scripts/graph.js";
+const pathfinder = new Worker("/public/scripts/pathfinder.js");
+
+pathfinder.requestPath = function(avatar,start,end) {
+ this.postMessage({mapId: avatar.map.id, blocked: avatar.map.GRAPH.blocked, nodes: avatar.map.GRAPH.nodes, avatarId: avatar.id, path: { start: start, end: end}});
+}
+
+pathfinder.onmessage = function({data}) {
+  _Map_._all[data.mapId].avatars[data.avatarId].findPathTo(data.result); 
+}
 
 window._Object_ = class {
     constructor(vertices, imp, render = function() {}, width, height, initialX, initialY, initialRotation, type, name) {
@@ -1975,7 +1983,8 @@ window.Avatar = class {
                 index: 0,
                 engaged: false,
                 start: undefined,
-                end: undefined
+                end: undefined,
+                request: true
             },
             targetId: undefined,
             target: {
@@ -2014,6 +2023,9 @@ window.Avatar = class {
             equippedItems: {
                 mainTool: undefined
             },
+            pathRequestRateLimit: new MultiFrameLinearAnimation([function() {
+               this.state.path.request = true;
+            }],this,[1]),
             targetUpdateAnimation: new LoopAnimation(function() {
                 const map = (this.map || $CURRENT_MAP);
 
@@ -2357,6 +2369,7 @@ window.Avatar = class {
 
         if (this.state.recording.useRecording) this.state.recordAnimation.run();
         if (this.state.goto.engaged) this.state.gotoAnimation.run();
+        if (!this.state.path.request) this.state.pathRequestRateLimit.run();
 
         // walk to destination
         walk: if (this.state.path.engaged && !this.state.goto.engaged) {
@@ -2375,7 +2388,7 @@ window.Avatar = class {
             if (!this.map.GRAPH.blocked.includes(this.map.GRAPH.find(x, y).id)) {
                this.goto(x + 5, y - 5);
             } else if (this.state.path.index !== 0) {
-                this.findPathTo(this.state.path.end.x, this.state.path.end.y);
+                this.requestPath(this.state.path.end.x, this.state.path.end.y);
                 break walk;
             }
  
@@ -2401,7 +2414,7 @@ window.Avatar = class {
                     this.state.speed = this.state.baseSpeed * this.state.attack.attackSpeed;
                     this.state.fire = false;
                     if (!this.state.openCarry && this.state.draw) this.holsterWeapon();
-                    if (!this.state.path.engaged) this.findPathTo(targetX + m.centerX, targetY + m.centerY);
+                    if (!this.state.path.engaged) this.requestPath(targetX + m.centerX, targetY + m.centerY);
                 } else if (dist < this.state.attack.settleDistance) {
                     if (this.state.path.engaged) this.disengagePath();
                     this.trans.rotation = Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX)) - 1.5708;
@@ -2423,7 +2436,7 @@ window.Avatar = class {
                         this.drawWeapon();
                         this.state.fire = true;
                     }
-                    if (!this.state.path.engaged) this.findPathTo(targetX + m.centerX, targetY + m.centerY);
+                    if (!this.state.path.engaged) this.requestPath(targetX + m.centerX, targetY + m.centerY);
                 }
 
                 break attack;
@@ -2535,35 +2548,40 @@ window.Avatar = class {
                 y
             } = ($CURRENT_MAP || this.map).GRAPH.getRandomPoint();
             this.state.speed = this.state.runningSpeed * this.state.baseSpeed;
-            this.findPathTo(x, y);
+            this.requestPath(x, y);
         }
     }
-
-    findPathTo(x, y) {
-   
-        this.disengagePath();
-        let p = false;
-
+ 
+    requestPath(x, y) { 
+      if (this.state.path.request) {
+        this.state.path.request = false;
+        this.state.pathRequestRateLimit.start();
         if ((x >= -this.map.width / 2 && x < this.map.width / 2) && (y <= this.map.height / 2 && y > -this.map.height / 2)) {
             this.state.path.start = this.map.GRAPH.getPoint(this.trans.offsetX + this.map.centerX, this.trans.offsetY + this.map.centerY);
             this.state.path.end = this.map.GRAPH.getPoint(x, y);
+ 
+            pathfinder.requestPath(this, this.state.path.start.unit, this.state.path.end.unit);
+          return true;
+       }
+     }
 
-            p = this.map.GRAPH.getPath(this.state.path.start.unit, this.state.path.end.unit);
+     return false;
+    }
 
-            if (!p) return p;
+    findPathTo(path) {
+                    
+      if (path.result) {
+         this.state.path.current = path.path;
+         this.state.path.current.unshift({
+           x: this.state.path.start.x,
+           y: this.state.path.start.y
+         });
 
-            this.state.path.current = p.path;
-            this.state.path.current.unshift({
-                x: this.state.path.start.x,
-                y: this.state.path.start.y
-            });
+         this.state.path.index = 0;
+         this.state.path.engaged = true;
+      }
 
-            if (p.result) {
-                this.state.path.index = 0;
-                this.state.path.engaged = true;
-            }
-        }
-        return p;
+        return path;
     }
 
     disengagePath() {
@@ -2576,7 +2594,7 @@ window.Avatar = class {
     }
 
     gotoAvatar() {
-        return this.findPathTo(this.map.centerX, this.map.centerY);
+        return this.requestPath(this.map.centerX, this.map.centerY);
     }
 
     delete() {
@@ -2714,6 +2732,198 @@ window.Trigger = class {
     }
 }
 
+// class for generating graphs for maps, used for pathfinding..
+
+window._Graph_ = class {
+    constructor(width, height, diagonal = false) {
+
+        this.width = width;
+        this.height = height;
+        this.nodeCount = width * height;
+        this.diagonal = diagonal;
+        this.blocked = [];
+        this.grid = new Map();
+        this.find = (function(col, row) {
+            return this.grid.get(`${col},${row}`);
+        }).bind(this);
+
+        class Node {
+            constructor(x, y, edges = []) {
+                this.position = {
+                    x: x,
+                    y: y
+                };
+                this.f = 0;
+                this.g = 0;
+                this.h = 0;
+                this.edges = edges;
+                this.parent = undefined;
+                this.fresh = true;
+            }
+        }
+
+        this.nodes = {};
+
+        let col = 0,
+            row = 0,
+            node;
+        for (let i = 1; i <= this.nodeCount; i++) {
+            node = new Node((col - (width / 2)) * 10, -((row - (height / 2)) * 10));
+            node.id = i;
+            this.nodes[i] = node;
+            this.grid.set(`${(col-(width/2))*10},${-((row-(height/2))*10)}`, node);
+
+            if (col > 0) node.edges.push(node.id - 1);
+            if (col < this.width - 1) node.edges.push(node.id + 1);
+            if (row > 0) node.edges.push(node.id - width);
+            if (row < this.height - 1) node.edges.push(node.id + width);
+
+            if (this.diagonal) {
+                if (col > 0 && row > 0) node.edges.push(node.id - width - 1);
+                if (col < width - 1 && row > 0) node.edges.push(node.id - width + 1);
+                if (row < height - 1 && col < width - 1) node.edges.push(node.id + width + 1);
+                if (row < height - 1 && col > 0) node.edges.push(node.id + width - 1);
+            }
+
+            if (col === width - 1) {
+                col = 0;
+                row++;
+            } else {
+                col++;
+            }
+        }
+    }
+
+    getPath(s, g) {
+        
+        function euclideanDistance(x1, y1, x2, y2) {
+            return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+        }
+
+        function manhattanDistance(x1, y1, x2, y2) {
+            return (Math.abs(x1 - x2) + Math.abs(y1 - y2));
+        }
+
+        if (this.blocked.includes(g)) return false;
+
+        const start = s,
+            goal = g,
+            open = [s],
+            closed = [];
+        let current, result = {
+            result: false,
+            path: []
+        };
+
+        while (open.length > 0) {
+          
+            current = open.reduce((a, v) => {
+                return ((this.nodes[v].f < a.f || (this.nodes[v].f === a.f && this.nodes[v].h < a.h)) ? this.nodes[v] : a)
+            }, {
+                f: Infinity,
+                h: Infinity
+            });
+
+            open.splice(open.indexOf(current.id), 1);
+            closed.push(current.id);
+
+            if (current.id === goal) {
+                let n = current;
+
+                while (n.id !== start) {
+                    n = this.nodes[n.parent];
+                    if (n.id === start) break;
+                    result.path.unshift(n.position);
+                }
+
+                result.path.push(current.position);
+                result.result = true;
+                break;
+            }
+
+            for (let i of current.edges) {
+                let edge = this.nodes[i];
+
+                if (edge === undefined) continue;
+
+                let calc = {
+                    g: current.g + euclideanDistance(edge.position.x, edge.position.y, current.position.x, current.position.y),
+                    h: manhattanDistance(edge.position.x, edge.position.y, this.nodes[goal].position.x, this.nodes[goal].position.y)
+                };
+                calc.f = calc.g + calc.h;
+
+                if (this.blocked.includes(edge.id) || closed.includes(edge.id)) continue;
+                if (edge.parent === undefined || edge.fresh === true || calc.f < edge.f) {
+                    edge.parent = current.id;
+                    edge.f = calc.f;
+                    edge.g = calc.g;
+                    edge.h = calc.h;
+                   if (!open.includes(edge.id)) open.push(edge.id); 
+                }
+            }
+
+            current.f = 0;
+            current.h = 0;
+            current.g = 0;
+            current.fresh = true;
+        }
+
+        return result;
+    }
+
+    getPoint(x, y) {
+
+        let p = {
+                x: (this.width % 2 === 0) ? (Math.floor(x * 0.1) * 10) : (Math.round(x * 0.1) * 10) - 5,
+                y: (this.height % 2 === 0) ? (Math.ceil(y * 0.1) * 10) : (y % 5 === 0 && y % 2 !== 0) ? (Math.round(y * 0.1) * 10) - 5 : (Math.round(y * 0.1) * 10) + 5
+            },
+            unit = this.find(p.x, p.y);
+
+        return (unit) ? {
+            x: p.x,
+            y: p.y,
+            unit: unit.id
+        } : false;
+    }
+
+    getRandomPoint() {
+        let p = this.nodes[random(this.nodeCount) || 1];
+       
+        while (this.blocked.includes(p.id)) {
+            p = this.nodes[random(this.nodeCount) || 1];
+        }
+
+        return {
+            x: p.position.x,
+            y: p.position.y,
+            unit: p.id
+        };
+    }
+
+    evalObstacle(x, y, width, height) {
+
+        let xAndWidth = (x + width) - 1,
+            yAndHeight = (y - height) + 1;
+
+        const cornerA = this.getPoint(x, y);
+        const cornerB = this.getPoint(xAndWidth, y);
+        const cornerC = this.getPoint(xAndWidth, yAndHeight);
+
+        if (cornerA && cornerB && cornerC) {
+            for (let i = cornerA.x; i <= cornerB.x; i += 10) {
+                for (let j = cornerB.y; j >= cornerC.y; j -= 10) {
+                    let unit = this.find(i, j);
+                    if (unit) this.blocked.push(unit.id);
+                }
+            }
+        } else {
+            return false;
+        }
+
+        return true;
+    }
+}
+
 // export class for map creation
 window._Map_ = class {
 
@@ -2721,6 +2931,8 @@ window._Map_ = class {
         isRecording: false,
         recording: []
     };
+ 
+    static _all = {};
 
     constructor(width, height, root = true) {
         this.width = width;
@@ -2750,7 +2962,7 @@ window._Map_ = class {
         this.locations = {};
         this.clusters = {};
         this.interactables = {};
-        this.GRAPH = new Graph(this.units.width, this.units.height);
+        this.GRAPH = new _Graph_(this.units.width, this.units.height);
         this.SUB_MAP_COUNT = 0;
         this.SUB_MAPS = {};
         this.PARENT_MAP = undefined;
@@ -2765,6 +2977,8 @@ window._Map_ = class {
         }
 
         this.groundPlate = new VisibleBarrier(0, 0, 500, 500, this.groundColor);
+ 
+        _Map_._all[this.id] = this;
     }
 
     render() {

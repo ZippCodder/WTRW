@@ -352,7 +352,7 @@ window.onload = async () => {
     await import("/public/scripts/objects.js");
     await import("/public/scripts/game.js");
     await import("/public/scripts/controls.js");
-
+  
     function renderObjects() {
         $OBJECTS.forEach(v => {
             if (v.preRender) v.preRender();
