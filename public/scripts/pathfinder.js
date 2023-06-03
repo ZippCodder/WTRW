@@ -8,9 +8,7 @@
   } 
   
    function getPath(s, g) {
-        
-        if (this.blocked.includes(g)) return false;
-
+         
         const start = s,
             goal = g,
             open = [s],
@@ -57,13 +55,13 @@
                 };
                 calc.f = calc.g + calc.h;
 
-                if (this.blocked.includes(edge.id) || closed.includes(edge.id)) continue;
+                if ((this.blocked.includes(edge.id) || closed.includes(edge.id)) && edge.id !== goal) continue;
                 if (edge.parent === undefined || edge.fresh === true || calc.f < edge.f) {
                     edge.parent = current.id;
                     edge.f = calc.f;
                     edge.g = calc.g;
                     edge.h = calc.h;
-                   if (!open.includes(edge.id)) open.push(edge.id); 
+                    if (!open.includes(edge.id)) open.push(edge.id); 
                 }
             }
 

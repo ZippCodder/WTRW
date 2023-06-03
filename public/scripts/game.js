@@ -45,28 +45,31 @@
 // $MAP.GRAPH.getPath(488,1857);
 // console.log(performance.now()-t1);
 
+
   let b = new Avatar("Keanu Reeves", 5, 5);
   $MAP.link(b);
-  b.state.attack.engageDistance = 500;
-  b.state.attack.disengageDistance = 500;
+  b.state.attack.engageDistance = 100;
+  b.state.attack.disengageDistance = 200;
   b.state.attack.attackSpeed = 1;
   b.state.armor = 5000;
   b.state.passive = false;
-  b.state.aggressive = false;
+  b.state.aggressive = true;
+  b.state.attack.forget = true;
   b.state.targetUpdateAnimation.rate = 0.2;
   b.addItem(new GLOCK_20(0, 0, 0, 1000));
   b.state.fireAnimation.rate = 0.5 / 10;
-  b.state.targetId = b.id;
+  b.state.targetId = b.id; 
   b.killTarget([id],true);
+
 
  // $MAP.link(new VisibleBarrier(10,10,10,10));
  // console.log(b.findPathTo(-30,-30));
-  
+ /*
     let c = new Avatar("Trinity", -20, 0);
     $MAP.link(c);
     c.state.attack.engageDistance = 500;
     c.state.attack.disengageDistance = 500;
-    c.state.attack.attackSpeed = 1;
+    c.state.attack.attackSpeed = 2;
     c.state.armor = 5000;
     c.state.passive = false;
     c.state.aggressive = false;
@@ -74,9 +77,9 @@
     c.addItem(new GLOCK_20(0, 0, 0, 1000));
     c.state.fireAnimation.rate = 0.5 / 10;
     c.state.targetId = c.id;
-    c.killTarget([id],true); 
-
-    for (let i = 1; i <= 60; i++) {
+    c.killTarget([id],true);  
+*/
+    for (let i = 1; i <= 40; i++) {
         let {
             x,
             y
@@ -93,5 +96,5 @@
         a.addItem(new GLOCK_20(0, 0, 0, 100));
         a.state.fireAnimation.rate = 0.5 / 1;
         a.state.targetId = id;
-        a.killTarget([$AVATAR.id]);
+        a.killTarget([b.id]);
     } 

@@ -25,7 +25,7 @@ pathfinder.requestPath = function(avatar,start,end) {
 }
 
 pathfinder.onmessage = function({data}) {
-  _Map_._all[data.mapId].avatars[data.avatarId].findPathTo(data.result); 
+  _Map_._all[data.mapId].avatars[data.avatarId]?.findPathTo(data.result); 
 }
 
 window._Object_ = class {
@@ -2025,13 +2025,13 @@ window.Avatar = class {
             },
             pathRequestRateLimit: new MultiFrameLinearAnimation([function() {
                this.state.path.request = true;
-            }],this,[0.5]),
+            }],this,[1]),
             targetUpdateAnimation: new LoopAnimation(function() {
                 const map = (this.map || $CURRENT_MAP);
 
                 if (this.state.attack.multiple) {
                     let targetDistance = this.state.attack.engageDistance,
-                        target;
+                        target, remember = [];
 
                     for (let i in map.avatars) {
                         if (map.avatars[i].id === this.id) continue;
@@ -2041,18 +2041,26 @@ window.Avatar = class {
                             offsetY: targetY
                         } = map.avatars[i].trans;
                         let dist = distance(this.trans.offsetX, this.trans.offsetY, targetX, targetY);
-                        if (((this.state.target.id.includes(this.map.avatars[i].state.targetId) && !this.state.attack.invertTargets) || (!this.state.target.id.includes(this.map.avatars[i].state.targetId) && this.state.attack.invertTargets)) && dist < targetDistance) {
+                        if (((this.state.target.id.includes(map.avatars[i].state.targetId) && !this.state.attack.invertTargets) || (!this.state.target.id.includes(this.map.avatars[i].state.targetId) && this.state.attack.invertTargets))) {
+                          if (dist < targetDistance && map.avatars[i] !== this) {
                             targetDistance = dist;
                             target = map.avatars[i];
-                        }
+                          }
+                          if (dist < this.state.attack.disengageDistance && this.state.attack.forget && !remember.includes(map.avatars[i].state.targetId)) {
+                            remember.push(map.avatars[i].state.targetId);
+                          }
+                        } 
+                    }  
+ 
+                    if (this.state.attack.forget) {
+                      this.state.target.id = remember;
                     }
 
-                    if ((targetDistance === this.state.attack.engageDistance && this.state.target.engaged && this.state.attack.forget) || target === undefined) this.disengageTarget();
-
-                    if (this.state.target.current !== target) {
+                    if (target && this.state.target.current !== target) {
                         this.state.target.current = target;
                         this.state.target.engaged = true;
                     }
+
                 } else if (map.avatars[this.state.target.id[0]]) {
                     let {
                         offsetX: targetX,
@@ -2398,9 +2406,8 @@ window.Avatar = class {
         // attack target(s)
 
         if (this.state.target.id.length > 0) this.state.targetUpdateAnimation.run();
-
+        
         attack: if (this.state.target.current && this.state.target.engaged && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo > 0) {
-
             const m = this.map || $CURRENT_MAP;
             if (this.map.avatars[this.state.target.current.id]) {
 
@@ -2414,7 +2421,7 @@ window.Avatar = class {
                     this.state.speed = this.state.baseSpeed * this.state.attack.attackSpeed;
                     this.state.fire = false;
                     if (!this.state.openCarry && this.state.draw) this.holsterWeapon();
-                    if (!this.state.path.engaged) this.requestPath(targetX + m.centerX, targetY + m.centerY);
+                    if (this.state.path.request && !this.state.path.engaged) this.requestPath(targetX + m.centerX, targetY + m.centerY);
                 } else if (dist < this.state.attack.settleDistance) {
                     if (this.state.path.engaged) this.disengagePath();
                     this.trans.rotation = Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX)) - 1.5708;
@@ -2527,7 +2534,7 @@ window.Avatar = class {
         return false;
     }
 
-    disengageTarget() {
+    disengageTarget() { 
         this.state.target.engaged = false;
         this.state.target.current = undefined;
         this.state.speed = this.state.baseSpeed;
@@ -2556,20 +2563,21 @@ window.Avatar = class {
       if (this.state.path.request) {
         this.state.path.request = false;
         this.state.pathRequestRateLimit.start();
-        if ((x >= -this.map.width / 2 && x < this.map.width / 2) && (y <= this.map.height / 2 && y > -this.map.height / 2)) {
-            this.state.path.start = this.map.GRAPH.getPoint(this.trans.offsetX + this.map.centerX, this.trans.offsetY + this.map.centerY);
-            this.state.path.end = this.map.GRAPH.getPoint(x, y);
- 
+
+       let start = this.map.GRAPH.getPoint(this.trans.offsetX + this.map.centerX, this.trans.offsetY + this.map.centerY), end = this.map.GRAPH.getPoint(x, y);
+
+        if ((x >= -this.map.width / 2 && x < this.map.width / 2) && (y <= this.map.height / 2 && y > -this.map.height / 2) && start && end) {
+            this.state.path.start = start;           
+            this.state.path.end = end;
             pathfinder.requestPath(this, this.state.path.start.unit, this.state.path.end.unit);
           return true;
-       }
+        }
      }
 
      return false;
     }
 
     findPathTo(path) {
-                    
       if (path.result) {
          this.state.path.current = path.path;
          this.state.path.current.unshift({
@@ -3080,11 +3088,9 @@ window._Map_ = class {
             if (obj.postLink) obj.postLink();
 
             if (obj.obstacle) {
-              if (obj.type !== "avatar") {
                 for (let i of obj.segments) {
                     this.GRAPH.evalObstacle((i[0] + obj.trans.offsetX) + this.centerX, (-(i[1]) + obj.trans.offsetY) + this.centerY, i[2], i[3]);
                 }
-              }
             }
 
             this.objectCount++;
@@ -3136,12 +3142,10 @@ window._Map_ = class {
         this.GRAPH.blocked = [];
         for (let o in this.obstacles) {
             let obj = this.obstacles[o];
-          if (obj.type !== "avatar") {
             for (let i of obj.segments) {
                 this.GRAPH.evalObstacle((i[0] + obj.trans.offsetX) + this.centerX, (-(i[1]) + obj.trans.offsetY) + this.centerY, i[2], i[3]);
             }
           }
-        }
     }
 
     getObject(index) {
