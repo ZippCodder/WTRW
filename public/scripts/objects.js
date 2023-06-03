@@ -2025,7 +2025,7 @@ window.Avatar = class {
             },
             pathRequestRateLimit: new MultiFrameLinearAnimation([function() {
                this.state.path.request = true;
-            }],this,[1]),
+            }],this,[0.5]),
             targetUpdateAnimation: new LoopAnimation(function() {
                 const map = (this.map || $CURRENT_MAP);
 
@@ -3080,9 +3080,11 @@ window._Map_ = class {
             if (obj.postLink) obj.postLink();
 
             if (obj.obstacle) {
+              if (obj.type !== "avatar") {
                 for (let i of obj.segments) {
                     this.GRAPH.evalObstacle((i[0] + obj.trans.offsetX) + this.centerX, (-(i[1]) + obj.trans.offsetY) + this.centerY, i[2], i[3]);
                 }
+              }
             }
 
             this.objectCount++;
@@ -3134,9 +3136,11 @@ window._Map_ = class {
         this.GRAPH.blocked = [];
         for (let o in this.obstacles) {
             let obj = this.obstacles[o];
+          if (obj.type !== "avatar") {
             for (let i of obj.segments) {
                 this.GRAPH.evalObstacle((i[0] + obj.trans.offsetX) + this.centerX, (-(i[1]) + obj.trans.offsetY) + this.centerY, i[2], i[3]);
             }
+          }
         }
     }
 
