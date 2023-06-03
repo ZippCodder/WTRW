@@ -21,11 +21,11 @@ import {
 const pathfinder = new Worker("/public/scripts/pathfinder.js");
 
 pathfinder.requestPath = function(avatar,start,end) {
-this.postMessage({mapId: avatar.map.id, blocked: avatar.map.GRAPH.blocked, nodes: avatar.map.GRAPH.nodes, avatarId: avatar.id, path: { start: start, end: end}});
+ this.postMessage({mapId: avatar.map.id, blocked: avatar.map.GRAPH.blocked, nodes: avatar.map.GRAPH.nodes, avatarId: avatar.id, path: { start: start, end: end}});
 }
 
 pathfinder.onmessage = function({data}) {
-_Map_._all[data.mapId].avatars[data.avatarId].findPathTo(data.result); 
+  _Map_._all[data.mapId].avatars[data.avatarId].findPathTo(data.result); 
 }
 
 window._Object_ = class {
@@ -2348,7 +2348,6 @@ window.Avatar = class {
     }
 
     preRender() {
-        let T1 = performance.now();
         // run animations
         this.state.blinkingAnimation.run();
 
@@ -2445,6 +2444,7 @@ window.Avatar = class {
 
             this.disengageTarget();
         }
+
     }
 
     render() {
@@ -2581,7 +2581,7 @@ window.Avatar = class {
          this.state.path.engaged = true;
       }
 
-        return true; 
+        return path;
     }
 
     disengagePath() {

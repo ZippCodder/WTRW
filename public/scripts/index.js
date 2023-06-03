@@ -385,6 +385,7 @@ window.onload = async () => {
     let T1, T2;
 
     function init() {
+
         if (performance.now() - frameRateMarker >= 1000) {
             frameRate = globalFrameRun;
             globalFrameRun = 0;
@@ -412,6 +413,7 @@ window.onload = async () => {
         gameStats.innerHTML = `FPS: ${frameRate}, Time: ${T2-T1}`;
         globalFrameRun++;
         times.push(T2 - T1);
+
         requestAnimationFrame(init);
     }
 
