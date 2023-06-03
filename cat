@@ -1,0 +1,857 @@
+commit f598adc94ca6f44a1129ee265f770b143d1fd2e1
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Fri Jun 2 08:11:55 2023 -0600
+
+    added pathfinder worker and made a few optimizations. continuing avatar optimizations from here
+
+commit 14c7a82f1df0a41e1834e5e56c075cff0e8f2069
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Fri Jun 2 03:42:21 2023 -0600
+
+    cleaned up degubbing junk to start building worker for path finding service.
+
+commit ccf3a7d2e7db1430bbdc95fe766bb4b80b4f21e4
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Tue May 30 09:55:54 2023 -0600
+
+    fixed further bugs with goto and findPathTo
+
+commit f838adcaf5b6eeddbc03d1eff0a2cc035962dd66
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Mon May 29 10:08:35 2023 -0600
+
+    fixed isse with avatar obstacle blocking and goto not working right
+
+commit 7788344c1c8ff4bef013fab22f124f5a115a051a
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Mon May 29 09:08:57 2023 -0600
+
+    added graph obstacle updating
+
+commit 112e8e8a6a9f3059c009c45e6255a439e7c5dcb9
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Mon May 29 06:42:44 2023 -0600
+
+    Revert "commiting for revert"
+    
+    This reverts commit b1b16f65d94dba8cb55d10aa62469b271ffa64e1.
+
+commit b1b16f65d94dba8cb55d10aa62469b271ffa64e1
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Mon May 29 06:42:29 2023 -0600
+
+    commiting for revert
+
+commit 5bfed966ecc81891e6e8f72d009ba00017fab315
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Mon May 29 00:59:21 2023 -0600
+
+    added feature: avatars will run if they run out of ammo while being attacked
+
+commit c1715feb8a40dca85ecdfe5e41c7f8f37e605788
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Sun May 28 19:06:32 2023 -0600
+
+    optomized vertex shader and increased readability
+
+commit 5232bc5961cc433f0c8b5d9fdfd013cbafb1d16e
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Sun May 28 11:33:33 2023 -0600
+
+    cleaned up unused obsolete variables, renamed global variables for better readability.
+
+commit 1c608f0d7a1ead2d373a09e1e445d00afe1e66e6
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Sun May 28 08:34:19 2023 -0600
+
+    finished rennovations, code organization and module separation.
+
+commit 4bd956cefaea63f9078fc69214a3b161d3779594
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Sun May 28 05:14:17 2023 -0600
+
+    separated file into modules
+
+commit fd33c011be93875b4e6c889b3587fbb08dd5f2ce
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Sat May 27 11:10:42 2023 -0600
+
+    Revert "commiting to revert"
+    
+    This reverts commit ddef2065faf3b1cad9398f66813ab7097f1967c6.
+
+commit ddef2065faf3b1cad9398f66813ab7097f1967c6
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Sat May 27 11:10:37 2023 -0600
+
+    commiting to revert
+
+commit 8f434ef71efdfe6a3f5826e68cfdabbb7f80ad86
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Sat May 27 06:44:26 2023 -0600
+
+    added more avatar functions and fixed some things
+
+commit 28c73755c87b6003dde77e9ec0e777eaf5702226
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Sat May 27 00:06:45 2023 -0600
+
+    added bullet ids and kill counts
+
+commit 4f55774e198ab91c3fe89aa1dfe064067cc85276
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Fri May 26 23:11:17 2023 -0600
+
+    fixed bot recoil
+
+commit 588856b5567c5844e2be64ccda7d8ea40423b14e
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Fri May 26 20:20:04 2023 -0600
+
+    fixed a few issues
+
+commit 4306fbd648507fca83757bb85e81d8840bf60478
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Fri May 26 10:46:36 2023 -0600
+
+    fixed issues with target invertion and pther tings
+
+commit d1b85506d277c92abfe87c197bab96c9cf057e19
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Fri May 26 09:03:40 2023 -0600
+
+    Revert "efjefheufhue"
+    
+    This reverts commit 3a11a039c81606e1b6cc5b0a6d5aef38ae103208.
+
+commit 3a11a039c81606e1b6cc5b0a6d5aef38ae103208
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Fri May 26 09:03:35 2023 -0600
+
+    efjefheufhue
+
+commit d51709418b8882114fbb750a63767f1e335c22c2
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Fri May 26 01:17:26 2023 -0600
+
+    finished full avatar attack settigs
+
+commit 8ceb399bc638c4fe094583110a04548a453e618a
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Thu May 25 10:38:39 2023 -0600
+
+    finished full bot combat settings. Bots are ready to go :)
+
+commit c62f953f0e65e8d5cd0ba3e58c317d964b1da9ae
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Thu May 25 08:44:32 2023 -0600
+
+    fixed misc bugs and inconsistencies. Improved attack settings.
+
+commit c425a84717746565d4380eba53ed2117285ea247
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Wed May 24 06:29:38 2023 -0600
+
+    setup avatar target attack function, working properly.
+
+commit eafd658210d9efdacd7c06a83d00a180c6f5b939
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Tue May 23 08:00:40 2023 -0600
+
+    fixed a bunch of bugs and inconsistencies and made Avatars 100% autonomous. Bots can now act independently.
+
+commit e79142432df36ac77ab174007e2ca4c8f5b9758c
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Tue May 23 04:26:58 2023 -0600
+
+    fixed misc bugs
+
+commit 816e175207f7740e4f2f71223c525384cc479bd7
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Sat May 20 00:55:51 2023 -0600
+
+    fixed bugs and did a few optimizations
+
+commit 397939673899771c46d631d05c186ad0e74bbbd1
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Fri May 19 22:26:11 2023 -0600
+
+    added colored lighting
+
+commit d356c682f90eb3f79c30f0468c9261ecdf6961ef
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Fri May 19 20:15:02 2023 -0600
+
+    Revert "whatever"
+    
+    This reverts commit 545aec92ee83bf9bf955d3dd23aca87d362aa599.
+
+commit 545aec92ee83bf9bf955d3dd23aca87d362aa599
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Fri May 19 20:14:47 2023 -0600
+
+    whatever
+
+commit 25a11cbd7f520fbafb96bbdec0b782b1bca60d26
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Fri May 19 10:15:22 2023 -0600
+
+    Revert "Revert "fixed a few bugs with pathfinding""
+    
+    This reverts commit 6ee31b18873d36e25442e1ce413c55b2c13764fc.
+
+commit 6ee31b18873d36e25442e1ce413c55b2c13764fc
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Fri May 19 10:10:27 2023 -0600
+
+    Revert "fixed a few bugs with pathfinding"
+    
+    This reverts commit 752bfd8dbebbbe8092731514265737b61b65ca94.
+
+commit 752bfd8dbebbbe8092731514265737b61b65ca94
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Fri May 19 10:05:29 2023 -0600
+
+    fixed a few bugs with pathfinding
+
+commit 90087d4e0272439623794d1b01a7bd4a1d1bf249
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Fri May 19 01:19:33 2023 -0600
+
+    finalized bot pathfinding and obstacle evaluation
+
+commit 1c422b8705d73c46e6d7bddd83baf9efef80b089
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Thu May 18 11:04:05 2023 -0600
+
+    completed path finding and fine tuning obstacle navagation
+
+commit 841a6aa98071edef983cc8eb31d005be4fc658bd
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Wed May 17 05:55:58 2023 -0600
+
+    finished pathfinder, my need revisions, but its finished.
+
+commit 5b66ab6dccbb57a7919ce157ce5edebb42609fc1
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Mon May 15 01:17:30 2023 -0600
+
+    separating modules
+
+commit c18883af2c830237bff8fc80d0c5dd38ef5763b2
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Sun May 14 09:59:53 2023 -0600
+
+    fixed space above canvas, tweaked misc things.
+
+commit a03cd5568b145f659a05d40ac531708d780aff91
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Sun May 14 09:23:34 2023 -0600
+
+    established main branch and added local server for testing
+
+commit c92d443365f1a6d87cf5fa4e18f9a86a62d85dda
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Sun May 14 20:09:37 2023 -0600
+
+    server file
+
+commit 6fa36ec52540975fd17e53936ea7bb761df22c36
+Author: deonrich <deon.edward.rich@gmail.com>
+Date:   Sun May 14 07:08:33 2023 -0600
+
+    adding main folder and main working branch for large changes
+
+commit 5ed664127cf63d25466947af97b5bd593769d0e7
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Sun May 14 18:51:56 2023 -0600
+
+    uploading last zip file
+    
+    * enabled colored text with shaders
+    * fixed a few other things
+
+commit 3a29cee20085cea22219216754cc77e5f2017f43
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Thu May 11 12:12:03 2023 -0600
+
+    latest version
+    
+    fixed general issues and bugs
+
+commit e2f182ed55dcdcd01f8c453a42481c8c47b15a2e
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Sun May 7 16:01:10 2023 -0600
+
+    uploading latest emergency zip version
+    
+    - fully fixed firing mechanism and animation
+    - fixed misc bugs
+
+commit faeb9017d0084a93a7bb2426c5cf8bad7d938cb1
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Sat May 6 08:35:35 2023 -0600
+
+    adding latest emergency zip
+    
+    added lighting and street light functionality.
+
+commit 8fbf8121c418259b149b5f531698f5a119415791
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Mon May 1 20:55:57 2023 -0600
+
+    latest emergency zip
+    
+    completed bullet and weapon settings
+    weapon accuracy, etc.
+
+commit b1499e071e22a766b290452d1448967ef6e53693
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Mon May 1 14:04:29 2023 -0600
+
+    latest emergency zip
+    
+    added bullets
+
+commit 541198d4f1f21c8ba28fd2e42448a0fd764692e6
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Fri Apr 28 23:29:41 2023 -0600
+
+    latest emergency zip file
+    
+    added nested map parsing and printing.
+
+commit 5d4fa6465568c0cf8c2b64cf91671561ff7b0070
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Fri Apr 28 21:56:37 2023 -0600
+
+    latest emergency zip
+    
+    fixed errors
+    removed object index (obsolete)
+    enabled dynamic object printing
+
+commit 56e8b3c44b48b084e9c9cc9ce30a3da294f53abf
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Wed Apr 26 22:58:40 2023 -0600
+
+    Latest emergency zip
+    
+    fixed all object and map attachments
+    fixed object cleanup functions
+    fixed other errors
+
+commit eb7ec8c926a777112b78fcf56e44ea7497e7f538
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Mon Apr 24 20:23:08 2023 -0600
+
+    latest emergency zip
+    
+    room system done
+    fades and transitions
+
+commit 2f62d4d03372270a6713f26e6697482d56ace68e
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Sat Apr 22 08:24:16 2023 -0600
+
+    Uploading emergency file
+    
+    N/A..
+
+commit 9fe4daf02dcdb00122320197789f3690103c16a9
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Tue Feb 28 20:27:32 2023 -0600
+
+    Adding latest emergency zip file.
+    
+    * Fixed messed up instance deletion
+    * Added rings to pickups
+    * Fixed book textures
+
+commit daa3d90974bb76016e10f882a5d7f2e2274e035d
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Wed Feb 22 18:47:13 2023 -0600
+
+    uploading latest emergency zip
+    
+    updated new textures
+
+commit b494c36aa6b08000070ee4afbb9c13df19b27d6e
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Sun Feb 12 13:39:20 2023 -0600
+
+    Adding latest emergency zip (important)
+    
+    Fixed vertex attribute issues and rendering issues.
+
+commit 35672ef0f700993fa28dc2d33b8f3ae2ecda1b55
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Sun Feb 5 08:05:57 2023 -0600
+
+    adding latest emergency zip file
+    
+    created main interface and tweaked a couple things. : P
+
+commit b6125fb604df8c979dc87a0301cecda47af93ee2
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Sun Jan 29 09:09:20 2023 -0600
+
+    Emergency zip file
+    
+    finished main interface and boldened pickups
+
+commit 4d34a02be25d9e81f65415a8092e8bc9dedba9c5
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Sun Jan 22 21:04:54 2023 -0600
+
+    latest emergency zip
+    
+    added inventory and onscreen controls. created icons and boldened rocks and grass.
+
+commit 72373f6ba2fd9f3dff9e71cbab6ea34ed449adc1
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Mon Jan 16 22:20:16 2023 -0600
+
+    latest emergency zip
+    
+    added sitting functions
+
+commit db7f673ca5bc3464776a63fb651f68ac34512f8d
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Sun Jan 15 18:24:04 2023 -0600
+
+    Adding latest backup zip
+    
+    added button controls
+
+commit ebc7b9260d1bf238d8854b6f292cf25c57a29009
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Sun Jan 8 11:41:02 2023 -0600
+
+    adding latest emergency zip file
+    
+    finished instanced objects
+
+commit ae3d579513db3daa29d5a7f85f5d09ee08b7f2e4
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Sun Dec 25 14:41:51 2022 -0600
+
+    Adding latest backup zip
+    
+    added full translation and rotation to static clusters and mized static clusters.
+
+commit 62619ba83384dcc698301e33c69c2c47c886a1c9
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Fri Dec 16 07:47:09 2022 -0600
+
+    Adding theme colors
+
+commit b8d500935c236af3eb34f8693e5f3820abe4a15c
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Fri Dec 16 07:41:41 2022 -0600
+
+    Creating file for general notes
+
+commit f7aa5fb0f2666a6d9812a9e71ae52e6b2ff2d8b6
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Sat Dec 10 19:35:58 2022 -0600
+
+    uploading latest emergency zip
+
+commit dce2696370732ac6b84c90cc74f977a20d3dc9a4
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Mon Dec 5 22:23:50 2022 -0600
+
+    latest backup file
+    
+    N/A
+
+commit 1290d02985949099963c1b09fe3c92f64b800f5c
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Tue Nov 15 13:07:35 2022 -0600
+
+    Not sure what to say here anymore lol
+    
+    N/A
+
+commit a4b36ba21d7e4cb260805a43e536684acc4388ef
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Tue Nov 15 10:46:50 2022 -0600
+
+    updating shit
+    
+    N/A
+
+commit c6937d46b23eaefbf5ff4d2dca0c8dc24d755d21
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Tue Nov 15 10:13:32 2022 -0600
+
+    updating
+    
+    N/A
+
+commit 66a8f5c2f4ddd45afa6c271a4dff4964414b363d
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Mon Nov 14 12:00:26 2022 -0600
+
+    Updating the objects list
+    
+    N/A
+
+commit b4803a1966785cb273235ad99093781b05930667
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Mon Nov 14 08:34:03 2022 -0600
+
+    n
+    
+    gh
+
+commit bef30783d948da0fdd750d1f6e8e1ff2c1372308
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Fri Nov 11 15:22:37 2022 -0600
+
+    Updating  shit, get off my back mom
+    
+    N/A
+
+commit 352b983143060f4735ef860d561eeadf8a204de2
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Tue Oct 25 08:35:25 2022 -0600
+
+    adding latest emergency zip
+    
+    N/A
+
+commit 8e1b0de3e72921e03b49d965da8934985ad61aed
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Thu Oct 20 20:17:39 2022 -0600
+
+    Add files via upload
+
+commit b0d024d573d58855fefa41137d4b05df0eec187b
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Thu Oct 20 14:51:34 2022 -0600
+
+    Add files via upload
+    
+    take it asshole
+
+commit 6b3821d7bffef7c30feaa6af23395ccbe43f4efe
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Thu Oct 20 14:50:58 2022 -0600
+
+    Delete mainfont.png
+    
+    wefrdg
+
+commit a419a943d0a3cad5112c851b1dafef37c1f2c289
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Thu Oct 20 14:47:40 2022 -0600
+
+    Add files via upload
+    
+    adding a new new one
+
+commit 2fded76d88d9c21302322577e23fc811562b4292
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Thu Oct 20 14:47:25 2022 -0600
+
+    Delete mainfont.png
+    
+    vhjyiguhoj
+
+commit cc4027a5b7472adfadf055577e0216b5b913e498
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Thu Oct 20 14:46:09 2022 -0600
+
+    Add files via upload
+    
+    here ya go
+
+commit bdef0d6a68afe743bf77f07e5f7fa53056b43fdb
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Thu Oct 20 14:45:51 2022 -0600
+
+    Delete mainfont.png
+    
+    adding new one
+
+commit 229ecb1ba079f882d5db0be3a2f87454bacf3f88
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Thu Oct 20 13:43:16 2022 -0600
+
+    Adding main font file
+    
+    N/A
+
+commit 37dd16313fbbb7feba805ed61a780333ed6b15a2
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Thu Oct 20 13:41:05 2022 -0600
+
+    Delete IMG_20221019_083401.png
+    
+    get it outa here
+
+commit 2ef47f9836b22825f285a2a88cc5c60bd4d23e33
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Thu Oct 20 13:39:54 2022 -0600
+
+    Delete IMG_20221019_083401-modified.png
+    
+    replacing with better quality text png
+
+commit c626b32c06239adfa0a623b22b4865e5cb5b2538
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Wed Oct 19 09:10:26 2022 -0600
+
+    adding backgroundless font png
+    
+    N/A
+
+commit 1050fefa1c04902b45cd44082a82673756e00829
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Wed Oct 19 09:09:42 2022 -0600
+
+    Deleting old screenshot font version
+
+commit 14033c44fabd59a4eff951dbe04a50d88c614d51
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Wed Oct 19 08:54:24 2022 -0600
+
+    adding cut font image
+
+commit 6ffaa4eab66a9573f4dcda317c4f81c5124a9692
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Wed Oct 19 08:27:48 2022 -0600
+
+    Adding font png
+    
+    N/A
+
+commit e144b6980cfe04faeaa2c672fb23a35af85acbe1
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Sun Oct 16 21:06:33 2022 -0600
+
+    Adding latest emergency zip
+    
+    N/A
+
+commit 3d2bef58da6ac406b8814b526945f6b1bc898a1f
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Sun Oct 16 07:56:14 2022 -0600
+
+    Adding emergency zip
+    
+    N/A
+
+commit 31bac4d068472b5dd98e73a7be0900e2425ad947
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Wed Oct 12 11:20:43 2022 -0600
+
+    Uploading emergency zip
+    
+    N/A
+
+commit dd71fccb6aa21c7e85635c92d2a73f8e61804512
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Sun Oct 9 21:06:18 2022 -0600
+
+    adding backup zip
+    
+    N/A
+
+commit 8ec4a9785cdea2280bac92772f7e1f4c32292c5e
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Wed Oct 5 15:46:56 2022 -0600
+
+    Uploading backup files incase my tablet decides to go boom.
+    
+    eat dick.
+
+commit cd6f2b3fb675ef8557cb549422eb4c08a513a8d9
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Tue Sep 27 16:53:40 2022 -0600
+
+    Updating README
+    
+    obviously...
+
+commit c2c66541c74db5c757e650591eab2b951f6ef43c
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Tue Sep 27 12:50:49 2022 -0600
+
+    Uploading files
+    
+    N/A
+
+commit 4f421c3ad446289226df8ea2da10c01a2afb8450
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Wed Sep 14 14:00:03 2022 -0600
+
+    Update README.md
+
+commit 4c69b817b802520fa4caa6a5eb4bf84c25fa954f
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Wed Sep 14 13:52:46 2022 -0600
+
+    Update README.md
+
+commit 24bb140476eeb7cad83761933f957c37aa7b096a
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Wed Sep 14 13:40:10 2022 -0600
+
+    Update README.md
+
+commit fc7c9f717c9e3d5648a56ba1928d4e54497fb1f0
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Wed Sep 14 12:00:16 2022 -0600
+
+    Update README.md
+
+commit 2cf094f72b99ec82f9c1b7decfa4b3b1990a19fe
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Wed Sep 14 11:56:08 2022 -0600
+
+    Update README.md
+
+commit 0d08bbc19b7764f6c1ca18de61ae36d4880f8437
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Wed Sep 14 11:52:11 2022 -0600
+
+    Update README.md
+
+commit 62a068918abc08356dab1981d8ba6c988bde3f02
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Wed Sep 14 10:37:29 2022 -0600
+
+    Update README.md
+
+commit 5f96fed79b25c4712b491711a50254d6a3aba910
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Wed Sep 14 10:28:33 2022 -0600
+
+    Update README.md
+
+commit 40cec567937a2b0b6af438b5b2738c0048165677
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Wed Sep 14 10:19:30 2022 -0600
+
+    Update README.md
+
+commit 383821e0a0ec18364a8a902254af9fb1b09a9587
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Wed Sep 14 10:10:16 2022 -0600
+
+    Update README.md
+
+commit ec95fc519dfe4d1a252aa6302b0d239d10737420
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Wed Sep 14 09:47:31 2022 -0600
+
+    Update README.md
+
+commit 645dc105926084e3a86507a11820616c901cacc8
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Wed Sep 14 09:41:26 2022 -0600
+
+    Update README.md
+
+commit 7d50607876d8f3a029dbe926aa2821a21cbf2265
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Wed Sep 14 09:17:53 2022 -0600
+
+    Update README.md
+
+commit 1b7baaa8699484be88009683d402f9843cc906be
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Wed Sep 14 08:41:29 2022 -0600
+
+    Update README.md
+
+commit f654cd2115f9353532d55764dc79b10f5b17a1e2
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Wed Sep 14 08:36:30 2022 -0600
+
+    Update README.md
+
+commit ac7cb8136f20a4c799e768b1cafd78af6938a4ab
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Tue Sep 13 16:36:38 2022 -0600
+
+    Update README.md
+
+commit daa60f2896f11f4c1d4501c42fa513bb189150e8
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Tue Sep 13 15:25:45 2022 -0600
+
+    Update README.md
+
+commit b995c020a27433f3451b5d85f3e29549e5b62601
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Tue Sep 13 15:25:06 2022 -0600
+
+    Update README.md
+
+commit b8bf87deb539d4ff45b2e9358dccec1489373074
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Tue Sep 13 15:24:17 2022 -0600
+
+    Update README.md
+
+commit f72344a882af6c33e5047a7eb53e0c20085391d0
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Tue Sep 13 15:12:13 2022 -0600
+
+    Update README.md
+
+commit e0c0285fd90bbbdf129078215679fe58f46a3361
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Tue Sep 13 13:03:02 2022 -0600
+
+    Updating in game features
+
+commit 5f4f6a1bc64d856d8818a00c8296d9410d79ed93
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Tue Sep 13 11:29:19 2022 -0600
+
+    Updaing game features
+
+commit e56a80df161d87a5a0465d928fd70e422cb21fdf
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Tue Sep 13 10:04:38 2022 -0600
+
+    Updating in game features
+
+commit 2b17dbc05f0dcf866c3349c584c3fe4423f81780
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Tue Sep 13 09:31:23 2022 -0600
+
+    Updating in game features
+
+commit 114e64fd7c3353564f4bba38e341d0a87da8110b
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Tue Sep 13 09:03:46 2022 -0600
+
+    Updating game features
+
+commit f7c08a2c880d378d8113240fcafd9a9844e972e3
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Tue Sep 13 08:46:30 2022 -0600
+
+    Updating game features
+    
+    N/A
+
+commit 5c7e1c8ebf5e9a7e0abcfd7a982cb3ac5b5163be
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Tue Sep 13 08:17:45 2022 -0600
+
+    Listing game features
+    
+    N/A
+
+commit 98fd8ebbd2473b731ef67b119c02e068f1d0e2f3
+Author: Deon Rich <69010494+ZippCodder@users.noreply.github.com>
+Date:   Tue Aug 30 17:32:57 2022 -0600
+
+    Initial commit

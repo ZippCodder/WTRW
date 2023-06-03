@@ -28,9 +28,9 @@
 
   /* INSTANTIATE INITIAL MAP */
 
-  $MAP = new _Map_(780, 280).init();
- // $MAP = new _Map_(200, 200).init();
-  $MAP.parseLayoutScript(Map1);
+  //$MAP = new _Map_(780, 280).init();
+  $MAP = new _Map_(200, 200).init();
+  //$MAP.parseLayoutScript(Map1);
   $CURRENT_MAP = $MAP;
   $MAP.showGeometry();
 
@@ -78,12 +78,12 @@
     c.state.targetId = c.id;
     c.killTarget([id], true); 
 */
-    for (let i = 1; i <= 30; i++) {
+    for (let i = 1; i <= 50; i++) {
         let {
             x,
             y
         } = $MAP.GRAPH.getRandomPoint();
-        let a = new Avatar(String(i), x, y);
+        let a = new Avatar(String(i), x+5, y+5);
         $MAP.link(a);
         a.state.attack.engageDistance = 300;
         a.state.attack.disengageDistance = 500;
@@ -92,8 +92,9 @@
         a.state.aggressive = false;
         a.state.passive = false;
         a.state.targetUpdateAnimation.rate = 0.2;
-        a.addItem(new GLOCK_20(0, 0, 0, 0));
+        a.addItem(new GLOCK_20(0, 0, 0, 100));
         a.state.fireAnimation.rate = 0.5 / 1;
         a.state.targetId = id;
-        a.gotoAvatar();
+       // a.gotoAvatar();
+       a.killTarget([$AVATAR.targetId],true); 
     } 
