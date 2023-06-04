@@ -30,7 +30,7 @@
 
   $MAP = new _Map_(780, 280).init();
  // $MAP = new _Map_(500, 500).init();
-  //$MAP.parseLayoutScript(Map2);
+  $MAP.parseLayoutScript(Map2);
   $CURRENT_MAP = $MAP;
   $MAP.showGeometry();
 
@@ -79,6 +79,7 @@
     c.state.targetId = c.id;
     c.killTarget([id],true); 
 
+/*
     for (let i = 1; i <= 40; i++) {
         let {
             x,
@@ -97,4 +98,4 @@
         a.state.fireAnimation.rate = 0.5 / 1;
         a.state.targetId = id;
         a.killTarget([c.id]);
-    } 
+    } */

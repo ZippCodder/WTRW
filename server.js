@@ -4,7 +4,7 @@ const path = require("path");
 
 const server = http.createServer();
 
-server.on("request", async (req,res) => {
+server.on("requestblahblah", async (req,res) => {
     console.log(req.url);
 	let file, contentType = "text/javascript";
 
