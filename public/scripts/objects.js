@@ -2094,7 +2094,10 @@ window.Avatar = class {
 
                 this.translate(tx, ty);
 
-              if (this.state.goto.x === this.trans.offsetX && this.state.goto.y === this.trans.offsetY) this.disengageGoto();
+              if (this.state.goto.x === this.trans.offsetX && this.state.goto.y === this.trans.offsetY) {
+                  if (this.state.goto.reserve) this.map.GRAPH.reserved.splice(this.map.GRAPH.reserved.indexOf(this.state.goto.reserve),1);
+                  this.disengageGoto();
+              }
             }, this, 0.03),
             recordAnimation: new LoopAnimation(function() {
                 if (this.state.recording.useRecording) {
@@ -2526,7 +2529,6 @@ window.Avatar = class {
     }
 
     disengageGoto() {
-        if (this.state.goto.reserve) this.map.GRAPH.reserved.splice(this.map.GRAPH.reserved.indexOf(this.state.goto.reserve),1);
         this.state.goto.engaged = false;
         this.state.walking = false;
     }
@@ -2626,7 +2628,7 @@ window.Avatar = class {
     }
  
     clean() {
-     this.disengageGoto();
+     if (this.state.goto.reserve) this.map.GRAPH.reserved.splice(this.map.GRAPH.reserved.indexOf(this.state.goto.reserve),1);
     } 
 
     delete() {
@@ -2995,7 +2997,7 @@ window._Map_ = class {
         this.locations = {};
         this.clusters = {};
         this.interactables = {};
-        this.GRAPH = new _Graph_(this.units.width, this.units.height);
+        this.GRAPH = new _Graph_(this.units.width, this.units.height, true);
         this.SUB_MAP_COUNT = 0;
         this.SUB_MAPS = {};
         this.PARENT_MAP = undefined;

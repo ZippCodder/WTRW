@@ -44,7 +44,7 @@
     
         import {
             draw
-        } from "./lib.js";
+        } from "/public/scripts/lib.js";
         import {
             KC_357,
             GLOCK_20,
@@ -97,9 +97,8 @@
             DOOR,
             LIGHT_SWITCH,
             MAIN_AVATAR_DRAW_WEAPON,
-            HIT_TEXT,
             GLOCK_20_TOP_2
-        } from "./textures.js";
+        } from "/public/scripts/textures.js";
 
         // Import texture for editing and downloading...
 
@@ -146,9 +145,7 @@
   
         resize(256, 512);
         // export function draw(a, w, h, iw, ih, s, lw, attribs=[],canvas) {
-        new FontFace("Geo","url(https://fonts.gstatic.com/s/geo/v19/CSRz4zRZluflKHpnYDpSbA.woff2)").load().then(font => {
-        document.fonts.add(font);
-        let texture = HIT_TEXT;
+        let texture = MAIN_AVATAR_DRAW_WEAPON;
         //GLOCK_20.render(ctx);
         //LAPTOP(600,160,0.2,ctx);      
         //ASSASSINS_KNIFE(150,200,0.2,ctx);
@@ -158,7 +155,7 @@
          //BOOK_2(430,200,0.2,ctx);
         //MAIN_AVATAR_DEFAULT.render(ctx);
         texture.render(ctx);
-        //GLOCK_20_TOP_2.render(ctx,-90);
+        GLOCK_20_TOP.render(ctx,-90);
        
         //ROAD_RAIL(200,100,0.2,ctx);
         //STREET_LIGHT(142,-8,0.2,ctx);
@@ -170,6 +167,5 @@
         log(texture.getData());
         console.log(texture.textureDimensions);
         setSource(`MAIN_AVATAR_DRAW_GLOCK_20_PULLBACK`); 
-        });
     </script>
 </html>

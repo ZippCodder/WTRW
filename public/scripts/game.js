@@ -28,8 +28,8 @@
 
   /* INSTANTIATE INITIAL MAP */
 
-  //$MAP = new _Map_(780, 280).init();
-  $MAP = new _Map_(200, 200).init();
+  $MAP = new _Map_(780, 280).init();
+ // $MAP = new _Map_(500, 500).init();
   //$MAP.parseLayoutScript(Map2);
   $CURRENT_MAP = $MAP;
   $MAP.showGeometry();
@@ -75,6 +75,7 @@
     c.state.targetUpdateAnimation.rate = 0.2;
     c.addItem(new GLOCK_20(0, 0, 0, 1000));
     c.state.fireAnimation.rate = 0.5 / 10;
+    c.state.reloadTimeout.timingConfig[0] = 0;
     c.state.targetId = c.id;
     c.killTarget([id],true); 
 

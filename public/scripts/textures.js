@@ -206,25 +206,6 @@ export let ACTION_BUTTON_TEXTURE = new TextureData(0, 0, 1, "control", {
     ctx.stroke();
 }, [], 600, 600);
 
-export let HIT_TEXT = new TextureData(0, 0, 1, "general", {
-    width: 700,
-    height: 700
-}, [
-    [0, 0, 700, 700]
-], 0, undefined, function(ctx) {
-    // base body: 600x600, texture: 1024x1024, size: 20
-
-    ctx.strokeStyle = "red";
-    ctx.fillStyle = "red";
-    ctx.lineWidth = 3;
-    ctx.font = "50px Geo";
-    ctx.textBaseline = "middle";
-    ctx.textAlign = "center";
-
-    ctx.fillText("HIT", 50, 50);
-    ctx.strokeText("HIT", 50, 50);
-}, [], 700, 700);
-
 /* icon container */
 
 export let ICONS = new TextureData(0, 0, 1, "control", {
