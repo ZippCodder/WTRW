@@ -1976,7 +1976,8 @@ window.Avatar = class {
                     x: 0,
                     y: 0
                 },
-                engaged: false
+                engaged: false,
+                reserve: undefined
             },
             path: {
                 current: [],
@@ -2091,11 +2092,7 @@ window.Avatar = class {
 
                 this.translate(tx, ty);
 
-              if (this.state.goto.x === this.trans.offsetX && this.state.goto.y === this.trans.offsetY) {
-                let currentUnit = this.map.GRAPH.getPoint(this.state.goto.target.x,this.state.goto.target.y).unit;
-                this.map.GRAPH.reserved.splice(this.map.GRAPH.reserved.indexOf(currentUnit),1);
-                this.disengageGoto();
-              }
+              if (this.state.goto.x === this.trans.offsetX && this.state.goto.y === this.trans.offsetY) this.disengageGoto();
             }, this, 0.03),
             recordAnimation: new LoopAnimation(function() {
                 if (this.state.recording.useRecording) {
@@ -2399,6 +2396,7 @@ window.Avatar = class {
             let next = this.map.GRAPH.find(x, y).id;
 
             if (!this.map.GRAPH.blocked.includes(next) && !this.map.GRAPH.reserved.includes(next)) {
+               this.state.goto.reserve = next;
                this.map.GRAPH.reserved.push(next);
                this.goto(x + 5, y - 5);
             } else if (this.state.path.index !== 0) {
@@ -2513,6 +2511,7 @@ window.Avatar = class {
     }
 
     disengageGoto() {
+        if (this.state.goto.reserve) this.map.GRAPH.reserved.splice(this.map.GRAPH.reserved.indexOf(this.state.goto.reserve),1);
         this.state.goto.engaged = false;
         this.state.walking = false;
     }
@@ -2610,6 +2609,10 @@ window.Avatar = class {
     gotoAvatar() {
         return this.requestPath(this.map.centerX, this.map.centerY);
     }
+ 
+    clean() {
+     this.disengageGoto();
+    } 
 
     delete() {
         this.map.unlink(this.id);

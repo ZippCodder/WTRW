@@ -71,7 +71,7 @@
     c.state.attack.attackSpeed = 2;
     c.state.armor = 5000;
     c.state.passive = false;
-    c.state.aggressive = false;
+    c.state.aggressive = true;
     c.state.targetUpdateAnimation.rate = 0.2;
     c.addItem(new GLOCK_20(0, 0, 0, 1000));
     c.state.fireAnimation.rate = 0.5 / 10;
