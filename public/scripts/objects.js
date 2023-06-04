@@ -2091,7 +2091,11 @@ window.Avatar = class {
 
                 this.translate(tx, ty);
 
-                if (this.state.goto.x === this.trans.offsetX && this.state.goto.y === this.trans.offsetY) this.disengageGoto();
+              if (this.state.goto.x === this.trans.offsetX && this.state.goto.y === this.trans.offsetY) {
+                let currentUnit = this.map.GRAPH.getPoint(this.state.goto.target.x,this.state.goto.target.y).unit;
+                this.map.GRAPH.reserved.splice(this.map.GRAPH.reserved.indexOf(currentUnit),1);
+                this.disengageGoto();
+              }
             }, this, 0.03),
             recordAnimation: new LoopAnimation(function() {
                 if (this.state.recording.useRecording) {
@@ -2392,8 +2396,10 @@ window.Avatar = class {
                 x,
                 y
             } = this.state.path.current[this.state.path.index];
- 
-            if (!this.map.GRAPH.blocked.includes(this.map.GRAPH.find(x, y).id)) {
+            let next = this.map.GRAPH.find(x, y).id;
+
+            if (!this.map.GRAPH.blocked.includes(next) && !this.map.GRAPH.reserved.includes(next)) {
+               this.map.GRAPH.reserved.push(next);
                this.goto(x + 5, y - 5);
             } else if (this.state.path.index !== 0) {
                 this.requestPath(this.state.path.end.x, this.state.path.end.y);
@@ -2578,7 +2584,7 @@ window.Avatar = class {
     }
 
     findPathTo(path) {
-      if (path.result) {
+      if (path.result && this.state.path.start) {
          this.state.path.current = path.path;
          this.state.path.current.unshift({
            x: this.state.path.start.x,
@@ -2750,6 +2756,7 @@ window._Graph_ = class {
         this.nodeCount = width * height;
         this.diagonal = diagonal;
         this.blocked = [];
+        this.reserved = [];
         this.grid = new Map();
         this.find = (function(col, row) {
             return this.grid.get(`${col},${row}`);
