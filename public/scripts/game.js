@@ -28,16 +28,16 @@
 
   /* INSTANTIATE INITIAL MAP */
 
-  $MAP = new _Map_(780, 280).init();
- // $MAP = new _Map_(200, 200).init();
- // $MAP.parseLayoutScript(Map1);
+  //$MAP = new _Map_(780, 280).init();
+  $MAP = new _Map_(200, 200).init();
+  //$MAP.parseLayoutScript(Map2);
   $CURRENT_MAP = $MAP;
   $MAP.showGeometry();
 
   $MAP.avatars[$AVATAR.id] = $AVATAR;
   $AVATAR.state.targetId = $AVATAR.id;
-  $AVATAR.addItem(new GLOCK_20(0, 0, 0, 1000));
-  $AVATAR.state.fireAnimation.rate = 0.5 / 20;
+  $AVATAR.addItem(new GLOCK_20(0,0,0,100));
+  $AVATAR.state.fireAnimation.rate = 0.5 / 10;
 
   let id = genObjectId();
 

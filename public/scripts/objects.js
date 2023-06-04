@@ -1826,7 +1826,7 @@ window.GLOCK_20 = class extends _Gun_ {
 
     constructor(initialX, initialY, initialRotation, bullets) {
         super(initialX, initialY, initialRotation);
-        this.bullets = bullets ?? 15;
+        this.bullets = bullets ?? 30;
     }
 }
 
@@ -1994,10 +1994,8 @@ window.Avatar = class {
                 engaged: false
             },
             reload: {
-                time: 0,
-                limit: 0,
                 progress: 0,
-                reloading: false
+                loaded: true
             },
             attack: {
                 engageDistance: 100,
@@ -2024,6 +2022,10 @@ window.Avatar = class {
             equippedItems: {
                 mainTool: undefined
             },
+            reloadTimeout: new MultiFrameLinearAnimation([function() {
+               this.state.reload.progress = 0;
+               this.state.reload.loaded = true;
+            }],this,[1]),
             pathRequestRateLimit: new MultiFrameLinearAnimation([function() {
                this.state.path.request = true;
             }],this,[1]),
@@ -2264,6 +2266,9 @@ window.Avatar = class {
 
             this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo--;
 
+            this.state.reload.progress++;
+            if (this.state.reload.progress === this.state.equippedItems.mainTool.constructor._properties.capacity) this.state.reload.loaded = false;
+
         }, this, 0);
     }
 
@@ -2302,6 +2307,10 @@ window.Avatar = class {
             this.state.position.body.texture = 0;
             this.state.position.body.vertices = 0;
         }
+    }
+ 
+    reload() {
+     this.state.reloadTimeout.start();
     }
 
     addItem(item, slot) {
@@ -2346,6 +2355,9 @@ window.Avatar = class {
                 case "gun": {
                     this.state.armed = true;
                     this.state.equippedItems.mainTool = item;
+                    this.state.reload.progress = 0;
+                    this.state.reload.loaded = true;
+                    this.state.reloadTimeout.timingConfig[0] = this.state.equippedItems.mainTool.constructor._properties.reloadTime;
                     this.state.fireAnimation.rate = 0.5 / this.state.equippedItems.mainTool.constructor._properties.fireRate;
                 }
                 break;
@@ -2371,10 +2383,11 @@ window.Avatar = class {
             this.state.position.body.vertices = 1;
         }
 
-        if (this.state.fire && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo) {
+        if (this.state.fire && this.state.reload.loaded && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo) {
             this.state.fireAnimation.run();
             this.state.recoilAnimation.run();
         }
+        if (!this.state.reload.loaded) this.state.reloadTimeout.run();
 
         if (this.state.recording.useRecording) this.state.recordAnimation.run();
         if (this.state.goto.engaged) this.state.gotoAnimation.run();
@@ -2414,6 +2427,8 @@ window.Avatar = class {
         attack: if (this.state.target.current && this.state.target.engaged && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo > 0) {
             const m = this.map || $CURRENT_MAP;
             if (this.map.avatars[this.state.target.current.id]) {
+                    
+              if (!this.state.reload.loaded && !this.state.reloadTimeout.running) this.reload();
 
                 const {
                     offsetX: targetX,
@@ -2452,7 +2467,7 @@ window.Avatar = class {
 
                 break attack;
             }
-
+ 
             this.disengageTarget();
         }
 
