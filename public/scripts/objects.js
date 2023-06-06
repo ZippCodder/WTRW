@@ -2025,7 +2025,7 @@ window.Avatar = class {
             reloadTimeout: new MultiFrameLinearAnimation([function() {
                this.state.reload.progress = 0;
                this.state.reload.loaded = true;
-            }],this,[1]),
+            }],this,[0]),
             pathRequestRateLimit: new MultiFrameLinearAnimation([function() {
                this.state.path.request = true;
             }],this,[1]),

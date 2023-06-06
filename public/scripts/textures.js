@@ -114,6 +114,17 @@ class TextureData {
     }
 }
 
+class Sheet {
+ constructor(textures = []) {
+     // update texture offset.y and offset.y  
+     // update textureDimensions with and height to sheet width and height 
+     // get data 
+    
+     // loop through textures and organize on the sheet. 
+     // max dimensions: 1024x2048
+ }
+}
+
 // @CONTROLS
 
 export let JOYSTICK_DISC_TEXTURE = new TextureData(0, 0, 1, "general", {
