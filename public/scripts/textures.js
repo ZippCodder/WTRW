@@ -114,15 +114,47 @@ class TextureData {
     }
 }
 
-class Sheet {
- constructor(textures = []) {
-     // update texture offset.y and offset.y  
-     // update textureDimensions with and height to sheet width and height 
-     // get data 
-    
-     // loop through textures and organize on the sheet. 
-     // max dimensions: 1024x2048
+export class Sheet {
+ constructor(textures = [], width, height) {
+   this.textures = textures;
+   this.width = width || 1024; 
+   this.height = height || 2048;
+   
+   let placement = {x: 0, y: 0};
+   let rowHeight = 0;
+ 
+   for (let t of this.textures) {
+ 
+    if (placement.x+t.bodyDimensions.width > this.width) {
+     placement.x = 0;
+     placement.y = rowHeight;
+     rowHeight = 0;
+    }
+     
+    if (placement.y+t.bodyDimensions.height > rowHeight) rowHeight = placement.y+t.bodyDimensions.height;
+
+    t.offset.x += placement.x;
+    t.offset.y += placement.y;
+    t.textureDimensions.width = this.width;
+    t.textureDimensions.height = this.height;
+
+    placement.x += t.bodyDimensions.width;
+
+    if (placement.y+t.bodyDimensions.height > this.height) {
+      console.log("Max sheet height exceeded. Increase sheet height or remove offending texture!");
+    }
+   }
  }
+
+  addTexture(texture) {
+   this.textures.push(texture);
+  }
+ 
+  render(ctx) {
+   for (let t of this.textures) {
+    t.render(ctx);
+   }
+  }
 }
 
 // @CONTROLS

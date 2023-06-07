@@ -97,7 +97,8 @@
             DOOR,
             LIGHT_SWITCH,
             MAIN_AVATAR_DRAW_WEAPON,
-            GLOCK_20_TOP_2
+            GLOCK_20_TOP_2, 
+            Sheet
         } from "/public/scripts/textures.js";
 
         // Import texture for editing and downloading...
@@ -143,29 +144,15 @@
         //CAFE(-18, -18, 0.2);
         //MAIN_AVATAR_DEFAULT(-5, -5, 0.2);
   
-        resize(256, 512);
+        resize(1024, 2048);
         // export function draw(a, w, h, iw, ih, s, lw, attribs=[],canvas) {
-        let texture = MAIN_AVATAR_DRAW_WEAPON;
+        let texture = new Sheet([MAIN_AVATAR_DEFAULT,MAIN_AVATAR_WALKING_1,MAIN_AVATAR_WALKING_2,MAIN_AVATAR_BLINKING]);
         //GLOCK_20.render(ctx);
-        //LAPTOP(600,160,0.2,ctx);      
-        //ASSASSINS_KNIFE(150,200,0.2,ctx);
-        //KITCHEN_KNIFE(200,200,0.2,ctx);
-        //COMBAT_KNIFE(250,250,0.2,ctx);
-        //BOOK_1(730,200,0.2,ctx);
-         //BOOK_2(430,200,0.2,ctx);
-        //MAIN_AVATAR_DEFAULT.render(ctx);
+        //MAIN_AVATAR_DEFAULT.render(ctx)
         texture.render(ctx);
-        GLOCK_20_TOP.render(ctx,-90);
-       
-        //ROAD_RAIL(200,100,0.2,ctx);
-        //STREET_LIGHT(142,-8,0.2,ctx);
-       // BENCH(200,0,0.2,ctx);
-        //MAIN_AVATAR_DEFAULT.render(ctx);
-        //ROAD_SIGN(200,10,0.2,ctx);
-        //PICNIC_TABLE(400,50,0.2,ctx);
-        //BENCH(2,-10,0.2,ctx);
-        log(texture.getData());
-        console.log(texture.textureDimensions);
+        //GLOCK_20_TOP.render(ctx,-90); 
+       // log(texture.getData());
+       // console.log(texture.textureDimensions);
         setSource(`MAIN_AVATAR_DRAW_GLOCK_20_PULLBACK`); 
     </script>
 </html>
