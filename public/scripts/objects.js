@@ -2339,7 +2339,7 @@ window.Avatar = class {
         item.ring.trans.offsetY = item.trans.offsetY = this.trans.offsetY + random(10, true);
         item.trans.rotation = random(360);
 
-        ($CURRENT_MAP || this.map).link(item);
+        (this.map || $CURRENT_MAP).link(item);
 
         return true;
     }
