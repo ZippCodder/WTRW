@@ -29,10 +29,10 @@
   /* INSTANTIATE INITIAL MAP */
 
   $MAP = new _Map_(780, 280).init();
- // $MAP = new _Map_(300, 300).init();
-  //$MAP.parseLayoutScript(Map2);
+ //$MAP = new _Map_(300, 300).init();
+  $MAP.parseLayoutScript(Map2);
   $CURRENT_MAP = $MAP;
-  $MAP.showGeometry();
+ // $MAP.showGeometry();
 
   $MAP.avatars[$AVATAR.id] = $AVATAR;
   $AVATAR.state.targetId = $AVATAR.id;
@@ -63,7 +63,7 @@
 */
  // $MAP.link(new VisibleBarrier(10,10,10,10));
  // console.log(b.findPathTo(-30,-30));
-
+/*
     let c = new Avatar("Trinity", -20, 0);
     $MAP.link(c);
     c.state.attack.engageDistance = 500;
@@ -97,4 +97,4 @@
         a.state.fireAnimation.rate = 0.5 / 1;
         a.state.targetId = id;
         a.killTarget([c.id]);
-    } 
+    } */

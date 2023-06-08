@@ -61,12 +61,16 @@ const _PROPERTIES_ = {
 // extract texture data from drawn texture...
 
 class TextureData {
-    constructor(xOffset, yOffset, size, objectType, bodyDimensions, boundingBoxes, lineWidth, ctx, render, attribs = [], textureWidth, textureHeight) {
+    constructor(xOffset, yOffset, size, objectType, bodyDimensions, boundingBoxes, lineWidth, ctx, render, attribs = [], textureWidth, textureHeight, visualOffsetX = 0, visualOffsetY = 0) {
         this.size = size;
         this.attribs = attribs;
         this.offset = {
             x: xOffset,
-            y: yOffset
+            y: yOffset,
+            vx: visualOffsetX || xOffset, 
+            vy: visualOffsetY || yOffset,
+            tx: 0,
+            ty: 0
         };
         this.bodyDimensions = bodyDimensions;
         this.boundingBoxes = boundingBoxes;
@@ -110,7 +114,7 @@ class TextureData {
     }
 
     getData() {
-        return draw(this.boundingBoxes, this.bodyDimensions.width, this.bodyDimensions.height, this.textureDimensions.width, this.textureDimensions.height, _PROPERTIES_[this.objectType].size, this.lineWidth, this.attribs);
+        return draw(this.boundingBoxes, this.bodyDimensions.width, this.bodyDimensions.height, this.textureDimensions.width, this.textureDimensions.height, _PROPERTIES_[this.objectType].size, this.lineWidth, this.offset.tx, this.offset.ty, this.attribs);
     }
 }
 
@@ -133,11 +137,14 @@ export class Sheet {
      
     if (placement.y+t.bodyDimensions.height > rowHeight) rowHeight = placement.y+t.bodyDimensions.height;
 
-    t.offset.x += placement.x;
-    t.offset.y += placement.y;
+    t.offset.tx += placement.x;
+    t.offset.ty += placement.y;
+    t.offset.vx += placement.x;
+    t.offset.vy += placement.y;   
+ 
     t.textureDimensions.width = this.width;
     t.textureDimensions.height = this.height;
-
+  
     placement.x += t.bodyDimensions.width;
 
     if (placement.y+t.bodyDimensions.height > this.height) {
@@ -150,9 +157,12 @@ export class Sheet {
    this.textures.push(texture);
   }
  
-  render(ctx) {
+  render(ctx, showBorders) {
    for (let t of this.textures) {
-    t.render(ctx);
+       t.render(ctx);
+       ctx.lineWidth = 1;
+       ctx.strokeStyle = "red";
+       if (showBorders) ctx.strokeRect(t.offset.vx,t.offset.vy,t.bodyDimensions.width,t.bodyDimensions.height);
    }
   }
 }
@@ -1668,16 +1678,16 @@ export let GLOCK_20 = new TextureData(0, 30, 0.2, "firearm", {
 
 // @AVATARS
 
-export let MAIN_AVATAR_DEFAULT = new TextureData(-1, -1, 0.2, "avatar", {
+export let MAIN_AVATAR_DEFAULT = new TextureData(0, 0, 0.2, "avatar", {
     width: 702,
     height: 428
 }, [
-    [152, 15, 408, 408]
+    [0, 0, 702, 428]
 ], 0, undefined, function(ctx) {
     // body: 700x428, texture: 1024,512, size: 0.15, boxes: [[152, 15, 408, 408],[561, 145, 136, 136],[15, 145, 136, 136]]
     // -1, -1
     ctx.save();
-    ctx.translate(this.offset.x, this.offset.y);
+    ctx.translate(this.offset.vx, this.offset.vy);
     ctx.scale(this.size, this.size);
 
     ctx.strokeStyle = "#1A1A1A";
@@ -1713,9 +1723,9 @@ export let MAIN_AVATAR_DEFAULT = new TextureData(-1, -1, 0.2, "avatar", {
     ctx.strokeRect(231, 60, 250, 75);
 
     ctx.restore();
-}, [0]);
+}, [0], 0, 0, -1, -1);
 
-export let MAIN_AVATAR_DRAW_WEAPON = new TextureData(-1, -1, 0.2, "avatar", {
+export let MAIN_AVATAR_DRAW_WEAPON = new TextureData(0, 0, 0.2, "avatar", {
     width: 702,
     height: 2140
 }, [
@@ -1724,7 +1734,7 @@ export let MAIN_AVATAR_DRAW_WEAPON = new TextureData(-1, -1, 0.2, "avatar", {
     // body: 702x740, texture: 1024,512, size: 0.15, boxes: [[152, 15, 408, 408],[561, 145, 136, 136],[15, 145, 136, 136]]
     // -1, -1
     ctx.save();
-    ctx.translate(this.offset.x, this.offset.y);
+    ctx.translate(this.offset.vx, this.offset.vy);
     ctx.scale(this.size, this.size);
 
     ctx.strokeStyle = "#1A1A1A";
@@ -1771,7 +1781,7 @@ export let MAIN_AVATAR_DRAW_WEAPON = new TextureData(-1, -1, 0.2, "avatar", {
     ctx.strokeRect(15 + h2.x, 145 + h2.y, 136, 136);
 
     ctx.restore();
-}, [0]);
+}, [0], 0, 0, -1, -1);
 
 export let GLOCK_20_TOP = new TextureData(54, 182, 0.2, "firearm", {
     width: 900,
@@ -2551,7 +2561,7 @@ export let ROAD = new TextureData(0, 0, 0.2, "prop", {
     [0, 0, 2500, 1410]
 ], 0, undefined, function(ctx) {
     ctx.save();
-    ctx.translate(this.offset.x, this.offset.y);
+    ctx.translate(this.offset.vx, this.offset.vy);
     ctx.scale(this.size, this.size);
     ctx.beginPath();
     ctx.lineWidth = 20;
@@ -2588,7 +2598,7 @@ export let ROAD_DOUBLE = new TextureData(0, 0, 0.2, "prop", {
     [0, 0, 2500, 1410]
 ], 0, undefined, function(ctx) {
     ctx.save();
-    ctx.translate(this.offset.x, this.offset.y);
+    ctx.translate(this.offset.vx, this.offset.vy);
     ctx.scale(this.size, this.size);
     ctx.beginPath();
     ctx.lineWidth = 20;
@@ -2611,7 +2621,7 @@ export let ROAD_DOUBLE = new TextureData(0, 0, 0.2, "prop", {
     ctx.strokeRect(1785, 700, 357, 40);
 
     ctx.restore();
-}, [1]);
+}, [0]);
 
 export let ROAD_CORNER = new TextureData(0, 0, 0.2, "prop", {
     width: 1410,
@@ -2620,7 +2630,7 @@ export let ROAD_CORNER = new TextureData(0, 0, 0.2, "prop", {
     [0, 0, 1410, 1410]
 ], 0, undefined, function(ctx) {
     ctx.save();
-    ctx.translate(this.offset.x, this.offset.y);
+    ctx.translate(this.offset.vx, this.offset.vy);
     ctx.scale(this.size, this.size);
     ctx.beginPath();
     ctx.lineWidth = 20;
@@ -2649,7 +2659,7 @@ export let ROAD_CORNER = new TextureData(0, 0, 0.2, "prop", {
     ctx.strokeRect(357, 700, 357, 40);
 
     ctx.restore();
-}, [2]);
+}, [0]);
 
 export let ROAD_TRICORNER = new TextureData(0, 0, 0.2, "prop", {
     width: 1410,
@@ -2658,7 +2668,7 @@ export let ROAD_TRICORNER = new TextureData(0, 0, 0.2, "prop", {
     [0, 0, 1410, 1410]
 ], 0, undefined, function(ctx) {
     ctx.save();
-    ctx.translate(this.offset.x, this.offset.y);
+    ctx.translate(this.offset.vx, this.offset.vy);
     ctx.scale(this.size, this.size);
     ctx.beginPath();
     ctx.lineWidth = 20;
@@ -2687,7 +2697,7 @@ export let ROAD_TRICORNER = new TextureData(0, 0, 0.2, "prop", {
     ctx.strokeRect(357, 700, 357, 40);
 
     ctx.restore();
-}, [3]);
+}, [0]);
 
 export let ROAD_QUADCORNER = new TextureData(0, 0, 0.2, "prop", {
     width: 1410,
@@ -2696,7 +2706,7 @@ export let ROAD_QUADCORNER = new TextureData(0, 0, 0.2, "prop", {
     [0, 0, 1410, 1410]
 ], 0, undefined, function(ctx) {
     ctx.save();
-    ctx.translate(this.offset.x, this.offset.y);
+    ctx.translate(this.offset.vx, this.offset.vy);
     ctx.scale(this.size, this.size);
     ctx.beginPath();
     ctx.lineWidth = 20;
@@ -2721,7 +2731,7 @@ export let ROAD_QUADCORNER = new TextureData(0, 0, 0.2, "prop", {
     ctx.strokeRect(357, 700, 357, 40);
 
     ctx.restore();
-}, [4]);
+}, [0]);
 
 export let BULLET = new TextureData(0, 0, 0.2, "prop", {
     width: 90,
@@ -2770,7 +2780,7 @@ export let BULLETSHELL = new TextureData(0, 0, 0.2, "prop", {
     ctx.restore();
 });
 
-export let ROAD_SIGN = new TextureData(2, 2, 0.2, "prop", {
+export let ROAD_SIGN = new TextureData(0, 0, 0.2, "prop", {
     width: 380,
     height: 1520
 }, [
@@ -2778,7 +2788,7 @@ export let ROAD_SIGN = new TextureData(2, 2, 0.2, "prop", {
     [160, 520, 60, 1000]
 ], 20, undefined, function(ctx) {
     ctx.save();
-    ctx.translate(this.offset.x, this.offset.y);
+    ctx.translate(this.offset.vx, this.offset.vy);
     ctx.scale(this.size, this.size);
     ctx.beginPath();
     ctx.lineWidth = 20;
@@ -2799,10 +2809,7 @@ export let ROAD_SIGN = new TextureData(2, 2, 0.2, "prop", {
     ctx.lineTo(370, 520);
     ctx.lineTo(10, 520);
     ctx.lineTo(0, 510);
-    ctx.lineTo(0, 5);
-    ctx.stroke();
-
-    ctx.fillStyle = "#9E9E9E";
+     ctx.fillStyle = "#9E9E9E";
     ctx.fillRect(160, 520, 60, 1000);
     ctx.strokeRect(160, 520, 60, 1000);
     ctx.lineWidth = 10;
@@ -2815,7 +2822,7 @@ export let ROAD_SIGN = new TextureData(2, 2, 0.2, "prop", {
     ctx.strokeText("65", 190, 380);
 
     ctx.restore();
-});
+}, undefined, 0, 0, 2, 2);
 
 export let PICNIC_TABLE = new TextureData(2, -8, 0.2, "prop", {
     width: 1400,
@@ -3452,7 +3459,7 @@ export let BENCH = new TextureData(2, -10, 0.2, "prop", {
 });
 // 1300, 550
 
-export let ROAD_RAIL = new TextureData(-58, -18, 0.2, "prop", {
+export let ROAD_RAIL = new TextureData(0, 0, 0.2, "prop", {
     width: 1300,
     height: 550
 }, [
@@ -3461,7 +3468,7 @@ export let ROAD_RAIL = new TextureData(-58, -18, 0.2, "prop", {
     [450, 150, 1000, 410]
 ], 20, undefined, function(ctx) {
     ctx.save();
-    ctx.translate(this.offset.x, this.offset.y);
+    ctx.translate(this.offset.vx, this.offset.vy);
     ctx.scale(this.size, this.size);
     ctx.beginPath();
     ctx.lineWidth = 20;
@@ -3493,7 +3500,7 @@ export let ROAD_RAIL = new TextureData(-58, -18, 0.2, "prop", {
     ctx.strokeRect(450, 400, 1000, 160);
 
     ctx.restore();
-});
+},undefined,0,0,-58,-18);
 
 export let ROAD_RAIL_VERTICAL = new TextureData(-58, -18, 0.2, "prop", {
     width: 150,

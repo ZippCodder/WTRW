@@ -30,8 +30,8 @@ export function cut(ar, lw = 0, atrbs = [], vertices = false) {
     return (vertices) ? res.flat(1) : res;
 }
 
-export function draw(a, w, h, iw, ih, s, lw, attribs = [], canvas) {
-    // boxes, width, height, texture width, texture height, size, line width, box type, canvas
+export function draw(a, w, h, iw, ih, s, lw, tx, ty, attribs = [], canvas) {
+    // boxes, width, height, texture width, texture height, size, line width, texture offset x, texture offset y, additional attributes, canvas
 
     // draw texture...
 
@@ -86,8 +86,8 @@ export function draw(a, w, h, iw, ih, s, lw, attribs = [], canvas) {
             outCoords[i] = [(x / s) + offset[0],
                 (y / s) + offset[1],
                 1.0,
-                aofb(aisofb(x, iw), 1),
-                aofb(aisofb(a[i][1], ih), 1), ...attribs
+                aofb(aisofb(x+tx, iw), 1),
+                aofb(aisofb(a[i][1]+ty, ih), 1), ...attribs
             ];
         }
 

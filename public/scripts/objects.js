@@ -519,7 +519,7 @@ window._InstancedCluster_ = class {
 window._MixedStaticCluster_ = class {
 
     static groupings = {
-        "0": [textures.road, textures.roaddouble, textures.roadcorner, textures.roadtricorner, textures.roadquadcorner],
+        "0": [textures.roads],
         "1": [textures.urbanfence, textures.urbanfencevertical, textures.urbanfencehalf],
     };
 
@@ -1410,14 +1410,14 @@ window.PicnicTable = class extends _StaticClusterClient_ {
 
 window.Road = class extends _MixedStaticClusterClient_ {
 
-    static _defaultVertices = [-25, 14.1, 1, 0, 0, 0, 25, 14.1, 1, 0.9765625, 0, 0, -25, -14.1, 1, 0, 0.55078125, 0, 25, 14.1, 1, 0.9765625, 0, 0, -25, -14.1, 1, 0, 0.55078125, 0, 25, -14.1, 1, 0.9765625, 0.55078125, 0];
-
+    static _defaultVertices = [-25,14.1,1,0,0,0,25,14.1,1,0.48828125,0,0,-25,-14.1,1,0,0.275390625,0,25,14.1,1,0.48828125,0,0,-25,-14.1,1,0,0.275390625,0,25,-14.1,1,0.48828125,0.275390625,0];
+ 
     width = 50;
     height = 28.2;
     name = "road";
     clusterName = "road";
     bottomLayer = true;
-    texture = textures.road;
+    texture = textures.roads;
     grouping = 0;
 
     constructor(initialX, initialY, initialRotation) {
@@ -1434,7 +1434,7 @@ window.RoadDouble = class extends _MixedStaticClusterClient_ {
     name = "road double";
     clusterName = "road";
     bottomLayer = true;
-    texture = textures.roaddouble;
+    texture = textures.roads;
     grouping = 0;
 
     constructor(initialX, initialY, initialRotation) {
@@ -1444,14 +1444,14 @@ window.RoadDouble = class extends _MixedStaticClusterClient_ {
 
 window.RoadCorner = class extends _StaticClusterClient_ {
 
-    static _defaultVertices = [-14.1, 14.1, 1, 0, 0, 2, 14.1, 14.1, 1, 0.55078125, 0, 2, -14.1, -14.1, 1, 0, 0.55078125, 2, 14.1, 14.1, 1, 0.55078125, 0, 2, -14.1, -14.1, 1, 0, 0.55078125, 2, 14.1, -14.1, 1, 0.55078125, 0.55078125, 2];
+    static _defaultVertices = [-14.1,14.1,1,0,0.275390625,0,14.1,14.1,1,0.275390625,0.275390625,0,-14.1,-14.1,1,0,0.55078125,0,14.1,14.1,1,0.275390625,0.275390625,0,-14.1,-14.1,1,0,0.55078125,0,14.1,-14.1,1,0.275390625,0.55078125,0];
 
     width = 28.2;
     height = 28.2;
     name = "road corner";
     bottomLayer = true;
     clusterName = "road";
-    texture = textures.roadcorner;
+    texture = textures.roads;
     grouping = 0;
 
     constructor(initialX, initialY, initialRotation) {
@@ -1461,7 +1461,7 @@ window.RoadCorner = class extends _StaticClusterClient_ {
 
 window.RoadTriCorner = class extends _StaticClusterClient_ {
 
-    static _defaultVertices = [-14.1, 14.1, 1, 0, 0, 3, 14.1, 14.1, 1, 0.55078125, 0, 3, -14.1, -14.1, 1, 0, 0.55078125, 3, 14.1, 14.1, 1, 0.55078125, 0, 3, -14.1, -14.1, 1, 0, 0.55078125, 3, 14.1, -14.1, 1, 0.55078125, 0.55078125, 3];
+    static _defaultVertices = [-14.1,14.1,1,0.275390625,0.275390625,0,14.1,14.1,1,0.55078125,0.275390625,0,-14.1,-14.1,1,0.275390625,0.55078125,0,14.1,14.1,1,0.55078125,0.275390625,0,-14.1,-14.1,1,0.275390625,0.55078125,0,14.1,-14.1,1,0.55078125,0.55078125,0];
 
     width = 28.2;
     height = 28.2;
@@ -1469,7 +1469,7 @@ window.RoadTriCorner = class extends _StaticClusterClient_ {
     clusterName = "road";
     grouping = 0;
     bottomLayer = true;
-    texture = textures.roadtricorner;
+    texture = textures.roads;
 
     constructor(initialX, initialY, initialRotation) {
         super(initialX, initialY, initialRotation);
@@ -1483,7 +1483,7 @@ window.RoadQuadCorner = class extends _StaticClusterClient_ {
     width = 28.2;
     height = 28.2;
     clusterName = "road";
-    texture = textures.roadquadcorner;
+    texture = textures.roads;
     grouping = 0;
     bottomLayer = true;
     name = "road quad corner";
@@ -2289,7 +2289,7 @@ window.Avatar = class {
 
         if ((this.state.passive && !this.state.aggressive) || (this.state.fire && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo <= 0)) {
             this.run();
-        } else if (!this.state.target.id.includes(owner.state.targetId) && ($CURRENT_MAP || this.map).avatars[owner.id] && this.state.aggressive) {
+        } else if (!this.state.target.id.includes(owner.state.targetId) && (this.map || $CURRENT_MAP).avatars[owner.id] && this.state.aggressive) {
             this.state.target.id.push(owner.state.targetId);
             this.state.target.engaged = true;
             this.state.attack.multiple = true;
@@ -2339,7 +2339,7 @@ window.Avatar = class {
         item.ring.trans.offsetY = item.trans.offsetY = this.trans.offsetY + random(10, true);
         item.trans.rotation = random(360);
 
-        ($CURRENT_MAP || this.map).link(item);
+        (this.map || $CURRENT_MAP).link(item);
 
         return true;
     }
@@ -2575,7 +2575,7 @@ window.Avatar = class {
             let {
                 x,
                 y
-            } = ($CURRENT_MAP || this.map).GRAPH.getRandomPoint();
+            } = (this.map || $CURRENT_MAP).GRAPH.getRandomPoint();
             this.state.speed = this.state.runningSpeed * this.state.baseSpeed;
             this.requestPath(x, y);
         }
