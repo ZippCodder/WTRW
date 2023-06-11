@@ -377,15 +377,12 @@ export let ICONS = new TextureData(0, 0, 1, "control", {
 
 // @BUILDINGS
 
-
-export let LUXURY = new TextureData(0, 0, 0.2, "building", {
-    width: 3200,
-    height: 2280
+export let LUXURY_APARTMENT = new TextureData(2010, 3510, 0.2, "building", {
+    width: 6370,
+    height: 7720
 }, [
-    [500, 1700, 3200, 1500],
-    [600, 3200, 3000, 700],
-    [2750, 3900, 600, 250, 0]
-], 20, undefined, function(ctx, n) {
+ [-2000,-3000,3500,4660],[-1565, 2200, 2700, 1500],[1500,1900,300,2000],[4000,1900,300,2000],[1500, -700, 2800, 4000],[-1950, 1650, 385, 2150],[1119, 1650, 385, 2150],[1450, -3500, 90, 2800],[4260, -3500, 90, 2800],[1450, -3500, 2900, 100],[1450, -1050, 2900, 100]
+], 0, undefined, function(ctx, n) {
     // body: 3200x2280, texture: 1024,512, size: 0.18, boxes: [[500, 1700, 3200, 1500],[600, 3200, 3000, 700],[2750, 3900, 600, 250]]
 
     ctx.save();
@@ -446,18 +443,18 @@ export let LUXURY = new TextureData(0, 0, 0.2, "building", {
        ctx.strokeRect(1950, 2100, 700, 1200);
 
        ctx.fillStyle = "#9C9C9C";
-       ctx.fillRect(2075, 2250, 50, 900); 
-       ctx.fillRect(2225, 2250, 50, 900);
-       ctx.fillRect(2375, 2250, 50, 900);
+       ctx.fillRect(2125, 2250, 50, 900); 
+       ctx.fillRect(2275, 2250, 50, 900);
+       ctx.fillRect(2425, 2250, 50, 900);
        
        ctx.lineWidth = 15;
-       ctx.strokeRect(2075, 2250, 50, 900); 
-       ctx.strokeRect(2225, 2250, 50, 900);
-       ctx.strokeRect(2375, 2250, 50, 900);
+       ctx.strokeRect(2125, 2250, 50, 900); 
+       ctx.strokeRect(2275, 2250, 50, 900);
+       ctx.strokeRect(2425, 2250, 50, 900);
        ctx.lineWidth = 20;
        ctx.fillStyle = "#242424";
-       ctx.fillRect(2550, 2600, 40, 150);
-       ctx.strokeRect(2550, 2600, 40, 150);
+       ctx.fillRect(2550, 2700, 40, 150);
+       ctx.strokeRect(2550, 2700, 40, 150);
 
        ctx.fillStyle = "#424242";
        ctx.fillRect(1900, 2000, 800, 100);
@@ -477,8 +474,8 @@ export let LUXURY = new TextureData(0, 0, 0.2, "building", {
        ctx.lineTo(-1950, 3800); 
        ctx.lineTo(-1565, 3800); 
        ctx.lineTo(-1565, 2200); 
-       ctx.lineTo(1135, 2200);
-       ctx.lineTo(1135, 3800);
+       ctx.lineTo(1115, 2200);
+       ctx.lineTo(1115, 3800);
        ctx.lineTo(1500, 3800);
        ctx.lineTo(1500, 1660);
        ctx.fill(); 
@@ -492,24 +489,25 @@ export let LUXURY = new TextureData(0, 0, 0.2, "building", {
        ctx.lineTo(-1950, 3800); 
        ctx.lineTo(-1565, 3800); 
        ctx.lineTo(-1565, 2200); 
-       ctx.lineTo(1135, 2200);
-       ctx.lineTo(1135, 3800);
+       ctx.lineTo(1115, 2200);
+       ctx.lineTo(1115, 3800);
        ctx.lineTo(1500, 3800);
        ctx.stroke();
  
        // - door
 
        ctx.fillStyle = "#424242";
-       ctx.fillRect(-1565, 2200, 2700, 1500);
+       ctx.fillRect(-1565, 2200, 2680, 1500);
        ctx.fillStyle = "#242424";
-       ctx.fillRect(-1565, 3650, 2700, 50); 
+       //ctx.fillRect(-1565, 3650, 2680, 50); 
 
-       ctx.strokeRect(-1565, 2200, 2700, 1500);
-       ctx.strokeRect(-1565, 2200, 2700, 1450);
+       ctx.strokeRect(-1565, 2200, 2680, 1500);
+       ctx.lineWidth = 15;
+       ctx.strokeRect(-1565, 2200, 2680, 1450);
        ctx.lineWidth = 10;
-       ctx.strokeRect(-1565, 2200, 2700, 400);
-       ctx.strokeRect(-1565, 2200, 2700, 800);
-       ctx.strokeRect(-1565, 2200, 2700, 1200); 
+       ctx.strokeRect(-1565, 2200, 2680, 400);
+       ctx.strokeRect(-1565, 2200, 2680, 800);
+       ctx.strokeRect(-1565, 2200, 2680, 1200); 
  
      // balcony
 
@@ -579,18 +577,18 @@ export let LUXURY = new TextureData(0, 0, 0.2, "building", {
        ctx.fillRect(1500, 600, 100, 300);
        ctx.fillRect(1500, 900, 2400, 100);
        ctx.fillRect(1500, 900, 2400, 50);
-       ctx.fillRect(1600, 1000, 50, 400); 
-       ctx.fillRect(2600, 1000, 50, 400);
-       ctx.fillRect(3600, 1000, 50, 400);
+       ctx.fillRect(1950, 1000, 50, 400); 
+       ctx.fillRect(2675, 1000, 50, 400);
+       ctx.fillRect(3400, 1000, 50, 400);
  
        ctx.lineWidth = 20;
        ctx.strokeRect(1500, 600, 100, 300);
        ctx.fillStyle = "#545454";
        ctx.fillRect(1500, 950, 2400, 50);
        ctx.strokeRect(1500, 900, 2400, 100);
-       ctx.strokeRect(1600, 1000, 50, 400); 
-       ctx.strokeRect(2600, 1000, 50, 400);
-       ctx.strokeRect(3600, 1000, 50, 400);
+       ctx.strokeRect(1950, 1000, 50, 400); 
+       ctx.strokeRect(2675, 1000, 50, 400);
+       ctx.strokeRect(3400, 1000, 50, 400);
  
        // - windows 
        ctx.fillStyle = "#424242";
@@ -714,12 +712,86 @@ export let LUXURY = new TextureData(0, 0, 0.2, "building", {
        ctx.fillStyle = "#424242"; 
        ctx.fillRect(1450, -800, 2900, 100);
        ctx.strokeRect(1450, -3500, 2900, 2800);
+ 
+       // hatch
 
-       ctx.font = "100px Arial";
-       ctx.strokeText("245", 1568,3000);
+       ctx.lineWidth = 20; 
+       ctx.fillStyle = "#424242";
+       ctx.fillRect(2550,-2750,700,50);
+       ctx.strokeRect(2550,-3200,700,500);
+       ctx.lineWidth = 15;
 
+       ctx.moveTo(2800, -2900);
+       ctx.lineTo(3000, -2900);
+       ctx.lineTo(3000, -2800);
+       ctx.lineTo(2970, -2800);
+       ctx.lineTo(2970, -2850);
+       ctx.lineTo(2830, -2850);
+       ctx.lineTo(2830, -2800);
+       ctx.lineTo(2800, -2800);
+       ctx.lineTo(2800, -2908);
+       ctx.fillStyle = "#A1A1A1";
+       ctx.fill();
+ 
+       ctx.fillStyle = "#8A8A8A"; 
+       ctx.fillRect(2800,-2900,200,25);
+ 
+       ctx.beginPath();
+       ctx.moveTo(2800, -2900);
+       ctx.lineTo(3000, -2900);
+       ctx.lineTo(3000, -2800);
+       ctx.lineTo(2970, -2800);
+       ctx.lineTo(2970, -2850);
+       ctx.lineTo(2830, -2850);
+       ctx.lineTo(2830, -2800);
+       ctx.lineTo(2800, -2800);
+       ctx.lineTo(2800, -2908);
+       ctx.stroke();
+   
+       // roof rails
+      ctx.lineWidth = 20; 
+      ctx.fillStyle = "#363636"; 
+      ctx.fillRect(1500, -3450, 2800, 70); 
+      ctx.fillStyle = "#292929";
+      ctx.fillRect(1500, -3450, 2800, 30);
+      ctx.strokeRect(1500, -3450, 2800, 70);
+      ctx.fillRect(1550,-3380,50,80);
+      ctx.strokeRect(1550,-3380,50,80);
+      ctx.fillRect(2875,-3380,50,80);
+      ctx.strokeRect(2875,-3380,50,80);
+      ctx.fillRect(4200,-3380,50,80);
+      ctx.strokeRect(4200,-3380,50,80);
+ 
+      ctx.fillStyle = "#363636"; 
+      ctx.fillRect(1500, -1050, 2800, 70); 
+      ctx.fillStyle = "#292929";
+      ctx.fillRect(1500, -1050, 2800, 30);
+      ctx.strokeRect(1500, -1050, 2800, 70);
+      ctx.fillRect(1550,-980,50,80);
+      ctx.strokeRect(1550,-980,50,80);
+      ctx.fillRect(2875,-980,50,80);
+      ctx.strokeRect(2875,-980,50,80);
+      ctx.fillRect(4200,-980,50,80);
+      ctx.strokeRect(4200,-980,50,80);
+ 
+      ctx.fillRect(1500, -3380, 50, 2330);
+      ctx.strokeRect(1500, -3380, 50, 2330);
+      ctx.fillRect(4250, -3380, 50, 2330);
+      ctx.strokeRect(4250, -3380, 50, 2330);
+
+/*
+      ctx.strokeStyle = "red";
+      ctx.strokeRect(1450, -3500, 90, 2800);
+      ctx.strokeRect(4260, -3500, 90, 2800);
+      ctx.strokeRect(1450, -3500, 2900, 100);
+      ctx.strokeRect(1450, -1050, 2900, 100); 
+
+[-2000,-3000,3500,4660],[-1565, 2200, 2700, 1500],[1500,1900,300,2000],[4000,1900,300,2000],[1500, -700, 2800, 4000],[-1950, 1650, 385, 2150],[1119, 1650, 385, 2150],[1450, -3500, 90, 2800],[4260, -3500, 90, 2800],[1450, -3500, 2900, 100],[1450, -1050, 2900, 100]
+
+*/
+ 
        ctx.restore();
-}, undefined, 0, 0, 3000, 5000);
+}, undefined, 0, 0, 2010, 3510);
 
 export let GENERIC_APARTMENT = new TextureData(-98, -338, 0.2, "building", {
     width: 3200,

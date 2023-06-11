@@ -1583,16 +1583,16 @@ window.Table = class extends _StaticClusterClient_ {
 /* Buildings */
 
 window._Building_ = class extends _StaticClusterClient_ {
-    constructor(initialX, initialY, initialRotation, doors = [], rooms) {
+    constructor(initialX, initialY, initialRotation, doors = [], rooms, doorOffset = 0) {
         super(initialX, initialY, initialRotation);
 
         this.doors = [];
         this.rooms = rooms || [new _Map_(150, 80, false).init([
-            [0, 35]
-        ])];
+            [0 + doorOffset, 35]
+        ], doorOffset)];
 
         for (let i of doors) {
-            this.doors.push(new Trigger(this.trans.offsetX + i[0], this.trans.offsetY + i[1], (function() {
+          this.doors.push(new Trigger(this.trans.offsetX + i[0], this.trans.offsetY + i[1], (function() {
 
                 $CURRENT_MAP.move = false;
 
@@ -1606,7 +1606,7 @@ window._Building_ = class extends _StaticClusterClient_ {
                     }
                 }).bind(this));
             }).bind(this), true));
-        }
+        } 
     }
 
     postLink() {
@@ -1636,6 +1636,27 @@ window._Building_ = class extends _StaticClusterClient_ {
             this.trans.rotation = rotation;
         }
         if (translateVertices) this.cluster.translateVertices(this.clusterIndex, this.constructor._defaultVertices, -this.cluster.trans.offsetX + this.trans.offsetX, -this.cluster.trans.offsetY + this.trans.offsetY, this.trans.rotation);
+    }
+}
+
+window.LuxuryApartment = class extends _Building_ {
+
+    static _defaultVertices = [-63.7,77.2,1,0,0,63.7,77.2,1,0.6220703125,0,-63.7,-77.2,1,0,0.75390625,63.7,77.2,1,0.6220703125,0,-63.7,-77.2,1,0,0.75390625,63.7,-77.2,1,0.6220703125,0.75390625];
+
+    width = 127.4;
+    height = 154.4;
+    name = "luxury apartment";
+    clusterName = "luxury apartment";
+    texture = textures.luxuryapartment;
+    obstacle = true;
+    segments = [
+    [-63.5,-67,70,93.2],[-54.8,37,54,30],[6.5,31,6,40],[56.5,31,6,40],[6.5,-21,56,80],[-62.5,26,7.7,43],[-1.1200000000000045,26,7.7,43],[5.5,-77,1.8,56],[61.7,-77,1.8,56],[5.5,-77,58,2],[5.5,-28,58,2]
+    ];
+
+    constructor(initialX, initialY, initialRotation) {
+        super(initialX, initialY, initialRotation, [
+            [35, 65, 0],[23, -57, 1],[-30, -65, 0]
+        ],[new _Map_(300, 50, false).init([[0 + -40, 35]], -40),new _Map_(150, 80, false).init([[0, 35]])]);
     }
 }
 
@@ -2969,7 +2990,7 @@ window._Map_ = class {
  
     static _all = {};
 
-    constructor(width, height, root = true) {
+    constructor(width = 100, height = 100, root = true) {
         this.width = width;
         this.height = height;
         this.id = genObjectId();
@@ -3398,7 +3419,7 @@ window._Map_ = class {
 
     init(spawns = [
         [0, 0]
-    ]) {
+    ], doorOffset = 0) {
         // attach any default objects or clusters for all maps, etc.
         this._bulletMatrix = new _BulletCluster_([-0.9, 0.4, 1, 0, 0, 0.9, 0.4, 1, 0.5625, 0, -0.9, -0.4, 1, 0, 0.5, 0.9, 0.4, 1, 0.5625, 0, -0.9, -0.4, 1, 0, 0.5, 0.9, -0.4, 1, 0.5625, 0.5], textures.bullet);
         this.link(this._bulletMatrix);
@@ -3429,9 +3450,9 @@ window._Map_ = class {
         }
 
         if (!this.root) {
-            let exit = new Door(false, -1, 0, (this.height / 2) + 9.2);
+            let exit = new Door(false, -1, 0 + doorOffset, (this.height / 2) + 9.2);
             exit.exclude = true;
-            let light = new LightSwitch(25, (this.height / 2) + 12);
+            let light = new LightSwitch(25 + doorOffset, (this.height / 2) + 12);
             light.exclude = true;
 
             this.link(exit);

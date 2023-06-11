@@ -28,11 +28,13 @@
 
   /* INSTANTIATE INITIAL MAP */
 
-  $MAP = new _Map_(780, 280).init();
+  $MAP = new _Map_(780, 780).init();
  //$MAP = new _Map_(300, 300).init();
-  $MAP.parseLayoutScript(Map2);
+//  $MAP.parseLayoutScript(Map2);
   $CURRENT_MAP = $MAP;
  // $MAP.showGeometry();
+
+  $MAP.link(new LuxuryApartment(0,100));
 
   $MAP.avatars[$AVATAR.id] = $AVATAR;
   $AVATAR.state.targetId = $AVATAR.id;
@@ -45,12 +47,11 @@
 // $MAP.GRAPH.getPath(488,1857);
 // console.log(performance.now()-t1);
 
-/*
   let b = new Avatar("Keanu Reeves", 5, 5);
   $MAP.link(b);
   b.state.attack.engageDistance = 500;
   b.state.attack.disengageDistance = 200;
-  b.state.attack.attackSpeed = 3;
+  b.state.attack.attackSpeed = 1;
   b.state.armor = 3000;
   b.state.passive = false;
   b.state.aggressive = true;
@@ -60,7 +61,7 @@
   b.state.fireAnimation.rate = 0.5 / 10;
   b.state.targetId = b.id; 
   b.killTarget([id],true);
-*/
+
  // $MAP.link(new VisibleBarrier(10,10,10,10));
  // console.log(b.findPathTo(-30,-30));
 /*
