@@ -1509,7 +1509,7 @@ window.Door = class extends _StaticClusterClient_ {
     interactable = true;
     minDistance = 17;
 
-    constructor(label, room = -1, initialX, initialY, initialRotation) {
+    constructor(label, room = -1, initialX, initialY, initialRotation, outPoint) {
         super(initialX, initialY, initialRotation);
         if (label) {
             this.label = new Text(label.substring(0, 10), 50, false, this.trans.offsetX, this.trans.offsetY + 3);
@@ -1517,9 +1517,10 @@ window.Door = class extends _StaticClusterClient_ {
         this.text = label || false;
         this.roomIndex = room;
         this.room = room;
-    }
+        this.outPoint = outPoint;
+  }
 
-    postLink() {
+    postLink() {	
         if (this.label) {
             this.label.exclude = true;
             this.label.managedMovement = true;
@@ -1529,7 +1530,7 @@ window.Door = class extends _StaticClusterClient_ {
     }
 
     action() {
-        if (typeof this.room === "number") this.room = (this.room < 0) ? this.map.PARENT_MAP : this.map.SUB_MAPS[this.room];
+      if (typeof this.room === "number") this.room = (this.room < 0) ? this.map.PARENT_MAP : this.map.SUB_MAPS[this.room];
 
         if (this.room) {
             $CURRENT_MAP.move = false;
@@ -1537,9 +1538,15 @@ window.Door = class extends _StaticClusterClient_ {
                 $CURRENT_MAP = this.room;
                 $AVATAR.rotate(180);
                 this.map.move = true;
-                if ($CURRENT_MAP.centerX === 0 && $CURRENT_MAP.centerY === 0) {
-                    let [x, y] = $CURRENT_MAP.spawnPoints[0];
+
+                if (this.outPoint) {
+                    let [x, y] = this.outPoint;
+                  if (this.roomIndex < 0 && this.map.building) {
+                    let b = this.map.building;
+                    $CURRENT_MAP.translate((-$CURRENT_MAP.centerX) + (b.trans.offsetX + x), (-$CURRENT_MAP.centerY) + (b.trans.offsetY + y));
+                  } else {
                     $CURRENT_MAP.translate((-$CURRENT_MAP.centerX) + x, (-$CURRENT_MAP.centerY) + y);
+                  }
                 }
             }).bind(this));
         }
@@ -1600,10 +1607,11 @@ window._Building_ = class extends _StaticClusterClient_ {
                     $CURRENT_MAP = this.rooms[i[2]];
                     $AVATAR.rotate(180);
                     this.map.move = true;
-                    if ($CURRENT_MAP.centerX === 0 && $CURRENT_MAP.centerY === 0) {
-                        let [x, y] = $CURRENT_MAP.spawnPoints[0];
-                        $CURRENT_MAP.translate((-$CURRENT_MAP.centerX) + x, (-$CURRENT_MAP.centerY) + y);
-                    }
+
+                  if (i[3]) {
+                    let [x, y] = i[3];
+                    $CURRENT_MAP.translate((-$CURRENT_MAP.centerX) + x, (-$CURRENT_MAP.centerY) + y);
+                  }
                 }).bind(this));
             }).bind(this), true));
         } 
@@ -1615,6 +1623,7 @@ window._Building_ = class extends _StaticClusterClient_ {
         }
 
         for (let i of this.rooms) {
+            i.building = this;
             this.map.addSubMap(i);
         }
     }
