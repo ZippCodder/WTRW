@@ -326,7 +326,8 @@ window.onload = async () => {
         downwardlight: document.querySelector("#downwardlight"),
         avatardrawweapon: document.querySelector("#avatardrawweapon"),
         avatardrawglock20pullback: document.querySelector("#avatardrawglock20pullback"), 
-        roads: document.querySelector("#roads")
+        roads: document.querySelector("#roads"),
+        fences: document.querySelector("#fences")
     }
 
     gl.uniform1f(locations.worldUnitX, worldUnitX);

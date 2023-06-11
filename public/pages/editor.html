@@ -98,6 +98,7 @@
             LIGHT_SWITCH,
             MAIN_AVATAR_DRAW_WEAPON,
             GLOCK_20_TOP_2, 
+            LUXURY,
             Sheet
         } from "/public/scripts/textures.js";
 
@@ -144,17 +145,19 @@
         //CAFE(-18, -18, 0.2);
         //MAIN_AVATAR_DEFAULT(-5, -5, 0.2);
   
-        resize(1024, 1024);
+        resize(3000, 3000);
         // export function draw(a, w, h, iw, ih, s, lw, attribs=[],canvas) {
-        let texture = new Sheet([ROAD,ROAD_DOUBLE,ROAD_CORNER,ROAD_TRICORNER,ROAD_QUADCORNER], 1024, 1024);
+        let texture = new Sheet([ROAD_RAIL,ROAD_SIGN,URBAN_FENCE_HALF,URBAN_FENCE,URBAN_FENCE_VERTICAL], 1024, 1024);
         //GLOCK_20.render(ctx);
-        //MAIN_AVATAR_DEFAULT.render(ctx)
+        //URBAN_FENCE.render(ctx);
+        //PICNIC_TABLE.render(ctx);
         texture.render(ctx);
         //GLOCK_20_TOP.render(ctx,-90); 
        // log(texture.getData());
-          log(ROAD_CORNER.getData());
-          console.log(ROAD.textureDimensions);
+          log(URBAN_FENCE_VERTICAL.getData());
+          console.log(URBAN_FENCE_HALF.textureDimensions);
+          console.log(URBAN_FENCE_HALF);
        // console.log(texture.textureDimensions);
-        setSource(`roads.png`); 
+        setSource(`fences.png`); 
     </script>
 </html>
