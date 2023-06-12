@@ -1506,10 +1506,11 @@ window.Door = class extends _StaticClusterClient_ {
         [-7.3, -0.2, 14.6, 9.4]
     ];
     topLayer = false;
+    exclude = true;
     interactable = true;
     minDistance = 17;
 
-    constructor(label, room = -1, initialX, initialY, initialRotation, outPoint) {
+    constructor(label, room = -1, initialX, initialY, initialRotation, outPoint, buildingExit) {
         super(initialX, initialY, initialRotation);
         if (label) {
             this.label = new Text(label.substring(0, 10), 50, false, this.trans.offsetX, this.trans.offsetY + 3);
@@ -1517,6 +1518,7 @@ window.Door = class extends _StaticClusterClient_ {
         this.text = label || false;
         this.roomIndex = room;
         this.room = room;
+        this.buildingExit = buildingExit;
         this.outPoint = outPoint;
   }
 
@@ -1524,7 +1526,6 @@ window.Door = class extends _StaticClusterClient_ {
         if (this.label) {
             this.label.exclude = true;
             this.label.managedMovement = true;
-            this.label.topLayer = true;
             this.map.link(this.label);
         }
     }
@@ -1541,9 +1542,9 @@ window.Door = class extends _StaticClusterClient_ {
 
                 if (this.outPoint) {
                     let [x, y] = this.outPoint;
-                  if (this.roomIndex < 0 && this.map.building) {
+                  if (this.buildingExit && this.map.building) {
                     let b = this.map.building;
-                    $CURRENT_MAP.translate((-$CURRENT_MAP.centerX) + (b.trans.offsetX + x), (-$CURRENT_MAP.centerY) + (b.trans.offsetY + y));
+      $CURRENT_MAP.translate(-$CURRENT_MAP.centerX + (b.trans.offsetX+$CURRENT_MAP.centerX+x),-$CURRENT_MAP.centerY + (b.trans.offsetY+$CURRENT_MAP.centerY+y));
                   } else {
                     $CURRENT_MAP.translate((-$CURRENT_MAP.centerX) + x, (-$CURRENT_MAP.centerY) + y);
                   }
@@ -1590,16 +1591,17 @@ window.Table = class extends _StaticClusterClient_ {
 /* Buildings */
 
 window._Building_ = class extends _StaticClusterClient_ {
-    constructor(initialX, initialY, initialRotation, doors = [], rooms, doorOffset = 0) {
+    constructor(initialX, initialY, initialRotation, doors = [], rooms, doorOffset = 0, setup) {
         super(initialX, initialY, initialRotation);
 
+        this.setup = setup;
         this.doors = [];
         this.rooms = rooms || [new _Map_(150, 80, false).init([
             [0 + doorOffset, 35]
         ], doorOffset)];
 
         for (let i of doors) {
-          this.doors.push(new Trigger(this.trans.offsetX + i[0], this.trans.offsetY + i[1], (function() {
+          let t = new Trigger(this.trans.offsetX + i[0], this.trans.offsetY + i[1], (function() {
 
                 $CURRENT_MAP.move = false;
 
@@ -1613,7 +1615,10 @@ window._Building_ = class extends _StaticClusterClient_ {
                     $CURRENT_MAP.translate((-$CURRENT_MAP.centerX) + x, (-$CURRENT_MAP.centerY) + y);
                   }
                 }).bind(this));
-            }).bind(this), true));
+            }).bind(this), true);
+         t.outPoint = i[3];
+            
+         this.doors.push(t);
         } 
     }
 
@@ -1626,6 +1631,8 @@ window._Building_ = class extends _StaticClusterClient_ {
             i.building = this;
             this.map.addSubMap(i);
         }
+ 
+        this.setup();
     }
 
     clean() {
@@ -1664,8 +1671,11 @@ window.LuxuryApartment = class extends _Building_ {
 
     constructor(initialX, initialY, initialRotation) {
         super(initialX, initialY, initialRotation, [
-            [35, 65, 0],[23, -57, 1],[-30, -65, 0]
-        ],[new _Map_(300, 50, false).init([[0 + -40, 35]], -40),new _Map_(150, 80, false).init([[0, 35]])]);
+            [35, 65, 0],[23, -57, 1],[-30, -65, 0, [-40.37,18.93]]
+        ],[new _Map_(300, 50, false).init(undefined, -40, [-29.3,-73], true),new _Map_(150, 80, false).init()],undefined,function(){
+        let d1 = new Door("Roof",-1, 30,(this.map.SUB_MAPS[0].height / 2) + 9.2,0,[34.77,53.53],true);
+        this.rooms[0].link(d1);
+}); 
     }
 }
 
@@ -3252,7 +3262,7 @@ window._Map_ = class {
                         frame = frame.concat([ob.text, ob.size, toRGB(ob._color), ob.trans.offsetX, ob.trans.offsetY, ob.trans.rotation * (180 / Math.PI), false]);
                         break;
                     case "door":
-                        frame = frame.concat([ob.text, ob.roomIndex, ob.trans.offsetX, ob.trans.offsetY, ob.trans.rotation * (180 / Math.PI)]);
+                        frame = frame.concat([ob.text, ob.roomIndex, ob.trans.offsetX, ob.trans.offsetY, ob.trans.rotation * (180 / Math.PI), ob.outPoint]);
                         break;
                     case "visible barrier":
                         frame = frame.concat([ob.trans.offsetX, ob.trans.offsetY, ob.width, ob.height, ob.color]);
@@ -3428,7 +3438,7 @@ window._Map_ = class {
 
     init(spawns = [
         [0, 0]
-    ], doorOffset = 0) {
+    ], doorOffset = 0, exitPoint, buildingExit, label) {
         // attach any default objects or clusters for all maps, etc.
         this._bulletMatrix = new _BulletCluster_([-0.9, 0.4, 1, 0, 0, 0.9, 0.4, 1, 0.5625, 0, -0.9, -0.4, 1, 0, 0.5, 0.9, 0.4, 1, 0.5625, 0, -0.9, -0.4, 1, 0, 0.5, 0.9, -0.4, 1, 0.5625, 0.5], textures.bullet);
         this.link(this._bulletMatrix);
@@ -3459,8 +3469,7 @@ window._Map_ = class {
         }
 
         if (!this.root) {
-            let exit = new Door(false, -1, 0 + doorOffset, (this.height / 2) + 9.2);
-            exit.exclude = true;
+            let exit = new Door(label, -1, 0 + doorOffset, (this.height / 2) + 9.2, 0, exitPoint, buildingExit);
             let light = new LightSwitch(25 + doorOffset, (this.height / 2) + 12);
             light.exclude = true;
 

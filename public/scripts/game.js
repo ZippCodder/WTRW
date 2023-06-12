@@ -34,8 +34,8 @@
   $CURRENT_MAP = $MAP;
  // $MAP.showGeometry();
 
-  $MAP.link(new LuxuryApartment(0,100));
-
+  $MAP.link(new LuxuryApartment(0,0));
+  $MAP.noclip=true; 
   $MAP.avatars[$AVATAR.id] = $AVATAR;
   $AVATAR.state.targetId = $AVATAR.id;
   $AVATAR.addItem(new GLOCK_20(0,0,0,100));
