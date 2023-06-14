@@ -1544,9 +1544,13 @@ window.Door = class extends _StaticClusterClient_ {
                     let [x, y] = this.outPoint;
                   if (this.buildingExit && this.map.building) {
                     let b = this.map.building;
+                    $CURRENT_MAP.noclip = true;
       $CURRENT_MAP.translate(-$CURRENT_MAP.centerX + (b.trans.offsetX+$CURRENT_MAP.centerX+x),-$CURRENT_MAP.centerY + (b.trans.offsetY+$CURRENT_MAP.centerY+y));
+                    $CURRENT_MAP.noclip = false;
                   } else {
+                    $CURRENT_MAP.noclip = true;
                     $CURRENT_MAP.translate((-$CURRENT_MAP.centerX) + x, (-$CURRENT_MAP.centerY) + y);
+                    $CURRENT_MAP.noclip = false;
                   }
                 }
             }).bind(this));
@@ -1612,7 +1616,9 @@ window._Building_ = class extends _StaticClusterClient_ {
 
                   if (i[3]) {
                     let [x, y] = i[3];
+                    $CURRENT_MAP.noclip = true;
                     $CURRENT_MAP.translate((-$CURRENT_MAP.centerX) + x, (-$CURRENT_MAP.centerY) + y);
+                    $CURRENT_MAP.noclip = false;
                   }
                 }).bind(this));
             }).bind(this), true);

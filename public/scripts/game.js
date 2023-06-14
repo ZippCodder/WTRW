@@ -35,7 +35,8 @@
  // $MAP.showGeometry();
 
   $MAP.link(new LuxuryApartment(0,0));
-  $MAP.noclip=true; 
+  $MAP.translate(-100,50);
+  $MAP.noclip=false; 
   $MAP.avatars[$AVATAR.id] = $AVATAR;
   $AVATAR.state.targetId = $AVATAR.id;
   $AVATAR.addItem(new GLOCK_20(0,0,0,100));
