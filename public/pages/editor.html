@@ -99,6 +99,7 @@
             MAIN_AVATAR_DRAW_WEAPON,
             GLOCK_20_TOP_2, 
             LUXURY_APARTMENT,
+            HOUSE_1,
             Sheet
         } from "/public/scripts/textures.js";
 
@@ -145,18 +146,18 @@
         //CAFE(-18, -18, 0.2);
         //MAIN_AVATAR_DEFAULT(-5, -5, 0.2);
   
-        resize(2048, 2048);
+        resize(2048, 2048); // 1474 1864
         // export function draw(a, w, h, iw, ih, s, lw, attribs=[],canvas) {
-        let texture = LUXURY_APARTMENT//new Sheet([ROAD_RAIL,ROAD_SIGN,URBAN_FENCE_HALF,URBAN_FENCE,URBAN_FENCE_VERTICAL], 1024, 1024);
+        let texture = HOUSE_1//new Sheet([ROAD_RAIL,ROAD_SIGN,URBAN_FENCE_HALF,URBAN_FENCE,URBAN_FENCE_VERTICAL], 1024, 1024);
+        //MAIN_AVATAR_DEFAULT.render(ctx);
         //GLOCK_20.render(ctx);
         //URBAN_FENCE.render(ctx);
         //PICNIC_TABLE.render(ctx);
         texture.render(ctx);
         //GLOCK_20_TOP.render(ctx,-90); 
        // log(texture.getData());
-          log(LUXURY_APARTMENT.getData());
-          console.log(LUXURY_APARTMENT.textureDimensions);
-       // console.log(texture.textureDimensions);
-        setSource(`luxury_apartment.png`); 
+          log(texture.getData());
+          console.log(texture.textureDimensions);
+        setSource(`house1.png`); 
     </script>
 </html>

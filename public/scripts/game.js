@@ -22,21 +22,34 @@
       Map1,
       Map2
   } from "/public/scripts/maps.js";
+  
+  import {
+  _Map_,
+  Avatar,
+  House1,
+  UrbanFence, 
+  UrbanFenceHalf, 
+  UrbanFenceVertical, 
+  PicnicTable,
+  StreetLight,
+  Chair,
+  Table,
+  GLOCK_20
+  } from "/public/scripts/objects.js";
 
   $AVATAR = new Avatar("R O B I N H O O D");
   $AVATAR.postLink();
 
-  /* INSTANTIATE INITIAL MAP */
+  // Game setup and initialization
 
   $MAP = new _Map_(780, 780).init();
  //$MAP = new _Map_(300, 300).init();
 //  $MAP.parseLayoutScript(Map2);
   $CURRENT_MAP = $MAP;
  // $MAP.showGeometry();
-
-  $MAP.link(new LuxuryApartment(0,0));
+  $MAP.link(new House1(0,0));
   $MAP.translate(-100,50);
-  $MAP.noclip=false; 
+  $MAP.noclip=true; 
   $MAP.avatars[$AVATAR.id] = $AVATAR;
   $AVATAR.state.targetId = $AVATAR.id;
   $AVATAR.addItem(new GLOCK_20(0,0,0,100));
@@ -100,3 +113,97 @@
         a.state.targetId = id;
         a.killTarget([c.id]);
     } */
+
+// Developer console
+
+  let consoleActive = false;
+  let log = document.querySelector("textarea");
+   
+  function enableConsole() {
+      let comms = [],
+          commIndex, inputs = [],
+          addedObjects = [];
+
+      function activateConsole() {
+          log.addEventListener("keydown",
+              (e) => {
+                  if (e.key === "Enter") {
+                      e.preventDefault();
+                      comms.push(log.value.split(">").at(-1));
+                      inputs.push(log.value.split(">").at(-1));
+                      log.value = "";
+                      commIndex = inputs.length;
+
+                      if (inputs.at(-1).trim() === "clear") {
+                          comms = [];
+                          log.value = "";
+                          log.value += "\n>";
+                          comms.push("\n>");
+                          log.setSelectionRange(log.value.length, log.value.length, "forward");
+                      } else {
+                          try {
+                              let output = "\n" + JSON.stringify(eval(comms.at(-1)));
+                              comms.push(output);
+                          } catch (err) {
+                              comms.push("\n" + err);
+                          }
+
+                          for (let i of comms) {
+                              log.value += i;
+                          }
+
+                          log.value += "\n>";
+                          comms.push("\n>");
+                          log.setSelectionRange(log.value.length, log.value.length, "forward");
+                      }
+                  } else if (e.key === "ArrowUp") {
+                      e.preventDefault();
+                      commIndex--;
+
+                      log.value = "";
+                      for (let i of comms) {
+                          log.value += i;
+                      }
+                      log.value += inputs[commIndex];
+                  } else if (e.key === "ArrowDown") {
+                      e.preventDefault();
+                      commIndex++;
+
+                      log.value = "";
+                      for (let i of comms) {
+                          log.value += i;
+                      }
+                      log.value += inputs[commIndex];
+                  }
+              });
+      }
+
+      activateConsole();
+
+      window.addEventListener("keydown",
+          (e) => {
+              if (e.key === "`") {
+                  if (log.style.display === "block") {
+                      consoleActive = false;
+                      console.log("Developer console disabled.");
+                      log.style.display = "none";
+                      log.blur();
+                  } else {
+                      consoleActive = true;
+                      console.log("Developer console active.");
+                      log.style.display = "block";
+                      log.focus();
+                      log.value += "\n>";
+                      comms.push("\n>");
+                  }
+              } else if (e.key === "+" && scale - 0.1 >= 1 && !consoleActive) {
+                  scale -= 0.1;
+              } else if (e.key === "-" && scale + 0.1 <= 10 && !consoleActive) {
+                  scale += 0.1;
+              }
+          });
+  }
+
+  enableConsole();
+
+

@@ -4,7 +4,8 @@ import {
 
 /*
 @TODO 
-- Fix heavy lag with avatars when obstacle assessment is enabled
+- Finish issues and features with avatars
+- Fix error with map layout printing
 */
 
 window.onload = async () => {
@@ -39,7 +40,6 @@ window.onload = async () => {
             globalDarkness = points[phase];
         }
     }, undefined, 0.005);
-
     window.requestTransition = function(c, speed = 2) {
         if (!useTransition) {
             c();
@@ -49,7 +49,7 @@ window.onload = async () => {
         callback = c;
         transitionSpeed = speed;
         transitioning = true;
-    }
+    };
     window.$OBJECTS = [];
     window.$CONTROLS = [];
     window.$JOYSTICK_L = null;
@@ -328,7 +328,8 @@ window.onload = async () => {
         avatardrawglock20pullback: document.querySelector("#avatardrawglock20pullback"), 
         roads: document.querySelector("#roads"),
         fences: document.querySelector("#fences"),
-        luxuryapartment: document.querySelector("#luxuryapartment")
+        luxuryapartment: document.querySelector("#luxuryapartment"),
+        house1: document.querySelector("#house1")
     }
 
     gl.uniform1f(locations.worldUnitX, worldUnitX);

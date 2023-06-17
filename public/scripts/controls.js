@@ -17,10 +17,12 @@
       toRGB,
       rotate
   } from "/public/scripts/lib.js";
+ 
+import {
+      _Joystick_,
+      _Button_
+} from "/public/scripts/objects.js"; 
 
-
-  let consoleActive = false;
-  let log = document.querySelector("textarea");
 
   $JOYSTICK_L = new _Joystick_(true, joystickSizes.left);
   $JOYSTICK_R = new _Joystick_(false, joystickSizes.right);
@@ -186,91 +188,3 @@
   inventoryButton.ontouchstart = () => {
       inventoryWindow.style.display = "grid";
   }
-
-
-  function enableConsole() {
-      let comms = [],
-          commIndex, inputs = [],
-          addedObjects = [];
-
-      function activateConsole() {
-          log.addEventListener("keydown",
-              (e) => {
-                  if (e.key === "Enter") {
-                      e.preventDefault();
-                      comms.push(log.value.split(">").at(-1));
-                      inputs.push(log.value.split(">").at(-1));
-                      log.value = "";
-                      commIndex = inputs.length;
-
-                      if (inputs.at(-1).trim() === "clear") {
-                          comms = [];
-                          log.value = "";
-                          log.value += "\n>";
-                          comms.push("\n>");
-                          log.setSelectionRange(log.value.length, log.value.length, "forward");
-                      } else {
-                          try {
-                              let output = "\n" + JSON.stringify(eval(comms.at(-1)));
-                              comms.push(output);
-                          } catch (err) {
-                              comms.push("\n" + err);
-                          }
-
-                          for (let i of comms) {
-                              log.value += i;
-                          }
-
-                          log.value += "\n>";
-                          comms.push("\n>");
-                          log.setSelectionRange(log.value.length, log.value.length, "forward");
-                      }
-                  } else if (e.key === "ArrowUp") {
-                      e.preventDefault();
-                      commIndex--;
-
-                      log.value = "";
-                      for (let i of comms) {
-                          log.value += i;
-                      }
-                      log.value += inputs[commIndex];
-                  } else if (e.key === "ArrowDown") {
-                      e.preventDefault();
-                      commIndex++;
-
-                      log.value = "";
-                      for (let i of comms) {
-                          log.value += i;
-                      }
-                      log.value += inputs[commIndex];
-                  }
-              });
-      }
-
-      activateConsole();
-
-      window.addEventListener("keydown",
-          (e) => {
-              if (e.key === "`") {
-                  if (log.style.display === "block") {
-                      consoleActive = false;
-                      console.log("Developer console disabled.");
-                      log.style.display = "none";
-                      log.blur();
-                  } else {
-                      consoleActive = true;
-                      console.log("Developer console active.");
-                      log.style.display = "block";
-                      log.focus();
-                      log.value += "\n>";
-                      comms.push("\n>");
-                  }
-              } else if (e.key === "+" && scale - 0.1 >= 1 && !consoleActive) {
-                  scale -= 0.1;
-              } else if (e.key === "-" && scale + 0.1 <= 10 && !consoleActive) {
-                  scale += 0.1;
-              }
-          });
-  }
-
-  enableConsole();

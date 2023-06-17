@@ -792,6 +792,301 @@ export let LUXURY_APARTMENT = new TextureData(2010, 3510, 0.2, "building", {
  
        ctx.restore();
 }, undefined, 0, 0, 2010, 3510);
+ 
+export let HOUSE_1 = new TextureData(-1190, 3510, 0.2, "building", {
+    width: 7370,
+    height: 9320
+}, [
+[5500, 2400, 2500, 1200],
+[1300, 1500, 1700, 1700],
+[1200, -3500, 5550, 3500],
+[5000, 1000, 3500, 1500],
+[5000, 2200, 500, 1500],
+[8000, 2200, 500, 1500],
+[5000, -3100, 3500, 3200],
+[5000, -2100, 300, 3200],
+[8200, -2100, 300, 3200],
+[1300, -3100, 3900, 6000]
+    ], 0, undefined, function(ctx, n) {
+    // body: 3200x2280, texture: 1024,512, size: 0.18, boxes: [[500, 1700, 3200, 1500],[600, 3200, 3000, 700],[2750, 3900, 600, 250]]
+
+/*
+bounds 
+
+[5500, 2400, 2500, 1200],
+[1300, 1500, 1700, 1700],
+[1200, -3500, 5550, 3500],
+[5000, 1000, 3500, 1500],
+[5000, 2200, 500, 1500],
+[8000, 2200, 500, 1500],
+[5000, -3100, 3500, 3200],
+[5000, -2100, 300, 3200],
+[8200, -2100, 300, 3200],
+[1300, -3100, 3900, 6000]
+
+*/
+
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    console.log(this.size);
+    ctx.scale(this.size || 0, this.size || 0);
+    ctx.lineWidth = 20;
+    ctx.strokeStyle = "#1A1A1A";
+
+    // garage
+    ctx.fillStyle = "#949494";
+    ctx.lineWidth = 20;
+    ctx.moveTo(5000, 2800);
+    ctx.lineTo(5000, 3700);
+    ctx.lineTo(5500, 3700);
+    ctx.lineTo(5500, 2400);
+    ctx.lineTo(8000, 2400);
+    ctx.lineTo(8000, 3700);
+    ctx.lineTo(8500, 3700);
+    ctx.lineTo(8500, 2050);
+    ctx.lineTo(5000, 2050);
+    ctx.fill();
+    ctx.stroke();
+    ctx.beginPath();
+ 
+    // - door
+    ctx.fillStyle = "#4D4D4D"; 
+    ctx.fillRect(5500, 2400, 2500, 1200);
+    ctx.strokeRect(5500, 2400, 2500, 1200);
+    ctx.lineWidth = 15;
+    ctx.strokeRect(5500, 2400, 2500, 1150);
+    ctx.lineWidth = 10;
+    ctx.strokeRect(5500, 2400, 2500, 400);
+    ctx.strokeRect(5500, 2400, 2500, 800);
+  
+    // front porch
+    ctx.lineWidth = 20;
+    ctx.fillStyle = "#949494";
+    ctx.fillRect(3000, 1500, 2000, 1400);
+    ctx.strokeRect(3000, 1500, 2000, 1400);
+    ctx.fillStyle = "#A3A3A3";
+    ctx.fillRect(3000, 2900, 2000, 500);
+    ctx.fillStyle = "#8A8A8A";
+    ctx.fillRect(3000, 3350, 2000, 50);
+    ctx.strokeRect(3000, 2900, 2000, 500);
+    ctx.lineWidth = 10;
+    ctx.strokeRect(3000, 2900, 290, 500);
+    ctx.strokeRect(3000, 2900, 580, 500);
+    ctx.strokeRect(3000, 2900, 870, 500);
+    ctx.strokeRect(3000, 2900, 1160, 500);
+    ctx.strokeRect(3000, 2900, 1450, 500);
+    ctx.strokeRect(3000, 2900, 1740, 500);
+
+    ctx.lineWidth = 20;
+    ctx.fillStyle = "#ABABAB";
+    ctx.fillRect(3500, 3700, 1000, 500);
+    ctx.fillRect(3500, 4500, 1000, 500);
+    ctx.fillRect(3500, 5300, 1000, 500);
+    ctx.fillStyle = "#DBDBDB";
+    ctx.fillRect(3500, 3700, 1000, 420);
+    ctx.fillRect(3500, 4500, 1000, 420);
+    ctx.fillRect(3500, 5300, 1000, 420);
+    ctx.strokeRect(3500, 3700, 1000, 500);
+    ctx.strokeRect(3500, 4500, 1000, 500);
+    ctx.strokeRect(3500, 5300, 1000, 500);
+
+    // - door
+    ctx.lineWidth = 20;
+    ctx.fillStyle = "#757575";
+    ctx.fillRect(3200, 1800, 700, 1100);
+    ctx.strokeRect(3200, 1800, 700, 1100);
+
+    ctx.fillStyle = "#4D4D4D"; 
+    ctx.fillRect(3200, 1900, 50, 1020);
+    ctx.fillRect(3850, 1900, 50, 1020);
+    ctx.fillRect(3200, 1800, 700, 100); 
+    ctx.fillStyle = "#404040";
+    ctx.fillRect(3200, 1800, 700, 50);
+    ctx.strokeRect(3200, 1900, 50, 1020);
+    ctx.strokeRect(3850, 1900, 50, 1020);
+    ctx.strokeRect(3200, 1800, 700, 100);
+      
+    ctx.lineWidth = 15;
+    ctx.fillRect(3750, 2400, 50, 150);
+    ctx.strokeRect(3750, 2400, 50, 150);
+
+    // - window
+    ctx.lineWidth = 20;
+    ctx.fillStyle = "#4D4D4D";
+    ctx.fillRect(4000, 1800, 800, 800);
+    ctx.fillStyle = "#404040";
+    ctx.fillRect(4000, 1800, 800, 50);
+    ctx.fillStyle = "#C7C7C7";
+    ctx.fillRect(4050, 1900, 700, 650);
+    ctx.fillStyle = "#404040";
+    ctx.fillRect(4050, 2500, 700, 50);
+    ctx.strokeRect(4000, 1800, 800, 800);
+    ctx.lineWidth = 15;
+    ctx.strokeRect(4050, 1900, 700, 650);
+    ctx.strokeRect(4050, 1900, 700, 600);
+
+    ctx.fillStyle = "#4D4D4D";
+    ctx.fillRect(4050, 2083, 700, 50);
+    ctx.fillRect(4050, 2316, 700, 50);
+    ctx.fillStyle = "#404040";
+    ctx.fillRect(4050, 2083, 700, 30);
+    ctx.fillRect(4050, 2316, 700, 30);
+
+    ctx.strokeRect(4050, 2083, 700, 50);
+    ctx.strokeRect(4050, 2316, 700, 50);
+ 
+    // small left section
+    ctx.lineWidth = 20;
+    ctx.fillStyle = "#949494";
+    ctx.fillRect(1300, 1500, 1700, 1700);
+    ctx.strokeRect(1300, 1500, 1700, 1700);
+
+    // - window
+    ctx.fillStyle = "#4D4D4D";
+    ctx.fillRect(2000, 1850, 1000, 1380);
+    ctx.lineWidth = 15;
+    ctx.fillStyle = "#404040";
+    ctx.fillRect(2000, 1850, 1000, 50);
+    ctx.fillRect(2050, 3150, 950, 50);
+    ctx.strokeRect(2050, 1950, 950, 1240);
+    
+    ctx.fillStyle = "#C7C7C7";
+    ctx.fillRect(2050, 1950, 950, 1190);
+
+    ctx.fillStyle = "#4D4D4D";
+    ctx.strokeRect(2050, 1950, 950, 1190);
+    ctx.fillRect(2500, 1950, 50, 1220);
+    ctx.fillRect(2050, 2313, 450, 50);
+    ctx.fillRect(2050, 2726, 450, 50);
+    ctx.fillStyle = "#404040";
+    ctx.fillRect(2050, 2313, 450, 30);
+    ctx.fillRect(2050, 2726, 450, 30);
+
+
+    ctx.strokeRect(2500, 1950, 50, 1220);
+    ctx.strokeRect(2050, 2313, 450, 50);
+    ctx.strokeRect(2050, 2726, 450, 50);
+
+    ctx.lineWidth = 20;
+    ctx.strokeRect(2000, 1850, 1000, 1380);
+  
+    // roofs
+    ctx.lineWidth = 20;
+    ctx.fillStyle = "#4D4D4D";
+    ctx.fillRect(1200, -3500, 5550, 3500); 
+    ctx.fillStyle = "#404040";
+    ctx.fillRect(1200, -3500, 5550, 3200);
+    ctx.strokeRect(1200, -3500, 5550, 3500);
+  
+   // top right section 
+    ctx.lineWidth = 20;
+    ctx.fillStyle = "#C7C7C7";
+    ctx.fillRect(5000, -700, 3500, 2500);
+    ctx.fillStyle = "#E0E0E0";
+    ctx.fillRect(5000, -3100, 3500, 2400);
+    ctx.strokeRect(5000, -3100, 3500, 5000);
+
+    ctx.fillStyle = "#A3A3A3";
+    ctx.fillRect(5300, -400, 2900, 1900);
+    ctx.strokeRect(5300, -400, 2900, 1900);
+    ctx.fillStyle = "#787878";
+    ctx.fillRect(5300, -400, 2900, 500);
+    ctx.strokeRect(5300, -400, 2900, 500); 
+  
+    ctx.lineWidth = 10;
+    ctx.strokeRect(5300, 100, 290, 1400);
+    ctx.strokeRect(5300, 100, 580, 1400);
+    ctx.strokeRect(5300, 100, 870, 1400);
+    ctx.strokeRect(5300, 100, 1160, 1400);
+    ctx.strokeRect(5300, 100, 1450, 1400);
+    ctx.strokeRect(5300, 100, 1740, 1400);
+    ctx.strokeRect(5300, 100, 2030, 1400);
+    ctx.strokeRect(5300, 100, 2320, 1400);
+    ctx.strokeRect(5300, 100, 2610, 1400);
+    
+   // top bar 
+    ctx.lineWidth = 20;
+    ctx.fillStyle = "#636363";
+    ctx.fillRect(1250, 1350, 3750, 250);
+    ctx.fillStyle = "#424242";
+    ctx.fillRect(1250, 1350, 3750, 50);
+    ctx.strokeRect(1250, 1350, 3750, 250);
+
+    ctx.lineWidth = 20;
+    ctx.fillStyle = "#636363";
+    ctx.fillRect(5000, 1800, 3550, 250);
+    ctx.fillStyle = "#424242";
+    ctx.fillRect(5000, 1800, 3550, 50);
+    ctx.strokeRect(5000, 1800, 3550, 250);
+
+    ctx.lineWidth = 20;
+    ctx.fillStyle = "#636363";
+    ctx.fillRect(4950, 1350, 50, 700);
+    ctx.fillStyle = "#424242";
+    ctx.fillRect(4950, 1350, 50, 500);
+    ctx.strokeRect(4950, 1350, 50, 700);
+
+   // - door
+    ctx.fillStyle = "#616161";
+    ctx.fillRect(5675, -400, 700, 500);
+    ctx.strokeRect(5675, -400, 700, 500);
+
+    ctx.fillStyle = "#404040";
+    ctx.fillRect(5675, -400, 50, 530);
+    ctx.strokeRect(5675, -400, 50, 530);
+
+    ctx.fillRect(6325, -400, 50, 530);
+    ctx.strokeRect(6325, -400, 50, 530);
+
+    ctx.lineWidth = 15;
+    ctx.fillRect(6225, -400, 50, 100);
+    ctx.strokeRect(6225, -400, 50, 100);
+  
+   // - rail
+    ctx.lineWidth = 20;
+    ctx.fillStyle = "#757575";
+    ctx.fillRect(5300, 1000, 2900, 100);
+    ctx.fillStyle = "#616161";
+    ctx.fillRect(5300, 1000, 2900, 50);
+    ctx.strokeRect(5300, 1000, 2900, 100);
+  
+    ctx.fillRect(5840, 1100, 50, 300);
+    ctx.fillRect(6430, 1100, 50, 300);
+    ctx.fillRect(7020, 1100, 50, 300);
+    ctx.fillRect(7610, 1100, 50, 300);
+
+    ctx.strokeRect(5840, 1100, 50, 300);
+    ctx.strokeRect(6430, 1100, 50, 300);
+    ctx.strokeRect(7020, 1100, 50, 300);
+    ctx.strokeRect(7610, 1100, 50, 300);
+ 
+   // top left section
+    ctx.fillStyle = "#949494";
+    ctx.fillRect(1300, 0, 3700, 1350);
+    ctx.strokeRect(1300, 0, 3700, 1350);
+  
+   // - window
+    ctx.fillStyle = "#4D4D4D";
+    ctx.fillRect(1900, 400, 2500, 550);
+    ctx.fillStyle = "#404040";
+    ctx.fillRect(1900, 400, 2500, 50);
+    ctx.strokeRect(1900, 400, 2500, 550);
+    ctx.lineWidth = 15;
+    ctx.fillStyle = "#404040";
+    ctx.fillRect(2000, 550, 2300, 300);
+    ctx.strokeRect(2000, 550, 2300, 300);
+    ctx.fillStyle = "#C2C2C2";
+    ctx.fillRect(2000, 550, 2300, 250);
+    ctx.strokeRect(2000, 550, 2300, 250);
+   
+    ctx.fillStyle = "#4D4D4D"; 
+    ctx.fillRect(2733, 550, 50, 280);
+    ctx.fillRect(3516, 550, 50, 280);
+    ctx.strokeRect(2733, 550, 50, 280);
+    ctx.strokeRect(3516, 550, 50, 280);
+    
+      ctx.restore();
+},undefined,0, 0);
 
 export let GENERIC_APARTMENT = new TextureData(-98, -338, 0.2, "building", {
     width: 3200,
@@ -2145,7 +2440,7 @@ export let MAIN_AVATAR_DEFAULT = new TextureData(0, 0, 0.2, "avatar", {
     ctx.strokeRect(231, 60, 250, 75);
 
     ctx.restore();
-}, [0], 0, 0, 1300, 2000);
+}, [0], 0, 0, 3000, 10000);
 
 export let MAIN_AVATAR_DRAW_WEAPON = new TextureData(0, 0, 0.2, "avatar", {
     width: 702,

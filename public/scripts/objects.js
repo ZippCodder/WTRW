@@ -28,7 +28,7 @@ pathfinder.onmessage = function({data}) {
   _Map_._all[data.mapId].avatars[data.avatarId]?.findPathTo(data.result); 
 }
 
-window._Object_ = class {
+export class _Object_ {
     constructor(vertices, imp, render = function() {}, width, height, initialX, initialY, initialRotation, type, name) {
         render = render.bind(this);
 
@@ -77,7 +77,7 @@ window._Object_ = class {
     }
 }
 
-window._StaticCluster_ = class {
+export class _StaticCluster_ {
     constructor(textureSrc, topLayer) {
 
         this.vao = ext.createVertexArrayOES();
@@ -196,7 +196,7 @@ window._StaticCluster_ = class {
     }
 }
 
-window._BulletCluster_ = class {
+export class _BulletCluster_ {
     constructor(vertices, textureSrc) {
         this.vao = ext.createVertexArrayOES();
         this.linked = false;
@@ -378,7 +378,7 @@ window._BulletCluster_ = class {
     }
 }
 
-window._InstancedCluster_ = class {
+export class _InstancedCluster_ {
     constructor(vertices, textureSrc, useLight) {
 
         this.vao = ext.createVertexArrayOES();
@@ -516,7 +516,7 @@ window._InstancedCluster_ = class {
     }
 }
 
-window._MixedStaticCluster_ = class {
+export class _MixedStaticCluster_ {
 
     static groupings = {
         "0": [textures.roads],
@@ -672,7 +672,7 @@ window._MixedStaticCluster_ = class {
     }
 }
 
-window._LineMatrix_ = class {
+export class _LineMatrix_ {
     constructor() {
         this.vao = ext.createVertexArrayOES();
         this.isCluster = true;
@@ -760,7 +760,7 @@ window._LineMatrix_ = class {
     }
 }
 
-window._MixedStaticClusterClient_ = class {
+export class _MixedStaticClusterClient_ {
 
     hasCluster = true;
     clusterType = _MixedStaticCluster_;
@@ -788,7 +788,7 @@ window._MixedStaticClusterClient_ = class {
     }
 }
 
-window._StaticClusterClient_ = class {
+export class _StaticClusterClient_ {
 
     hasCluster = true;
     clusterType = _StaticCluster_;
@@ -816,7 +816,7 @@ window._StaticClusterClient_ = class {
     }
 }
 
-window._InstancedClusterClient_ = class {
+export class _InstancedClusterClient_ {
 
     hasCluster = true;
     clusterType = _InstancedCluster_;
@@ -844,7 +844,7 @@ window._InstancedClusterClient_ = class {
     }
 }
 
-window._BulletClusterClient_ = class {
+export class _BulletClusterClient_ {
 
     hasCluster = true;
     name = "bullet";
@@ -880,7 +880,7 @@ window._BulletClusterClient_ = class {
     }
 }
 
-window.DownwardLight = class extends _Object_ {
+export class DownwardLight extends _Object_ {
     constructor(initialX, initialY, initialRotation, color) {
         super([], function() {
 
@@ -939,7 +939,7 @@ window.DownwardLight = class extends _Object_ {
     }
 }
 
-window.Bullet = class extends _BulletClusterClient_ {
+export class Bullet extends _BulletClusterClient_ {
 
     width = 1.8;
     height = 0.8;
@@ -949,7 +949,7 @@ window.Bullet = class extends _BulletClusterClient_ {
     }
 }
 
-window.Grass = class extends _InstancedClusterClient_ {
+export class Grass extends _InstancedClusterClient_ {
 
     static _defaultVertices = [-1.5, 1.5, 1, 0, 0, 1.5, 1.5, 1, 0.9375, 0, -1.5, -1.5, 1, 0, 0.9375, 1.5, 1.5, 1, 0.9375, 0, -1.5, -1.5, 1, 0, 0.9375, 1.5, -1.5, 1, 0.9375, 0.9375];
 
@@ -964,7 +964,7 @@ window.Grass = class extends _InstancedClusterClient_ {
     }
 }
 
-window.Grass2 = class extends _InstancedClusterClient_ {
+export class Grass2 extends _InstancedClusterClient_ {
 
     static _defaultVertices = [-1.5, 1.5, 1, 0, 0, 1.5, 1.5, 1, 0.9375, 0, -1.5, -1.5, 1, 0, 0.9375, 1.5, 1.5, 1, 0.9375, 0, -1.5, -1.5, 1, 0, 0.9375, 1.5, -1.5, 1, 0.9375, 0.9375];
 
@@ -979,7 +979,7 @@ window.Grass2 = class extends _InstancedClusterClient_ {
     }
 }
 
-window.Rocks1 = class extends _InstancedClusterClient_ {
+export class Rocks1 extends _InstancedClusterClient_ {
 
     static _defaultVertices = [-1.5, 1.5, 1, 0, 0, 1.5, 1.5, 1, 0.9375, 0, -1.5, -1.5, 1, 0, 0.9375, 1.5, 1.5, 1, 0.9375, 0, -1.5, -1.5, 1, 0, 0.9375, 1.5, -1.5, 1, 0.9375, 0.9375];
 
@@ -994,7 +994,7 @@ window.Rocks1 = class extends _InstancedClusterClient_ {
     }
 }
 
-window.Rocks2 = class extends _InstancedClusterClient_ {
+export class Rocks2 extends _InstancedClusterClient_ {
 
     static _defaultVertices = [-1.5, 1.5, 1, 0, 0, 1.5, 1.5, 1, 0.9375, 0, -1.5, -1.5, 1, 0, 0.9375, 1.5, 1.5, 1, 0.9375, 0, -1.5, -1.5, 1, 0, 0.9375, 1.5, -1.5, 1, 0.9375, 0.9375];
 
@@ -1011,7 +1011,7 @@ window.Rocks2 = class extends _InstancedClusterClient_ {
 
 /* Misc props */
 
-window.Book1 = class extends _InstancedClusterClient_ {
+export class Book1 extends _InstancedClusterClient_ {
 
     static _defaultVertices = [-3.0100000000000002, 4.16, 1, 0, 0, 3.0100000000000002, 4.16, 1, 0.940625, 0, -3.0100000000000002, -4.16, 1, 0, 0.65, 3.0100000000000002, 4.16, 1, 0.940625, 0, -3.0100000000000002, -4.16, 1, 0, 0.65, 3.0100000000000002, -4.16, 1, 0.940625, 0.65];
 
@@ -1026,7 +1026,7 @@ window.Book1 = class extends _InstancedClusterClient_ {
     }
 }
 
-window.Book2 = class extends _InstancedClusterClient_ {
+export class Book2 extends _InstancedClusterClient_ {
 
     static _defaultVertices = [-3.0100000000000002, 4.16, 1, 0, 0, 3.0100000000000002, 4.16, 1, 0.940625, 0, -3.0100000000000002, -4.16, 1, 0, 0.65, 3.0100000000000002, 4.16, 1, 0.940625, 0, -3.0100000000000002, -4.16, 1, 0, 0.65, 3.0100000000000002, -4.16, 1, 0.940625, 0.65];
 
@@ -1041,7 +1041,7 @@ window.Book2 = class extends _InstancedClusterClient_ {
     }
 }
 
-window.RoadRail = class extends _InstancedClusterClient_ {
+export class RoadRail extends _InstancedClusterClient_ {
 
     static _defaultVertices = [-13.4,5.9,1,0,0,-10,5.9,1,0.033203125,0,-13.4,-5.5,1,0,0.111328125,-10,5.9,1,0.033203125,0,-13.4,-5.5,1,0,0.111328125,-10,-5.5,1,0.033203125,0.111328125,9.6,5.9,1,0.224609375,0,12.999999999999998,5.9,1,0.2578125,0,9.6,-5.5,1,0.224609375,0.111328125,12.999999999999998,5.9,1,0.2578125,0,9.6,-5.5,1,0.224609375,0.111328125,12.999999999999998,-5.5,1,0.2578125,0.111328125,-10.4,4.9,1,0.029296875,0.009765625,9.999999999999998,4.9,1,0.228515625,0.009765625,-10.4,-3.7,1,0.029296875,0.09375,9.999999999999998,4.9,1,0.228515625,0.009765625,-10.4,-3.7,1,0.029296875,0.09375,9.999999999999998,-3.7,1,0.228515625,0.09375];
 
@@ -1062,7 +1062,7 @@ window.RoadRail = class extends _InstancedClusterClient_ {
     }
 }
 
-window.RoadRailVertical = class extends _StaticClusterClient_ {
+export class RoadRailVertical extends _StaticClusterClient_ {
 
     static _defaultVertices = [-1.7, 12.7, 1, 0, 0, 1.7, 12.7, 1, 0.53125, 0, -1.7, -12.7, 1, 0, 0.49609375, 1.7, 12.7, 1, 0.53125, 0, -1.7, -12.7, 1, 0, 0.49609375, 1.7, -12.7, 1, 0.53125, 0.49609375];
 
@@ -1081,7 +1081,7 @@ window.RoadRailVertical = class extends _StaticClusterClient_ {
     }
 }
 
-window.StreetLight = class extends _StaticClusterClient_ {
+export class StreetLight extends _StaticClusterClient_ {
 
     static _defaultVertices = [-15.5, 24.5, 1, 0, 0, 15.5, 24.5, 1, 0.60546875, 0, -15.5, -24.5, 1, 0, 0.95703125, 15.5, 24.5, 1, 0.60546875, 0, -15.5, -24.5, 1, 0, 0.95703125, 15.5, -24.5, 1, 0.60546875, 0.95703125];
 
@@ -1156,7 +1156,7 @@ window.StreetLight = class extends _StaticClusterClient_ {
     }
 }
 
-window.Bench = class extends _StaticClusterClient_ {
+export class Bench extends _StaticClusterClient_ {
 
     static _defaultVertices = [-12.2, 7.7, 1, 0, 0, 12.2, 7.7, 1, 0.953125, 0, -12.2, -7.7, 1, 0, 0.6015625, 12.2, 7.7, 1, 0.953125, 0, -12.2, -7.7, 1, 0, 0.6015625, 12.2, -7.7, 1, 0.953125, 0.6015625];
 
@@ -1184,7 +1184,7 @@ window.Bench = class extends _StaticClusterClient_ {
     }
 }
 
-window.Tile = class extends _StaticClusterClient_ {
+export class Tile extends _StaticClusterClient_ {
 
     static _defaultVertices = [-4.2, 4.2, 1, 0, 0, 4.2, 4.2, 1, 0.65625, 0, -4.2, -4.2, 1, 0, 0.65625, 4.2, 4.2, 1, 0.65625, 0, -4.2, -4.2, 1, 0, 0.65625, 4.2, -4.2, 1, 0.65625, 0.65625];
 
@@ -1200,7 +1200,7 @@ window.Tile = class extends _StaticClusterClient_ {
     }
 }
 
-window.LightSwitch = class extends _StaticClusterClient_ {
+export class LightSwitch extends _StaticClusterClient_ {
 
     static _defaultVertices = [-1.6, 2.4, 1, 0, 0, 1.6, 2.4, 1, 0.5, 0, -1.6, -2.4, 1, 0, 0.75, 1.6, 2.4, 1, 0.5, 0, -1.6, -2.4, 1, 0, 0.75, 1.6, -2.4, 1, 0.5, 0.75];
 
@@ -1228,7 +1228,7 @@ window.LightSwitch = class extends _StaticClusterClient_ {
     }
 }
 
-window.Chair = class extends _StaticClusterClient_ {
+export class Chair extends _StaticClusterClient_ {
 
     static _defaultVertices = [-5.2, 7.5, 1, 0, 0, 5.2, 7.5, 1, 0.8125, 0, -5.2, -7.5, 1, 0, 0.5859375, 5.2, 7.5, 1, 0.8125, 0, -5.2, -7.5, 1, 0, 0.5859375, 5.2, -7.5, 1, 0.8125, 0.5859375];
 
@@ -1256,7 +1256,7 @@ window.Chair = class extends _StaticClusterClient_ {
     }
 }
 
-window.SmallPlant = class extends _StaticClusterClient_ {
+export class SmallPlant extends _StaticClusterClient_ {
 
     static _defaultVertices = [-2.7, 0.5, 1, 0, 0.29296875, 2.7, 0.5, 1, 0.421875, 0.29296875, -2.7, -7.9, 1, 0, 0.62109375, 2.7, 0.5, 1, 0.421875, 0.29296875, -2.7, -7.9, 1, 0, 0.62109375, 2.7, -7.9, 1, 0.421875, 0.62109375, -2.7, 8.100000000000001, 1, 0, -0.00390625, 2.7, 8.100000000000001, 1, 0.421875, -0.00390625, -2.7, 0.09999999999999964, 1, 0, 0.30859375, 2.7, 8.100000000000001, 1, 0.421875, -0.00390625, -2.7, 0.09999999999999964, 1, 0, 0.30859375, 2.7, 0.09999999999999964, 1, 0.421875, 0.30859375];
 
@@ -1276,7 +1276,7 @@ window.SmallPlant = class extends _StaticClusterClient_ {
     }
 }
 
-window.RoadSign = class extends _StaticClusterClient_ {
+export class RoadSign extends _StaticClusterClient_ {
 
     static _defaultVertices = [-4.2,15.6,1,0.2578125,0,3.8,15.6,1,0.3359375,0,-4.2,4.799999999999999,1,0.2578125,0.10546875,3.8,15.6,1,0.3359375,0,-4.2,4.799999999999999,1,0.2578125,0.10546875,3.8,4.799999999999999,1,0.3359375,0.10546875,-1,5.200000000000001,1,0.2890625,0.1015625,0.5999999999999996,5.200000000000001,1,0.3046875,0.1015625,-1,-15.2,1,0.2890625,0.30078125,0.5999999999999996,5.200000000000001,1,0.3046875,0.1015625,-1,-15.2,1,0.2890625,0.30078125,0.5999999999999996,-15.2,1,0.3046875,0.30078125];
 
@@ -1296,7 +1296,7 @@ window.RoadSign = class extends _StaticClusterClient_ {
     }
 }
 
-window.Laptop = class extends _StaticClusterClient_ {
+export class Laptop extends _StaticClusterClient_ {
 
     static _defaultVertices = [-4.36, 4.86, 1, 0, 0, 4.36, 4.86, 1, 0.68125, 0, -4.36, -4.86, 1, 0, 0.759375, 4.36, 4.86, 1, 0.68125, 0, -4.36, -4.86, 1, 0, 0.759375, 4.36, -4.86, 1, 0.68125, 0.759375];
 
@@ -1311,7 +1311,7 @@ window.Laptop = class extends _StaticClusterClient_ {
     }
 }
 
-window.UrbanFence = class extends _MixedStaticClusterClient_ {
+export class UrbanFence extends _MixedStaticClusterClient_ {
 
     static _defaultVertices = [-24.2,14.2,1,0,0.30078125,0,24.2,14.2,1,0.47265625,0.30078125,0,-24.2,-14.2,1,0,0.578125,0,24.2,14.2,1,0.47265625,0.30078125,0,-24.2,-14.2,1,0,0.578125,0,24.2,-14.2,1,0.47265625,0.578125,0];
 
@@ -1331,7 +1331,7 @@ window.UrbanFence = class extends _MixedStaticClusterClient_ {
     }
 }
 
-window.UrbanFenceVertical = class extends _StaticClusterClient_ {
+export class UrbanFenceVertical extends _MixedStaticClusterClient_ {
 
     static _defaultVertices = [-2.2,28.2,1,0.47265625,0.30078125,0,2.2,28.2,1,0.515625,0.30078125,0,-2.2,-28.2,1,0.47265625,0.8515625,0,2.2,28.2,1,0.515625,0.30078125,0,-2.2,-28.2,1,0.47265625,0.8515625,0,2.2,-28.2,1,0.515625,0.8515625,0];
 
@@ -1351,7 +1351,7 @@ window.UrbanFenceVertical = class extends _StaticClusterClient_ {
     }
 }
 
-window.UrbanFenceHalf = class extends _StaticClusterClient_ {
+export class UrbanFenceHalf extends _MixedStaticClusterClient_ {
 
     static _defaultVertices = [-12.2,14.2,1,0.3359375,0,0,12.2,14.2,1,0.57421875,0,0,-12.2,-14.2,1,0.3359375,0.27734375,0,12.2,14.2,1,0.57421875,0,0,-12.2,-14.2,1,0.3359375,0.27734375,0,12.2,-14.2,1,0.57421875,0.27734375,0];
 
@@ -1371,7 +1371,7 @@ window.UrbanFenceHalf = class extends _StaticClusterClient_ {
     }
 }
 
-window.PicnicTable = class extends _StaticClusterClient_ {
+export class PicnicTable extends _StaticClusterClient_ {
 
     static _defaultVertices = [-14.2, 6.300000000000001, 1, 0, 0.09375, -5.799999999999999, 6.300000000000001, 1, 0.1640625, 0.09375, -14.2, -12.1, 1, 0, 0.8125, -5.799999999999999, 6.300000000000001, 1, 0.1640625, 0.09375, -14.2, -12.1, 1, 0, 0.8125, -5.799999999999999, -12.1, 1, 0.1640625, 0.8125, -6.199999999999999, 8.7, 1, 0.15625, 0, 6.199999999999999, 8.7, 1, 0.3984375, 0, -6.199999999999999, -11.7, 1, 0.15625, 0.796875, 6.199999999999999, 8.7, 1, 0.3984375, 0, -6.199999999999999, -11.7, 1, 0.15625, 0.796875, 6.199999999999999, -11.7, 1, 0.3984375, 0.796875, 5.800000000000001, 6.300000000000001, 1, 0.390625, 0.09375, 14.2, 6.300000000000001, 1, 0.5546875, 0.09375, 5.800000000000001, -12.1, 1, 0.390625, 0.8125, 14.2, 6.300000000000001, 1, 0.5546875, 0.09375, 5.800000000000001, -12.1, 1, 0.390625, 0.8125, 14.2, -12.1, 1, 0.5546875, 0.8125, -8.2, -11.299999999999999, 1, 0.1171875, 0.78125, 8.2, -11.299999999999999, 1, 0.4375, 0.78125, -8.2, -15.7, 1, 0.1171875, 0.953125, 8.2, -11.299999999999999, 1, 0.4375, 0.78125, -8.2, -15.7, 1, 0.1171875, 0.953125, 8.2, -15.7, 1, 0.4375, 0.953125];
 
@@ -1408,7 +1408,7 @@ window.PicnicTable = class extends _StaticClusterClient_ {
     }
 }
 
-window.Road = class extends _MixedStaticClusterClient_ {
+export class Road extends _MixedStaticClusterClient_ {
 
     static _defaultVertices = [-25,14.1,1,0,0,0,25,14.1,1,0.48828125,0,0,-25,-14.1,1,0,0.275390625,0,25,14.1,1,0.48828125,0,0,-25,-14.1,1,0,0.275390625,0,25,-14.1,1,0.48828125,0.275390625,0];
  
@@ -1425,7 +1425,7 @@ window.Road = class extends _MixedStaticClusterClient_ {
     }
 }
 
-window.RoadDouble = class extends _MixedStaticClusterClient_ {
+export class RoadDouble extends _MixedStaticClusterClient_ {
 
     static _defaultVertices = [-25, 14.1, 1, 0, 0, 1, 25, 14.1, 1, 0.9765625, 0, 1, -25, -14.1, 1, 0, 0.55078125, 1, 25, 14.1, 1, 0.9765625, 0, 1, -25, -14.1, 1, 0, 0.55078125, 1, 25, -14.1, 1, 0.9765625, 0.55078125, 1];
 
@@ -1442,7 +1442,7 @@ window.RoadDouble = class extends _MixedStaticClusterClient_ {
     }
 }
 
-window.RoadCorner = class extends _StaticClusterClient_ {
+export class RoadCorner extends _StaticClusterClient_ {
 
     static _defaultVertices = [-14.1,14.1,1,0,0.275390625,0,14.1,14.1,1,0.275390625,0.275390625,0,-14.1,-14.1,1,0,0.55078125,0,14.1,14.1,1,0.275390625,0.275390625,0,-14.1,-14.1,1,0,0.55078125,0,14.1,-14.1,1,0.275390625,0.55078125,0];
 
@@ -1459,7 +1459,7 @@ window.RoadCorner = class extends _StaticClusterClient_ {
     }
 }
 
-window.RoadTriCorner = class extends _StaticClusterClient_ {
+export class RoadTriCorner extends _StaticClusterClient_ {
 
     static _defaultVertices = [-14.1,14.1,1,0.275390625,0.275390625,0,14.1,14.1,1,0.55078125,0.275390625,0,-14.1,-14.1,1,0.275390625,0.55078125,0,14.1,14.1,1,0.55078125,0.275390625,0,-14.1,-14.1,1,0.275390625,0.55078125,0,14.1,-14.1,1,0.55078125,0.55078125,0];
 
@@ -1476,7 +1476,7 @@ window.RoadTriCorner = class extends _StaticClusterClient_ {
     }
 }
 
-window.RoadQuadCorner = class extends _StaticClusterClient_ {
+export class RoadQuadCorner extends _StaticClusterClient_ {
 
     static _defaultVertices = [-14.1, 14.1, 1, 0, 0, 4, 14.1, 14.1, 1, 0.55078125, 0, 4, -14.1, -14.1, 1, 0, 0.55078125, 4, 14.1, 14.1, 1, 0.55078125, 0, 4, -14.1, -14.1, 1, 0, 0.55078125, 4, 14.1, -14.1, 1, 0.55078125, 0.55078125, 4];
 
@@ -1493,7 +1493,7 @@ window.RoadQuadCorner = class extends _StaticClusterClient_ {
     }
 }
 
-window.Door = class extends _StaticClusterClient_ {
+export class Door extends _StaticClusterClient_ {
 
     static _defaultVertices = [-7.3, 10.2, 1, 0, 0, 7.3, 10.2, 1, 0.5703125, 0, -7.3, -10.2, 1, 0, 0.796875, 7.3, 10.2, 1, 0.5703125, 0, -7.3, -10.2, 1, 0, 0.796875, 7.3, -10.2, 1, 0.5703125, 0.796875];
     width = 14.6;
@@ -1573,7 +1573,7 @@ window.Door = class extends _StaticClusterClient_ {
     }
 }
 
-window.Table = class extends _StaticClusterClient_ {
+export class Table extends _StaticClusterClient_ {
 
     static _defaultVertices = [-14.2, 9.3, 1, 0, 0, 14.2, 9.3, 1, 0.5546875, 0, -14.2, -7.1000000000000005, 1, 0, 0.640625, 14.2, 9.3, 1, 0.5546875, 0, -14.2, -7.1000000000000005, 1, 0, 0.640625, 14.2, -7.1000000000000005, 1, 0.5546875, 0.640625, -13.399999999999999, -6.700000000000001, 1, 0.015625, 0.625, -11, -6.700000000000001, 1, 0.0625, 0.625, -13.399999999999999, -9.3, 1, 0.015625, 0.7265625, -11, -6.700000000000001, 1, 0.0625, 0.625, -13.399999999999999, -9.3, 1, 0.015625, 0.7265625, -11, -9.3, 1, 0.0625, 0.7265625, 11, -6.700000000000001, 1, 0.4921875, 0.625, 13.400000000000002, -6.700000000000001, 1, 0.5390625, 0.625, 11, -9.3, 1, 0.4921875, 0.7265625, 13.400000000000002, -6.700000000000001, 1, 0.5390625, 0.625, 11, -9.3, 1, 0.4921875, 0.7265625, 13.400000000000002, -9.3, 1, 0.5390625, 0.7265625];
 
@@ -1594,7 +1594,7 @@ window.Table = class extends _StaticClusterClient_ {
 
 /* Buildings */
 
-window._Building_ = class extends _StaticClusterClient_ {
+export class _Building_ extends _StaticClusterClient_ {
     constructor(initialX, initialY, initialRotation, doors = [], rooms, doorOffset = 0, setup) {
         super(initialX, initialY, initialRotation);
 
@@ -1638,7 +1638,7 @@ window._Building_ = class extends _StaticClusterClient_ {
             this.map.addSubMap(i);
         }
  
-        this.setup();
+        if (this.setup) this.setup();
     }
 
     clean() {
@@ -1661,7 +1661,26 @@ window._Building_ = class extends _StaticClusterClient_ {
     }
 }
 
-window.LuxuryApartment = class extends _Building_ {
+export class House1 extends _Building_ {
+
+    static _defaultVertices = [-73.7,93.2,1,0,0,73.7,93.2,1,0.7197265625,0,-73.7,-93.2,1,0,0.91015625,73.7,93.2,1,0.7197265625,0,-73.7,-93.2,1,0,0.91015625,73.7,-93.2,1,0.7197265625,0.91015625];
+
+    width = 147.4;
+    height = 186.4;
+    name = "house 1";
+    clusterName = "house 1";
+    texture = textures.house1;
+    obstacle = true;
+    segments = [[12.5,25,50,24],[-71.5,7,34,34],[-73.5,-93,111,70],[2.5,-3,70,30],[2.5,21,10,30],[62.5,21,10,30],[2.5,-85,70,64],[2.5,-65,6,64],[66.5,-65,6,64],[-71.5,-85,78,120]];
+ 
+    constructor(initialX, initialY, initialRotation) {
+        super(initialX, initialY, initialRotation,[
+            [-26.1, -33, 0,[0, 44.38]],[23, -57, 1],[-30, -65, 0]
+        ],[new _Map_(150, 100, false).init(),new _Map_(150, 80, false).init(),new _Map_(150, 80, false).init()],undefined); 
+    }
+}
+
+export class LuxuryApartment extends _Building_ {
 
     static _defaultVertices = [-63.7,77.2,1,0,0,63.7,77.2,1,0.6220703125,0,-63.7,-77.2,1,0,0.75390625,63.7,77.2,1,0.6220703125,0,-63.7,-77.2,1,0,0.75390625,63.7,-77.2,1,0.6220703125,0.75390625];
 
@@ -1685,7 +1704,7 @@ window.LuxuryApartment = class extends _Building_ {
     }
 }
 
-window.GenericApartment = class extends _Building_ {
+export class GenericApartment extends _Building_ {
 
     static _defaultVertices = [-32.2, 23, 1, 0, 0, 32.2, 23, 1, 0.62890625, 0, -32.2, -7.4, 1, 0, 0.59375, 32.2, 23, 1, 0.62890625, 0, -32.2, -7.4, 1, 0, 0.59375, 32.2, -7.4, 1, 0.62890625, 0.59375, -30.200000000000003, -7, 1, 0.01953125, 0.5859375, 30.199999999999996, -7, 1, 0.609375, 0.5859375, -30.200000000000003, -21.4, 1, 0.01953125, 0.8671875, 30.199999999999996, -7, 1, 0.609375, 0.5859375, -30.200000000000003, -21.4, 1, 0.01953125, 0.8671875, 30.199999999999996, -21.4, 1, 0.609375, 0.8671875, 12.799999999999997, -21, 1, 0.439453125, 0.859375, 25.199999999999996, -21, 1, 0.560546875, 0.859375, 12.799999999999997, -26.4, 1, 0.439453125, 0.96484375, 25.199999999999996, -21, 1, 0.560546875, 0.859375, 12.799999999999997, -26.4, 1, 0.439453125, 0.96484375, 25.199999999999996, -26.4, 1, 0.560546875, 0.96484375];
 
@@ -1707,7 +1726,7 @@ window.GenericApartment = class extends _Building_ {
     }
 }
 
-window.Cafe = class extends _Building_ {
+export class Cafe extends _Building_ {
 
     static _defaultVertices = [-40.2, 30.2, 1, 0, 0, 40.2, 30.2, 1, 0.78515625, 0, -40.2, -12.2, 1, 0, 0.4140625, 40.2, 30.2, 1, 0.78515625, 0, -40.2, -12.2, 1, 0, 0.4140625, 40.2, -12.2, 1, 0.78515625, 0.4140625, -38.2, -9.8, 1, 0.01953125, 0.390625, 38.2, -9.8, 1, 0.765625, 0.390625, -38.2, -30.2, 1, 0.01953125, 0.58984375, 38.2, -9.8, 1, 0.765625, 0.390625, -38.2, -30.2, 1, 0.01953125, 0.58984375, 38.2, -30.2, 1, 0.765625, 0.58984375];
 
@@ -1729,7 +1748,7 @@ window.Cafe = class extends _Building_ {
     }
 }
 
-window.Supermarket = class extends _StaticClusterClient_ {
+export class Supermarket extends _StaticClusterClient_ {
 
     static _defaultVertices = [-62.2, 26.2, 1, 0, 0, 62.2, 26.2, 1, 0.607421875, 0, -62.2, -8.2, 1, 0, 0.3359375, 62.2, 26.2, 1, 0.607421875, 0, -62.2, -8.2, 1, 0, 0.3359375, 62.2, -8.2, 1, 0.607421875, 0.3359375, -60.2, -7.800000000000001, 1, 0.009765625, 0.33203125, 60.2, -7.800000000000001, 1, 0.59765625, 0.33203125, -60.2, -26.2, 1, 0.009765625, 0.51171875, 60.2, -7.800000000000001, 1, 0.59765625, 0.33203125, -60.2, -26.2, 1, 0.009765625, 0.51171875, 60.2, -26.2, 1, 0.59765625, 0.51171875];
 
@@ -1751,7 +1770,7 @@ window.Supermarket = class extends _StaticClusterClient_ {
 
 /* Weapons and Firearms */
 
-window._Pickup_ = class extends _InstancedClusterClient_ {
+export class _Pickup_ extends _InstancedClusterClient_ {
     constructor(initialX, initialY, initialRotation) {
         super(initialX, initialY, typeof initialRotation === "number" || random(360));
 
@@ -1787,7 +1806,7 @@ window._Pickup_ = class extends _InstancedClusterClient_ {
     }
 }
 
-window._Gun_ = class extends _Pickup_ {
+export class _Gun_ extends _Pickup_ {
 
     constructor(initialX, initialY, initialRotation) {
         super(initialX, initialY, initialRotation);
@@ -1796,7 +1815,7 @@ window._Gun_ = class extends _Pickup_ {
     type = "gun";
 }
 
-window._Blade_ = class extends _Pickup_ {
+export class _Blade_ extends _Pickup_ {
 
     constructor(initialX, initialY, initialRotation) {
         super(initialX, initialY, initialRotation);
@@ -1805,7 +1824,7 @@ window._Blade_ = class extends _Pickup_ {
     type = "blade";
 }
 
-window.KitchenKnife = class extends _Blade_ {
+export class KitchenKnife extends _Blade_ {
 
     static _defaultVertices = [-1.24, 6.57, 1, 0, 0, 1.24, 6.57, 1, 0.775, 0, -1.24, -6.57, 1, 0, 0.51328125, 1.24, 6.57, 1, 0.775, 0, -1.24, -6.57, 1, 0, 0.51328125, 1.24, -6.57, 1, 0.775, 0.51328125];
 
@@ -1820,7 +1839,7 @@ window.KitchenKnife = class extends _Blade_ {
     }
 }
 
-window.AssassinsKnife = class extends _Blade_ {
+export class AssassinsKnife extends _Blade_ {
 
     static _defaultVertices = [-1.73, 6.7700000000000005, 1, 0, 0, 1.73, 6.7700000000000005, 1, 0.540625, 0, -1.73, -6.7700000000000005, 1, 0, 0.52890625, 1.73, 6.7700000000000005, 1, 0.540625, 0, -1.73, -6.7700000000000005, 1, 0, 0.52890625, 1.73, -6.7700000000000005, 1, 0.540625, 0.52890625];
 
@@ -1835,7 +1854,7 @@ window.AssassinsKnife = class extends _Blade_ {
     }
 }
 
-window.CombatKnife = class extends _Blade_ {
+export class CombatKnife extends _Blade_ {
 
     static _defaultVertices = [-3.4899999999999998, 4.630000000000001, 1, 0, 0, 3.4899999999999998, 4.630000000000001, 1, 0.5453125, 0, -3.4899999999999998, -4.630000000000001, 1, 0, 0.7234375, 3.4899999999999998, 4.630000000000001, 1, 0.5453125, 0, -3.4899999999999998, -4.630000000000001, 1, 0, 0.7234375, 3.4899999999999998, -4.630000000000001, 1, 0.5453125, 0.7234375];
 
@@ -1850,7 +1869,7 @@ window.CombatKnife = class extends _Blade_ {
     }
 }
 
-window.GLOCK_20 = class extends _Gun_ {
+export class GLOCK_20 extends _Gun_ {
 
     static _properties = {
         fireRate: 1,
@@ -1876,7 +1895,7 @@ window.GLOCK_20 = class extends _Gun_ {
     }
 }
 
-window.GP_K100 = class extends _Gun_ {
+export class GP_K100 extends _Gun_ {
 
     static _defaultVertices = [-7.4, 3.0900000000000003, 1, 0, 0, 7.4, 3.0900000000000003, 1, 0.578125, 0, -7.4, -3.0900000000000003, 1, 0, 0.965625, 7.4, 3.0900000000000003, 1, 0.578125, 0, -7.4, -3.0900000000000003, 1, 0, 0.965625, 7.4, -3.0900000000000003, 1, 0.578125, 0.965625];
 
@@ -1891,7 +1910,7 @@ window.GP_K100 = class extends _Gun_ {
     }
 }
 
-window.NXR_44_MAG = class extends _Gun_ {
+export class NXR_44_MAG extends _Gun_ {
 
     static _defaultVertices = [-6.910000000000001, 3.44, 1, 0, 0, 6.910000000000001, 3.44, 1, 0.5398437500000001, 0, -6.910000000000001, -3.44, 1, 0, 0.5375, 6.910000000000001, 3.44, 1, 0.5398437500000001, 0, -6.910000000000001, -3.44, 1, 0, 0.5375, 6.910000000000001, -3.44, 1, 0.5398437500000001, 0.5375];
 
@@ -1906,7 +1925,7 @@ window.NXR_44_MAG = class extends _Gun_ {
     }
 }
 
-window.KC_357 = class extends _Gun_ {
+export class KC_357 extends _Gun_ {
 
     static _defaultVertices = [-4.26, 2.8, 1, 0, 0, 4.26, 2.8, 1, 0.665625, 0, -4.26, -2.8, 1, 0, 0.875, 4.26, 2.8, 1, 0.665625, 0, -4.26, -2.8, 1, 0, 0.875, 4.26, -2.8, 1, 0.665625, 0.875];
 
@@ -1921,7 +1940,7 @@ window.KC_357 = class extends _Gun_ {
     }
 }
 
-window.USP_45 = class extends _Gun_ {
+export class USP_45 extends _Gun_ {
 
     static _defaultVertices = [-8.15, 3.9300000000000006, 1, 0, 0, 8.15, 3.9300000000000006, 1, 0.63671875, 0, -8.15, -3.9300000000000006, 1, 0, 0.6140625000000001, 8.15, 3.9300000000000006, 1, 0.63671875, 0, -8.15, -3.9300000000000006, 1, 0, 0.6140625000000001, 8.15, -3.9300000000000006, 1, 0.63671875, 0.6140625000000001];
 
@@ -1936,7 +1955,7 @@ window.USP_45 = class extends _Gun_ {
     }
 }
 
-window.PickupRing = class extends _InstancedClusterClient_ {
+export class PickupRing extends _InstancedClusterClient_ {
 
     static _defaultVertices = [-4.28, 4.28, 1, 0, 0, 4.28, 4.28, 1, 0.66875, 0, -4.28, -4.28, 1, 0, 0.66875, 4.28, 4.28, 1, 0.66875, 0, -4.28, -4.28, 1, 0, 0.66875, 4.28, -4.28, 1, 0.66875, 0.66875];
 
@@ -1965,7 +1984,7 @@ window.PickupRing = class extends _InstancedClusterClient_ {
     }
 }
 
-window.Avatar = class {
+export class Avatar {
 
     constructor(name = "Unnamed Human", initialX = 0, initialY = 0, initialRotation = 0) {
         this.character = name;
@@ -2683,7 +2702,7 @@ window.Avatar = class {
 }
 
 // Class for invisible barriers
-window.Barrier = class {
+export class Barrier {
     constructor(x, y, width, height) {
         this.segments = [
             [0, 0, width, height]
@@ -2712,7 +2731,7 @@ window.Barrier = class {
 }
 
 // export class for visible barriers
-window.VisibleBarrier = class extends _Object_ {
+export class VisibleBarrier extends _Object_ {
     constructor(initialX, initialY, width, height, color = [40, 40, 40, 1.0]) {
         super([], function() {
 
@@ -2759,7 +2778,7 @@ window.VisibleBarrier = class extends _Object_ {
 }
 
 // Invisible sensor for event triggers
-window.Sensor = class extends Barrier {
+export class Sensor extends Barrier {
     constructor(x, y, width, height, action) {
         super(x, y, width, height);
         this.action = action;
@@ -2776,7 +2795,7 @@ window.Sensor = class extends Barrier {
 
 // Invisible trigger for doors, etc.
 
-window.Trigger = class {
+export class Trigger {
     constructor(x, y, action, managedMovement = false) {
         this.segments = [
             [-2.5, -2.5, 2.5, 2.5]
@@ -2814,7 +2833,7 @@ window.Trigger = class {
 
 // class for generating graphs for maps, used for pathfinding..
 
-window._Graph_ = class {
+ class _Graph_ {
     constructor(width, height, diagonal = false) {
 
         this.width = width;
@@ -3006,7 +3025,7 @@ window._Graph_ = class {
 }
 
 // export class for map creation
-window._Map_ = class {
+export class _Map_ {
 
     static _recording = {
         isRecording: false,
@@ -3309,7 +3328,7 @@ window._Map_ = class {
 
         for (let i of objs) {
             let attribs = i.slice(1, i.length);
-            let ob = new(eval(`${i[0]}`))(...attribs);
+            let ob = new (eval(`${i[0]}`))(...attribs);
             this.link(ob);
         }
 
@@ -3487,7 +3506,7 @@ window._Map_ = class {
     }
 }
 
-window.Text = class extends _Object_ {
+export class Text extends _Object_ {
     constructor(text, size = 30, color, initialX, initialY, initialRotation, textureSrc, segments) {
         super([], function() {
             let textData = createText(text, size);
@@ -3565,7 +3584,7 @@ window.Text = class extends _Object_ {
 
 /* GAME CONTROL ELEMENTS */
 
-window._Button_ = class extends _Object_ {
+export class _Button_ extends _Object_ {
     constructor(textureSrc, textureActiveSrc, initialX, initialY, action, radius) {
         super([-8.571428571428571, 8.571428571428571, 1, 0, 0, 8.571428571428571, 8.571428571428571, 1, 1, 0, -8.571428571428571, -8.571428571428571, 1, 0, 1, 8.571428571428571, 8.571428571428571, 1, 1, 0, -8.571428571428571, -8.571428571428571, 1, 0, 1, 8.571428571428571, -8.571428571428571, 1, 1, 1], function() {
 
@@ -3622,7 +3641,7 @@ window._Button_ = class extends _Object_ {
     }
 }
 
-window._Joystick_ = class extends _Object_ {
+export class _Joystick_ extends _Object_ {
 
     constructor(left, scale = 1) {
         super([
