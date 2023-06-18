@@ -43,7 +43,7 @@
   // Game setup and initialization
 
   $MAP = new _Map_(500, 500).init();
-  $MAP.parseLayoutScript(Map1);
+  //$MAP.parseLayoutScript(Map1);
 
   $CURRENT_MAP = $MAP;
   $MAP.showGeometry();
@@ -52,22 +52,56 @@
   $AVATAR.addItem(new GLOCK_20(0, 0, 0, 1000));
   $AVATAR.state.fireAnimation.rate = 0.5 / 10;
 
-  //$MAP.link(new House1);
-  //$MAP.translate(100, 0);
+  $MAP.link(new House1);
+  $MAP.translate(100, 0);
 
   let id = genObjectId();
 
-  let b = new Avatar("Keanu Reeves", 5, 5);
+  let b = new Avatar("Keanu Reeves", 0, 0);
   $MAP.link(b);
+  b.exclude = true;
   b.state.armor = 3000;
   b.state.aggressive = true;
-  b.state.attack.engageDistance = 50;
-  b.state.attack.slowdownDistance = 20;
-  b.state.attack.settleDistance = 10;
-  b.state.attack.disengageDistance = 100;
+  b.state.follow.settleDistance = 20;
+  b.state.follow.run = true;
   b.addItem(new GLOCK_20(0, 0, 0, 1000));
   b.state.targetId = b.id;
-  b.killTarget([$AVATAR.id]);
+  //b.follow($AVATAR.id);
+  //b.killTarget([id], true);
+
+ /* 
+  let c = new Avatar("Beatrice", 5, 5);
+  $MAP.link(c);
+  c.state.armor = 3000;
+  c.state.aggressive = false;
+  c.state.follow.settleDistance = 20;
+  c.state.follow.rush = true;
+  c.addItem(new GLOCK_20(0, 0, 0, 1000));
+  c.state.targetId = b.id;
+  c.follow($AVATAR.id);
+  //c.killTarget([id], true);
+
+  let d = new Avatar("Walter", 5, 5);
+  $MAP.link(d);
+  d.state.armor = 3000;
+  d.state.aggressive = false;
+  d.state.follow.settleDistance = 20;
+  d.state.follow.rush = true;
+  d.addItem(new GLOCK_20(0, 0, 0, 1000));
+  d.state.targetId = b.id;
+  d.follow($AVATAR.id);
+  //c.killTarget([id], true);
+
+  let e = new Avatar("Hammy Onion", 5, 5);
+  $MAP.link(e);
+  e.state.armor = 3000;
+  e.state.aggressive = false;
+  e.state.follow.settleDistance = 20;
+  e.state.follow.rush = true;
+  e.addItem(new GLOCK_20(0, 0, 0, 1000));
+  e.state.targetId = b.id;
+  e.follow($AVATAR.id);
+  //c.killTarget([id], true);
 
   // $MAP.link(new VisibleBarrier(10,10,10,10));
   // console.log(b.findPathTo(-30,-30));
@@ -82,7 +116,7 @@
       c.state.targetUpdateAnimation.rate = 1/5; 
       c.state.targetId = c.id;
       c.killTarget([id],true); */
-
+/*
   for (let i = 1; i <= 40; i++) {
       let {
           x,
@@ -100,9 +134,9 @@
       a.addItem(new GLOCK_20(0, 0, 0, 1000));
       a.state.fireAnimation.rate = 0.5 / 1;
       a.state.targetId = id;
-      a.killTarget([$AVATAR.id]);
+      a.killTarget([b.id]);
   }
-
+*/
   // Developer console
 
   let consoleActive = false;

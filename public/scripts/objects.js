@@ -2098,6 +2098,13 @@ export class Avatar {
                 progress: 0,
                 loaded: true
             },
+            follow: {
+                target: undefined,
+                rush: false,
+                run: false,
+                slowdownDistance: 50,
+                settleDistance: 30
+            },
             attack: {
                 engageDistance: 100,
                 slowdownDistance: 50,
@@ -2190,13 +2197,11 @@ export class Avatar {
                 if (this.state.goto.y !== this.trans.offsetY) {
                     ty = (Math.abs(this.state.goto.y - this.trans.offsetY) < this.state.speed) ? (this.state.goto.y - this.trans.offsetY) : (this.trans.offsetY < this.state.goto.y) ? this.state.speed : -this.state.speed;
                 }
-
-                this.rotate((Math.atan2(this.state.goto.y - this.trans.offsetY, this.state.goto.x - this.trans.offsetX) - 1.5708) * 180 / Math.PI);
-
+ 
                 this.translate(tx, ty);
 
                 if (this.state.goto.x === this.trans.offsetX && this.state.goto.y === this.trans.offsetY) {
-                    if (this.state.goto.reserve) this.map.GRAPH.reserved.splice(this.map.GRAPH.reserved.indexOf(this.state.goto.reserve), 1);
+                    if (this.state.goto.reserve) this.map.GRAPH.reserved.splice(this.map.GRAPH.reserved.indexOf(this.state.goto.reserve), 1); 
                     this.disengageGoto();
                 }
             }, this, 0.03),
@@ -2416,6 +2421,11 @@ export class Avatar {
     reload() {
         this.state.reloadTimeout.start();
     }
+   
+    follow(id) {
+       this.state.speed = (this.state.follow.run) ? this.state.runningSpeed:this.state.baseSpeed;
+       this.state.follow.target = this.map.avatars[id];
+    }
 
     addItem(item, slot) {
         let r = this.inventory.addItem(item, slot);
@@ -2499,7 +2509,9 @@ export class Avatar {
 
         // walk to destination
         walk: if (this.state.path.engaged && !this.state.goto.engaged) {
+
             if (this.state.recording.useRecording) this.pauseRecording();
+
             if (this.state.path.index === this.state.path.current.length) {
                 this.disengagePath();
                 break walk;
@@ -2514,13 +2526,17 @@ export class Avatar {
             if (!this.map.GRAPH.blocked.includes(next) && !this.map.GRAPH.reserved.includes(next)) {
                 this.state.goto.reserve = next;
                 this.map.GRAPH.reserved.push(next);
+
                 this.goto(x + 5, y - 5);
-            } else if (this.state.path.index !== 0 && this.state.path.index !== this.state.path.current.length - 1) {
+            
+                let r = (Math.atan2(this.state.goto.y - this.trans.offsetY, this.state.goto.x - this.trans.offsetX) - 1.5708);
+                this.trans.rotation = r;
+ 
+            } else {
+                this.disengagePath();
                 this.requestPath(this.state.path.end.x, this.state.path.end.y);
                 break walk;
-            } else if (this.state.path.index === this.state.path.current.length - 1) {
-                this.disengagePath();
-            }
+            } 
 
             this.state.path.index++;
         }
@@ -2544,11 +2560,11 @@ export class Avatar {
                     this.state.speed = this.state.baseSpeed * this.state.attack.attackSpeed;
                     this.state.fire = false;
                     if (!this.state.openCarry && this.state.draw) this.holsterWeapon();
-                    if (this.state.path.request && !this.state.path.engaged) {
+                    if (this.state.path.request && !this.state.path.engaged && !this.state.follow.target) {
                         this.requestPath(targetX + m.centerX, targetY + m.centerY);
                     }
                 } else if (dist < this.state.attack.settleDistance) {
-                    if (this.state.path.engaged) this.disengagePath();
+                    if (this.state.path.engaged && !this.state.follow.target) this.disengagePath();
                     this.trans.rotation = Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX)) - 1.5708;
                     if (!this.state.draw) {
                         this.drawWeapon();
@@ -2560,7 +2576,7 @@ export class Avatar {
                         this.drawWeapon();
                         this.state.fire = true;
                     }
-                    this.state.speed = (this.state.baseSpeed / 3) * this.state.attack.attackSpeed;
+                    if (!this.state.follow.rush || !this.state.follow.target) this.state.speed = (this.state.baseSpeed / 3) * this.state.attack.attackSpeed;
                 } else if (dist < this.state.attack.engageDistance) {
                     this.state.speed = this.state.baseSpeed * this.state.attack.attackSpeed;
                     this.trans.rotation = Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX)) - 1.5708;
@@ -2568,7 +2584,7 @@ export class Avatar {
                         this.drawWeapon();
                         this.state.fire = true;
                     }
-                    if (!this.state.path.engaged) {
+                    if (!this.state.path.engaged && !this.state.follow.target) {
                         this.requestPath(targetX + m.centerX, targetY + m.centerY);
                     }
                 }
@@ -2578,6 +2594,19 @@ export class Avatar {
 
             this.disengageTarget();
         }
+
+        follow: if (this.state.follow.target) {
+          let dist = distance(this.trans.offsetX, this.trans.offsetY, this.state.follow.target.trans.offsetX, this.state.follow.target.trans.offsetY);
+                           
+        if (dist > this.state.follow.settleDistance && !this.state.path.engaged) {
+         this.requestPath(this.state.follow.target.trans.offsetX + this.map.centerX, this.state.follow.target.trans.offsetY + this.map.centerY);
+          break follow;
+        }
+    
+        if (dist < this.state.follow.settleDistance && this.state.path.engaged) {
+            this.disengagePath();
+        }
+       }
 
     }
 
@@ -2677,7 +2706,7 @@ export class Avatar {
     }
 
     run() {
-        if (!this.state.path.engaged) {
+        if (!this.state.path.engaged && !this.state.follow.target) {
             let {
                 x,
                 y
@@ -2707,12 +2736,7 @@ export class Avatar {
 
     findPathTo(path) {
         if (path.result && this.state.path.start) {
-            this.state.path.current = path.path;
-            this.state.path.current.unshift({
-                x: this.state.path.start.x,
-                y: this.state.path.start.y
-            });
-
+            this.state.path.current = path.path; 
             this.state.path.index = 0;
             this.state.path.engaged = true;
         }
@@ -2720,8 +2744,6 @@ export class Avatar {
     }
 
     disengagePath() {
-        this.state.path.start = undefined;
-        this.state.path.end = undefined;
         this.state.path.current = [];
         this.state.path.index = 0;
         this.state.path.engaged = false;
