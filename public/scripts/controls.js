@@ -17,11 +17,11 @@
       toRGB,
       rotate
   } from "/public/scripts/lib.js";
- 
-import {
+
+  import {
       _Joystick_,
       _Button_
-} from "/public/scripts/objects.js"; 
+  } from "/public/scripts/objects.js";
 
 
   $JOYSTICK_L = new _Joystick_(true, joystickSizes.left);

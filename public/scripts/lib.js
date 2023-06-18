@@ -86,8 +86,8 @@ export function draw(a, w, h, iw, ih, s, lw, tx, ty, attribs = [], canvas) {
             outCoords[i] = [(x / s) + offset[0],
                 (y / s) + offset[1],
                 1.0,
-                aofb(aisofb(x+tx, iw), 1),
-                aofb(aisofb(a[i][1]+ty, ih), 1), ...attribs
+                aofb(aisofb(x + tx, iw), 1),
+                aofb(aisofb(a[i][1] + ty, ih), 1), ...attribs
             ];
         }
 

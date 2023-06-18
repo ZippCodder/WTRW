@@ -325,7 +325,7 @@ window.onload = async () => {
         lightswitch: document.querySelector("#lightswitch"),
         downwardlight: document.querySelector("#downwardlight"),
         avatardrawweapon: document.querySelector("#avatardrawweapon"),
-        avatardrawglock20pullback: document.querySelector("#avatardrawglock20pullback"), 
+        avatardrawglock20pullback: document.querySelector("#avatardrawglock20pullback"),
         roads: document.querySelector("#roads"),
         fences: document.querySelector("#fences"),
         luxuryapartment: document.querySelector("#luxuryapartment"),
@@ -356,7 +356,7 @@ window.onload = async () => {
     await import("/public/scripts/objects.js");
     await import("/public/scripts/game.js");
     await import("/public/scripts/controls.js");
-  
+
     function renderObjects() {
         $OBJECTS.forEach(v => {
             if (v.preRender) v.preRender();

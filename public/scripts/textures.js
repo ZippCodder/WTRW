@@ -62,18 +62,18 @@ const _PROPERTIES_ = {
 
 class TextureData {
     constructor(xOffset, yOffset, size, objectType, bodyDimensions, boundingBoxes, lineWidth, ctx, render, attribs = [], textureWidth, textureHeight, visualOffsetX = 0, visualOffsetY = 0) {
- 
+
         visualOffsetX *= size;
         visualOffsetY *= size;
         xOffset *= size;
         yOffset *= size;
- 
+
         this.size = size;
         this.attribs = attribs;
         this.offset = {
             x: xOffset,
             y: yOffset,
-            vx: visualOffsetX || xOffset, 
+            vx: visualOffsetX || xOffset,
             vy: visualOffsetY || yOffset,
             tx: 0,
             ty: 0
@@ -125,52 +125,55 @@ class TextureData {
 }
 
 export class Sheet {
- constructor(textures = [], width, height) {
-   this.textures = textures;
-   this.width = width || 1024; 
-   this.height = height || 2048;
-   
-   let placement = {x: 0, y: 0};
-   let rowHeight = 0;
- 
-   for (let t of this.textures) {
- 
-    if (placement.x+t.bodyDimensions.width > this.width) {
-     placement.x = 0;
-     placement.y = rowHeight;
-     rowHeight = 0;
+    constructor(textures = [], width, height) {
+        this.textures = textures;
+        this.width = width || 1024;
+        this.height = height || 2048;
+
+        let placement = {
+            x: 0,
+            y: 0
+        };
+        let rowHeight = 0;
+
+        for (let t of this.textures) {
+
+            if (placement.x + t.bodyDimensions.width > this.width) {
+                placement.x = 0;
+                placement.y = rowHeight;
+                rowHeight = 0;
+            }
+
+            if (placement.y + t.bodyDimensions.height > rowHeight) rowHeight = placement.y + t.bodyDimensions.height;
+
+            t.offset.tx += placement.x;
+            t.offset.ty += placement.y;
+            t.offset.vx += placement.x;
+            t.offset.vy += placement.y;
+
+            t.textureDimensions.width = this.width;
+            t.textureDimensions.height = this.height;
+
+            placement.x += t.bodyDimensions.width;
+
+            if (placement.y + t.bodyDimensions.height > this.height) {
+                console.log("Max sheet height exceeded. Increase sheet height or remove offending texture!");
+            }
+        }
     }
-     
-    if (placement.y+t.bodyDimensions.height > rowHeight) rowHeight = placement.y+t.bodyDimensions.height;
 
-    t.offset.tx += placement.x;
-    t.offset.ty += placement.y;
-    t.offset.vx += placement.x;
-    t.offset.vy += placement.y;   
- 
-    t.textureDimensions.width = this.width;
-    t.textureDimensions.height = this.height;
-  
-    placement.x += t.bodyDimensions.width;
-
-    if (placement.y+t.bodyDimensions.height > this.height) {
-      console.log("Max sheet height exceeded. Increase sheet height or remove offending texture!");
+    addTexture(texture) {
+        this.textures.push(texture);
     }
-   }
- }
 
-  addTexture(texture) {
-   this.textures.push(texture);
-  }
- 
-  render(ctx, showBorders) {
-   for (let t of this.textures) {
-       t.render(ctx);
-       ctx.lineWidth = 1;
-       ctx.strokeStyle = "red";
-       if (showBorders) ctx.strokeRect(t.offset.vx,t.offset.vy,t.bodyDimensions.width,t.bodyDimensions.height);
-   }
-  }
+    render(ctx, showBorders) {
+        for (let t of this.textures) {
+            t.render(ctx);
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = "red";
+            if (showBorders) ctx.strokeRect(t.offset.vx, t.offset.vy, t.bodyDimensions.width, t.bodyDimensions.height);
+        }
+    }
 }
 
 // @CONTROLS
@@ -381,7 +384,17 @@ export let LUXURY_APARTMENT = new TextureData(2010, 3510, 0.2, "building", {
     width: 6370,
     height: 7720
 }, [
- [-2000,-3000,3500,4660],[-1565, 2200, 2700, 1500],[1500,1900,300,2000],[4000,1900,300,2000],[1500, -700, 2800, 4000],[-1950, 1650, 385, 2150],[1119, 1650, 385, 2150],[1450, -3500, 90, 2800],[4260, -3500, 90, 2800],[1450, -3500, 2900, 100],[1450, -1050, 2900, 100]
+    [-2000, -3000, 3500, 4660],
+    [-1565, 2200, 2700, 1500],
+    [1500, 1900, 300, 2000],
+    [4000, 1900, 300, 2000],
+    [1500, -700, 2800, 4000],
+    [-1950, 1650, 385, 2150],
+    [1119, 1650, 385, 2150],
+    [1450, -3500, 90, 2800],
+    [4260, -3500, 90, 2800],
+    [1450, -3500, 2900, 100],
+    [1450, -1050, 2900, 100]
 ], 0, undefined, function(ctx, n) {
     // body: 3200x2280, texture: 1024,512, size: 0.18, boxes: [[500, 1700, 3200, 1500],[600, 3200, 3000, 700],[2750, 3900, 600, 250]]
 
@@ -391,440 +404,440 @@ export let LUXURY_APARTMENT = new TextureData(2010, 3510, 0.2, "building", {
     ctx.scale(this.size || 0, this.size || 0);
     ctx.lineWidth = 20;
     ctx.strokeStyle = "#1A1A1A";
-       
-     // front porch
 
-       ctx.fillStyle = "#CCCCCC";
-       ctx.fillRect(1500,1900,2500,1500);
+    // front porch
 
-       ctx.fillStyle = "#A3A3A3"; 
-       ctx.fillRect(1500,3300,2800,900);
-       ctx.fillStyle = "#858585";
-       ctx.fillRect(1500,4100,2800,100);
-       ctx.strokeRect(1500,3300,2800,900);
-        
-       ctx.lineWidth = 20; 
-       ctx.fillStyle = "#5E5E5E"; 
-       ctx.fillRect(1500,1900,300,2000);
-       ctx.fillRect(4000,1900,300,2000);
-       ctx.strokeRect(1500,1900,300,2000);
-       ctx.strokeRect(4000,1900,300,2000);
-       
-         // - window
-       ctx.lineWidth = 20;
-       
-       ctx.fillStyle = "#424242";
-       ctx.fillRect(2900, 2000, 1000, 950);
- 
-       ctx.fillStyle = "#9C9C9C";
-       ctx.fillRect(2950, 2100, 900, 750);
+    ctx.fillStyle = "#CCCCCC";
+    ctx.fillRect(1500, 1900, 2500, 1500);
 
-       ctx.fillStyle = "#242424"; 
-       ctx.fillRect(2900, 2000, 1000, 60);
-       ctx.fillRect(2950, 2850, 900, 60);
+    ctx.fillStyle = "#A3A3A3";
+    ctx.fillRect(1500, 3300, 2800, 900);
+    ctx.fillStyle = "#858585";
+    ctx.fillRect(1500, 4100, 2800, 100);
+    ctx.strokeRect(1500, 3300, 2800, 900);
 
-       ctx.strokeRect(2950, 2100, 900, 800);
-       ctx.strokeRect(2900, 2000, 1000, 950);
-          
-       ctx.lineWidth = 15;
-       ctx.strokeRect(2950, 2100, 900, 750);
+    ctx.lineWidth = 20;
+    ctx.fillStyle = "#5E5E5E";
+    ctx.fillRect(1500, 1900, 300, 2000);
+    ctx.fillRect(4000, 1900, 300, 2000);
+    ctx.strokeRect(1500, 1900, 300, 2000);
+    ctx.strokeRect(4000, 1900, 300, 2000);
 
-       ctx.fillStyle = "#424242";
-       ctx.fillRect(2950, 2610, 900, 40);
-       ctx.fillRect(2950, 2340, 900, 40);
-       ctx.strokeRect(2950, 2610, 900, 40);
-       ctx.strokeRect(2950, 2340, 900, 40);
-        
-     // - door
-       ctx.lineWidth = 20;
-   
-       ctx.fillStyle = "#616161";
-       ctx.fillRect(1950, 2100, 700, 1200);
-       ctx.strokeRect(1950, 2100, 700, 1200);
+    // - window
+    ctx.lineWidth = 20;
 
-       ctx.fillStyle = "#9C9C9C";
-       ctx.fillRect(2125, 2250, 50, 900); 
-       ctx.fillRect(2275, 2250, 50, 900);
-       ctx.fillRect(2425, 2250, 50, 900);
-       
-       ctx.lineWidth = 15;
-       ctx.strokeRect(2125, 2250, 50, 900); 
-       ctx.strokeRect(2275, 2250, 50, 900);
-       ctx.strokeRect(2425, 2250, 50, 900);
-       ctx.lineWidth = 20;
-       ctx.fillStyle = "#242424";
-       ctx.fillRect(2550, 2700, 40, 150);
-       ctx.strokeRect(2550, 2700, 40, 150);
+    ctx.fillStyle = "#424242";
+    ctx.fillRect(2900, 2000, 1000, 950);
 
-       ctx.fillStyle = "#424242";
-       ctx.fillRect(1900, 2000, 800, 100);
-       ctx.fillRect(1900, 2100, 50, 1240);
-       ctx.fillRect(2650, 2100, 50, 1240); 
-       ctx.fillStyle = "#242424";
-       ctx.fillRect(1900, 2000, 800, 50);
- 
-       ctx.strokeRect(1900, 2000, 800, 100);
-       ctx.strokeRect(1900, 2100, 50, 1240);
-       ctx.strokeRect(2650, 2100, 50, 1240); 
+    ctx.fillStyle = "#9C9C9C";
+    ctx.fillRect(2950, 2100, 900, 750);
 
-     // garage border wall fill 
- 
-       ctx.fillStyle = "#CCCCCC";
-       ctx.moveTo(-1950, 1660);
-       ctx.lineTo(-1950, 3800); 
-       ctx.lineTo(-1565, 3800); 
-       ctx.lineTo(-1565, 2200); 
-       ctx.lineTo(1115, 2200);
-       ctx.lineTo(1115, 3800);
-       ctx.lineTo(1500, 3800);
-       ctx.lineTo(1500, 1660);
-       ctx.fill(); 
-       ctx.strokeRect(1500,1900,300,2000);
- 
-     // garage
-       ctx.beginPath();
-       ctx.lineWidth = 20;
-       ctx.strokeRect(-2000,1600,3500,60);
-       ctx.moveTo(-1950, 1660);
-       ctx.lineTo(-1950, 3800); 
-       ctx.lineTo(-1565, 3800); 
-       ctx.lineTo(-1565, 2200); 
-       ctx.lineTo(1115, 2200);
-       ctx.lineTo(1115, 3800);
-       ctx.lineTo(1500, 3800);
-       ctx.stroke();
- 
-       // - door
+    ctx.fillStyle = "#242424";
+    ctx.fillRect(2900, 2000, 1000, 60);
+    ctx.fillRect(2950, 2850, 900, 60);
 
-       ctx.fillStyle = "#424242";
-       ctx.fillRect(-1565, 2200, 2680, 1500);
-       ctx.fillStyle = "#242424";
-       //ctx.fillRect(-1565, 3650, 2680, 50); 
+    ctx.strokeRect(2950, 2100, 900, 800);
+    ctx.strokeRect(2900, 2000, 1000, 950);
 
-       ctx.strokeRect(-1565, 2200, 2680, 1500);
-       ctx.lineWidth = 15;
-       ctx.strokeRect(-1565, 2200, 2680, 1450);
-       ctx.lineWidth = 10;
-       ctx.strokeRect(-1565, 2200, 2680, 400);
-       ctx.strokeRect(-1565, 2200, 2680, 800);
-       ctx.strokeRect(-1565, 2200, 2680, 1200); 
- 
-     // balcony
+    ctx.lineWidth = 15;
+    ctx.strokeRect(2950, 2100, 900, 750);
 
-       // border - fill
-       ctx.beginPath();
-       ctx.moveTo(1500,1500);
-       ctx.lineTo(1500,1900);
-       ctx.lineTo(4300,1900);
-       ctx.lineTo(4300,1500);
-       ctx.lineTo(4300,-700);
-       ctx.lineTo(1500, -700);
-       ctx.lineTo(1500, -300);
-       ctx.lineTo(3900, -300);
-       ctx.lineTo(3900, 1500);
-       ctx.lineTo(1490, 1500);
-       ctx.stroke();
-       ctx.lineWidth = 10;
-       ctx.moveTo(2700, 1500);
-       ctx.lineTo(2700, 1900);
-       ctx.moveTo(3905, 1500);
-       ctx.lineTo(3905, 1900);
-       ctx.moveTo(3905, 600);
-       ctx.lineTo(4300, 600);
-       ctx.moveTo(3905, -700);
-       ctx.lineTo(3905, -300);
-       ctx.moveTo(2700, -700);
-       ctx.lineTo(2700, -300); 
-       ctx.fillStyle = "#787878";
-       ctx.fill();
- 
-     // - border
-       ctx.beginPath();
-       ctx.lineWidth = 20;
-       ctx.fillStyle = "#CCCCCC";
-       ctx.fillRect(1500, -300,2400, 1800);
-       ctx.fillStyle = "#BABABA";
-       ctx.fillRect(1500, 1000,2400, 500);
-       ctx.strokeRect(1500, -300,2400, 1800);
-       ctx.moveTo(1500,1500);
-       ctx.lineTo(1500,1900);
-       ctx.lineTo(4300,1900);
-       ctx.lineTo(4300,1500);
-       ctx.lineTo(4300,-700);
-       ctx.lineTo(1500, -700);
-       ctx.lineTo(1500, -300);
-       ctx.lineTo(3900, -300);
-       ctx.lineTo(3900, 1500);
-       ctx.lineTo(1490, 1500);
-       ctx.stroke();
-       ctx.lineWidth = 10;
-       ctx.moveTo(2700, 1500);
-       ctx.lineTo(2700, 1900);
-       ctx.moveTo(3905, 1500);
-       ctx.lineTo(3905, 1900);
-       ctx.moveTo(3905, 600);
-       ctx.lineTo(4300, 600);
-       ctx.moveTo(3905, -700);
-       ctx.lineTo(3905, -300);
-       ctx.moveTo(2700, -700);
-       ctx.lineTo(2700, -300); 
-       ctx.stroke(); 
- 
-       // - rail
-       ctx.beginPath();
- 
-       ctx.fillStyle = "#707070";
-       ctx.fillRect(1500, 600, 100, 300);
-       ctx.fillRect(1500, 900, 2400, 100);
-       ctx.fillRect(1500, 900, 2400, 50);
-       ctx.fillRect(1950, 1000, 50, 400); 
-       ctx.fillRect(2675, 1000, 50, 400);
-       ctx.fillRect(3400, 1000, 50, 400);
- 
-       ctx.lineWidth = 20;
-       ctx.strokeRect(1500, 600, 100, 300);
-       ctx.fillStyle = "#545454";
-       ctx.fillRect(1500, 950, 2400, 50);
-       ctx.strokeRect(1500, 900, 2400, 100);
-       ctx.strokeRect(1950, 1000, 50, 400); 
-       ctx.strokeRect(2675, 1000, 50, 400);
-       ctx.strokeRect(3400, 1000, 50, 400);
- 
-       // - windows 
-       ctx.fillStyle = "#424242";
-       ctx.fillRect(1600, -300, 2200, 200);
-       ctx.strokeRect(1600, -300, 2200, 200);
-       ctx.lineWidth = 15;
- 
-       ctx.fillStyle = "#9C9C9C"; 
-       ctx.fillRect(1650, -300, 487, 110);
-       ctx.fillRect(2187, -300, 487, 110);
-       ctx.fillRect(2724, -300, 487, 110);
-       ctx.fillRect(3261, -300, 487, 110);
-       
-       ctx.fillStyle = "#242424";
-       ctx.fillRect(1650, -175, 487, 30);
-       ctx.fillRect(2187, -175, 487, 30);
-       ctx.fillRect(2724, -175, 487, 30);
-       ctx.fillRect(3261, -175, 487, 30);
-       
-       ctx.strokeRect(1650, -300, 487, 150);
-       ctx.strokeRect(2187, -300, 487, 150);
-       ctx.strokeRect(2724, -300, 487, 150);
-       ctx.strokeRect(3261, -300, 487, 150);
-       ctx.strokeRect(1650, -300, 487, 120);
-       ctx.strokeRect(2187, -300, 487, 120);
-       ctx.strokeRect(2724, -300, 487, 120);
-       ctx.strokeRect(3261, -300, 487, 120);
-       
-       // - doors
-       ctx.lineWidth = 20;
-       ctx.fillStyle = "#424242";
-       ctx.fillRect(1600, 0, 2200, 900);
-       ctx.fillStyle = "#242424";
-       ctx.fillRect(1600, 0, 2200, 40);
-       ctx.strokeRect(1600, 0, 2200, 900);
-       ctx.lineWidth = 15;
-       ctx.fillStyle = "#9C9C9C";
-       ctx.fillRect(1650, 100, 2100, 790);
-       ctx.fillStyle = "#424242";
-       ctx.fillRect(2316, 100, 50, 800);
-       ctx.fillRect(3038, 100, 50, 800);
-       ctx.strokeRect(1650, 100, 2100, 800);
-       ctx.strokeRect(2316, 100, 50, 800);
-       ctx.strokeRect(3038, 100, 50, 800);
- 
-      // lower roof 
-       ctx.lineWidth = 20;
-       ctx.fillStyle = "#4D4D4D";
-       ctx.fillRect(-2000,-3000,3500,4660);
-       ctx.fillStyle = "#333333";
-       ctx.fillRect(-2000,1550,3500,100);
-       ctx.strokeRect(-2000,-3000,3500,4660);    
-  
-      // top left section
-       ctx.lineWidth = 20;
-       ctx.fillStyle = "#616161"; 
-       ctx.fillRect(-500,-200, 2000, 1500);
-       ctx.strokeRect(-500,-200, 2000, 1500);
+    ctx.fillStyle = "#424242";
+    ctx.fillRect(2950, 2610, 900, 40);
+    ctx.fillRect(2950, 2340, 900, 40);
+    ctx.strokeRect(2950, 2610, 900, 40);
+    ctx.strokeRect(2950, 2340, 900, 40);
 
-       // - stripes 
-       ctx.lineWidth = 10;
-       ctx.moveTo(-300, -200);
-       ctx.lineTo(-300, 1300);
-       ctx.moveTo(-100, -200);
-       ctx.lineTo(-100, 1300);
-       ctx.moveTo(100, -200);
-       ctx.lineTo(100, 1300);
-       ctx.moveTo(300, -200);
-       ctx.lineTo(300, 1300);
-       ctx.moveTo(500, -200);
-       ctx.lineTo(500, 1300);
-       ctx.moveTo(700, -200);
-       ctx.lineTo(700, 1300);
-       ctx.moveTo(900, -200);
-       ctx.lineTo(900, 1300);
-       ctx.moveTo(1100, -200);
-       ctx.lineTo(1100, 1300);
-       ctx.moveTo(1300, -200);
-       ctx.lineTo(1300, 1300);
-       ctx.moveTo(1500, -200);
-       ctx.lineTo(1500, 1300);
+    // - door
+    ctx.lineWidth = 20;
 
-       ctx.stroke(); 
+    ctx.fillStyle = "#616161";
+    ctx.fillRect(1950, 2100, 700, 1200);
+    ctx.strokeRect(1950, 2100, 700, 1200);
 
-      // - shade 
-       ctx.lineWidth = 20; 
-       ctx.fillRect(-550, 200, 1400, 150);
-       ctx.fillStyle = "#4D4D4D";
-       ctx.fillRect(-550, 200, 1400, 50);
-       ctx.strokeRect(-550, 200, 1400, 150);
+    ctx.fillStyle = "#9C9C9C";
+    ctx.fillRect(2125, 2250, 50, 900);
+    ctx.fillRect(2275, 2250, 50, 900);
+    ctx.fillRect(2425, 2250, 50, 900);
 
-      // - windows 
-       ctx.lineWidth = 20;
+    ctx.lineWidth = 15;
+    ctx.strokeRect(2125, 2250, 50, 900);
+    ctx.strokeRect(2275, 2250, 50, 900);
+    ctx.strokeRect(2425, 2250, 50, 900);
+    ctx.lineWidth = 20;
+    ctx.fillStyle = "#242424";
+    ctx.fillRect(2550, 2700, 40, 150);
+    ctx.strokeRect(2550, 2700, 40, 150);
 
-       ctx.fillStyle = "#4D4D4D";
-       ctx.fillRect(-400,500, 1200, 300); 
-       ctx.fillRect(-400,900, 1200, 300);
+    ctx.fillStyle = "#424242";
+    ctx.fillRect(1900, 2000, 800, 100);
+    ctx.fillRect(1900, 2100, 50, 1240);
+    ctx.fillRect(2650, 2100, 50, 1240);
+    ctx.fillStyle = "#242424";
+    ctx.fillRect(1900, 2000, 800, 50);
 
-       ctx.fillStyle = "#9C9C9C";
-       ctx.fillRect(-400,500, 1200, 250); 
-       ctx.fillRect(-400,900, 1200, 250);
+    ctx.strokeRect(1900, 2000, 800, 100);
+    ctx.strokeRect(1900, 2100, 50, 1240);
+    ctx.strokeRect(2650, 2100, 50, 1240);
 
-       ctx.strokeRect(-400,500, 1200, 300); 
-       ctx.strokeRect(-400,900, 1200, 300);
-       ctx.lineWidth = 15;     
-       ctx.strokeRect(-400,500, 1200, 250); 
-       ctx.strokeRect(-400,900, 1200, 250);
-   
-      // roofs
-       ctx.lineWidth = 20;
- 
-       ctx.fillStyle = "#5C5C5C";
-       ctx.fillRect(-550,-2500, 2050, 2300);
-       ctx.fillStyle = "#424242";
-       ctx.fillRect(-550,-300, 2050, 100);
-       ctx.strokeRect(-550,-2500, 2050, 2300);
-       
-       ctx.lineWidth = 20;
-       ctx.fillStyle = "#5C5C5C";
-       ctx.fillRect(1450, -3500, 2900, 2800);
-       ctx.fillStyle = "#424242"; 
-       ctx.fillRect(1450, -800, 2900, 100);
-       ctx.strokeRect(1450, -3500, 2900, 2800);
- 
-       // hatch
+    // garage border wall fill 
 
-       ctx.lineWidth = 20; 
-       ctx.fillStyle = "#424242";
-       ctx.fillRect(2550,-2750,700,50);
-       ctx.strokeRect(2550,-3200,700,500);
-       ctx.lineWidth = 15;
+    ctx.fillStyle = "#CCCCCC";
+    ctx.moveTo(-1950, 1660);
+    ctx.lineTo(-1950, 3800);
+    ctx.lineTo(-1565, 3800);
+    ctx.lineTo(-1565, 2200);
+    ctx.lineTo(1115, 2200);
+    ctx.lineTo(1115, 3800);
+    ctx.lineTo(1500, 3800);
+    ctx.lineTo(1500, 1660);
+    ctx.fill();
+    ctx.strokeRect(1500, 1900, 300, 2000);
 
-       ctx.moveTo(2800, -2900);
-       ctx.lineTo(3000, -2900);
-       ctx.lineTo(3000, -2800);
-       ctx.lineTo(2970, -2800);
-       ctx.lineTo(2970, -2850);
-       ctx.lineTo(2830, -2850);
-       ctx.lineTo(2830, -2800);
-       ctx.lineTo(2800, -2800);
-       ctx.lineTo(2800, -2908);
-       ctx.fillStyle = "#A1A1A1";
-       ctx.fill();
- 
-       ctx.fillStyle = "#8A8A8A"; 
-       ctx.fillRect(2800,-2900,200,25);
- 
-       ctx.beginPath();
-       ctx.moveTo(2800, -2900);
-       ctx.lineTo(3000, -2900);
-       ctx.lineTo(3000, -2800);
-       ctx.lineTo(2970, -2800);
-       ctx.lineTo(2970, -2850);
-       ctx.lineTo(2830, -2850);
-       ctx.lineTo(2830, -2800);
-       ctx.lineTo(2800, -2800);
-       ctx.lineTo(2800, -2908);
-       ctx.stroke();
-   
-       // roof rails
-      ctx.lineWidth = 20; 
-      ctx.fillStyle = "#363636"; 
-      ctx.fillRect(1500, -3450, 2800, 70); 
-      ctx.fillStyle = "#292929";
-      ctx.fillRect(1500, -3450, 2800, 30);
-      ctx.strokeRect(1500, -3450, 2800, 70);
-      ctx.fillRect(1550,-3380,50,80);
-      ctx.strokeRect(1550,-3380,50,80);
-      ctx.fillRect(2875,-3380,50,80);
-      ctx.strokeRect(2875,-3380,50,80);
-      ctx.fillRect(4200,-3380,50,80);
-      ctx.strokeRect(4200,-3380,50,80);
- 
-      ctx.fillStyle = "#363636"; 
-      ctx.fillRect(1500, -1050, 2800, 70); 
-      ctx.fillStyle = "#292929";
-      ctx.fillRect(1500, -1050, 2800, 30);
-      ctx.strokeRect(1500, -1050, 2800, 70);
-      ctx.fillRect(1550,-980,50,80);
-      ctx.strokeRect(1550,-980,50,80);
-      ctx.fillRect(2875,-980,50,80);
-      ctx.strokeRect(2875,-980,50,80);
-      ctx.fillRect(4200,-980,50,80);
-      ctx.strokeRect(4200,-980,50,80);
- 
-      ctx.fillRect(1500, -3380, 50, 2330);
-      ctx.strokeRect(1500, -3380, 50, 2330);
-      ctx.fillRect(4250, -3380, 50, 2330);
-      ctx.strokeRect(4250, -3380, 50, 2330);
+    // garage
+    ctx.beginPath();
+    ctx.lineWidth = 20;
+    ctx.strokeRect(-2000, 1600, 3500, 60);
+    ctx.moveTo(-1950, 1660);
+    ctx.lineTo(-1950, 3800);
+    ctx.lineTo(-1565, 3800);
+    ctx.lineTo(-1565, 2200);
+    ctx.lineTo(1115, 2200);
+    ctx.lineTo(1115, 3800);
+    ctx.lineTo(1500, 3800);
+    ctx.stroke();
 
-/*
-      ctx.strokeStyle = "red";
-      ctx.strokeRect(1450, -3500, 90, 2800);
-      ctx.strokeRect(4260, -3500, 90, 2800);
-      ctx.strokeRect(1450, -3500, 2900, 100);
-      ctx.strokeRect(1450, -1050, 2900, 100); 
+    // - door
 
-[-2000,-3000,3500,4660],[-1565, 2200, 2700, 1500],[1500,1900,300,2000],[4000,1900,300,2000],[1500, -700, 2800, 4000],[-1950, 1650, 385, 2150],[1119, 1650, 385, 2150],[1450, -3500, 90, 2800],[4260, -3500, 90, 2800],[1450, -3500, 2900, 100],[1450, -1050, 2900, 100]
+    ctx.fillStyle = "#424242";
+    ctx.fillRect(-1565, 2200, 2680, 1500);
+    ctx.fillStyle = "#242424";
+    //ctx.fillRect(-1565, 3650, 2680, 50); 
 
-*/
- 
-       ctx.restore();
+    ctx.strokeRect(-1565, 2200, 2680, 1500);
+    ctx.lineWidth = 15;
+    ctx.strokeRect(-1565, 2200, 2680, 1450);
+    ctx.lineWidth = 10;
+    ctx.strokeRect(-1565, 2200, 2680, 400);
+    ctx.strokeRect(-1565, 2200, 2680, 800);
+    ctx.strokeRect(-1565, 2200, 2680, 1200);
+
+    // balcony
+
+    // border - fill
+    ctx.beginPath();
+    ctx.moveTo(1500, 1500);
+    ctx.lineTo(1500, 1900);
+    ctx.lineTo(4300, 1900);
+    ctx.lineTo(4300, 1500);
+    ctx.lineTo(4300, -700);
+    ctx.lineTo(1500, -700);
+    ctx.lineTo(1500, -300);
+    ctx.lineTo(3900, -300);
+    ctx.lineTo(3900, 1500);
+    ctx.lineTo(1490, 1500);
+    ctx.stroke();
+    ctx.lineWidth = 10;
+    ctx.moveTo(2700, 1500);
+    ctx.lineTo(2700, 1900);
+    ctx.moveTo(3905, 1500);
+    ctx.lineTo(3905, 1900);
+    ctx.moveTo(3905, 600);
+    ctx.lineTo(4300, 600);
+    ctx.moveTo(3905, -700);
+    ctx.lineTo(3905, -300);
+    ctx.moveTo(2700, -700);
+    ctx.lineTo(2700, -300);
+    ctx.fillStyle = "#787878";
+    ctx.fill();
+
+    // - border
+    ctx.beginPath();
+    ctx.lineWidth = 20;
+    ctx.fillStyle = "#CCCCCC";
+    ctx.fillRect(1500, -300, 2400, 1800);
+    ctx.fillStyle = "#BABABA";
+    ctx.fillRect(1500, 1000, 2400, 500);
+    ctx.strokeRect(1500, -300, 2400, 1800);
+    ctx.moveTo(1500, 1500);
+    ctx.lineTo(1500, 1900);
+    ctx.lineTo(4300, 1900);
+    ctx.lineTo(4300, 1500);
+    ctx.lineTo(4300, -700);
+    ctx.lineTo(1500, -700);
+    ctx.lineTo(1500, -300);
+    ctx.lineTo(3900, -300);
+    ctx.lineTo(3900, 1500);
+    ctx.lineTo(1490, 1500);
+    ctx.stroke();
+    ctx.lineWidth = 10;
+    ctx.moveTo(2700, 1500);
+    ctx.lineTo(2700, 1900);
+    ctx.moveTo(3905, 1500);
+    ctx.lineTo(3905, 1900);
+    ctx.moveTo(3905, 600);
+    ctx.lineTo(4300, 600);
+    ctx.moveTo(3905, -700);
+    ctx.lineTo(3905, -300);
+    ctx.moveTo(2700, -700);
+    ctx.lineTo(2700, -300);
+    ctx.stroke();
+
+    // - rail
+    ctx.beginPath();
+
+    ctx.fillStyle = "#707070";
+    ctx.fillRect(1500, 600, 100, 300);
+    ctx.fillRect(1500, 900, 2400, 100);
+    ctx.fillRect(1500, 900, 2400, 50);
+    ctx.fillRect(1950, 1000, 50, 400);
+    ctx.fillRect(2675, 1000, 50, 400);
+    ctx.fillRect(3400, 1000, 50, 400);
+
+    ctx.lineWidth = 20;
+    ctx.strokeRect(1500, 600, 100, 300);
+    ctx.fillStyle = "#545454";
+    ctx.fillRect(1500, 950, 2400, 50);
+    ctx.strokeRect(1500, 900, 2400, 100);
+    ctx.strokeRect(1950, 1000, 50, 400);
+    ctx.strokeRect(2675, 1000, 50, 400);
+    ctx.strokeRect(3400, 1000, 50, 400);
+
+    // - windows 
+    ctx.fillStyle = "#424242";
+    ctx.fillRect(1600, -300, 2200, 200);
+    ctx.strokeRect(1600, -300, 2200, 200);
+    ctx.lineWidth = 15;
+
+    ctx.fillStyle = "#9C9C9C";
+    ctx.fillRect(1650, -300, 487, 110);
+    ctx.fillRect(2187, -300, 487, 110);
+    ctx.fillRect(2724, -300, 487, 110);
+    ctx.fillRect(3261, -300, 487, 110);
+
+    ctx.fillStyle = "#242424";
+    ctx.fillRect(1650, -175, 487, 30);
+    ctx.fillRect(2187, -175, 487, 30);
+    ctx.fillRect(2724, -175, 487, 30);
+    ctx.fillRect(3261, -175, 487, 30);
+
+    ctx.strokeRect(1650, -300, 487, 150);
+    ctx.strokeRect(2187, -300, 487, 150);
+    ctx.strokeRect(2724, -300, 487, 150);
+    ctx.strokeRect(3261, -300, 487, 150);
+    ctx.strokeRect(1650, -300, 487, 120);
+    ctx.strokeRect(2187, -300, 487, 120);
+    ctx.strokeRect(2724, -300, 487, 120);
+    ctx.strokeRect(3261, -300, 487, 120);
+
+    // - doors
+    ctx.lineWidth = 20;
+    ctx.fillStyle = "#424242";
+    ctx.fillRect(1600, 0, 2200, 900);
+    ctx.fillStyle = "#242424";
+    ctx.fillRect(1600, 0, 2200, 40);
+    ctx.strokeRect(1600, 0, 2200, 900);
+    ctx.lineWidth = 15;
+    ctx.fillStyle = "#9C9C9C";
+    ctx.fillRect(1650, 100, 2100, 790);
+    ctx.fillStyle = "#424242";
+    ctx.fillRect(2316, 100, 50, 800);
+    ctx.fillRect(3038, 100, 50, 800);
+    ctx.strokeRect(1650, 100, 2100, 800);
+    ctx.strokeRect(2316, 100, 50, 800);
+    ctx.strokeRect(3038, 100, 50, 800);
+
+    // lower roof 
+    ctx.lineWidth = 20;
+    ctx.fillStyle = "#4D4D4D";
+    ctx.fillRect(-2000, -3000, 3500, 4660);
+    ctx.fillStyle = "#333333";
+    ctx.fillRect(-2000, 1550, 3500, 100);
+    ctx.strokeRect(-2000, -3000, 3500, 4660);
+
+    // top left section
+    ctx.lineWidth = 20;
+    ctx.fillStyle = "#616161";
+    ctx.fillRect(-500, -200, 2000, 1500);
+    ctx.strokeRect(-500, -200, 2000, 1500);
+
+    // - stripes 
+    ctx.lineWidth = 10;
+    ctx.moveTo(-300, -200);
+    ctx.lineTo(-300, 1300);
+    ctx.moveTo(-100, -200);
+    ctx.lineTo(-100, 1300);
+    ctx.moveTo(100, -200);
+    ctx.lineTo(100, 1300);
+    ctx.moveTo(300, -200);
+    ctx.lineTo(300, 1300);
+    ctx.moveTo(500, -200);
+    ctx.lineTo(500, 1300);
+    ctx.moveTo(700, -200);
+    ctx.lineTo(700, 1300);
+    ctx.moveTo(900, -200);
+    ctx.lineTo(900, 1300);
+    ctx.moveTo(1100, -200);
+    ctx.lineTo(1100, 1300);
+    ctx.moveTo(1300, -200);
+    ctx.lineTo(1300, 1300);
+    ctx.moveTo(1500, -200);
+    ctx.lineTo(1500, 1300);
+
+    ctx.stroke();
+
+    // - shade 
+    ctx.lineWidth = 20;
+    ctx.fillRect(-550, 200, 1400, 150);
+    ctx.fillStyle = "#4D4D4D";
+    ctx.fillRect(-550, 200, 1400, 50);
+    ctx.strokeRect(-550, 200, 1400, 150);
+
+    // - windows 
+    ctx.lineWidth = 20;
+
+    ctx.fillStyle = "#4D4D4D";
+    ctx.fillRect(-400, 500, 1200, 300);
+    ctx.fillRect(-400, 900, 1200, 300);
+
+    ctx.fillStyle = "#9C9C9C";
+    ctx.fillRect(-400, 500, 1200, 250);
+    ctx.fillRect(-400, 900, 1200, 250);
+
+    ctx.strokeRect(-400, 500, 1200, 300);
+    ctx.strokeRect(-400, 900, 1200, 300);
+    ctx.lineWidth = 15;
+    ctx.strokeRect(-400, 500, 1200, 250);
+    ctx.strokeRect(-400, 900, 1200, 250);
+
+    // roofs
+    ctx.lineWidth = 20;
+
+    ctx.fillStyle = "#5C5C5C";
+    ctx.fillRect(-550, -2500, 2050, 2300);
+    ctx.fillStyle = "#424242";
+    ctx.fillRect(-550, -300, 2050, 100);
+    ctx.strokeRect(-550, -2500, 2050, 2300);
+
+    ctx.lineWidth = 20;
+    ctx.fillStyle = "#5C5C5C";
+    ctx.fillRect(1450, -3500, 2900, 2800);
+    ctx.fillStyle = "#424242";
+    ctx.fillRect(1450, -800, 2900, 100);
+    ctx.strokeRect(1450, -3500, 2900, 2800);
+
+    // hatch
+
+    ctx.lineWidth = 20;
+    ctx.fillStyle = "#424242";
+    ctx.fillRect(2550, -2750, 700, 50);
+    ctx.strokeRect(2550, -3200, 700, 500);
+    ctx.lineWidth = 15;
+
+    ctx.moveTo(2800, -2900);
+    ctx.lineTo(3000, -2900);
+    ctx.lineTo(3000, -2800);
+    ctx.lineTo(2970, -2800);
+    ctx.lineTo(2970, -2850);
+    ctx.lineTo(2830, -2850);
+    ctx.lineTo(2830, -2800);
+    ctx.lineTo(2800, -2800);
+    ctx.lineTo(2800, -2908);
+    ctx.fillStyle = "#A1A1A1";
+    ctx.fill();
+
+    ctx.fillStyle = "#8A8A8A";
+    ctx.fillRect(2800, -2900, 200, 25);
+
+    ctx.beginPath();
+    ctx.moveTo(2800, -2900);
+    ctx.lineTo(3000, -2900);
+    ctx.lineTo(3000, -2800);
+    ctx.lineTo(2970, -2800);
+    ctx.lineTo(2970, -2850);
+    ctx.lineTo(2830, -2850);
+    ctx.lineTo(2830, -2800);
+    ctx.lineTo(2800, -2800);
+    ctx.lineTo(2800, -2908);
+    ctx.stroke();
+
+    // roof rails
+    ctx.lineWidth = 20;
+    ctx.fillStyle = "#363636";
+    ctx.fillRect(1500, -3450, 2800, 70);
+    ctx.fillStyle = "#292929";
+    ctx.fillRect(1500, -3450, 2800, 30);
+    ctx.strokeRect(1500, -3450, 2800, 70);
+    ctx.fillRect(1550, -3380, 50, 80);
+    ctx.strokeRect(1550, -3380, 50, 80);
+    ctx.fillRect(2875, -3380, 50, 80);
+    ctx.strokeRect(2875, -3380, 50, 80);
+    ctx.fillRect(4200, -3380, 50, 80);
+    ctx.strokeRect(4200, -3380, 50, 80);
+
+    ctx.fillStyle = "#363636";
+    ctx.fillRect(1500, -1050, 2800, 70);
+    ctx.fillStyle = "#292929";
+    ctx.fillRect(1500, -1050, 2800, 30);
+    ctx.strokeRect(1500, -1050, 2800, 70);
+    ctx.fillRect(1550, -980, 50, 80);
+    ctx.strokeRect(1550, -980, 50, 80);
+    ctx.fillRect(2875, -980, 50, 80);
+    ctx.strokeRect(2875, -980, 50, 80);
+    ctx.fillRect(4200, -980, 50, 80);
+    ctx.strokeRect(4200, -980, 50, 80);
+
+    ctx.fillRect(1500, -3380, 50, 2330);
+    ctx.strokeRect(1500, -3380, 50, 2330);
+    ctx.fillRect(4250, -3380, 50, 2330);
+    ctx.strokeRect(4250, -3380, 50, 2330);
+
+    /*
+          ctx.strokeStyle = "red";
+          ctx.strokeRect(1450, -3500, 90, 2800);
+          ctx.strokeRect(4260, -3500, 90, 2800);
+          ctx.strokeRect(1450, -3500, 2900, 100);
+          ctx.strokeRect(1450, -1050, 2900, 100); 
+
+    [-2000,-3000,3500,4660],[-1565, 2200, 2700, 1500],[1500,1900,300,2000],[4000,1900,300,2000],[1500, -700, 2800, 4000],[-1950, 1650, 385, 2150],[1119, 1650, 385, 2150],[1450, -3500, 90, 2800],[4260, -3500, 90, 2800],[1450, -3500, 2900, 100],[1450, -1050, 2900, 100]
+
+    */
+
+    ctx.restore();
 }, undefined, 0, 0, 2010, 3510);
- 
+
 export let HOUSE_1 = new TextureData(-1190, 3510, 0.2, "building", {
     width: 7370,
     height: 9320
 }, [
-[5500, 2400, 2500, 1200],
-[1300, 1500, 1700, 1700],
-[1200, -3500, 5550, 3500],
-[5000, 1000, 3500, 1500],
-[5000, 2200, 500, 1500],
-[8000, 2200, 500, 1500],
-[5000, -3100, 3500, 3200],
-[5000, -2100, 300, 3200],
-[8200, -2100, 300, 3200],
-[1300, -3100, 3900, 6000]
-    ], 0, undefined, function(ctx, n) {
+    [5500, 2400, 2500, 1200],
+    [1300, 1500, 1700, 1700],
+    [1200, -3500, 5550, 3500],
+    [5000, 1000, 3500, 1500],
+    [5000, 2200, 500, 1500],
+    [8000, 2200, 500, 1500],
+    [5000, -3100, 3500, 3200],
+    [5000, -2100, 300, 3200],
+    [8200, -2100, 300, 3200],
+    [1300, -3100, 3900, 6000]
+], 0, undefined, function(ctx, n) {
     // body: 3200x2280, texture: 1024,512, size: 0.18, boxes: [[500, 1700, 3200, 1500],[600, 3200, 3000, 700],[2750, 3900, 600, 250]]
 
-/*
-bounds 
+    /*
+    bounds 
 
-[5500, 2400, 2500, 1200],
-[1300, 1500, 1700, 1700],
-[1200, -3500, 5550, 3500],
-[5000, 1000, 3500, 1500],
-[5000, 2200, 500, 1500],
-[8000, 2200, 500, 1500],
-[5000, -3100, 3500, 3200],
-[5000, -2100, 300, 3200],
-[8200, -2100, 300, 3200],
-[1300, -3100, 3900, 6000]
+    [5500, 2400, 2500, 1200],
+    [1300, 1500, 1700, 1700],
+    [1200, -3500, 5550, 3500],
+    [5000, 1000, 3500, 1500],
+    [5000, 2200, 500, 1500],
+    [8000, 2200, 500, 1500],
+    [5000, -3100, 3500, 3200],
+    [5000, -2100, 300, 3200],
+    [8200, -2100, 300, 3200],
+    [1300, -3100, 3900, 6000]
 
-*/
+    */
 
     ctx.save();
     ctx.translate(this.offset.vx, this.offset.vy);
@@ -848,9 +861,9 @@ bounds
     ctx.fill();
     ctx.stroke();
     ctx.beginPath();
- 
+
     // - door
-    ctx.fillStyle = "#4D4D4D"; 
+    ctx.fillStyle = "#4D4D4D";
     ctx.fillRect(5500, 2400, 2500, 1200);
     ctx.strokeRect(5500, 2400, 2500, 1200);
     ctx.lineWidth = 15;
@@ -858,7 +871,7 @@ bounds
     ctx.lineWidth = 10;
     ctx.strokeRect(5500, 2400, 2500, 400);
     ctx.strokeRect(5500, 2400, 2500, 800);
-  
+
     // front porch
     ctx.lineWidth = 20;
     ctx.fillStyle = "#949494";
@@ -896,16 +909,16 @@ bounds
     ctx.fillRect(3200, 1800, 700, 1100);
     ctx.strokeRect(3200, 1800, 700, 1100);
 
-    ctx.fillStyle = "#4D4D4D"; 
+    ctx.fillStyle = "#4D4D4D";
     ctx.fillRect(3200, 1900, 50, 1020);
     ctx.fillRect(3850, 1900, 50, 1020);
-    ctx.fillRect(3200, 1800, 700, 100); 
+    ctx.fillRect(3200, 1800, 700, 100);
     ctx.fillStyle = "#404040";
     ctx.fillRect(3200, 1800, 700, 50);
     ctx.strokeRect(3200, 1900, 50, 1020);
     ctx.strokeRect(3850, 1900, 50, 1020);
     ctx.strokeRect(3200, 1800, 700, 100);
-      
+
     ctx.lineWidth = 15;
     ctx.fillRect(3750, 2400, 50, 150);
     ctx.strokeRect(3750, 2400, 50, 150);
@@ -934,7 +947,7 @@ bounds
 
     ctx.strokeRect(4050, 2083, 700, 50);
     ctx.strokeRect(4050, 2316, 700, 50);
- 
+
     // small left section
     ctx.lineWidth = 20;
     ctx.fillStyle = "#949494";
@@ -949,7 +962,7 @@ bounds
     ctx.fillRect(2000, 1850, 1000, 50);
     ctx.fillRect(2050, 3150, 950, 50);
     ctx.strokeRect(2050, 1950, 950, 1240);
-    
+
     ctx.fillStyle = "#C7C7C7";
     ctx.fillRect(2050, 1950, 950, 1190);
 
@@ -969,16 +982,16 @@ bounds
 
     ctx.lineWidth = 20;
     ctx.strokeRect(2000, 1850, 1000, 1380);
-  
+
     // roofs
     ctx.lineWidth = 20;
     ctx.fillStyle = "#4D4D4D";
-    ctx.fillRect(1200, -3500, 5550, 3500); 
+    ctx.fillRect(1200, -3500, 5550, 3500);
     ctx.fillStyle = "#404040";
     ctx.fillRect(1200, -3500, 5550, 3200);
     ctx.strokeRect(1200, -3500, 5550, 3500);
-  
-   // top right section 
+
+    // top right section 
     ctx.lineWidth = 20;
     ctx.fillStyle = "#C7C7C7";
     ctx.fillRect(5000, -700, 3500, 2500);
@@ -991,8 +1004,8 @@ bounds
     ctx.strokeRect(5300, -400, 2900, 1900);
     ctx.fillStyle = "#787878";
     ctx.fillRect(5300, -400, 2900, 500);
-    ctx.strokeRect(5300, -400, 2900, 500); 
-  
+    ctx.strokeRect(5300, -400, 2900, 500);
+
     ctx.lineWidth = 10;
     ctx.strokeRect(5300, 100, 290, 1400);
     ctx.strokeRect(5300, 100, 580, 1400);
@@ -1003,8 +1016,8 @@ bounds
     ctx.strokeRect(5300, 100, 2030, 1400);
     ctx.strokeRect(5300, 100, 2320, 1400);
     ctx.strokeRect(5300, 100, 2610, 1400);
-    
-   // top bar 
+
+    // top bar 
     ctx.lineWidth = 20;
     ctx.fillStyle = "#636363";
     ctx.fillRect(1250, 1350, 3750, 250);
@@ -1026,7 +1039,7 @@ bounds
     ctx.fillRect(4950, 1350, 50, 500);
     ctx.strokeRect(4950, 1350, 50, 700);
 
-   // - door
+    // - door
     ctx.fillStyle = "#616161";
     ctx.fillRect(5675, -400, 700, 500);
     ctx.strokeRect(5675, -400, 700, 500);
@@ -1041,15 +1054,15 @@ bounds
     ctx.lineWidth = 15;
     ctx.fillRect(6225, -400, 50, 100);
     ctx.strokeRect(6225, -400, 50, 100);
-  
-   // - rail
+
+    // - rail
     ctx.lineWidth = 20;
     ctx.fillStyle = "#757575";
     ctx.fillRect(5300, 1000, 2900, 100);
     ctx.fillStyle = "#616161";
     ctx.fillRect(5300, 1000, 2900, 50);
     ctx.strokeRect(5300, 1000, 2900, 100);
-  
+
     ctx.fillRect(5840, 1100, 50, 300);
     ctx.fillRect(6430, 1100, 50, 300);
     ctx.fillRect(7020, 1100, 50, 300);
@@ -1059,13 +1072,13 @@ bounds
     ctx.strokeRect(6430, 1100, 50, 300);
     ctx.strokeRect(7020, 1100, 50, 300);
     ctx.strokeRect(7610, 1100, 50, 300);
- 
-   // top left section
+
+    // top left section
     ctx.fillStyle = "#949494";
     ctx.fillRect(1300, 0, 3700, 1350);
     ctx.strokeRect(1300, 0, 3700, 1350);
-  
-   // - window
+
+    // - window
     ctx.fillStyle = "#4D4D4D";
     ctx.fillRect(1900, 400, 2500, 550);
     ctx.fillStyle = "#404040";
@@ -1078,15 +1091,15 @@ bounds
     ctx.fillStyle = "#C2C2C2";
     ctx.fillRect(2000, 550, 2300, 250);
     ctx.strokeRect(2000, 550, 2300, 250);
-   
-    ctx.fillStyle = "#4D4D4D"; 
+
+    ctx.fillStyle = "#4D4D4D";
     ctx.fillRect(2733, 550, 50, 280);
     ctx.fillRect(3516, 550, 50, 280);
     ctx.strokeRect(2733, 550, 50, 280);
     ctx.strokeRect(3516, 550, 50, 280);
-    
-      ctx.restore();
-},undefined,0, 0);
+
+    ctx.restore();
+}, undefined, 0, 0);
 
 export let GENERIC_APARTMENT = new TextureData(-98, -338, 0.2, "building", {
     width: 3200,
@@ -3526,9 +3539,9 @@ export let ROAD_SIGN = new TextureData(10, 10, 0.2, "prop", {
     ctx.lineTo(370, 520);
     ctx.lineTo(10, 520);
     ctx.lineTo(0, 510);
-    ctx.lineTo(0,5);
+    ctx.lineTo(0, 5);
     ctx.stroke();
-     ctx.fillStyle = "#9E9E9E";
+    ctx.fillStyle = "#9E9E9E";
     ctx.fillRect(160, 520, 60, 1000);
     ctx.strokeRect(160, 520, 60, 1000);
     ctx.lineWidth = 10;
@@ -3795,7 +3808,7 @@ export let URBAN_FENCE_HALF = new TextureData(0, 0, 0.2, "prop", {
     ctx.stroke();
 
     ctx.restore();
-},[0], 0, 0, 10, 10);
+}, [0], 0, 0, 10, 10);
 
 export let SMALL_PLANT = new TextureData(2, 17, 0.2, "prop", {
     width: 250,
@@ -4219,7 +4232,7 @@ export let ROAD_RAIL = new TextureData(-290, -90, 0.2, "prop", {
     ctx.strokeRect(450, 400, 1000, 160);
 
     ctx.restore();
-// -58 , -18
+    // -58 , -18
 });
 
 export let ROAD_RAIL_VERTICAL = new TextureData(-58, -18, 0.2, "prop", {

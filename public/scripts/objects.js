@@ -20,12 +20,23 @@ import {
 
 const pathfinder = new Worker("/public/scripts/pathfinder.js");
 
-pathfinder.requestPath = function(avatar,start,end) {
- this.postMessage({mapId: avatar.map.id, blocked: avatar.map.GRAPH.blocked, nodes: avatar.map.GRAPH.nodes, avatarId: avatar.id, path: { start: start, end: end}});
+pathfinder.requestPath = function(avatar, start, end) {
+    this.postMessage({
+        mapId: avatar.map.id,
+        blocked: avatar.map.GRAPH.blocked,
+        nodes: avatar.map.GRAPH.nodes,
+        avatarId: avatar.id,
+        path: {
+            start: start,
+            end: end
+        }
+    });
 }
 
-pathfinder.onmessage = function({data}) {
-  _Map_._all[data.mapId].avatars[data.avatarId]?.findPathTo(data.result); 
+pathfinder.onmessage = function({
+    data
+}) {
+    _Map_._all[data.mapId].avatars[data.avatarId]?.findPathTo(data.result);
 }
 
 export class _Object_ {
@@ -1043,7 +1054,7 @@ export class Book2 extends _InstancedClusterClient_ {
 
 export class RoadRail extends _InstancedClusterClient_ {
 
-    static _defaultVertices = [-13.4,5.9,1,0,0,-10,5.9,1,0.033203125,0,-13.4,-5.5,1,0,0.111328125,-10,5.9,1,0.033203125,0,-13.4,-5.5,1,0,0.111328125,-10,-5.5,1,0.033203125,0.111328125,9.6,5.9,1,0.224609375,0,12.999999999999998,5.9,1,0.2578125,0,9.6,-5.5,1,0.224609375,0.111328125,12.999999999999998,5.9,1,0.2578125,0,9.6,-5.5,1,0.224609375,0.111328125,12.999999999999998,-5.5,1,0.2578125,0.111328125,-10.4,4.9,1,0.029296875,0.009765625,9.999999999999998,4.9,1,0.228515625,0.009765625,-10.4,-3.7,1,0.029296875,0.09375,9.999999999999998,4.9,1,0.228515625,0.009765625,-10.4,-3.7,1,0.029296875,0.09375,9.999999999999998,-3.7,1,0.228515625,0.09375];
+    static _defaultVertices = [-13.4, 5.9, 1, 0, 0, -10, 5.9, 1, 0.033203125, 0, -13.4, -5.5, 1, 0, 0.111328125, -10, 5.9, 1, 0.033203125, 0, -13.4, -5.5, 1, 0, 0.111328125, -10, -5.5, 1, 0.033203125, 0.111328125, 9.6, 5.9, 1, 0.224609375, 0, 12.999999999999998, 5.9, 1, 0.2578125, 0, 9.6, -5.5, 1, 0.224609375, 0.111328125, 12.999999999999998, 5.9, 1, 0.2578125, 0, 9.6, -5.5, 1, 0.224609375, 0.111328125, 12.999999999999998, -5.5, 1, 0.2578125, 0.111328125, -10.4, 4.9, 1, 0.029296875, 0.009765625, 9.999999999999998, 4.9, 1, 0.228515625, 0.009765625, -10.4, -3.7, 1, 0.029296875, 0.09375, 9.999999999999998, 4.9, 1, 0.228515625, 0.009765625, -10.4, -3.7, 1, 0.029296875, 0.09375, 9.999999999999998, -3.7, 1, 0.228515625, 0.09375];
 
     width = 26.4;
     height = 11.4;
@@ -1278,7 +1289,7 @@ export class SmallPlant extends _StaticClusterClient_ {
 
 export class RoadSign extends _StaticClusterClient_ {
 
-    static _defaultVertices = [-4.2,15.6,1,0.2578125,0,3.8,15.6,1,0.3359375,0,-4.2,4.799999999999999,1,0.2578125,0.10546875,3.8,15.6,1,0.3359375,0,-4.2,4.799999999999999,1,0.2578125,0.10546875,3.8,4.799999999999999,1,0.3359375,0.10546875,-1,5.200000000000001,1,0.2890625,0.1015625,0.5999999999999996,5.200000000000001,1,0.3046875,0.1015625,-1,-15.2,1,0.2890625,0.30078125,0.5999999999999996,5.200000000000001,1,0.3046875,0.1015625,-1,-15.2,1,0.2890625,0.30078125,0.5999999999999996,-15.2,1,0.3046875,0.30078125];
+    static _defaultVertices = [-4.2, 15.6, 1, 0.2578125, 0, 3.8, 15.6, 1, 0.3359375, 0, -4.2, 4.799999999999999, 1, 0.2578125, 0.10546875, 3.8, 15.6, 1, 0.3359375, 0, -4.2, 4.799999999999999, 1, 0.2578125, 0.10546875, 3.8, 4.799999999999999, 1, 0.3359375, 0.10546875, -1, 5.200000000000001, 1, 0.2890625, 0.1015625, 0.5999999999999996, 5.200000000000001, 1, 0.3046875, 0.1015625, -1, -15.2, 1, 0.2890625, 0.30078125, 0.5999999999999996, 5.200000000000001, 1, 0.3046875, 0.1015625, -1, -15.2, 1, 0.2890625, 0.30078125, 0.5999999999999996, -15.2, 1, 0.3046875, 0.30078125];
 
     width = 8;
     height = 30.8;
@@ -1313,7 +1324,7 @@ export class Laptop extends _StaticClusterClient_ {
 
 export class UrbanFence extends _MixedStaticClusterClient_ {
 
-    static _defaultVertices = [-24.2,14.2,1,0,0.30078125,0,24.2,14.2,1,0.47265625,0.30078125,0,-24.2,-14.2,1,0,0.578125,0,24.2,14.2,1,0.47265625,0.30078125,0,-24.2,-14.2,1,0,0.578125,0,24.2,-14.2,1,0.47265625,0.578125,0];
+    static _defaultVertices = [-24.2, 14.2, 1, 0, 0.30078125, 0, 24.2, 14.2, 1, 0.47265625, 0.30078125, 0, -24.2, -14.2, 1, 0, 0.578125, 0, 24.2, 14.2, 1, 0.47265625, 0.30078125, 0, -24.2, -14.2, 1, 0, 0.578125, 0, 24.2, -14.2, 1, 0.47265625, 0.578125, 0];
 
     width = 48.4;
     height = 28.4;
@@ -1333,7 +1344,7 @@ export class UrbanFence extends _MixedStaticClusterClient_ {
 
 export class UrbanFenceVertical extends _MixedStaticClusterClient_ {
 
-    static _defaultVertices = [-2.2,28.2,1,0.47265625,0.30078125,0,2.2,28.2,1,0.515625,0.30078125,0,-2.2,-28.2,1,0.47265625,0.8515625,0,2.2,28.2,1,0.515625,0.30078125,0,-2.2,-28.2,1,0.47265625,0.8515625,0,2.2,-28.2,1,0.515625,0.8515625,0];
+    static _defaultVertices = [-2.2, 28.2, 1, 0.47265625, 0.30078125, 0, 2.2, 28.2, 1, 0.515625, 0.30078125, 0, -2.2, -28.2, 1, 0.47265625, 0.8515625, 0, 2.2, 28.2, 1, 0.515625, 0.30078125, 0, -2.2, -28.2, 1, 0.47265625, 0.8515625, 0, 2.2, -28.2, 1, 0.515625, 0.8515625, 0];
 
     width = 4.4;
     height = 56.4;
@@ -1353,7 +1364,7 @@ export class UrbanFenceVertical extends _MixedStaticClusterClient_ {
 
 export class UrbanFenceHalf extends _MixedStaticClusterClient_ {
 
-    static _defaultVertices = [-12.2,14.2,1,0.3359375,0,0,12.2,14.2,1,0.57421875,0,0,-12.2,-14.2,1,0.3359375,0.27734375,0,12.2,14.2,1,0.57421875,0,0,-12.2,-14.2,1,0.3359375,0.27734375,0,12.2,-14.2,1,0.57421875,0.27734375,0];
+    static _defaultVertices = [-12.2, 14.2, 1, 0.3359375, 0, 0, 12.2, 14.2, 1, 0.57421875, 0, 0, -12.2, -14.2, 1, 0.3359375, 0.27734375, 0, 12.2, 14.2, 1, 0.57421875, 0, 0, -12.2, -14.2, 1, 0.3359375, 0.27734375, 0, 12.2, -14.2, 1, 0.57421875, 0.27734375, 0];
 
     width = 24.4;
     height = 28.4;
@@ -1410,8 +1421,8 @@ export class PicnicTable extends _StaticClusterClient_ {
 
 export class Road extends _MixedStaticClusterClient_ {
 
-    static _defaultVertices = [-25,14.1,1,0,0,0,25,14.1,1,0.48828125,0,0,-25,-14.1,1,0,0.275390625,0,25,14.1,1,0.48828125,0,0,-25,-14.1,1,0,0.275390625,0,25,-14.1,1,0.48828125,0.275390625,0];
- 
+    static _defaultVertices = [-25, 14.1, 1, 0, 0, 0, 25, 14.1, 1, 0.48828125, 0, 0, -25, -14.1, 1, 0, 0.275390625, 0, 25, 14.1, 1, 0.48828125, 0, 0, -25, -14.1, 1, 0, 0.275390625, 0, 25, -14.1, 1, 0.48828125, 0.275390625, 0];
+
     width = 50;
     height = 28.2;
     name = "road";
@@ -1444,7 +1455,7 @@ export class RoadDouble extends _MixedStaticClusterClient_ {
 
 export class RoadCorner extends _StaticClusterClient_ {
 
-    static _defaultVertices = [-14.1,14.1,1,0,0.275390625,0,14.1,14.1,1,0.275390625,0.275390625,0,-14.1,-14.1,1,0,0.55078125,0,14.1,14.1,1,0.275390625,0.275390625,0,-14.1,-14.1,1,0,0.55078125,0,14.1,-14.1,1,0.275390625,0.55078125,0];
+    static _defaultVertices = [-14.1, 14.1, 1, 0, 0.275390625, 0, 14.1, 14.1, 1, 0.275390625, 0.275390625, 0, -14.1, -14.1, 1, 0, 0.55078125, 0, 14.1, 14.1, 1, 0.275390625, 0.275390625, 0, -14.1, -14.1, 1, 0, 0.55078125, 0, 14.1, -14.1, 1, 0.275390625, 0.55078125, 0];
 
     width = 28.2;
     height = 28.2;
@@ -1461,7 +1472,7 @@ export class RoadCorner extends _StaticClusterClient_ {
 
 export class RoadTriCorner extends _StaticClusterClient_ {
 
-    static _defaultVertices = [-14.1,14.1,1,0.275390625,0.275390625,0,14.1,14.1,1,0.55078125,0.275390625,0,-14.1,-14.1,1,0.275390625,0.55078125,0,14.1,14.1,1,0.55078125,0.275390625,0,-14.1,-14.1,1,0.275390625,0.55078125,0,14.1,-14.1,1,0.55078125,0.55078125,0];
+    static _defaultVertices = [-14.1, 14.1, 1, 0.275390625, 0.275390625, 0, 14.1, 14.1, 1, 0.55078125, 0.275390625, 0, -14.1, -14.1, 1, 0.275390625, 0.55078125, 0, 14.1, 14.1, 1, 0.55078125, 0.275390625, 0, -14.1, -14.1, 1, 0.275390625, 0.55078125, 0, 14.1, -14.1, 1, 0.55078125, 0.55078125, 0];
 
     width = 28.2;
     height = 28.2;
@@ -1520,9 +1531,9 @@ export class Door extends _StaticClusterClient_ {
         this.room = room;
         this.buildingExit = buildingExit;
         this.outPoint = outPoint;
-  }
+    }
 
-    postLink() {	
+    postLink() {
         if (this.label) {
             this.label.exclude = true;
             this.label.managedMovement = true;
@@ -1531,7 +1542,7 @@ export class Door extends _StaticClusterClient_ {
     }
 
     action() {
-      if (typeof this.room === "number") this.room = (this.room < 0) ? this.map.PARENT_MAP : this.map.SUB_MAPS[this.room];
+        if (typeof this.room === "number") this.room = (this.room < 0) ? this.map.PARENT_MAP : this.map.SUB_MAPS[this.room];
 
         if (this.room) {
             $CURRENT_MAP.move = false;
@@ -1542,16 +1553,16 @@ export class Door extends _StaticClusterClient_ {
 
                 if (this.outPoint) {
                     let [x, y] = this.outPoint;
-                  if (this.buildingExit && this.map.building) {
-                    let b = this.map.building;
-                    $CURRENT_MAP.noclip = true;
-      $CURRENT_MAP.translate(-$CURRENT_MAP.centerX + (b.trans.offsetX+$CURRENT_MAP.centerX+x),-$CURRENT_MAP.centerY + (b.trans.offsetY+$CURRENT_MAP.centerY+y));
-                    $CURRENT_MAP.noclip = false;
-                  } else {
-                    $CURRENT_MAP.noclip = true;
-                    $CURRENT_MAP.translate((-$CURRENT_MAP.centerX) + x, (-$CURRENT_MAP.centerY) + y);
-                    $CURRENT_MAP.noclip = false;
-                  }
+                    if (this.buildingExit && this.map.building) {
+                        let b = this.map.building;
+                        $CURRENT_MAP.noclip = true;
+                        $CURRENT_MAP.translate(-$CURRENT_MAP.centerX + (b.trans.offsetX + $CURRENT_MAP.centerX + x), -$CURRENT_MAP.centerY + (b.trans.offsetY + $CURRENT_MAP.centerY + y));
+                        $CURRENT_MAP.noclip = false;
+                    } else {
+                        $CURRENT_MAP.noclip = true;
+                        $CURRENT_MAP.translate((-$CURRENT_MAP.centerX) + x, (-$CURRENT_MAP.centerY) + y);
+                        $CURRENT_MAP.noclip = false;
+                    }
                 }
             }).bind(this));
         }
@@ -1605,7 +1616,7 @@ export class _Building_ extends _StaticClusterClient_ {
         ], doorOffset)];
 
         for (let i of doors) {
-          let t = new Trigger(this.trans.offsetX + i[0], this.trans.offsetY + i[1], (function() {
+            let t = new Trigger(this.trans.offsetX + i[0], this.trans.offsetY + i[1], (function() {
 
                 $CURRENT_MAP.move = false;
 
@@ -1614,18 +1625,18 @@ export class _Building_ extends _StaticClusterClient_ {
                     $AVATAR.rotate(180);
                     this.map.move = true;
 
-                  if (i[3]) {
-                    let [x, y] = i[3];
-                    $CURRENT_MAP.noclip = true;
-                    $CURRENT_MAP.translate((-$CURRENT_MAP.centerX) + x, (-$CURRENT_MAP.centerY) + y);
-                    $CURRENT_MAP.noclip = false;
-                  }
+                    if (i[3]) {
+                        let [x, y] = i[3];
+                        $CURRENT_MAP.noclip = true;
+                        $CURRENT_MAP.translate((-$CURRENT_MAP.centerX) + x, (-$CURRENT_MAP.centerY) + y);
+                        $CURRENT_MAP.noclip = false;
+                    }
                 }).bind(this));
             }).bind(this), true);
-         t.outPoint = i[3];
-            
-         this.doors.push(t);
-        } 
+            t.outPoint = i[3];
+
+            this.doors.push(t);
+        }
     }
 
     postLink() {
@@ -1637,7 +1648,7 @@ export class _Building_ extends _StaticClusterClient_ {
             i.building = this;
             this.map.addSubMap(i);
         }
- 
+
         if (this.setup) this.setup();
     }
 
@@ -1663,7 +1674,7 @@ export class _Building_ extends _StaticClusterClient_ {
 
 export class House1 extends _Building_ {
 
-    static _defaultVertices = [-73.7,93.2,1,0,0,73.7,93.2,1,0.7197265625,0,-73.7,-93.2,1,0,0.91015625,73.7,93.2,1,0.7197265625,0,-73.7,-93.2,1,0,0.91015625,73.7,-93.2,1,0.7197265625,0.91015625];
+    static _defaultVertices = [-73.7, 93.2, 1, 0, 0, 73.7, 93.2, 1, 0.7197265625, 0, -73.7, -93.2, 1, 0, 0.91015625, 73.7, 93.2, 1, 0.7197265625, 0, -73.7, -93.2, 1, 0, 0.91015625, 73.7, -93.2, 1, 0.7197265625, 0.91015625];
 
     width = 147.4;
     height = 186.4;
@@ -1671,18 +1682,31 @@ export class House1 extends _Building_ {
     clusterName = "house 1";
     texture = textures.house1;
     obstacle = true;
-    segments = [[12.5,25,50,24],[-71.5,7,34,34],[-73.5,-93,111,70],[2.5,-3,70,30],[2.5,21,10,30],[62.5,21,10,30],[2.5,-85,70,64],[2.5,-65,6,64],[66.5,-65,6,64],[-71.5,-85,78,120]];
- 
+    segments = [
+        [12.5, 25, 50, 24],
+        [-71.5, 7, 34, 34],
+        [-73.5, -93, 111, 70],
+        [2.5, -3, 70, 30],
+        [2.5, 21, 10, 30],
+        [62.5, 21, 10, 30],
+        [2.5, -85, 70, 64],
+        [2.5, -65, 6, 64],
+        [66.5, -65, 6, 64],
+        [-71.5, -85, 78, 120]
+    ];
+
     constructor(initialX, initialY, initialRotation) {
-        super(initialX, initialY, initialRotation,[
-            [-26.1, -33, 0,[0, 44.38]],[23, -57, 1],[-30, -65, 0]
-        ],[new _Map_(150, 100, false).init(),new _Map_(150, 80, false).init(),new _Map_(150, 80, false).init()],undefined); 
+        super(initialX, initialY, initialRotation, [
+            [-26.1, -33, 0, [0, 44.38]],
+            [23, -57, 1],
+            [-30, -65, 0]
+        ], [new _Map_(150, 100, false).init(), new _Map_(150, 80, false).init(), new _Map_(150, 80, false).init()], undefined);
     }
 }
 
 export class LuxuryApartment extends _Building_ {
 
-    static _defaultVertices = [-63.7,77.2,1,0,0,63.7,77.2,1,0.6220703125,0,-63.7,-77.2,1,0,0.75390625,63.7,77.2,1,0.6220703125,0,-63.7,-77.2,1,0,0.75390625,63.7,-77.2,1,0.6220703125,0.75390625];
+    static _defaultVertices = [-63.7, 77.2, 1, 0, 0, 63.7, 77.2, 1, 0.6220703125, 0, -63.7, -77.2, 1, 0, 0.75390625, 63.7, 77.2, 1, 0.6220703125, 0, -63.7, -77.2, 1, 0, 0.75390625, 63.7, -77.2, 1, 0.6220703125, 0.75390625];
 
     width = 127.4;
     height = 154.4;
@@ -1691,16 +1715,28 @@ export class LuxuryApartment extends _Building_ {
     texture = textures.luxuryapartment;
     obstacle = true;
     segments = [
-    [-63.5,-67,70,93.2],[-54.8,37,54,30],[6.5,31,6,40],[56.5,31,6,40],[6.5,-21,56,80],[-62.5,26,7.7,43],[-1.1200000000000045,26,7.7,43],[5.5,-77,1.8,56],[61.7,-77,1.8,56],[5.5,-77,58,2],[5.5,-28,58,2]
+        [-63.5, -67, 70, 93.2],
+        [-54.8, 37, 54, 30],
+        [6.5, 31, 6, 40],
+        [56.5, 31, 6, 40],
+        [6.5, -21, 56, 80],
+        [-62.5, 26, 7.7, 43],
+        [-1.1200000000000045, 26, 7.7, 43],
+        [5.5, -77, 1.8, 56],
+        [61.7, -77, 1.8, 56],
+        [5.5, -77, 58, 2],
+        [5.5, -28, 58, 2]
     ];
 
     constructor(initialX, initialY, initialRotation) {
         super(initialX, initialY, initialRotation, [
-            [35, 65, 0],[23, -57, 1],[-30, -65, 0, [-40.37,18.93]]
-        ],[new _Map_(300, 50, false).init(undefined, -40, [-29.3,-73], true),new _Map_(150, 80, false).init()],undefined,function(){
-        let d1 = new Door("Roof",-1, 30,(this.map.SUB_MAPS[0].height / 2) + 9.2,0,[34.77,53.53],true);
-        this.rooms[0].link(d1);
-}); 
+            [35, 65, 0],
+            [23, -57, 1],
+            [-30, -65, 0, [-40.37, 18.93]]
+        ], [new _Map_(300, 50, false).init(undefined, -40, [-29.3, -73], true), new _Map_(150, 80, false).init()], undefined, function() {
+            let d1 = new Door("Roof", -1, 30, (this.map.SUB_MAPS[0].height / 2) + 9.2, 0, [34.77, 53.53], true);
+            this.rooms[0].link(d1);
+        });
     }
 }
 
@@ -2088,12 +2124,12 @@ export class Avatar {
                 mainTool: undefined
             },
             reloadTimeout: new MultiFrameLinearAnimation([function() {
-               this.state.reload.progress = 0;
-               this.state.reload.loaded = true;
-            }],this,[0]),
+                this.state.reload.progress = 0;
+                this.state.reload.loaded = true;
+            }], this, [0]),
             pathRequestRateLimit: new MultiFrameLinearAnimation([function() {
-               this.state.path.request = true;
-            }],this,[1]),
+                this.state.path.request = true;
+            }], this, [1]),
             targetUpdateAnimation: new LoopAnimation(function() {
                 const map = (this.map || $CURRENT_MAP);
 
@@ -2110,18 +2146,18 @@ export class Avatar {
                         } = map.avatars[i].trans;
                         let dist = distance(this.trans.offsetX, this.trans.offsetY, targetX, targetY);
                         if (((this.state.target.id.includes(map.avatars[i].state.targetId) && !this.state.attack.invertTargets) || (!this.state.target.id.includes(this.map.avatars[i].state.targetId) && this.state.attack.invertTargets))) {
-                          if (dist < targetDistance && map.avatars[i] !== this) {
-                            targetDistance = dist;
-                            target = map.avatars[i];
-                          }
-                          if (dist < this.state.attack.disengageDistance && this.state.attack.forget && !remember.includes(map.avatars[i].state.targetId)) {
-                            remember.push(map.avatars[i].state.targetId);
-                          }
-                        } 
-                    }  
- 
+                            if (dist < targetDistance && map.avatars[i] !== this) {
+                                targetDistance = dist;
+                                target = map.avatars[i];
+                            }
+                            if (dist < this.state.attack.disengageDistance && this.state.attack.forget && !remember.includes(map.avatars[i].state.targetId)) {
+                                remember.push(map.avatars[i].state.targetId);
+                            }
+                        }
+                    }
+
                     if (this.state.attack.forget) {
-                      this.state.target.id = remember;
+                        this.state.target.id = remember;
                     }
 
                     if (target && this.state.target.current !== target) {
@@ -2159,10 +2195,10 @@ export class Avatar {
 
                 this.translate(tx, ty);
 
-              if (this.state.goto.x === this.trans.offsetX && this.state.goto.y === this.trans.offsetY) {
-                  if (this.state.goto.reserve) this.map.GRAPH.reserved.splice(this.map.GRAPH.reserved.indexOf(this.state.goto.reserve),1);
-                  this.disengageGoto();
-              }
+                if (this.state.goto.x === this.trans.offsetX && this.state.goto.y === this.trans.offsetY) {
+                    if (this.state.goto.reserve) this.map.GRAPH.reserved.splice(this.map.GRAPH.reserved.indexOf(this.state.goto.reserve), 1);
+                    this.disengageGoto();
+                }
             }, this, 0.03),
             recordAnimation: new LoopAnimation(function() {
                 if (this.state.recording.useRecording) {
@@ -2352,7 +2388,7 @@ export class Avatar {
             }
         }
 
-        if ((this.state.passive && !this.state.aggressive) || (this.state.fire && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo <= 0)) {
+        if ((this.state.passive && !this.state.aggressive) || (this.state.armed && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo <= 0)) {
             this.run();
         } else if (!this.state.target.id.includes(owner.state.targetId) && (this.map || $CURRENT_MAP).avatars[owner.id] && this.state.aggressive) {
             this.state.target.id.push(owner.state.targetId);
@@ -2376,9 +2412,9 @@ export class Avatar {
             this.state.position.body.vertices = 0;
         }
     }
- 
+
     reload() {
-     this.state.reloadTimeout.start();
+        this.state.reloadTimeout.start();
     }
 
     addItem(item, slot) {
@@ -2464,12 +2500,11 @@ export class Avatar {
         // walk to destination
         walk: if (this.state.path.engaged && !this.state.goto.engaged) {
             if (this.state.recording.useRecording) this.pauseRecording();
-         
             if (this.state.path.index === this.state.path.current.length) {
-              this.disengagePath();
-              break walk;
+                this.disengagePath();
+                break walk;
             }
-   
+
             let {
                 x,
                 y
@@ -2477,26 +2512,27 @@ export class Avatar {
             let next = this.map.GRAPH.find(x, y).id;
 
             if (!this.map.GRAPH.blocked.includes(next) && !this.map.GRAPH.reserved.includes(next)) {
-               this.state.goto.reserve = next;
-               this.map.GRAPH.reserved.push(next);
-               this.goto(x + 5, y - 5);
-            } else if (this.state.path.index !== 0) {
+                this.state.goto.reserve = next;
+                this.map.GRAPH.reserved.push(next);
+                this.goto(x + 5, y - 5);
+            } else if (this.state.path.index !== 0 && this.state.path.index !== this.state.path.current.length - 1) {
                 this.requestPath(this.state.path.end.x, this.state.path.end.y);
                 break walk;
+            } else if (this.state.path.index === this.state.path.current.length - 1) {
+                this.disengagePath();
             }
- 
+
             this.state.path.index++;
         }
 
         // attack target(s)
 
         if (this.state.target.id.length > 0) this.state.targetUpdateAnimation.run();
-        
+
         attack: if (this.state.target.current && this.state.target.engaged && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo > 0) {
             const m = this.map || $CURRENT_MAP;
             if (this.map.avatars[this.state.target.current.id]) {
-                    
-              if (!this.state.reload.loaded && !this.state.reloadTimeout.running) this.reload();
+                if (!this.state.reload.loaded && !this.state.reloadTimeout.running) this.reload();
 
                 const {
                     offsetX: targetX,
@@ -2508,7 +2544,9 @@ export class Avatar {
                     this.state.speed = this.state.baseSpeed * this.state.attack.attackSpeed;
                     this.state.fire = false;
                     if (!this.state.openCarry && this.state.draw) this.holsterWeapon();
-                    if (this.state.path.request && !this.state.path.engaged) this.requestPath(targetX + m.centerX, targetY + m.centerY);
+                    if (this.state.path.request && !this.state.path.engaged) {
+                        this.requestPath(targetX + m.centerX, targetY + m.centerY);
+                    }
                 } else if (dist < this.state.attack.settleDistance) {
                     if (this.state.path.engaged) this.disengagePath();
                     this.trans.rotation = Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX)) - 1.5708;
@@ -2530,12 +2568,14 @@ export class Avatar {
                         this.drawWeapon();
                         this.state.fire = true;
                     }
-                    if (!this.state.path.engaged) this.requestPath(targetX + m.centerX, targetY + m.centerY);
+                    if (!this.state.path.engaged) {
+                        this.requestPath(targetX + m.centerX, targetY + m.centerY);
+                    }
                 }
 
                 break attack;
             }
- 
+
             this.disengageTarget();
         }
 
@@ -2621,7 +2661,7 @@ export class Avatar {
         return false;
     }
 
-    disengageTarget() { 
+    disengageTarget() {
         this.state.target.engaged = false;
         this.state.target.current = undefined;
         this.state.speed = this.state.baseSpeed;
@@ -2633,6 +2673,7 @@ export class Avatar {
         } else {
             this.holsterWeapon();
         }
+
     }
 
     run() {
@@ -2645,37 +2686,36 @@ export class Avatar {
             this.requestPath(x, y);
         }
     }
- 
-    requestPath(x, y) { 
-      if (this.state.path.request) {
-        this.state.path.request = false;
-        this.state.pathRequestRateLimit.start();
 
-       let start = this.map.GRAPH.getPoint(this.trans.offsetX + this.map.centerX, this.trans.offsetY + this.map.centerY), end = this.map.GRAPH.getPoint(x, y);
+    requestPath(x, y) {
+        if (this.state.path.request) {
+            this.state.path.request = false;
+            this.state.pathRequestRateLimit.start();
 
-        if ((x >= -this.map.width / 2 && x < this.map.width / 2) && (y <= this.map.height / 2 && y > -this.map.height / 2) && start && end) {
-            this.state.path.start = start;           
-            this.state.path.end = end;
-            pathfinder.requestPath(this, this.state.path.start.unit, this.state.path.end.unit);
-          return true;
+            let start = this.map.GRAPH.getPoint(this.trans.offsetX + this.map.centerX, this.trans.offsetY + this.map.centerY),
+                end = this.map.GRAPH.getPoint(x, y);
+
+            if ((x >= -this.map.width / 2 && x < this.map.width / 2) && (y <= this.map.height / 2 && y > -this.map.height / 2) && start && end) {
+                this.state.path.start = start;
+                this.state.path.end = end;
+                pathfinder.requestPath(this, this.state.path.start.unit, this.state.path.end.unit);
+                return true;
+            }
         }
-     }
-
-     return false;
+        return false;
     }
 
     findPathTo(path) {
-      if (path.result && this.state.path.start) {
-         this.state.path.current = path.path;
-         this.state.path.current.unshift({
-           x: this.state.path.start.x,
-           y: this.state.path.start.y
-         });
+        if (path.result && this.state.path.start) {
+            this.state.path.current = path.path;
+            this.state.path.current.unshift({
+                x: this.state.path.start.x,
+                y: this.state.path.start.y
+            });
 
-         this.state.path.index = 0;
-         this.state.path.engaged = true;
-      }
-
+            this.state.path.index = 0;
+            this.state.path.engaged = true;
+        }
         return path;
     }
 
@@ -2691,10 +2731,10 @@ export class Avatar {
     gotoAvatar() {
         return this.requestPath(this.map.centerX, this.map.centerY);
     }
- 
+
     clean() {
-     if (this.state.goto.reserve) this.map.GRAPH.reserved.splice(this.map.GRAPH.reserved.indexOf(this.state.goto.reserve),1);
-    } 
+        if (this.state.goto.reserve) this.map.GRAPH.reserved.splice(this.map.GRAPH.reserved.indexOf(this.state.goto.reserve), 1);
+    }
 
     delete() {
         this.map.unlink(this.id);
@@ -2833,7 +2873,7 @@ export class Trigger {
 
 // class for generating graphs for maps, used for pathfinding..
 
- class _Graph_ {
+class _Graph_ {
     constructor(width, height, diagonal = false) {
 
         this.width = width;
@@ -2895,7 +2935,7 @@ export class Trigger {
     }
 
     getPath(s, g) {
-        
+
         function euclideanDistance(x1, y1, x2, y2) {
             return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
         }
@@ -2916,7 +2956,7 @@ export class Trigger {
         };
 
         while (open.length > 0) {
-          
+
             current = open.reduce((a, v) => {
                 return ((this.nodes[v].f < a.f || (this.nodes[v].f === a.f && this.nodes[v].h < a.h)) ? this.nodes[v] : a)
             }, {
@@ -2958,7 +2998,7 @@ export class Trigger {
                     edge.f = calc.f;
                     edge.g = calc.g;
                     edge.h = calc.h;
-                   if (!open.includes(edge.id)) open.push(edge.id); 
+                    if (!open.includes(edge.id)) open.push(edge.id);
                 }
             }
 
@@ -2988,7 +3028,7 @@ export class Trigger {
 
     getRandomPoint() {
         let p = this.nodes[random(this.nodeCount) || 1];
-       
+
         while (this.blocked.includes(p.id)) {
             p = this.nodes[random(this.nodeCount) || 1];
         }
@@ -3031,7 +3071,7 @@ export class _Map_ {
         isRecording: false,
         recording: []
     };
- 
+
     static _all = {};
 
     constructor(width = 100, height = 100, root = true) {
@@ -3077,7 +3117,7 @@ export class _Map_ {
         }
 
         this.groundPlate = new VisibleBarrier(0, 0, 500, 500, this.groundColor);
- 
+
         _Map_._all[this.id] = this;
     }
 
@@ -3237,7 +3277,7 @@ export class _Map_ {
             for (let i of obj.segments) {
                 this.GRAPH.evalObstacle((i[0] + obj.trans.offsetX) + this.centerX, (-(i[1]) + obj.trans.offsetY) + this.centerY, i[2], i[3]);
             }
-          }
+        }
     }
 
     getObject(index) {
@@ -3328,7 +3368,7 @@ export class _Map_ {
 
         for (let i of objs) {
             let attribs = i.slice(1, i.length);
-            let ob = new (eval(`${i[0]}`))(...attribs);
+            let ob = new(eval(`${i[0]}`))(...attribs);
             this.link(ob);
         }
 
