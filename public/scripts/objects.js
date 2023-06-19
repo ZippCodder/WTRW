@@ -2102,8 +2102,11 @@ export class Avatar {
                 target: undefined,
                 rush: false,
                 run: false,
+                lose: false,
+                engageDistance: 100,
                 slowdownDistance: 50,
-                settleDistance: 30
+                settleDistance: 30,
+                disengageDistance: 200
             },
             attack: {
                 engageDistance: 100,
@@ -2554,15 +2557,13 @@ export class Avatar {
                     offsetX: targetX,
                     offsetY: targetY
                 } = this.state.target.current.trans, dist = distance(this.trans.offsetX, this.trans.offsetY, targetX, targetY);
-                if (dist > this.state.attack.disengageDistance) {
+                if (dist > this.state.attack.disengageDistance && this.state.target.engaged) {
                     this.disengageTarget();
                 } else if (dist > this.state.attack.engageDistance) {
                     this.state.speed = this.state.baseSpeed * this.state.attack.attackSpeed;
                     this.state.fire = false;
                     if (!this.state.openCarry && this.state.draw) this.holsterWeapon();
-                    if (this.state.path.request && !this.state.path.engaged && !this.state.follow.target) {
-                        this.requestPath(targetX + m.centerX, targetY + m.centerY);
-                    }
+                    if (this.state.path.request && !this.state.path.engaged && !this.state.follow.target) this.requestPath(targetX + m.centerX, targetY + m.centerY);
                 } else if (dist < this.state.attack.settleDistance) {
                     if (this.state.path.engaged && !this.state.follow.target) this.disengagePath();
                     this.trans.rotation = Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX)) - 1.5708;
@@ -2594,7 +2595,32 @@ export class Avatar {
 
             this.disengageTarget();
         }
+  
+       // follow target
 
+       follow: if (this.state.follow.target) {
+
+                const {
+                    offsetX: targetX,
+                    offsetY: targetY
+                } = this.state.follow.target.trans, dist = distance(this.trans.offsetX, this.trans.offsetY, targetX, targetY), speed = (this.state.follow.run) ? this.state.runningSpeed:this.state.baseSpeed;
+
+                if (dist > this.state.follow.disengageDistance && this.state.follow.lose && this.state.path.engaged) {
+                    this.disengagePath();
+                } else if (dist > this.state.follow.engageDistance) {
+                    this.state.speed = speed;
+                    if (this.state.path.request && !this.state.path.engaged) this.requestPath(targetX + this.map.centerX, targetY + this.map.centerY);
+                } else if (dist < this.state.follow.settleDistance) {
+                    if (this.state.path.engaged) this.disengagePath();
+                } else if (dist < this.state.follow.slowdownDistance) {
+                    this.state.speed = speed/3;
+                } else if (dist < this.state.follow.engageDistance) {
+                    this.state.speed = speed;
+                    if (this.state.path.request && !this.state.path.engaged) this.requestPath(targetX + this.map.centerX, targetY + this.map.centerY);
+                }
+        }
+
+/*
         follow: if (this.state.follow.target) {
           let dist = distance(this.trans.offsetX, this.trans.offsetY, this.state.follow.target.trans.offsetX, this.state.follow.target.trans.offsetY);
                            
@@ -2607,7 +2633,7 @@ export class Avatar {
             this.disengagePath();
         }
        }
-
+      */
     }
 
     render() {
@@ -2695,7 +2721,7 @@ export class Avatar {
         this.state.target.current = undefined;
         this.state.speed = this.state.baseSpeed;
         this.state.fire = false;
-        if (this.state.path.engaged) this.disengagePath();
+        if (this.state.path.engaged && !this.state.follow.target) this.disengagePath();
 
         if (this.state.openCarry) {
             this.drawWeapon();

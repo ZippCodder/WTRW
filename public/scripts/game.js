@@ -34,7 +34,8 @@
       StreetLight,
       Chair,
       Table,
-      GLOCK_20
+      GLOCK_20,
+      VisibleBarrier
   } from "/public/scripts/objects.js";
 
   $AVATAR = new Avatar("R O B I N H O O D");
@@ -50,9 +51,10 @@
   $MAP.avatars[$AVATAR.id] = $AVATAR;
   $AVATAR.state.targetId = $AVATAR.id;
   $AVATAR.addItem(new GLOCK_20(0, 0, 0, 1000));
+  $AVATAR.state.reloadTimeout.timingConfig[0] = 0.5/5;
   $AVATAR.state.fireAnimation.rate = 0.5 / 10;
 
-  $MAP.link(new House1);
+  $MAP.parseLayoutScript("{\"layout\":[[\"House1\",0,0,0],[\"VisibleBarrier\",104.65972963347923,-4.629227292965751,30,30,[40,40,40,1]],[\"VisibleBarrier\",140.065464069508,-66.4899330444957,30,30,[40,40,40,1]],[\"VisibleBarrier\",57.73721279964687,-137.80435610930422,30,30,[40,40,40,1]],[\"VisibleBarrier\",30.498893395974584,-92.32562234625011,30,30,[40,40,40,1]],[\"VisibleBarrier\",-70.13124774710485,-113.50482610897879,30,30,[40,40,40,1]],[\"VisibleBarrier\",-113.09985395136292,-63.48763711222307,30,30,[40,40,40,1]],[\"VisibleBarrier\",-139.0705694684533,-5.95440910339623,30,30,[40,40,40,1]],[\"VisibleBarrier\",-189.3686148500412,-65.97027694088055,30,30,[40,40,40,1]],[\"VisibleBarrier\",-18.39336239091861,-125.10420429600453,10,60,[40,40,40,1]],[\"VisibleBarrier\",-140.29049302814167,-145.62316880873894,10,60,[40,40,40,1]],[\"VisibleBarrier\",-175.49736906626978,-164.0455808737822,10,60,[40,40,40,1]],[\"VisibleBarrier\",94.10964351202827,-86.18373034044895,10,60,[40,40,40,1]],[\"VisibleBarrier\",158.44832504201423,32.04931320622287,10,60,[40,40,40,1]],[\"VisibleBarrier\",-151.104465358621,-50.98076214780906,10,10,[40,40,40,1]],[\"VisibleBarrier\",-151.33919644275088,-91.55277110288303,10,10,[40,40,40,1]],[\"VisibleBarrier\",-182.39188487435925,-107.48221185761673,10,10,[40,40,40,1]],[\"VisibleBarrier\",-160.95114123086765,-120.7562654060795,10,10,[40,40,40,1]],[\"VisibleBarrier\",-115.64006249676555,-110.3028129769354,10,10,[40,40,40,1]],[\"VisibleBarrier\",-176.85053332252508,-33.53877788652521,10,10,[40,40,40,1]],[\"VisibleBarrier\",-100.23071035694062,-20.432715061242952,10,10,[40,40,40,1]],[\"VisibleBarrier\",-68.75748396403137,-75.90693343809735,10,10,[40,40,40,1]],[\"VisibleBarrier\",-93.39099519149113,-159.86101934773058,10,10,[40,40,40,1]],[\"VisibleBarrier\",12.651929735963918,-133.37110246053678,10,10,[40,40,40,1]],[\"VisibleBarrier\",66.51198185805396,-91.08163692091676,10,10,[40,40,40,1]],[\"VisibleBarrier\",142.3324992341645,-30.366127221546748,10,10,[40,40,40,1]]],\"settings\":{\"groundColor\":[255,255,255,1],\"lighting\":false,\"darkness\":1},\"root\":true,\"nodes\":3,\"children\":[{\"layout\":[],\"settings\":{\"groundColor\":[255,255,255,1],\"lighting\":false,\"darkness\":1},\"root\":false,\"nodes\":0,\"children\":[]},{\"layout\":[],\"settings\":{\"groundColor\":[255,255,255,1],\"lighting\":false,\"darkness\":1},\"root\":false,\"nodes\":0,\"children\":[]},{\"layout\":[],\"settings\":{\"groundColor\":[255,255,255,1],\"lighting\":false,\"darkness\":1},\"root\":false,\"nodes\":0,\"children\":[]}]}");
   $MAP.translate(100, 0);
 
   let id = genObjectId();
@@ -60,14 +62,14 @@
   let b = new Avatar("Keanu Reeves", 0, 0);
   $MAP.link(b);
   b.exclude = true;
-  b.state.armor = 3000;
+  b.state.armor = 5000;
   b.state.aggressive = true;
-  b.state.follow.settleDistance = 20;
-  b.state.follow.run = true;
   b.addItem(new GLOCK_20(0, 0, 0, 1000));
   b.state.targetId = b.id;
-  //b.follow($AVATAR.id);
-  //b.killTarget([id], true);
+  b.state.reloadTimeout.timingConfig[0] = 0.5/5;
+  b.state.fireAnimation.rate = 0.5 / 10;
+  b.follow($AVATAR.id);
+  b.killTarget([id], true);
 
  /* 
   let c = new Avatar("Beatrice", 5, 5);
@@ -130,7 +132,7 @@
       a.state.armor = 0;
       a.state.aggressive = false;
       a.state.passive = false;
-      a.state.targetUpdateAnimation.rate = 0.2;
+      a.state.targetUpdateAnimation.rate = 1/5;
       a.addItem(new GLOCK_20(0, 0, 0, 1000));
       a.state.fireAnimation.rate = 0.5 / 1;
       a.state.targetId = id;
