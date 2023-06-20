@@ -35,7 +35,9 @@
       Chair,
       Table,
       GLOCK_20,
-      VisibleBarrier
+      Text,
+      VisibleBarrier,
+      DownwardLight
   } from "/public/scripts/objects.js";
 
   $AVATAR = new Avatar("R O B I N H O O D");
@@ -47,7 +49,7 @@
   //$MAP.parseLayoutScript(Map1);
 
   $CURRENT_MAP = $MAP;
-  $MAP.showGeometry();
+  //$MAP.showGeometry();
   $MAP.avatars[$AVATAR.id] = $AVATAR;
   $AVATAR.state.targetId = $AVATAR.id;
   $AVATAR.addItem(new GLOCK_20(0, 0, 0, 1000));
@@ -69,7 +71,11 @@
   b.state.reloadTimeout.timingConfig[0] = 0.5/5;
   b.state.fireAnimation.rate = 0.5 / 10;
   b.follow($AVATAR.id);
-  b.killTarget([id], true);
+ // b.killTarget([id], true);
+
+  $MAP.lighting = true;
+  $MAP.darkness = 10;
+  $MAP.link(new DownwardLight);
 
  /* 
   let c = new Avatar("Beatrice", 5, 5);

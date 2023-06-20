@@ -215,9 +215,12 @@ window.onload = async () => {
           fragment[3] = fragment[3]*transparency;
 
         if (lightColor[3] != 0.0 && !(fragment[0] == 0.0 && fragment[1] == 0.0 && fragment[2] == 0.0 && fragment[3] == 0.0)) {
-          fragment[0] = lightColor[0];
-          fragment[1] = lightColor[1];
-          fragment[2] = lightColor[2];
+
+          float d = 1.0/fragment[0];
+
+          fragment[0] = lightColor[0]/d;
+          fragment[1] = lightColor[1]/d;
+          fragment[2] = lightColor[2]/d;
         }
                    
         gl_FragColor = fragment;

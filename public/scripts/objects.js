@@ -1110,7 +1110,7 @@ export class StreetLight extends _StaticClusterClient_ {
 
     constructor(initialX, initialY, initialRotation, color) {
         super(initialX, initialY, initialRotation);
-        this._color = color || [255, 255, 255, 1];
+        this._color = color || undefined;
         this.lights = [new DownwardLight(this.trans.offsetX - 13, this.trans.offsetY - 11.5, 0, this._color), new DownwardLight(this.trans.offsetX + 13, this.trans.offsetY - 11.5, 0, this._color)];
     }
 
@@ -2102,7 +2102,7 @@ export class Avatar {
                 target: undefined,
                 rush: false,
                 run: false,
-                lose: false,
+                forget: false,
                 engageDistance: 100,
                 slowdownDistance: 50,
                 settleDistance: 30,
@@ -2605,8 +2605,12 @@ export class Avatar {
                     offsetY: targetY
                 } = this.state.follow.target.trans, dist = distance(this.trans.offsetX, this.trans.offsetY, targetX, targetY), speed = (this.state.follow.run) ? this.state.runningSpeed:this.state.baseSpeed;
 
-                if (dist > this.state.follow.disengageDistance && this.state.follow.lose && this.state.path.engaged) {
+                if (dist > this.state.follow.disengageDistance) {
+                  if (this.state.follow.forget && this.state.path.engaged) {
                     this.disengagePath();
+                  } else if (this.state.path.request && !this.state.path.engaged) {
+                    this.requestPath(targetX + this.map.centerX, targetY + this.map.centerY);
+                  }
                 } else if (dist > this.state.follow.engageDistance) {
                     this.state.speed = speed;
                     if (this.state.path.request && !this.state.path.engaged) this.requestPath(targetX + this.map.centerX, targetY + this.map.centerY);
@@ -2620,20 +2624,6 @@ export class Avatar {
                 }
         }
 
-/*
-        follow: if (this.state.follow.target) {
-          let dist = distance(this.trans.offsetX, this.trans.offsetY, this.state.follow.target.trans.offsetX, this.state.follow.target.trans.offsetY);
-                           
-        if (dist > this.state.follow.settleDistance && !this.state.path.engaged) {
-         this.requestPath(this.state.follow.target.trans.offsetX + this.map.centerX, this.state.follow.target.trans.offsetY + this.map.centerY);
-          break follow;
-        }
-    
-        if (dist < this.state.follow.settleDistance && this.state.path.engaged) {
-            this.disengagePath();
-        }
-       }
-      */
     }
 
     render() {
