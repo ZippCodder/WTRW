@@ -2203,7 +2203,6 @@ export class Avatar {
                 this.translate(tx, ty);
 
                 if (this.state.goto.x === this.trans.offsetX && this.state.goto.y === this.trans.offsetY) {
-                    if (this.state.goto.reserve) this.map.GRAPH.reserved.splice(this.map.GRAPH.reserved.indexOf(this.state.goto.reserve), 1); 
                     this.disengageGoto();
                 }
             }, this, 0.03),
