@@ -2102,7 +2102,6 @@ export class Avatar {
                 target: undefined,
                 rush: false,
                 run: false,
-                forget: false,
                 engageDistance: 100,
                 slowdownDistance: 50,
                 settleDistance: 30,
@@ -2429,6 +2428,10 @@ export class Avatar {
        this.state.speed = (this.state.follow.run) ? this.state.runningSpeed:this.state.baseSpeed;
        this.state.follow.target = this.map.avatars[id];
     }
+ 
+    disengageFollow() {
+     this.state.follow.target = undefined;
+    }
 
     addItem(item, slot) {
         let r = this.inventory.addItem(item, slot);
@@ -2605,23 +2608,20 @@ export class Avatar {
                     offsetY: targetY
                 } = this.state.follow.target.trans, dist = distance(this.trans.offsetX, this.trans.offsetY, targetX, targetY), speed = (this.state.follow.run) ? this.state.runningSpeed:this.state.baseSpeed;
 
-                if (dist > this.state.follow.disengageDistance) {
-                  if (this.state.follow.forget && this.state.path.engaged) {
-                    this.disengagePath();
-                  } else if (this.state.path.request && !this.state.path.engaged) {
-                    this.requestPath(targetX + this.map.centerX, targetY + this.map.centerY);
-                  }
-                } else if (dist > this.state.follow.engageDistance) {
+                if (dist > this.state.follow.settleDistance) {
                     this.state.speed = speed;
-                    if (this.state.path.request && !this.state.path.engaged) this.requestPath(targetX + this.map.centerX, targetY + this.map.centerY);
-                } else if (dist < this.state.follow.settleDistance) {
-                    if (this.state.path.engaged) this.disengagePath();
-                } else if (dist < this.state.follow.slowdownDistance) {
+                    if (this.state.path.request && !this.state.path.engaged) {
+                      this.requestPath(targetX + this.map.centerX, targetY + this.map.centerY);
+                    }
+                } 
+
+                if (dist < this.state.follow.slowdownDistance && dist > this.state.settleDistance) {
                     this.state.speed = speed/3;
-                } else if (dist < this.state.follow.engageDistance) {
-                    this.state.speed = speed;
-                    if (this.state.path.request && !this.state.path.engaged) this.requestPath(targetX + this.map.centerX, targetY + this.map.centerY);
-                }
+                } else if (dist < this.state.follow.settleDistance) {
+                  if (this.state.path.engaged) {
+                    this.disengagePath();
+                  }
+                } 
         }
 
     }
@@ -2681,6 +2681,7 @@ export class Avatar {
     disengageGoto() {
         this.state.goto.engaged = false;
         this.state.walking = false;
+        if (this.state.goto.reserve) this.map.GRAPH.reserved.splice(this.map.GRAPH.reserved.indexOf(this.state.goto.reserve), 1);
     }
 
     killTarget(ids, multiple, invert) {
