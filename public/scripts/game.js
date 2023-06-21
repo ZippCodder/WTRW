@@ -61,19 +61,19 @@
 
   let id = genObjectId();
 
-  let b = new Avatar("Keanu Reeves", 0, 0);
+  let b = new Avatar("Keanu Reeves", 0, 50);
   $MAP.link(b);
   b.exclude = true;
   b.state.armor = 5000;
-  b.state.aggressive = true;
+  b.state.aggressive = false;
   b.addItem(new GLOCK_20(0, 0, 0, 1000));
   b.state.targetId = b.id;
-  b.state.attack.attackSpeed = 3;
+  b.state.baseSpeed = 3;
   b.state.reloadTimeout.timingConfig[0] = 0.5/5;
   b.state.targetUpdateAnimation.rate = 0.5/5;
   b.state.fireAnimation.rate = 0.5 / 10; 
-  b.follow($AVATAR.id);
- // b.killTarget([id], true);
+  //b.follow($AVATAR.id);
+  b.killTarget([id], true);
 
   $MAP.lighting = true;
   $MAP.darkness = 10;
@@ -125,8 +125,8 @@
       c.state.targetUpdateAnimation.rate = 1/5; 
       c.state.targetId = c.id;
       c.killTarget([id],true); */
-/*
-  for (let i = 1; i <= 40; i++) {
+  
+  for (let i = 1; i <= 30; i++) {
       let {
           x,
           y
@@ -145,7 +145,7 @@
       a.state.targetId = id;
       a.killTarget([$AVATAR.id]);
   }
-*/
+
   // Developer console
 
   let consoleActive = false;

@@ -2579,7 +2579,7 @@ export class Avatar {
                         this.drawWeapon();
                         this.state.fire = true;
                     }
-                    if (!this.state.follow.rush || !this.state.follow.target) this.state.speed = (this.state.baseSpeed / 3) * this.state.attack.attackSpeed;
+                    if (!this.state.follow.rush || !this.state.follow.target) this.state.speed = this.state.baseSpeed * (this.state.attack.attackSpeed/3);
                 } else if (dist < this.state.attack.engageDistance) {
                     this.state.speed = this.state.baseSpeed * this.state.attack.attackSpeed;
                     this.trans.rotation = Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX)) - 1.5708;
@@ -2605,7 +2605,7 @@ export class Avatar {
                 const {
                     offsetX: targetX,
                     offsetY: targetY
-                } = this.state.follow.target.trans, dist = distance(this.trans.offsetX, this.trans.offsetY, targetX, targetY), speed = (this.state.follow.run) ? this.state.runningSpeed:this.state.baseSpeed;
+                } = this.state.follow.target.trans, dist = distance(this.trans.offsetX, this.trans.offsetY, targetX, targetY), speed = (this.state.follow.run) ? this.state.runningSpeed*this.state.baseSpeed:this.state.baseSpeed;
 
                 if (dist > this.state.follow.settleDistance) {
                     this.state.speed = speed;
@@ -3176,10 +3176,19 @@ export class _Map_ {
             let ob = this.objects[i];
             if (ob.preRender && !this.freeze) ob.preRender();
 
-            if (!(ob instanceof Barrier || ob instanceof Trigger) && !ob.bottomLayer && !ob.topLayer && !ob.hasCluster && !ob.hidden && this.show) {
+            if (!(ob instanceof Barrier || ob instanceof Trigger || ob instanceof Avatar) && !ob.bottomLayer && !ob.topLayer && !ob.hasCluster && !ob.hidden && this.show) {
                 ob.render();
             }
         }
+  
+        for (let i in this.avatars) {
+            let av = this.avatars[i];
+
+            if (av.preRender && !this.freeze) av.preRender();
+            if (this.show) {
+              av.render();
+            }
+        } 
     }
 
     renderTopLayer() {
