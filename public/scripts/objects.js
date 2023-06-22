@@ -2723,12 +2723,12 @@ export class Avatar {
 
     run() {
         if (!this.state.path.engaged && !this.state.follow.target) {
-            let {
-                x,
-                y
-            } = (this.map || $CURRENT_MAP).GRAPH.getRandomPoint();
+            let point = this.map.GRAPH.getRandomPoint();
+
+            if (point) {
             this.state.speed = this.state.runningSpeed * this.state.baseSpeed;
-            this.requestPath(x, y);
+            this.requestPath(point.x, point.y);
+            }
         }
     }
 
@@ -2934,6 +2934,7 @@ class _Graph_ {
                 this.f = 0;
                 this.g = 0;
                 this.h = 0;
+                this.id = undefined;
                 this.edges = edges;
                 this.parent = undefined;
                 this.fresh = true;
@@ -3065,17 +3066,13 @@ class _Graph_ {
     }
 
     getRandomPoint() {
-        let p = this.nodes[random(this.nodeCount) || 1];
+        let p = false;
 
-        while (this.blocked.includes(p.id)) {
+        while (!p || (this.blocked.includes(p.id) && this.blocked.length !== this.nodeCount)) {
             p = this.nodes[random(this.nodeCount) || 1];
         }
-
-        return {
-            x: p.position.x,
-            y: p.position.y,
-            unit: p.id
-        };
+       
+        return (p) ? {x: p.position.x - this.map.centerX, y: p.position.y - this.map.centerY}:p;
     }
 
     evalObstacle(x, y, width, height) {
@@ -3141,6 +3138,7 @@ export class _Map_ {
         this.clusters = {};
         this.interactables = {};
         this.GRAPH = new _Graph_(this.units.width, this.units.height, true);
+        this.GRAPH.map = this; 
         this.SUB_MAP_COUNT = 0;
         this.SUB_MAPS = {};
         this.PARENT_MAP = undefined;

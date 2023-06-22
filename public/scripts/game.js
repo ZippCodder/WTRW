@@ -75,8 +75,8 @@
   //b.follow($AVATAR.id);
   b.killTarget([id], true);
 
-  $MAP.lighting = true;
-  $MAP.darkness = 10;
+  //$MAP.lighting = true;
+  //$MAP.darkness = 10;
 
  /* 
   let c = new Avatar("Beatrice", 5, 5);
@@ -125,13 +125,11 @@
       c.state.targetUpdateAnimation.rate = 1/5; 
       c.state.targetId = c.id;
       c.killTarget([id],true); */
-  
-  for (let i = 1; i <= 30; i++) {
-      let {
-          x,
-          y
-      } = $MAP.GRAPH.getRandomPoint();
-      let a = new Avatar(String(i), x, y);
+
+  for (let i = 1; i <= 40; i++) {
+      let {x,y} = $MAP.GRAPH.getRandomPoint();
+      
+      let a = new Avatar(String(i), x+5, y-5);
       $MAP.link(a);
       a.state.attack.engageDistance = 300;
       a.state.attack.disengageDistance = 500;
