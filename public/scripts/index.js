@@ -4,8 +4,9 @@ import {
 
 /*
 @TODO 
-- Finish issues and features with avatars
-- Fix error with map layout printing
+- Add avatar shot detection
+- Fix avatar stacking
+- create system for avatar skins managment
 */
 
 window.onload = async () => {

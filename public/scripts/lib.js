@@ -379,13 +379,14 @@ export class MultiFrameLoopAnimation {
 }
 
 export class MultiFrameLinearAnimation {
-    constructor(frames, object, timingConfig, endFunc, animationMultFactor) {
+    constructor(frames, object, timingConfig, endFunc, animationMultFactor = 1, fill = false) {
         this.frames = frames;
         this.object = object;
         this.nextFrame = 0;
         this.running = false;
         this.reset = false;
-        this.animationMultFactor = animationMultFactor || 1;
+        this.animationMultFactor = animationMultFactor;
+        this.fill = fill;
         this.timingConfig = timingConfig;
         this.duration = timingConfig.reduce((p, c) => p + c, 0);
         this.lastFrameDraw = undefined;
@@ -403,6 +404,8 @@ export class MultiFrameLinearAnimation {
                 this.running = true;
                 this.lastFrameDraw = Date.now();
             }
+ 
+            if (this.fill) this.frames[this.nextFrame]();
 
             this.lapsedTime = (Date.now() - this.lastFrameDraw) / 1000;
             if (this.lapsedTime >= this.timingConfig[this.nextFrame] * this.animationMultFactor) {

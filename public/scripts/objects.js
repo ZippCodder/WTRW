@@ -2222,12 +2222,15 @@ export class Avatar {
             }, this, 0.01),
             fireAnimation: undefined,
             recoilAnimation: new MultiFrameLinearAnimation([function() {
+                this.state.position.body.vertices = 1;
                 this.state.position.body.texture = 5;
             }, function() {
+                this.state.position.body.vertices = 1;
                 this.state.position.body.texture = 4;
             }], this, [0.05, 0.05], function() {
+                this.state.position.body.vertices = 1;
                 this.state.position.body.texture = 4;
-            }, 0.5),
+            }, 0.5, true),
             walkingAnimation: new MultiFrameLoopAnimation([function() {
                 this.state.position.body.texture = 2;
             }, function() {
@@ -2489,18 +2492,19 @@ export class Avatar {
 
     preRender() {
         // run animations
+       
         this.state.blinkingAnimation.run();
-
+        
         if (this.state.walking && this.state.draw === false) {
             this.state.walkingAnimation.run();
         } else {
-            this.state.walkingAnimation.end();
+           this.state.walkingAnimation.end();
         }
-
+        
         if (this.state.draw) {
             this.state.position.body.texture = 4;
             this.state.position.body.vertices = 1;
-        }
+        } 
 
         if (this.state.fire && this.state.reload.loaded && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo) {
             this.state.fireAnimation.run();
