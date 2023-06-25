@@ -312,6 +312,24 @@ export function random(max, mirror) {
     return (!mirror) ? n : (Math.random() < 0.5) ? n : -n;
 }
 
+export function isIntersecting(a1, b1, a2, b2) {
+  function getOrientation(p, q, r) {
+    let o = (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y);
+    return o === 0 ? 0 : o < 1 ? -1 : 1;
+  }
+
+  let o1 = getOrientation(a1, b1, a2);
+  let o2 = getOrientation(a1, b1, b2);
+  let o3 = getOrientation(a2, b2, a1);
+  let o4 = getOrientation(a2, b2, b1);
+
+  return o1 !== o2 && o3 !== o4;
+}
+
+export function lineIntersectsBox(p1, p2, box) {
+ 
+}
+
 // Animation creation objects
 
 export class LoopAnimation {
