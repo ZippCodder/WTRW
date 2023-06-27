@@ -15,7 +15,8 @@ import {
     Inventory,
     fromRGB,
     toRGB,
-    rotate
+    rotate,
+    lineIntersectsBox
 } from "/public/scripts/lib.js";
 
 const pathfinder = new Worker("/public/scripts/pathfinder.js");
@@ -227,7 +228,7 @@ export class _BulletCluster_ {
                         for (let segment of this.map.obstacles[o].segments) {
                             let [ox, oy, ow, oh] = segment;
 
-                            ox = (0 + ox) + this.map.obstacles[o].trans.offsetX;
+                            ox = ox + this.map.obstacles[o].trans.offsetX;
                             ox += ow / 2;
                             oy = (0 - oy) + this.map.obstacles[o].trans.offsetY;
                             oy -= oh / 2;
@@ -2092,7 +2093,8 @@ export class Avatar {
             target: {
                 current: undefined,
                 id: [],
-                engaged: false
+                engaged: false,
+                shot: false
             },
             reload: {
                 progress: 0,
@@ -2131,7 +2133,37 @@ export class Avatar {
             openCarry: false,
             equippedItems: {
                 mainTool: undefined
-            },
+            }, 
+            shotCheckAnimation: new LoopAnimation(function() {
+                this.state.target.shot = true;
+                
+                outer: for (let o in this.map.obstacles) {
+                  let obstacle = this.map.obstacles[o];
+		   
+                         if (obstacle.id === this.id || obstacle.id === this.state.target.current.id) continue;
+                        
+                         for (let segment of obstacle.segments) {
+                            let [ox, oy, ow, oh] = segment;
+
+                            ox = ox + obstacle.trans.offsetX;
+                            oy = oy + obstacle.trans.offsetY; 
+
+                            let p1 = this.trans.offsetX;
+                            let p2 = this.trans.offsetY;
+                            let p3 = this.state.target.current.trans.offsetX;
+                            let p4 = this.state.target.current.trans.offsetY;
+
+                            let result = lineIntersectsBox(p1,p2,p3,p4,ox,oy,ow,oh);
+
+                            if (result) {
+                              this.state.target.shot = !result;
+                              break outer;
+                            }
+                        }
+                     }
+
+                 console.log(this.state.target.shot);
+            }, this, 0.05), 
             reloadTimeout: new MultiFrameLinearAnimation([function() {
                 this.state.reload.progress = 0;
                 this.state.reload.loaded = true;
@@ -2511,7 +2543,7 @@ export class Avatar {
             this.state.position.body.vertices = 1;
         } 
 
-        if (this.state.fire && this.state.reload.loaded && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo) {
+        if (this.state.fire && this.state.target.shot && this.state.reload.loaded && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo) {
             this.state.fireAnimation.run();
         }
 
@@ -2564,6 +2596,7 @@ export class Avatar {
             const m = this.map || $CURRENT_MAP;
             if (this.map.avatars[this.state.target.current.id]) {
                 if (!this.state.reload.loaded && !this.state.reloadTimeout.running) this.reload();
+                this.state.shotCheckAnimation.run();
 
                 const {
                     offsetX: targetX,
@@ -2816,6 +2849,10 @@ export class Barrier {
 
         this.translate(x, y);
     }
+
+    delete() {
+        this.map.unlink(this.id);
+    }
 }
 
 // export class for visible barriers
@@ -2862,6 +2899,10 @@ export class VisibleBarrier extends _Object_ {
         this.obstacle = true;
         this.name = "visible barrier";
         this.type = "barrier";
+    }
+
+    delete() {
+        this.map.unlink(this.id);
     }
 }
 

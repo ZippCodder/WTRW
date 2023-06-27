@@ -56,8 +56,9 @@
   $AVATAR.state.reloadTimeout.timingConfig[0] = 0.5/5;
   $AVATAR.state.fireAnimation.rate = 0.5 / 1;
 
-  $MAP.parseLayoutScript("{\"layout\":[[\"House1\",0,0,0],[\"VisibleBarrier\",104.65972963347882,-4.629227292965737,30,30,[40,40,40,1]],[\"VisibleBarrier\",140.06546406950736,-66.48993304449547,30,30,[40,40,40,1]],[\"VisibleBarrier\",57.737212799645235,-137.80435610930397,30,30,[40,40,40,1]],[\"VisibleBarrier\",30.49889339597364,-92.3256223462499,30,30,[40,40,40,1]],[\"VisibleBarrier\",-70.13124774710568,-113.50482610897862,30,30,[40,40,40,1]],[\"VisibleBarrier\",-113.09985395136405,-63.48763711222286,30,30,[40,40,40,1]],[\"VisibleBarrier\",-139.07056946845407,-5.954409103396202,30,30,[40,40,40,1]],[\"VisibleBarrier\",-189.36861485003985,-65.97027694088032,30,30,[40,40,40,1]],[\"VisibleBarrier\",-18.393362390918725,-125.10420429600444,10,60,[40,40,40,1]],[\"VisibleBarrier\",-140.29049302814244,-145.62316880873908,10,60,[40,40,40,1]],[\"VisibleBarrier\",-175.49736906626873,-164.04558087378211,10,60,[40,40,40,1]],[\"VisibleBarrier\",94.10964351202755,-86.18373034044853,10,60,[40,40,40,1]],[\"VisibleBarrier\",158.44832504201412,32.04931320622346,10,60,[40,40,40,1]],[\"VisibleBarrier\",-151.10446535862133,-50.98076214780916,10,10,[40,40,40,1]],[\"VisibleBarrier\",-151.3391964427513,-91.55277110288282,10,10,[40,40,40,1]],[\"VisibleBarrier\",-182.39188487435814,-107.48221185761662,10,10,[40,40,40,1]],[\"VisibleBarrier\",-160.9511412308674,-120.75626540607927,10,10,[40,40,40,1]],[\"VisibleBarrier\",-115.64006249676648,-110.30281297693527,10,10,[40,40,40,1]],[\"VisibleBarrier\",-176.85053332252406,-33.53877788652507,10,10,[40,40,40,1]],[\"VisibleBarrier\",-100.2307103569419,-20.43271506124293,10,10,[40,40,40,1]],[\"VisibleBarrier\",-68.75748396403222,-75.90693343809664,10,10,[40,40,40,1]],[\"VisibleBarrier\",-93.39099519149228,-159.86101934773072,10,10,[40,40,40,1]],[\"VisibleBarrier\",12.651929735963648,-133.37110246053646,10,10,[40,40,40,1]],[\"VisibleBarrier\",66.51198185805235,-91.08163692091655,10,10,[40,40,40,1]],[\"VisibleBarrier\",142.3324992341639,-30.36612722154669,10,10,[40,40,40,1]],[\"StreetLight\",106.57927241621671,54.001223700790106,0,null],[\"StreetLight\",77.67863792028076,-79.26416062133629,0,null],[\"StreetLight\",-33.45092595319815,-48.52335096295401,0,null],[\"StreetLight\",-89.24068040908452,20.324730916273083,0,null],[\"StreetLight\",-91.91652804583156,104.38185423757541,0,null],[\"StreetLight\",34.370489967855534,131.0005146031299,0,null]],\"settings\":{\"groundColor\":[255,255,255,1],\"lighting\":true,\"darkness\":10},\"root\":true,\"nodes\":3,\"children\":[{\"layout\":[],\"settings\":{\"groundColor\":[255,255,255,1],\"lighting\":false,\"darkness\":1},\"root\":false,\"nodes\":0,\"children\":[]},{\"layout\":[],\"settings\":{\"groundColor\":[255,255,255,1],\"lighting\":false,\"darkness\":1},\"root\":false,\"nodes\":0,\"children\":[]},{\"layout\":[],\"settings\":{\"groundColor\":[255,255,255,1],\"lighting\":false,\"darkness\":1},\"root\":false,\"nodes\":0,\"children\":[]}]}");
-  $MAP.translate(100, 0);
+  //$MAP.parseLayoutScript("{\"layout\":[[\"House1\",0,0,0],[\"VisibleBarrier\",104.65972963347882,-4.629227292965737,30,30,[40,40,40,1]],[\"VisibleBarrier\",140.06546406950736,-66.48993304449547,30,30,[40,40,40,1]],[\"VisibleBarrier\",57.737212799645235,-137.80435610930397,30,30,[40,40,40,1]],[\"VisibleBarrier\",30.49889339597364,-92.3256223462499,30,30,[40,40,40,1]],[\"VisibleBarrier\",-70.13124774710568,-113.50482610897862,30,30,[40,40,40,1]],[\"VisibleBarrier\",-113.09985395136405,-63.48763711222286,30,30,[40,40,40,1]],[\"VisibleBarrier\",-139.07056946845407,-5.954409103396202,30,30,[40,40,40,1]],[\"VisibleBarrier\",-189.36861485003985,-65.97027694088032,30,30,[40,40,40,1]],[\"VisibleBarrier\",-18.393362390918725,-125.10420429600444,10,60,[40,40,40,1]],[\"VisibleBarrier\",-140.29049302814244,-145.62316880873908,10,60,[40,40,40,1]],[\"VisibleBarrier\",-175.49736906626873,-164.04558087378211,10,60,[40,40,40,1]],[\"VisibleBarrier\",94.10964351202755,-86.18373034044853,10,60,[40,40,40,1]],[\"VisibleBarrier\",158.44832504201412,32.04931320622346,10,60,[40,40,40,1]],[\"VisibleBarrier\",-151.10446535862133,-50.98076214780916,10,10,[40,40,40,1]],[\"VisibleBarrier\",-151.3391964427513,-91.55277110288282,10,10,[40,40,40,1]],[\"VisibleBarrier\",-182.39188487435814,-107.48221185761662,10,10,[40,40,40,1]],[\"VisibleBarrier\",-160.9511412308674,-120.75626540607927,10,10,[40,40,40,1]],[\"VisibleBarrier\",-115.64006249676648,-110.30281297693527,10,10,[40,40,40,1]],[\"VisibleBarrier\",-176.85053332252406,-33.53877788652507,10,10,[40,40,40,1]],[\"VisibleBarrier\",-100.2307103569419,-20.43271506124293,10,10,[40,40,40,1]],[\"VisibleBarrier\",-68.75748396403222,-75.90693343809664,10,10,[40,40,40,1]],[\"VisibleBarrier\",-93.39099519149228,-159.86101934773072,10,10,[40,40,40,1]],[\"VisibleBarrier\",12.651929735963648,-133.37110246053646,10,10,[40,40,40,1]],[\"VisibleBarrier\",66.51198185805235,-91.08163692091655,10,10,[40,40,40,1]],[\"VisibleBarrier\",142.3324992341639,-30.36612722154669,10,10,[40,40,40,1]],[\"StreetLight\",106.57927241621671,54.001223700790106,0,null],[\"StreetLight\",77.67863792028076,-79.26416062133629,0,null],[\"StreetLight\",-33.45092595319815,-48.52335096295401,0,null],[\"StreetLight\",-89.24068040908452,20.324730916273083,0,null],[\"StreetLight\",-91.91652804583156,104.38185423757541,0,null],[\"StreetLight\",34.370489967855534,131.0005146031299,0,null]],\"settings\":{\"groundColor\":[255,255,255,1],\"lighting\":true,\"darkness\":10},\"root\":true,\"nodes\":3,\"children\":[{\"layout\":[],\"settings\":{\"groundColor\":[255,255,255,1],\"lighting\":false,\"darkness\":1},\"root\":false,\"nodes\":0,\"children\":[]},{\"layout\":[],\"settings\":{\"groundColor\":[255,255,255,1],\"lighting\":false,\"darkness\":1},\"root\":false,\"nodes\":0,\"children\":[]},{\"layout\":[],\"settings\":{\"groundColor\":[255,255,255,1],\"lighting\":false,\"darkness\":1},\"root\":false,\"nodes\":0,\"children\":[]}]}");
+  $MAP.translate(0, 0);
+  $MAP.noclip=true;
 
   let id = genObjectId();
 
@@ -73,11 +74,13 @@
   b.state.targetUpdateAnimation.rate = 0.5/5;
   b.state.fireAnimation.rate = 0.5 / 10; 
   //b.follow($AVATAR.id);
-  b.killTarget([id], true);
+  b.killTarget([$AVATAR.id]);
+  //b.translate(0,30);
 
+  $MAP.darkness = 1;
+  $MAP.lighting = false;
   //$MAP.lighting = true;
   //$MAP.darkness = 10;
-
  /* 
   let c = new Avatar("Beatrice", 5, 5);
   $MAP.link(c);
@@ -110,10 +113,13 @@
   e.addItem(new GLOCK_20(0, 0, 0, 1000));
   e.state.targetId = b.id;
   e.follow($AVATAR.id);
-  //c.killTarget([id], true);
+  //c.killTarget([id], true); */
 
-  // $MAP.link(new VisibleBarrier(10,10,10,10));
-  // console.log(b.findPathTo(-30,-30));
+  $MAP.link(new VisibleBarrier(0,0,40,40));
+  $MAP.link(new VisibleBarrier(-80,0,40,40));
+  $MAP.link(new VisibleBarrier(80,0,40,40));
+  $MAP.link(new House1(0,150));
+  $MAP.showGeometry();
   /*
       let c = new Avatar("Trinity", -20, 0);
       $MAP.link(c);
@@ -125,7 +131,7 @@
       c.state.targetUpdateAnimation.rate = 1/5; 
       c.state.targetId = c.id;
       c.killTarget([id],true); */
-
+/*
   for (let i = 1; i <= 40; i++) {
       let {x,y} = $MAP.GRAPH.getRandomPoint();
       
@@ -143,7 +149,7 @@
       a.state.targetId = id;
       a.killTarget([$AVATAR.id]);
   } 
-
+*/
   // Developer console
 
   let consoleActive = false;
