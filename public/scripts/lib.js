@@ -326,8 +326,8 @@ export function isIntersecting(a1, b1, a2, b2) {
   return o1 !== o2 && o3 !== o4;
 }
 
-export function lineIntersectsBox(p1, p2, p3, p4, bx, by, bw, bh) {
-  return isIntersecting({x: p1, y: p2},{x: p3, y: p4},{x:  bx, y: by},{x: bx+bw, y: by}) || isIntersecting({x: p1, y: p2},{x: p3, y: p4},{x:  bx, y: by},{x: bx, y: by+bh}) || isIntersecting({x: p1, y: p2},{x: p3, y: p4},{x:  bx+bw, y: by+bh},{x: bx, y: by+bh}) || isIntersecting({x: p1, y: p2},{x: p3, y: p4},{x:  bx+bw, y: by+bh},{x: bx+bw, y: by}); 
+export function lineIntersectsBox(p1, p2, box) {
+ 
 }
 
 // Animation creation objects
