@@ -47,6 +47,8 @@ export function draw(a, w, h, iw, ih, s, lw, tx, ty, attribs = [], canvas) {
         let bounds = [];
 
         for (let i of a) {
+          if (i[4] === 0) continue;
+
             let [x,
                 y,
                 tw,
@@ -55,9 +57,7 @@ export function draw(a, w, h, iw, ih, s, lw, tx, ty, attribs = [], canvas) {
             x -= (w / 2) + (lw / 2);
             y -= (h / 2) + (lw / 2);
             tw += lw;
-            th += lw;
-
-            if (i[4] === 0) continue;
+            th += lw; 
 
             bounds.push([x / s, y / s, tw / s, th / s]);
         }
