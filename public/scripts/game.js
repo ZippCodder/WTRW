@@ -68,7 +68,7 @@
   b.state.aggressive = false;
   b.addItem(new GLOCK_20(0, 0, 0, 1000));
   b.state.targetId = b.id;
-  b.state.baseSpeed = 3;
+  b.state.baseSpeed = 1;
   b.state.reloadTimeout.timingConfig[0] = 0.5/5;
   b.state.targetUpdateAnimation.rate = 0.5/5;
   b.state.fireAnimation.rate = 0.5 / 10; 
@@ -112,8 +112,17 @@
   e.follow($AVATAR.id);
   //c.killTarget([id], true);
 
+<<<<<<< Updated upstream
   // $MAP.link(new VisibleBarrier(10,10,10,10));
   // console.log(b.findPathTo(-30,-30));
+=======
+  //$MAP.link(new VisibleBarrier(0,0,40,40));
+  //$MAP.link(new VisibleBarrier(-80,0,40,40));
+  //$MAP.link(new VisibleBarrier(80,0,40,40));
+  $MAP.link(new Chair(0,0));
+  $MAP.showGeometry();
+  $MAP.noclip=false;
+>>>>>>> Stashed changes
   /*
       let c = new Avatar("Trinity", -20, 0);
       $MAP.link(c);
