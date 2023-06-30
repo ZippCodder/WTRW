@@ -110,18 +110,12 @@ class TextureData {
         }
 
         for (let i of this.boundingBoxes) {
-
             i[0] *= this.size;
             i[1] *= this.size;
             i[0] += this.offset.x;
             i[1] += this.offset.y;
-
             i[2] *= this.size;
             i[3] *= this.size;
- 
-            let diff = (this.bodyDimensions.height) - Math.min(Math.abs(0-i[1]),Math.abs(this.bodyDimensions.height-i[1]));
-            i[1] += (i[1] < this.bodyDimensions.height/2) ? diff:-diff; 
-          
         }
     }
 
@@ -3562,16 +3556,17 @@ export let ROAD_SIGN = new TextureData(10, 10, 0.2, "prop", {
     ctx.restore();
 }, undefined, 0, 0, 0, 0);
 
-export let PICNIC_TABLE = new TextureData(10, -40, 0.2, "prop", {
+export let PICNIC_TABLE = new TextureData(2, -8, 0.2, "prop", {
     width: 1400,
     height: 850
 }, [
     [0, 170, 400, 900],
     [400, 50, 600, 1000],
     [1000, 170, 400, 900],
+    [300, 1050, 800, 200, 0]
 ], 20, undefined, function(ctx) {
     ctx.save();
-    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.translate(this.offset.x, this.offset.y);
     ctx.scale(this.size, this.size);
     ctx.beginPath();
     ctx.lineWidth = 20;
@@ -3914,14 +3909,15 @@ export let LIGHT_SWITCH = new TextureData(2, 2, 0.2, "prop", {
     ctx.restore();
 });
 
-export let STREET_LIGHT = new TextureData(730, -190, 0.2, "prop", {
+export let STREET_LIGHT = new TextureData(146, -38, 0.2, "prop", {
     width: 1550,
     height: 2450
 }, [
-    [0, 0, 1550, 2450],[30, 2200, 60, 430]
+    [0, 0, 1550, 2450]
 ], 0, undefined, function(ctx) {
+    // 146, -38
     ctx.save();
-    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.translate(this.offset.x, this.offset.y);
     ctx.scale(this.size, this.size);
     ctx.beginPath();
     ctx.lineWidth = 20;
@@ -4106,11 +4102,11 @@ export let ROCKS_2 = new TextureData(0, 0, 0.2, "prop", {
     ctx.restore();
 });
 
-export let CHAIR = new TextureData(10, -50, 0.2, "prop", {
+export let CHAIR = new TextureData(0, 0, 0.2, "prop", {
     width: 520,
     height: 750
 }, [
-    [0, 0, 520, 680] 
+    [0, 0, 520, 680]
 ], 0, undefined, function(ctx) {
     // 2, -10
     ctx.save();

@@ -1103,7 +1103,7 @@ export class StreetLight extends _StaticClusterClient_ {
     texture = textures.streetlight;
     obstacle = true;
     segments = [
-       [-0.3,-24.5,1.2,8.6]
+        [-0.7, 16.2, 1.4, 8]
     ];
     topLayer = true;
     on = false;
@@ -1252,7 +1252,7 @@ export class Chair extends _StaticClusterClient_ {
     interactable = true;
     minDistance = 12;
     segments = [
-        [-5,-8.5,10.4,13.6]
+        [-5.2, -7.5, 10.4, 13.6]
     ];
 
     action() {
@@ -2131,57 +2131,7 @@ export class Avatar {
             openCarry: false,
             equippedItems: {
                 mainTool: undefined
-<<<<<<< Updated upstream
             },
-=======
-            }, 
-            shotCheckAnimation: new LoopAnimation(function() {
-                this.state.target.shot = true;
-                
-                outer: for (let o in this.map.obstacles) {
-                  let obstacle = this.map.obstacles[o];
-		   
-                         if (obstacle.id === this.id || obstacle.id === this.state.target.current.id) continue;
-                        
-                         for (let segment of obstacle.segments) {
-                            let [ox, oy, ow, oh] = segment;
-
-                       /*
-                       let [ox,
-                            oy,
-                            ow,
-                            oh
-                        ] = segment;
-
-                        ox = ox + this.obstacles[i].trans.offsetX;
-                        ox += ow / 2;
-                        oy = (0 - oy) + this.obstacles[i].trans.offsetY;
-                        oy -= oh / 2;
-
-                        -14.2, -9.3, 28.4, 16.4
-                        [-5.2, -7.5, 10.4, 13.6]
-                        */
-
-                            ox = ox + obstacle.trans.offsetX;
-                            oy = oy + obstacle.trans.offsetY;
-
-                            let p1 = this.trans.offsetX;
-                            let p2 = this.trans.offsetY;
-                            let p3 = this.state.target.current.trans.offsetX;
-                            let p4 = this.state.target.current.trans.offsetY;
-
-                            let result = lineIntersectsBox(p1,p2,p3,p4,ox,oy,ow,oh);
-
-                            if (result) {
-                              this.state.target.shot = !result;
-                              break outer;
-                            }
-                        }
-                     }
-
-                 console.log(this.state.target.shot);
-            }, this, 0.05), 
->>>>>>> Stashed changes
             reloadTimeout: new MultiFrameLinearAnimation([function() {
                 this.state.reload.progress = 0;
                 this.state.reload.loaded = true;
@@ -3496,7 +3446,7 @@ export class _Map_ {
                             oh
                         ] = segment;
 
-                        ox = ox + this.obstacles[i].trans.offsetX;
+                        ox = (0 + ox) + this.obstacles[i].trans.offsetX;
                         ox += ow / 2;
                         oy = (0 - oy) + this.obstacles[i].trans.offsetY;
                         oy -= oh / 2;
