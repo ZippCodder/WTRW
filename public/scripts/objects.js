@@ -230,8 +230,8 @@ export class _BulletCluster_ {
 
                             ox = ox + this.map.obstacles[o].trans.offsetX;
                             ox += ow / 2;
-                            oy = (0 - oy) + this.map.obstacles[o].trans.offsetY;
-                            oy -= oh / 2;
+                            oy = oy + this.map.obstacles[o].trans.offsetY;
+                            oy += oh / 2;
 
                             if ((Math.abs(ox - b.trans.offsetX) < (b.width / 2 + ow / 2)) && (Math.abs(oy - b.trans.offsetY) < (b.height / 2 + oh / 2))) {
                                 b.delete();
@@ -2083,7 +2083,7 @@ export class Avatar {
                 current: undefined,
                 id: [],
                 engaged: false,
-                shot: false
+                shot: true
             },
             reload: {
                 progress: 0,
@@ -3478,8 +3478,8 @@ export class _Map_ {
 
                         ox = ox + this.obstacles[i].trans.offsetX;
                         ox += ow / 2;
-                        oy = (0 - oy) + this.obstacles[i].trans.offsetY;
-                        oy -= oh / 2;
+                        oy = oy + this.obstacles[i].trans.offsetY;
+                        oy += oh / 2;
 
                         if ((Math.round(Math.abs($AVATAR.trans.offsetY - (oy))) < Math.round(($AVATAR.bounds.height / 2) + (oh / 2))) && (Math.abs($AVATAR.trans.offsetX - (ox - x)) < ($AVATAR.bounds.width / 2) + (ow / 2))) {
                             if (!(this.obstacles[i] instanceof Sensor)) {
