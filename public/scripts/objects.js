@@ -1104,7 +1104,7 @@ export class StreetLight extends _StaticClusterClient_ {
     texture = textures.streetlight;
     obstacle = true;
     segments = [
-       [-0.3,-24.5,1.2,8.6]
+       [-0.3,-24.3,1.2,8.6]
     ];
     topLayer = true;
     on = false;
@@ -1253,7 +1253,7 @@ export class Chair extends _StaticClusterClient_ {
     interactable = true;
     minDistance = 12;
     segments = [
-        [-5,-8.5,10.4,13.6]
+        [-5,-5.7,10,13]
     ];
 
     action() {
@@ -1394,9 +1394,7 @@ export class PicnicTable extends _StaticClusterClient_ {
     clusterName = "picnic table";
     texture = textures.picnictable;
     segments = [
-        [-14.2, -6.3, 8.4, 18.4],
-        [-6.2, -8.7, 12.4, 20.4],
-        [5.8, -6.3, 8.4, 18.4]
+        [-14.2,-11.7,8.4,18.4],[-6.2,-11.3,12.4,20.4],[5.8,-11.7,8.4,18.4]
     ];
     interactable = true;
     minDistance = 20;
@@ -1596,7 +1594,7 @@ export class Table extends _StaticClusterClient_ {
     texture = textures.table;
     obstacle = true;
     segments = [
-        [-14.2, -9.3, 28.4, 16.4]
+        [-14.2,-6.7,28.4,16.4]
     ];
 
     constructor(initialX, initialY, initialRotation) {
@@ -1684,16 +1682,7 @@ export class House1 extends _Building_ {
     texture = textures.house1;
     obstacle = true;
     segments = [
-        [12.5, 25, 50, 24],
-        [-71.5, 7, 34, 34],
-        [-73.5, -93, 111, 70],
-        [2.5, -3, 70, 30],
-        [2.5, 21, 10, 30],
-        [62.5, 21, 10, 30],
-        [2.5, -85, 70, 64],
-        [2.5, -65, 6, 64],
-        [66.5, -65, 6, 64],
-        [-71.5, -85, 78, 120]
+       [12.5,-49,50,24],[-71.5,-41,34,34],[-73.5,23,111,70],[2.5,-27,70,30],[2.5,-51,10,30],[62.5,-51,10,30],[2.5,21,70,64],[2.5,1,6,64],[66.5,1,6,64],[-71.5,-35,78,120]     
     ];
 
     constructor(initialX, initialY, initialRotation) {

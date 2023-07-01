@@ -118,10 +118,7 @@ class TextureData {
 
             i[2] *= this.size;
             i[3] *= this.size;
- 
-            let diff = (this.bodyDimensions.height) - Math.min(Math.abs(0-i[1]),Math.abs(this.bodyDimensions.height-i[1]));
-            i[1] += (i[1] < this.bodyDimensions.height/2) ? diff:-diff; 
-          
+           
         }
     }
 
@@ -2804,7 +2801,7 @@ export let MAIN_AVATAR_WALKING_2 = new TextureData(-1, -1, 0.2, "avatar", {
     ctx.restore();
 }, [0]);
 
-export let TABLE = new TextureData(2, 2, 0.2, "avatar", {
+export let TABLE = new TextureData(10, 10, 0.2, "avatar", {
     width: 1400,
     height: 910
 }, [
@@ -2813,7 +2810,7 @@ export let TABLE = new TextureData(2, 2, 0.2, "avatar", {
     [1260, 800, 100, 110, 0]
 ], 20, undefined, function(ctx) {
     ctx.save();
-    ctx.translate(this.offset.x, this.offset.y);
+    ctx.translate(this.offset.vx, this.offset.vy);
     ctx.scale(this.size, this.size);
 
     ctx.beginPath();
@@ -4110,11 +4107,11 @@ export let CHAIR = new TextureData(10, -50, 0.2, "prop", {
     width: 520,
     height: 750
 }, [
-    [0, 0, 520, 680] 
+    [0, 60, 500, 650]
 ], 0, undefined, function(ctx) {
     // 2, -10
     ctx.save();
-    ctx.translate(this.offset.x, this.offset.y);
+    ctx.translate(this.offset.vx, this.offset.vy);
     ctx.scale(this.size, this.size);
     ctx.beginPath();
     ctx.lineWidth = 20;
