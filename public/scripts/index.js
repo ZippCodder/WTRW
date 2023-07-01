@@ -3,8 +3,9 @@ import {
 } from "/public/scripts/lib.js";
 
 /*
-@TODO 
-- Add avatar shot detection
+@TODO
+- Implement avatar changable follow target
+- Implement avatar rotation accuracy 
 - Fix avatar stacking
 - create system for avatar skins managment
 */

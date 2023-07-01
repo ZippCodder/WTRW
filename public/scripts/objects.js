@@ -2150,9 +2150,7 @@ export class Avatar {
                             }
                         }
                      }
-
-                 console.log(this.state.target.shot);
-            }, this, 0.05), 
+            }, this, 0.5), 
             reloadTimeout: new MultiFrameLinearAnimation([function() {
                 this.state.reload.progress = 0;
                 this.state.reload.loaded = true;
@@ -2599,7 +2597,10 @@ export class Avatar {
                     if (!this.state.openCarry && this.state.draw) this.holsterWeapon();
                     if (this.state.path.request && !this.state.path.engaged && !this.state.follow.target) this.requestPath(targetX + m.centerX, targetY + m.centerY);
                 } else if (dist < this.state.attack.settleDistance) {
-                    if (this.state.path.engaged && !this.state.follow.target) this.disengagePath();
+                    if (this.state.target.shot && this.state.path.engaged && !this.state.follow.target) {
+                     this.disengagePath();
+                    }
+
                     this.trans.rotation = Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX)) - 1.5708;
                     if (!this.state.draw) {
                         this.drawWeapon();
@@ -2611,6 +2612,7 @@ export class Avatar {
                         this.drawWeapon();
                         this.state.fire = true;
                     }
+
                     if (!this.state.follow.rush || !this.state.follow.target) this.state.speed = this.state.baseSpeed * (this.state.attack.attackSpeed/3);
                 } else if (dist < this.state.attack.engageDistance) {
                     this.state.speed = this.state.baseSpeed * this.state.attack.attackSpeed;
@@ -2623,6 +2625,8 @@ export class Avatar {
                         this.requestPath(targetX + m.centerX, targetY + m.centerY);
                     }
                 }
+ 
+                if (!this.state.target.shot && this.state.path.request && !this.state.path.engaged && !this.state.follow.target) this.requestPath(targetX + m.centerX, targetY + m.centerY)
 
                 break attack;
             }
