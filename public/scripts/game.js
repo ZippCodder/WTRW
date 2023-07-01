@@ -37,7 +37,8 @@
       GLOCK_20,
       Text,
       VisibleBarrier,
-      DownwardLight
+      DownwardLight,
+      Barrier
   } from "/public/scripts/objects.js";
 
   $AVATAR = new Avatar("R O B I N H O O D");
@@ -56,7 +57,7 @@
   $AVATAR.state.reloadTimeout.timingConfig[0] = 0.5/5;
   $AVATAR.state.fireAnimation.rate = 0.5 / 10;
 
-  $MAP.parseLayoutScript("{\"layout\":[[\"Chair\",0,0,0],[\"VisibleBarrier\",79.9999999999999,0,40,40,[40,40,40,1]],[\"StreetLight\",38.699203287709274,9.099536998574237,0,null],[\"Text\",\"Welcome to the Real World\",10,[0,0,0,1],4.7497554982911385,44.43014810018445,0,false],[\"Text\",\"Welcome to the Real World\",10,[245,255,143,null],-13.05642616168079,32.38006470468627,0,false],[\"Text\",\"Welcome to the Real World\",10,[245,255,143,1],-13.05642616168079,32.38006470468627,0,false],[\"Text\",\"Welcome to the Real World\",10,[142,132,234,1],10.49190331470944,20.806837333513762,0,false],[\"Text\",\"Welcome to the Real World\",10,[142,132,234,0.2],4.386183578591963,26.39996300465254,0,false],[\"Text\",\"Welcome to the Real World\",10,[142,132,234,0.5],4.386183578591963,26.39996300465254,0,false],[\"Text\",\"Welcome to the Real World\",10,[142,132,234,0.8],-16.69993428424891,13.407557204725336,0,false],[\"Text\",\"Welcome to the Real World\",10,[142,132,234,0.7],-21.45378094867793,9.069093307020452,0,false],[\"Text\",\"Welcome to the Real World\",10,[142,132,234,0.6],-25.665320026436987,3.403705276014364,0,false],[\"Text\",\"Welcome to the Real World\",10,[142,132,234,0],45.916226092950126,68.13810304203076,0,false],[\"VisibleBarrier\",10.526514745252825,103.97031990556872,100,5,[123,243,243,1]],[\"VisibleBarrier\",8.973985986901349,156.5825185075051,100,5,[123,243,243,1]],[\"VisibleBarrier\",-40.76698125553952,130.09976739312194,5,50,[253,132,122,1]],[\"VisibleBarrier\",61.24942730437391,129.78593285254092,5,50,[253,132,122,1]],[\"VisibleBarrier\",30.353832763960874,141.80803493791035,5,25,[70,97,100,1]],[\"VisibleBarrier\",-2.6346265561068805,141.73880688004908,5,25,[70,97,100,1]],[\"VisibleBarrier\",17.088756698450865,115.22086715483533,5,25,[70,97,100,1]],[\"VisibleBarrier\",-8.653431234060164,129.22996967193512,120,25,[70,97,10,1]],[\"VisibleBarrier\",-36.352889837856566,83.28489772820262,5,25,[30,144,255,1]],[\"VisibleBarrier\",19.290552965365997,75.1684556748579,5,25,[30,144,200,1]],[\"VisibleBarrier\",6.413629060947004,87.80306993267037,5,25,[30,144,200,1]],[\"VisibleBarrier\",-5.360167098704551,48.03170382229456,5,25,[30,144,200,1]],[\"VisibleBarrier\",-27.594919371931383,44.92848956958822,5,25,[30,144,200,1]]],\"settings\":{\"groundColor\":[255,255,255,1],\"lighting\":false,\"darkness\":1},\"root\":true,\"nodes\":0,\"children\":[]}"); 
+  //$MAP.parseLayoutScript("{\"layout\":[[\"Chair\",0,0,0],[\"VisibleBarrier\",79.9999999999999,0,40,40,[40,40,40,1]],[\"StreetLight\",38.699203287709274,9.099536998574237,0,null],[\"Text\",\"Welcome to the Real World\",10,[0,0,0,1],4.7497554982911385,44.43014810018445,0,false],[\"Text\",\"Welcome to the Real World\",10,[245,255,143,null],-13.05642616168079,32.38006470468627,0,false],[\"Text\",\"Welcome to the Real World\",10,[245,255,143,1],-13.05642616168079,32.38006470468627,0,false],[\"Text\",\"Welcome to the Real World\",10,[142,132,234,1],10.49190331470944,20.806837333513762,0,false],[\"Text\",\"Welcome to the Real World\",10,[142,132,234,0.2],4.386183578591963,26.39996300465254,0,false],[\"Text\",\"Welcome to the Real World\",10,[142,132,234,0.5],4.386183578591963,26.39996300465254,0,false],[\"Text\",\"Welcome to the Real World\",10,[142,132,234,0.8],-16.69993428424891,13.407557204725336,0,false],[\"Text\",\"Welcome to the Real World\",10,[142,132,234,0.7],-21.45378094867793,9.069093307020452,0,false],[\"Text\",\"Welcome to the Real World\",10,[142,132,234,0.6],-25.665320026436987,3.403705276014364,0,false],[\"Text\",\"Welcome to the Real World\",10,[142,132,234,0],45.916226092950126,68.13810304203076,0,false],[\"VisibleBarrier\",10.526514745252825,103.97031990556872,100,5,[123,243,243,1]],[\"VisibleBarrier\",8.973985986901349,156.5825185075051,100,5,[123,243,243,1]],[\"VisibleBarrier\",-40.76698125553952,130.09976739312194,5,50,[253,132,122,1]],[\"VisibleBarrier\",61.24942730437391,129.78593285254092,5,50,[253,132,122,1]],[\"VisibleBarrier\",30.353832763960874,141.80803493791035,5,25,[70,97,100,1]],[\"VisibleBarrier\",-2.6346265561068805,141.73880688004908,5,25,[70,97,100,1]],[\"VisibleBarrier\",17.088756698450865,115.22086715483533,5,25,[70,97,100,1]],[\"VisibleBarrier\",-8.653431234060164,129.22996967193512,120,25,[70,97,10,1]],[\"VisibleBarrier\",-36.352889837856566,83.28489772820262,5,25,[30,144,255,1]],[\"VisibleBarrier\",19.290552965365997,75.1684556748579,5,25,[30,144,200,1]],[\"VisibleBarrier\",6.413629060947004,87.80306993267037,5,25,[30,144,200,1]],[\"VisibleBarrier\",-5.360167098704551,48.03170382229456,5,25,[30,144,200,1]],[\"VisibleBarrier\",-27.594919371931383,44.92848956958822,5,25,[30,144,200,1]]],\"settings\":{\"groundColor\":[255,255,255,1],\"lighting\":false,\"darkness\":1},\"root\":true,\"nodes\":0,\"children\":[]}"); 
 
   $MAP.translate(0, 0);
 
@@ -74,7 +75,7 @@
   b.state.targetUpdateAnimation.rate = 0.5/5;
   b.state.fireAnimation.rate = 0.5 / 10; 
   //b.follow($AVATAR.id);
-  b.killTarget([$AVATAR.id]);
+  b.killTarget([id], true);
   //b.translate(0,30);
 
   $MAP.darkness = 1;
@@ -135,7 +136,7 @@
       c.state.targetId = c.id;
       c.killTarget([id],true); */
 /*
-  for (let i = 1; i <= 40; i++) {
+  for (let i = 1; i <= 30; i++) {
       let {x,y} = $MAP.GRAPH.getRandomPoint();
       
       let a = new Avatar(String(i), x+5, y-5);

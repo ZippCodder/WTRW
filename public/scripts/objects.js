@@ -2815,7 +2815,7 @@ export class Avatar {
 export class Barrier {
     constructor(x, y, width, height) {
         this.segments = [
-            [0, 0, width, height]
+            [0, -height, width, height]
         ];
 
         this.trans = {
