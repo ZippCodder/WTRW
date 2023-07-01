@@ -1,6 +1,6 @@
 # Notes
 
-##Theme
+## Theme
 
 * Green - #33ff5c
 * Red - #ff3643 
@@ -9,7 +9,7 @@
 * Gray - #E3E3E3
 * Light gray - #F3F3F3
 
-##TODO
+## TODO
 
 1. Add avatar rotation accuracy ajdustment
 2. Add changable avatar follow target
