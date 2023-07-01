@@ -2,14 +2,6 @@ import {
     LoopAnimation
 } from "/public/scripts/lib.js";
 
-/*
-@TODO
-- Implement avatar changable follow target
-- Implement avatar rotation accuracy 
-- Fix avatar stacking
-- create system for avatar skins managment
-*/
-
 window.onload = async () => {
 
     window.canvas = document.querySelector("canvas");

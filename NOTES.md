@@ -2,5 +2,8 @@ Theme: Green - #33ff5c, Red - #ff3643, Darker gray - #3C3C3C, Dark gray - #A3A3A
 
 @TODO
 
-- Fix avatars not running when out of ammo and shot 
-- Fix avatars not pursuing when shoe at certain distances in aggressive mode
+- Add avatar rotation accuracy ajdustment
+- Add changable avatar follow target
+- Fix avatar stacking
+- Create avatar skin managment system
+- Add avatar settings inupt object 

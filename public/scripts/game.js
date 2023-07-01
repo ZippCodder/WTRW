@@ -75,7 +75,7 @@
   b.state.targetUpdateAnimation.rate = 0.5/5;
   b.state.fireAnimation.rate = 0.5 / 10; 
   //b.follow($AVATAR.id);
-  b.killTarget([id], true);
+  b.killTarget([$AVATAR.id], true);
   //b.translate(0,30);
 
   $MAP.darkness = 1;
@@ -135,7 +135,7 @@
       c.state.targetUpdateAnimation.rate = 1/5; 
       c.state.targetId = c.id;
       c.killTarget([id],true); */
-
+/*
   for (let i = 1; i <= 30; i++) {
       let {x,y} = $MAP.GRAPH.getRandomPoint();
       
@@ -152,7 +152,7 @@
       a.state.fireAnimation.rate = 0.5 / 1;
       a.state.targetId = id;
       a.killTarget([b.id]);
-  } 
+  } */
 
   // Developer console
 
