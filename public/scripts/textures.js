@@ -271,6 +271,52 @@ export let ACTION_BUTTON_TEXTURE = new TextureData(0, 0, 1, "control", {
     ctx.stroke();
 }, [], 600, 600);
 
+export let RELOAD_BUTTON_TEXTURE = new TextureData(0, 0, 1.3, "control", {
+    width: 260,
+    height: 260
+}, [
+    [0, 0, 260, 260]
+], 0, undefined, function(ctx) {
+    // base body: 600x600, texture: 1024x1024, size: 20
+    ctx.scale(this.size || 0, this.size || 0);
+    ctx.translate(-200, -200);
+
+    ctx.fillStyle = "black";
+    ctx.globalAlpha = 0.7;
+    ctx.lineWidth = 15;
+    ctx.strokeStyle = "white";
+    ctx.moveTo(300, 300);
+    ctx.arc(300, 300, 100, 0, 2 * Math.PI);
+    ctx.fill();
+
+    ctx.translate(300,300);
+    ctx.rotate(10);
+    ctx.translate(-300,-300);
+
+    ctx.beginPath();
+
+    ctx.translate(300,300);
+    ctx.rotate(0.15);
+    ctx.translate(-300,-300);
+
+    ctx.arc(300, 300, 40, 0, (2 * Math.PI)*0.75);
+
+    ctx.translate(300,300);
+    ctx.rotate(-0.15);
+    ctx.translate(-300,-300);
+
+    ctx.translate(-2.5,-13);
+    ctx.moveTo(338.5,320);
+    ctx.lineTo(348,302);
+ 
+    ctx.moveTo(349,298);
+    ctx.lineTo(322,318);
+    ctx.moveTo(339,298);
+    ctx.lineTo(360,323);
+    ctx.stroke();
+
+}, [], 260, 260);
+
 /* icon container */
 
 export let ICONS = new TextureData(0, 0, 1, "control", {

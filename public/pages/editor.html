@@ -100,6 +100,7 @@
             GLOCK_20_TOP_2, 
             LUXURY_APARTMENT,
             HOUSE_1,
+            RELOAD_BUTTON_TEXTURE,
             Sheet
         } from "/public/scripts/textures.js";
 
@@ -146,9 +147,10 @@
         //CAFE(-18, -18, 0.2);
         //MAIN_AVATAR_DEFAULT(-5, -5, 0.2);
   
-        resize(1550, 2450); // 1474 1864
+        resize(260, 260); // 1474 1864
         // export function draw(a, w, h, iw, ih, s, lw, attribs=[],canvas) {
-        let texture = HOUSE_1//new Sheet([ROAD_RAIL,ROAD_SIGN,URBAN_FENCE_HALF,URBAN_FENCE,URBAN_FENCE_VERTICAL], 1024, 1024);
+        let texture = RELOAD_BUTTON_TEXTURE//new Sheet([ROAD_RAIL,ROAD_SIGN,URBAN_FENCE_HALF,URBAN_FENCE,URBAN_FENCE_VERTICAL], 1024, 1024);
+        //ACTION_BUTTON_TEXTURE.render(ctx);
         //MAIN_AVATAR_DEFAULT.render(ctx);
         //GLOCK_20.render(ctx);
         //URBAN_FENCE.render(ctx);
@@ -158,6 +160,6 @@
        // log(texture.getData());
           log(texture.getData());
           console.log(texture.textureDimensions);
-        setSource(`house1.png`); 
+        setSource(`RELOAD_BUTTON_TEXTURE_2.png`); 
     </script>
 </html>

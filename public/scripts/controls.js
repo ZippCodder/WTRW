@@ -32,6 +32,11 @@
   }, 8.5);
   $ACTION_BUTTON.hidden = true;
 
+ /* $RELOAD_BUTTON = new _Button_(textures.reloadbutton, textures.reloadbuttonactive, (worldWidth / 2) - 30, 0, function(pX, pY) {
+      const i = $CURRENT_MAP.interactables[$CURRENT_MAP.currentInteractable.id];
+      if (i) i.action();
+  }, 4.8); */
+
   function moveJoystick(e, m = true) {
       e.preventDefault();
 

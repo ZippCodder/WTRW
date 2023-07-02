@@ -50,6 +50,7 @@ window.onload = async () => {
     window.$JOYSTICK_R = null;
     window.$CURRENT_MAP = null;
     window.$ACTION_BUTTON = null;
+    window.$RELOAD_BUTTON = null;
     window.$AVATAR = null;
     window.$MAP = null;
     window.viewportWidth = window.innerWidth;
@@ -326,7 +327,9 @@ window.onload = async () => {
         roads: document.querySelector("#roads"),
         fences: document.querySelector("#fences"),
         luxuryapartment: document.querySelector("#luxuryapartment"),
-        house1: document.querySelector("#house1")
+        house1: document.querySelector("#house1"), 
+        reloadbutton: document.querySelector("#reloadbutton"),
+        reloadbuttonactive: document.querySelector("#reloadbuttonactive")
     }
 
     gl.uniform1f(locations.worldUnitX, worldUnitX);
@@ -375,6 +378,7 @@ window.onload = async () => {
     $CONTROLS.push($JOYSTICK_L);
     $CONTROLS.push($JOYSTICK_R);
     $CONTROLS.push($ACTION_BUTTON);
+    //$CONTROLS.push($RELOAD_BUTTON);
 
     let loadingScreen = document.querySelector("#loading-screen");
     let gameStats = document.querySelector("#game-stats");
