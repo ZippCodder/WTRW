@@ -13,6 +13,8 @@
 
 1. Add avatar rotation accuracy ajdustment
 2. Add changable avatar follow target
-3. Fix avatar stacking
-4. Create avatar skin managment system
-5. Add avatar settings inupt object 
+3. Implement avatar death and respawn system
+4. Fix avatar stacking
+5. Create avatar skin managment system
+6. Add avatar settings inupt object
+7. Implement explovives
