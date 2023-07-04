@@ -18,3 +18,4 @@
 5. Create avatar skin managment system
 6. Add avatar settings inupt object
 7. Implement explovives
+8. Add fixed joysticks option
