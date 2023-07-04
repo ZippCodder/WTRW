@@ -61,8 +61,8 @@ window.onload = async () => {
     window.minViewport = Math.min(viewportWidth, viewportHeight);
     window.scale = 1.2;
     window.joystickSizes = {
-        left: 3,
-        right: 3
+        left: 1.5,
+        right: 1.5
     };
     window.controlTransparency = 1;
     window.bulletResolution = 0.001;
