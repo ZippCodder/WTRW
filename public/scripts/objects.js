@@ -3714,7 +3714,7 @@ export class Text extends _Object_ {
 /* GAME CONTROL ELEMENTS */
 
 export class _Button_ extends _Object_ {
-    constructor(textureSrc, textureActiveSrc, initialX, initialY, action, radius) {
+    constructor(textureSrc, textureActiveSrc, initialX, initialY, action, radius, scale = 1, toggle = false) {
         super([-8.571428571428571, 8.571428571428571, 1, 0, 0, 8.571428571428571, 8.571428571428571, 1, 1, 0, -8.571428571428571, -8.571428571428571, 1, 0, 1, 8.571428571428571, 8.571428571428571, 1, 1, 0, -8.571428571428571, -8.571428571428571, 1, 0, 1, 8.571428571428571, -8.571428571428571, 1, 1, 1], function() {
 
             this.buffer = gl.createBuffer();
@@ -3748,25 +3748,33 @@ export class _Button_ extends _Object_ {
             gl.useProgram(program);
         }, function() {
             ext.bindVertexArrayOES(this.vao);
-            gl.uniform2fv(locations.translation, [this.trans.offsetX, this.trans.offsetY]);
+            gl.uniform2fv(locations.translation, [this.trans.offsetX*this.scale, this.trans.offsetY*this.scale]);
             gl.uniform1f(locations.rotation, this.trans.rotation);
             gl.uniform1f(locations.scale, this.scale);
+   
+            (this.enabled) ? gl.uniform1f(locations.transparency, 1/controlTransparency):gl.uniform1f(locations.transparency, 0.5/controlTransparency);
 
             gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
             gl.activeTexture(gl.TEXTURE0);
-            if (this.active) {
-                gl.bindTexture(gl.TEXTURE_2D, this.textureActive);
-            } else {
-                gl.bindTexture(gl.TEXTURE_2D, this.texture);
-            }
+ 
+              if ((this.active && !toggle) || (toggle && !this.on)) {
+                  gl.bindTexture(gl.TEXTURE_2D, this.textureActive);
+              } else if ((!this.active && !toggle) || (toggle && this.on)) {
+                  gl.bindTexture(gl.TEXTURE_2D, this.texture);
+              }
+            
             gl.useProgram(program);
 
             gl.drawArrays(gl.TRIANGLES, 0, this.vertices.length / 5);
+            gl.uniform1f(locations.transparency, 1);
         }, radius * 2, radius * 2, initialX, initialY, 0);
         this.type = "button";
-        this.scale = 1;
-        this.radius = radius;
-        this.action = action;
+        this.scale = scale;
+        this.enabled = true;
+        this.active = false;
+        this.radius = radius/scale;
+        this.on = false;
+        this.action = action.bind(this);
     }
 }
 
@@ -3802,6 +3810,7 @@ export class _Joystick_ extends _Object_ {
                 gl.uniform2fv(locations.translation, [this.base.x * scale, this.base.y * scale]);
                 gl.uniform1f(locations.rotation, 0);
                 gl.uniform1f(locations.scale, this.scale);
+                gl.uniform1f(locations.transparency, 1/controlTransparency);
 
                 gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
                 gl.bufferData(gl.ARRAY_BUFFER, this.vertices, gl.DYNAMIC_DRAW);
@@ -3813,6 +3822,7 @@ export class _Joystick_ extends _Object_ {
                 gl.uniform2fv(locations.translation, [this.thumb.x * scale, this.thumb.y * scale]);
                 gl.bufferData(gl.ARRAY_BUFFER, this.thumbVertices, gl.DYNAMIC_DRAW);
                 gl.drawArrays(gl.TRIANGLES, 0, 6);
+                gl.uniform1f(locations.transparency, 1);
 
                 if ($CURRENT_MAP.move) {
                     if (left) {

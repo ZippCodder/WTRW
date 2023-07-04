@@ -182,23 +182,24 @@ export class Sheet {
 // @CONTROLS
 
 export let JOYSTICK_DISC_TEXTURE = new TextureData(0, 0, 1, "general", {
-    width: 700,
-    height: 700
+    width: 600,
+    height: 600
 }, [
-    [0, 0, 700, 700]
+    [0, 0, 600, 600]
 ], 0, undefined, function(ctx) {
     // base body: 600x600, texture: 1024x1024, size: 20
 
-    ctx.lineWidth = 30;
     ctx.fillStyle = "black";
-    ctx.globalAlpha = 0.3;
+    ctx.strokeStyle = "white";
+    ctx.globalAlpha = 0.5;
 
     // Joystick base
 
     ctx.moveTo(300, 300);
     ctx.arc(300, 300, 300, 0, 2 * Math.PI);
     ctx.fill();
-}, [], 700, 700);
+ 
+}, [], 600, 600);
 
 export let PICKUP_RING = new TextureData(0, 0, 0.2, "general", {
     width: 428,
@@ -232,7 +233,7 @@ export let ACTION_BUTTON_TEXTURE = new TextureData(0, 0, 1, "control", {
     ctx.scale(this.size || 0, this.size || 0);
 
     ctx.fillStyle = "black";
-    ctx.globalAlpha = 0.5;
+    ctx.globalAlpha = 0.7;
     ctx.lineWidth = 20;
     ctx.strokeStyle = "white";
     ctx.moveTo(300, 300);
@@ -265,17 +266,17 @@ export let ACTION_BUTTON_TEXTURE = new TextureData(0, 0, 1, "control", {
     ctx.lineTo(330, 280);
     ctx.lineTo(280, 280);
     ctx.lineTo(280, 450);
-    ctx.lineTo(353, 554);
+    ctx.lineTo(355, 554);
 
     ctx.fillStyle = "white";
     ctx.stroke();
 }, [], 600, 600);
 
 export let RELOAD_BUTTON_TEXTURE = new TextureData(0, 0, 1.3, "control", {
-    width: 260,
-    height: 260
+    width: 600,
+    height: 600
 }, [
-    [0, 0, 260, 260]
+    [0, 0, 600, 600]
 ], 0, undefined, function(ctx) {
     // base body: 600x600, texture: 1024x1024, size: 20
     ctx.scale(this.size || 0, this.size || 0);
@@ -315,7 +316,62 @@ export let RELOAD_BUTTON_TEXTURE = new TextureData(0, 0, 1.3, "control", {
     ctx.lineTo(360,323);
     ctx.stroke();
 
-}, [], 260, 260);
+}, [], 600, 600);
+
+export let AVATAR_MODE_BUTTON_TEXTURE = new TextureData(0, 0, 1, "control", {
+    width: 600,
+    height: 600
+}, [
+    [0, 0, 600, 600]
+], 0, undefined, function(ctx) {
+    // base body: 600x600, texture: 1024x1024, size: 20
+    ctx.scale(this.size || 0, this.size || 0);
+
+    ctx.fillStyle = "black";
+    ctx.globalAlpha = 0.5;
+    ctx.lineWidth = 15;
+    ctx.strokeStyle = "white";
+   
+    ctx.moveTo(300, 300);
+    ctx.arc(300, 300, 300, 0, 2 * Math.PI);
+    ctx.fill(); 
+ 
+    ctx.lineWidth = 30;
+    ctx.fillStyle = "white";
+    ctx.font = "300px Arial";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    //ctx.strokeText("P", 300, 320);
+    ctx.strokeText("H", 300, 320);
+ 
+}, [], 600, 600);
+
+export let DROP_ITEM_BUTTON_TEXTURE = new TextureData(0, 0, 1, "control", {
+    width: 600,
+    height: 600
+}, [
+    [0, 0, 600, 600]
+], 0, undefined, function(ctx) {
+    // base body: 600x600, texture: 1024x1024, size: 20
+    ctx.scale(this.size || 0, this.size || 0);
+
+    ctx.fillStyle = "black";
+    ctx.globalAlpha = 0.7;
+    ctx.lineWidth = 15;
+    ctx.strokeStyle = "white";
+   
+    ctx.moveTo(300, 300);
+    ctx.arc(300, 300, 300, 0, 2 * Math.PI);
+    ctx.fill(); 
+ 
+    ctx.lineWidth = 20;
+    ctx.fillStyle = "white";
+    ctx.font = "400px Arial";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.strokeText("⇩", 300, 320);
+ 
+}, [], 600, 600);
 
 /* icon container */
 

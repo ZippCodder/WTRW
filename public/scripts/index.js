@@ -51,6 +51,8 @@ window.onload = async () => {
     window.$CURRENT_MAP = null;
     window.$ACTION_BUTTON = null;
     window.$RELOAD_BUTTON = null;
+    window.$AVATAR_MODE_BUTTON = null;
+    window.$DROP_ITEM_BUTTON = null;
     window.$AVATAR = null;
     window.$MAP = null;
     window.viewportWidth = window.innerWidth;
@@ -59,9 +61,10 @@ window.onload = async () => {
     window.minViewport = Math.min(viewportWidth, viewportHeight);
     window.scale = 1.2;
     window.joystickSizes = {
-        left: 1.5,
-        right: 1.5
+        left: 3,
+        right: 3
     };
+    window.controlTransparency = 1;
     window.bulletResolution = 0.001;
     window.viewportRatio = maxViewport / minViewport;
     window.worldUnitX = (maxViewport === viewportWidth) ? 0.01 + (0.01 / viewportRatio) : 0.01 + (0.01 * viewportRatio);
@@ -329,7 +332,11 @@ window.onload = async () => {
         luxuryapartment: document.querySelector("#luxuryapartment"),
         house1: document.querySelector("#house1"), 
         reloadbutton: document.querySelector("#reloadbutton"),
-        reloadbuttonactive: document.querySelector("#reloadbuttonactive")
+        reloadbuttonactive: document.querySelector("#reloadbuttonactive"),
+        avatarmode1: document.querySelector("#avatarmode1"),
+        avatarmode2: document.querySelector("#avatarmode2"),
+        dropitem1: document.querySelector("#dropitem1"),
+        dropitem2: document.querySelector("#dropitem2")
     }
 
     gl.uniform1f(locations.worldUnitX, worldUnitX);
@@ -375,10 +382,7 @@ window.onload = async () => {
     }
 
     $OBJECTS.push($AVATAR);
-    $CONTROLS.push($JOYSTICK_L);
-    $CONTROLS.push($JOYSTICK_R);
-    $CONTROLS.push($ACTION_BUTTON);
-    //$CONTROLS.push($RELOAD_BUTTON);
+    $CONTROLS.push($JOYSTICK_L,$JOYSTICK_R,$ACTION_BUTTON,$RELOAD_BUTTON,$AVATAR_MODE_BUTTON,$DROP_ITEM_BUTTON);
 
     let loadingScreen = document.querySelector("#loading-screen");
     let gameStats = document.querySelector("#game-stats");

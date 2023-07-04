@@ -25,17 +25,33 @@
 
 
   $JOYSTICK_L = new _Joystick_(true, joystickSizes.left);
+
   $JOYSTICK_R = new _Joystick_(false, joystickSizes.right);
+
   $ACTION_BUTTON = new _Button_(textures.actionbutton, textures.actionbuttonactive, (worldWidth / 2) - 15, 0, function(pX, pY) {
       const i = $CURRENT_MAP.interactables[$CURRENT_MAP.currentInteractable.id];
       if (i) i.action();
   }, 8.5);
-  $ACTION_BUTTON.hidden = true;
 
- /* $RELOAD_BUTTON = new _Button_(textures.reloadbutton, textures.reloadbuttonactive, (worldWidth / 2) - 30, 0, function(pX, pY) {
-      const i = $CURRENT_MAP.interactables[$CURRENT_MAP.currentInteractable.id];
-      if (i) i.action();
-  }, 4.8); */
+  $RELOAD_BUTTON = new _Button_(textures.reloadbutton, textures.reloadbuttonactive, (worldWidth / 2) - 30, -15, function(pX, pY) {
+     if (this.enabled) {
+      $AVATAR.reload();
+      this.enabled = false;
+     } 
+  }, 8.5, 2.2);
+   
+ $AVATAR_MODE_BUTTON = new _Button_(textures.avatarmode1, textures.avatarmode2, (worldWidth / 2) - 10, 15, function(pX, pY) {
+   if (this.on) {
+    this.on = false;
+   } else {
+    this.on = true;
+   } 
+  }, 8.5, 3, true);
+
+ $DROP_ITEM_BUTTON = new _Button_(textures.dropitem1, textures.dropitem2, (worldWidth / 2) - 45, -15, function(pX, pY) {
+   console.log("dropping item..."); 
+  }, 8.5, 2.2);
+
 
   function moveJoystick(e, m = true) {
       e.preventDefault();
@@ -123,7 +139,7 @@
       let buttonPress = false;
 
       for (let i of $CONTROLS) {
-          if (i instanceof _Button_ && !i.hidden && distance(pX, pY, i.trans.offsetX, i.trans.offsetY) < i.radius) {
+          if (i instanceof _Button_ && !i.hidden && i.enabled && distance(pX, pY, i.trans.offsetX, i.trans.offsetY) < i.radius) {
 
               i.active = true;
               i.touch = touch.identifier;
