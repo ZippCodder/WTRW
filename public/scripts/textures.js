@@ -272,7 +272,7 @@ export let ACTION_BUTTON_TEXTURE = new TextureData(0, 0, 1, "control", {
     ctx.stroke();
 }, [], 600, 600);
 
-export let RELOAD_BUTTON_TEXTURE = new TextureData(0, 0, 1.3, "control", {
+export let RELOAD_BUTTON_TEXTURE = new TextureData(0, 0, 3, "control", {
     width: 600,
     height: 600
 }, [
@@ -306,15 +306,15 @@ export let RELOAD_BUTTON_TEXTURE = new TextureData(0, 0, 1.3, "control", {
     ctx.rotate(-0.15);
     ctx.translate(-300,-300);
 
-    ctx.translate(-2.5,-13);
-    ctx.moveTo(338.5,320);
-    ctx.lineTo(348,302);
- 
+    ctx.translate(-2.5,-11);
+    ctx.moveTo(338.5,320); // 321
+    ctx.lineTo(352,305);
+
     ctx.moveTo(349,298);
-    ctx.lineTo(322,318);
-    ctx.moveTo(339,298);
-    ctx.lineTo(360,323);
-    ctx.stroke();
+    ctx.lineTo(320.2,318);
+    ctx.moveTo(340,298);
+    ctx.lineTo(361,323);
+    ctx.stroke(); 
 
 }, [], 600, 600);
 
@@ -356,20 +356,31 @@ export let DROP_ITEM_BUTTON_TEXTURE = new TextureData(0, 0, 1, "control", {
     ctx.scale(this.size || 0, this.size || 0);
 
     ctx.fillStyle = "black";
-    ctx.globalAlpha = 0.7;
-    ctx.lineWidth = 15;
+    ctx.globalAlpha = 0.5;
+    ctx.lineWidth = 60;
     ctx.strokeStyle = "white";
-   
+
     ctx.moveTo(300, 300);
     ctx.arc(300, 300, 300, 0, 2 * Math.PI);
     ctx.fill(); 
  
-    ctx.lineWidth = 20;
-    ctx.fillStyle = "white";
-    ctx.font = "400px Arial";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.strokeText("⇩", 300, 320);
+    ctx.beginPath();
+    ctx.moveTo(300, 120);
+    ctx.lineTo(300, 340);
+    
+    ctx.moveTo(319,370);    
+    ctx.lineTo(203,255);
+
+    ctx.moveTo(277,370);
+    ctx.lineTo(393,255);
+
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.lineWidth = 30;
+    ctx.moveTo(220, 450);
+    ctx.lineTo(380, 450);
+    ctx.stroke();
  
 }, [], 600, 600);
 

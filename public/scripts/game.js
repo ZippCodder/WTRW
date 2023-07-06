@@ -70,7 +70,7 @@
   b.state.aggressive = false;
   b.addItem(new GLOCK_20(0, 0, 0, 1000));
   b.state.targetId = b.id;
-  b.state.baseSpeed = 3;
+  b.state.baseSpeed = 1;
   b.state.reloadTimeout.timingConfig[0] = 0.5/5;
   b.state.targetUpdateAnimation.rate = 0.5/5;
   b.state.fireAnimation.rate = 0.5 / 10; 

@@ -24,23 +24,23 @@
   } from "/public/scripts/objects.js";
 
 
-  $JOYSTICK_L = new _Joystick_(true, joystickSizes.left);
+  $JOYSTICK_L = new _Joystick_(true, joystickSizes.left, fixedJoysticks, {x: (-worldWidth/2) + 20, y: (-worldHeight/2) + 20});
 
-  $JOYSTICK_R = new _Joystick_(false, joystickSizes.right);
+  $JOYSTICK_R = new _Joystick_(false, joystickSizes.right, fixedJoysticks, {x: (worldWidth/2) - 20, y: (-worldHeight/2) + 20});
 
-  $ACTION_BUTTON = new _Button_(textures.actionbutton, textures.actionbuttonactive, (worldWidth / 2) - 15, 0, function(pX, pY) {
+  $ACTION_BUTTON = new _Button_(textures.actionbutton, textures.actionbuttonactive, (worldWidth / 2) - 20, (-worldHeight/2) + 39, function(pX, pY) {
       const i = $CURRENT_MAP.interactables[$CURRENT_MAP.currentInteractable.id];
       if (i) i.action();
-  }, 8.5);
+  }, 8.5, 1.5);
 
-  $RELOAD_BUTTON = new _Button_(textures.reloadbutton, textures.reloadbuttonactive, (worldWidth / 2) - 30, -15, function(pX, pY) {
+  $RELOAD_BUTTON = new _Button_(textures.reloadbutton, textures.reloadbuttonactive, (worldWidth / 2) - 38, -(worldHeight / 2) + 20, function(pX, pY) {
      if (this.enabled) {
       $AVATAR.reload();
       this.enabled = false;
      } 
   }, 8.5, 2.2);
    
- $AVATAR_MODE_BUTTON = new _Button_(textures.avatarmode1, textures.avatarmode2, (worldWidth / 2) - 10, 15, function(pX, pY) {
+ $AVATAR_MODE_BUTTON = new _Button_(textures.avatarmode1, textures.avatarmode2, (worldWidth / 2) - 10, (worldHeight/2) - 15, function(pX, pY) {
    if (this.on) {
     this.on = false;
    } else {
@@ -48,7 +48,7 @@
    } 
   }, 8.5, 3, true);
 
- $DROP_ITEM_BUTTON = new _Button_(textures.dropitem1, textures.dropitem2, (worldWidth / 2) - 45, -15, function(pX, pY) {
+ $DROP_ITEM_BUTTON = new _Button_(textures.dropitem1, textures.dropitem2, (worldWidth / 2) - 35, -(worldHeight / 2) + 30, function(pX, pY) {
    console.log("dropping item..."); 
   }, 8.5, 2.2);
 
@@ -64,7 +64,6 @@
       } else if (m) {
           for (let i = 0; i < 2; i++) {
               if (e.touches[i]?.clientX < window.innerWidth / 2 && (e.touches[i]?.identifier !== $JOYSTICK_R.id)) {
-                  if ($CURRENT_MAP.move) $AVATAR.state.walking = true;
 
                   $JOYSTICK_L.id = e.touches[i].identifier;
                   configure($JOYSTICK_L);
@@ -78,8 +77,6 @@
       } else if (m) {
           for (let i = 0; i < 2; i++) {
               if (e.touches[i]?.clientX > window.innerWidth / 2 && (e.touches[i]?.identifier !== $JOYSTICK_L.id)) {
-                  if ($CURRENT_MAP.move) $AVATAR.drawWeapon();
-
                   $JOYSTICK_R.id = e.touches[i].identifier;
                   configure($JOYSTICK_R);
                   break;
@@ -103,7 +100,6 @@
           let pX = aofb(aisofb(pageX, window.innerWidth), worldWidth) - (worldWidth / 2);
           let pY = aofb(100 - aisofb(pageY, window.innerHeight), worldHeight) - (worldHeight / 2);
 
-          if (stick.base.anchored) {
               let {
                   width,
                   height,
@@ -117,13 +113,14 @@
               let d = distance(x, y, pX, pY),
                   t = radius / d;
 
+          if (stick.base.anchored) { 
               if (d > radius) {
                   pX = (((1 - t) * x) + (t * pX));
                   pY = (((1 - t) * y) + (t * pY));
               }
           }
 
-          stick.translate(pX, pY);
+          if ((d < radius) || stick.base.anchored || !stick.fixed) stick.translate(pX, pY);
       }
   }
 
@@ -184,14 +181,16 @@
 
       if (!uL) {
           $AVATAR.state.walking = false;
-
           $JOYSTICK_L.unanchor();
+          $JOYSTICK_L.fix(); 
           $JOYSTICK_L.id = undefined;
       }
+
       if (!uR) {
           if ($CURRENT_MAP.move) $AVATAR.holsterWeapon();
 
           $JOYSTICK_R.unanchor();
+          $JOYSTICK_R.fix();
           $JOYSTICK_R.id = undefined;
       }
   });

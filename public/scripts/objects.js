@@ -3780,7 +3780,7 @@ export class _Button_ extends _Object_ {
 
 export class _Joystick_ extends _Object_ {
 
-    constructor(left, scale = 1) {
+    constructor(left, scale = 1, fixed = false, position = {x: 0, y: 0}) {
         super([
             0, 0, 1, 0, 0, 30, 0, 1, 1, 0, 0, 30, 1, 0, 1, 30, 0, 1, 1, 0, 0, 30, 1, 0, 1, 30, 30, 1, 1, 1
         ], function() {
@@ -3805,7 +3805,8 @@ export class _Joystick_ extends _Object_ {
             gl.disableVertexAttribArray(locations.textrUnit);
 
         }, function() {
-            if (this.base.anchored) {
+            if (!this.base.anchored && !this.fixed) return;
+            
                 ext.bindVertexArrayOES(this.vao);
                 gl.uniform2fv(locations.translation, [this.base.x * scale, this.base.y * scale]);
                 gl.uniform1f(locations.rotation, 0);
@@ -3825,27 +3826,30 @@ export class _Joystick_ extends _Object_ {
                 gl.uniform1f(locations.transparency, 1);
 
                 if ($CURRENT_MAP.move) {
-                    if (left) {
+                    if (left && this.base.anchored) {
                         $CURRENT_MAP.translate((this.distance.x * this.scale) * movementMultFactor, (this.distance.y * this.scale) * movementMultFactor);
+                       
+             if ($CURRENT_MAP.move) $AVATAR.state.walking = true;
                     }
 
-                    $AVATAR.trans.rotation = this.rotation;
+    if (this.base.anchored) $AVATAR.trans.rotation = this.rotation;
+    if ($CURRENT_MAP.move && this.base.anchored && !left) $AVATAR.drawWeapon();
                 }
-
-            }
         }, 30, 30);
+        this.position = Object.create(position);
         this.base = {
-            x: 0,
-            y: 0,
+            x: position.x,
+            y: position.y,
             width: 30 / scale,
             height: 30 / scale,
             anchored: false,
             radius: 15 / scale
         };
         this.scale = scale;
+        this.fixed = fixed;
         this.thumb = {
-            x: 0,
-            y: 0,
+            x: position.x,
+            y: position.y,
             width: 16.66 / scale,
             height: 16.66 / scale
         };
@@ -3859,6 +3863,7 @@ export class _Joystick_ extends _Object_ {
         this.ratio = 0;
         this.left = left;
         this.id = undefined;
+        this.fix();
     }
 
     unanchor() {
@@ -3869,13 +3874,25 @@ export class _Joystick_ extends _Object_ {
             $AVATAR.state.fire = false;
         }
     }
+ 
+    fix() {
+     if (!this.fixed) return;     
+
+          let {x,y} = this.position;      
+ 
+          this.base.x = x - this.base.width / 2;
+          this.base.y = y - this.base.height / 2; 
+          this.thumb.x = x - this.thumb.width / 2;
+          this.thumb.y = y - this.thumb.height / 2;
+    } 
 
     translate(x, y) {
 
         if (!this.base.anchored) {
-
-            this.base.x = x - this.base.width / 2;
-            this.base.y = y - this.base.height / 2;
+             if (!this.fixed) {
+               this.base.x = x - this.base.width / 2;
+               this.base.y = y - this.base.height / 2;
+             }
             this.base.anchored = true;
         }
         this.thumb.x = x - this.thumb.width / 2;
