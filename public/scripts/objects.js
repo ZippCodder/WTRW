@@ -1032,6 +1032,7 @@ export class Book1 extends _InstancedClusterClient_ {
     name = "black book";
     clusterName = "black book";
     texture = textures.book1;
+    moveable = true;
 
     constructor(initialX, initialY, initialRotation) {
         super(initialX, initialY, initialRotation);
@@ -1047,6 +1048,7 @@ export class Book2 extends _InstancedClusterClient_ {
     name = "white book";
     clusterName = "white book";
     texture = textures.book2;
+    moveable = true;
 
     constructor(initialX, initialY, initialRotation) {
         super(initialX, initialY, initialRotation);
@@ -1316,6 +1318,7 @@ export class Laptop extends _StaticClusterClient_ {
     clusterName = "laptop";
     texture = textures.laptop;
     height = 9.72;
+    moveable = true; 
     name = "laptop";
 
     constructor(initialX, initialY, initialRotation) {
@@ -1807,6 +1810,7 @@ export class _Pickup_ extends _InstancedClusterClient_ {
     pickup = true;
     interactable = true;
     minDistance = 5;
+    moveable = true;
 
     postLink() {
         this.map.link(this.ring);
@@ -2047,6 +2051,7 @@ export class Avatar {
         this.type = "avatar";
         this.name = "avatar";
         this.state = {
+            hostile: false,
             baseSpeed: 1,
             runningSpeed: 2,
             speed: 1,
@@ -2055,6 +2060,22 @@ export class Avatar {
             kills: 0,
             passive: false,
             aggressive: false,
+            pickup: {
+              hitbox: {
+               x: 0,
+               y: 0,
+               width: 5,
+               height: 5
+              },
+              offset: {
+               x: 0,
+               y: 0,
+               aRotation: 0,
+               bRotation: 0,
+              },
+              current: false,
+              reachDistance: 2.5
+            },
             vitals: {
                 health: 100,
                 hunger: 100,
@@ -2658,7 +2679,7 @@ export class Avatar {
                   }
                 } 
         }
-
+      this.movePickup();
     }
 
     render() {
@@ -2766,6 +2787,41 @@ export class Avatar {
             this.requestPath(point.x, point.y);
             }
         }
+    }
+
+    grab() {
+     if (this.state.pickup.current) return;    
+
+      let [x, y] = rotate(0, this.state.pickup.reachDistance, (this.trans.rotation) * 180 / Math.PI);
+      let {width, height} = this.state.pickup.hitbox;    
+ 
+             for (let i in $CURRENT_MAP.moveables) {
+               let obj = $CURRENT_MAP.moveables[i];               
+
+               if ((Math.abs(x - obj.trans.offsetX) < (obj.width / 2 + width / 2)) && (Math.abs(y - obj.trans.offsetY) < (obj.height / 2 + height / 2))) {
+                 this.state.pickup.offset.x = obj.trans.offsetX;
+                 this.state.pickup.offset.y = obj.trans.offsetY;
+                 this.state.pickup.offset.aRotation = (this.trans.rotation * 180 / Math.PI);
+                 this.state.pickup.offset.bRotation = obj.trans.rotation;
+                 this.state.pickup.current = obj;
+                 break;
+               }
+             }
+    }
+
+    movePickup() {
+        if (this.state.pickup.current) {
+           let {offsetX, offsetY} = this.state.pickup.current.trans, pickup = this.state.pickup.current, rotation = (this.trans.rotation * 180 / Math.PI);
+           let [x2, y2] = rotate((this.state.pickup.offset.x),(this.state.pickup.offset.y),rotation-this.state.pickup.offset.aRotation);
+
+         pickup.translate(x2-offsetX, y2-offsetY,this.state.pickup.offset.bRotation + (this.state.pickup.offset.aRotation - rotation), true);
+        } 
+    }
+
+    drop() {
+     if (this.state.pickup.current) {
+      this.state.pickup.current = undefined;
+     }
     }
 
     requestPath(x, y) {
@@ -2890,6 +2946,7 @@ export class VisibleBarrier extends _Object_ {
             [-width / 2, -height / 2, width, height]
         ];
         this.obstacle = true;
+        this.moveable = true;
         this.name = "visible barrier";
         this.type = "barrier";
     }
@@ -3178,6 +3235,7 @@ export class _Map_ {
         this.objects = {};
         this.avatars = {};
         this.obstacles = {};
+        this.moveables = {};
         this.locations = {};
         this.clusters = {};
         this.interactables = {};
@@ -3301,6 +3359,7 @@ export class _Map_ {
             this.objects[obj.id] = obj;
             if (obj.obstacle) this.obstacles[obj.id] = obj;
             if (obj.pickup) this.pickups[obj.id] = obj;
+            if (obj.moveable) this.moveables[obj.id] = obj;
             if (obj.interactable) this.interactables[obj.id] = obj;
             if (obj.type === "avatar") this.avatars[obj.id] = obj;
 
@@ -3472,6 +3531,7 @@ export class _Map_ {
         if (this.move) {
             if (!this.noclip) {
                 for (let i in this.obstacles) {
+                  if (this.obstacles[i] === $AVATAR.state.pickup.current) continue;
                     for (let segment of this.obstacles[i].segments) {
 
                         let [ox,

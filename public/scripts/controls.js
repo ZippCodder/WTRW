@@ -40,16 +40,13 @@
      } 
   }, 8.5, 2.2);
    
- $AVATAR_MODE_BUTTON = new _Button_(textures.avatarmode1, textures.avatarmode2, (worldWidth / 2) - 10, (worldHeight/2) - 15, function(pX, pY) {
-   if (this.on) {
-    this.on = false;
-   } else {
-    this.on = true;
-   } 
+ $AVATAR_MODE_BUTTON = new _Button_(textures.avatarmode2, textures.avatarmode1, (worldWidth / 2) - 10, (worldHeight/2) - 15, function(pX, pY) {
+   this.on = !this.on;
+   $AVATAR.state.hostile = !$AVATAR.state.hostile;
   }, 8.5, 3, true);
 
  $DROP_ITEM_BUTTON = new _Button_(textures.dropitem1, textures.dropitem2, (worldWidth / 2) - 35, -(worldHeight / 2) + 30, function(pX, pY) {
-   console.log("dropping item..."); 
+   $AVATAR.drop(); 
   }, 8.5, 2.2);
 
 
