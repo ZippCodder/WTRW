@@ -1811,7 +1811,7 @@ export class Supermarket extends _StaticClusterClient_ {
 
 export class _Pickup_ extends _InstancedClusterClient_ {
     constructor(initialX, initialY, initialRotation) {
-        super(initialX, initialY, typeof initialRotation === "number" || random(360));
+        super(initialX, initialY, initialRotation ?? random(360));
 
         this.ring = new PickupRing(this.trans.offsetX, this.trans.offsetY);
     }
