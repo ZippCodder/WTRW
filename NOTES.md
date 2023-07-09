@@ -12,10 +12,9 @@
 ## TODO
 
 1. Add changable avatar follow target
-2. Add avatar object pickup feature on passive mode
-3. Implement avatar death and respawn system
-4. Fix avatar stacking
-5. Create avatar skin managment system
-6. Add avatar settings inupt object
-7. Implement explovives
-8. Add fixed joysticks option
+2. Implement avatar death and respawn system
+3. Fix avatar stacking
+4. Create avatar skin managment system
+5. Add avatar settings inupt object
+6. Implement explovives
+7. Implement textured floors

@@ -64,6 +64,7 @@ window.onload = async () => {
         left: 1.5,
         right: 1.5
     };
+    window.fixedJoysticks = true;
     window.controlTransparency = 1;
     window.bulletResolution = 0.001;
     window.viewportRatio = maxViewport / minViewport;

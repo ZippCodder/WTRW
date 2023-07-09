@@ -605,7 +605,7 @@ export class _MixedStaticCluster_ {
     }
 
     translateVertices(index, vertices, x = 0, y = 0, rotation = 0) {
-        this.vertices[index] = offsetVertices(vertices, x, y, rotation, this.stride);
+        this.vertices[index] = offsetVertices(vertices, x, y, -rotation, this.stride);
 
         ext.bindVertexArrayOES(this.vao);
         gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
@@ -1032,6 +1032,7 @@ export class Book1 extends _InstancedClusterClient_ {
     name = "black book";
     clusterName = "black book";
     texture = textures.book1;
+    moveable = true;
 
     constructor(initialX, initialY, initialRotation) {
         super(initialX, initialY, initialRotation);
@@ -1047,6 +1048,7 @@ export class Book2 extends _InstancedClusterClient_ {
     name = "white book";
     clusterName = "white book";
     texture = textures.book2;
+    moveable = true;
 
     constructor(initialX, initialY, initialRotation) {
         super(initialX, initialY, initialRotation);
@@ -1316,6 +1318,7 @@ export class Laptop extends _StaticClusterClient_ {
     clusterName = "laptop";
     texture = textures.laptop;
     height = 9.72;
+    moveable = true; 
     name = "laptop";
 
     constructor(initialX, initialY, initialRotation) {
@@ -1550,6 +1553,11 @@ export class Door extends _StaticClusterClient_ {
                 $AVATAR.rotate(180);
                 this.map.move = true;
 
+                if ($AVATAR.state.pickup.current) {
+                  $AVATAR.state.pickup.current.delete();
+                  $CURRENT_MAP.link($AVATAR.state.pickup.current);
+                }
+
                 if (this.outPoint) {
                     let [x, y] = this.outPoint;
                     if (this.buildingExit && this.map.building) {
@@ -1562,7 +1570,7 @@ export class Door extends _StaticClusterClient_ {
                         $CURRENT_MAP.translate((-$CURRENT_MAP.centerX) + x, (-$CURRENT_MAP.centerY) + y);
                         $CURRENT_MAP.noclip = false;
                     }
-                }
+                } 
             }).bind(this));
         }
     }
@@ -1623,6 +1631,11 @@ export class _Building_ extends _StaticClusterClient_ {
                     $CURRENT_MAP = this.rooms[i[2]];
                     $AVATAR.rotate(180);
                     this.map.move = true;
+
+                    if ($AVATAR.state.pickup.current) {
+                      $AVATAR.state.pickup.current.delete();
+                      $CURRENT_MAP.link($AVATAR.state.pickup.current);
+                    }
 
                     if (i[3]) {
                         let [x, y] = i[3];
@@ -1798,15 +1811,15 @@ export class Supermarket extends _StaticClusterClient_ {
 
 export class _Pickup_ extends _InstancedClusterClient_ {
     constructor(initialX, initialY, initialRotation) {
-        super(initialX, initialY, typeof initialRotation === "number" || random(360));
+        super(initialX, initialY, initialRotation ?? random(360));
 
         this.ring = new PickupRing(this.trans.offsetX, this.trans.offsetY);
-        this.ring.exclude = true;
     }
 
     pickup = true;
     interactable = true;
     minDistance = 5;
+    moveable = true;
 
     postLink() {
         this.map.link(this.ring);
@@ -1821,14 +1834,16 @@ export class _Pickup_ extends _InstancedClusterClient_ {
     }
 
     translate(x, y, rotation = false, translateVertices) {
-        this.ring.translate(x, y, rotation, translateVertices);
 
         this.trans.offsetX += x;
-        this.trans.offsetY += y;
+        this.trans.offsetY += y; 
+        this.ring.translate(this.trans.offsetX-this.ring.trans.offsetX, this.trans.offsetY-this.ring.trans.offsetY, false, translateVertices);
+
         if (rotation) {
             this.trans.rotation = rotation;
         }
-        if (translateVertices) this.cluster.translateVertices(this.clusterIndex, x, y, this.trans.rotation * (Math.PI / 180));
+
+        if (translateVertices) this.cluster.translateVertices(this.clusterIndex, x, y, this.trans.rotation);
     }
 }
 
@@ -1989,7 +2004,9 @@ export class PickupRing extends _InstancedClusterClient_ {
     height = 8.56;
     name = "pickup ring";
     clusterName = "pickup ring";
+    exclude = true;
     texture = textures.pickupring;
+    managedMovement = true;
 
     constructor(initialX, initialY, initialRotation) {
         super(initialX, initialY, initialRotation);
@@ -2047,6 +2064,7 @@ export class Avatar {
         this.type = "avatar";
         this.name = "avatar";
         this.state = {
+            hostile: false,
             baseSpeed: 1,
             runningSpeed: 2,
             speed: 1,
@@ -2055,6 +2073,22 @@ export class Avatar {
             kills: 0,
             passive: false,
             aggressive: false,
+            pickup: {
+              hitbox: {
+               x: 0,
+               y: 0,
+               width: 5,
+               height: 5
+              },
+              offset: {
+               x: 0,
+               y: 0,
+               aRotation: 0,
+               bRotation: 0,
+              },
+              current: false,
+              reachDistance: 2.5
+            },
             vitals: {
                 health: 100,
                 hunger: 100,
@@ -2658,7 +2692,7 @@ export class Avatar {
                   }
                 } 
         }
-
+      this.movePickup();
     }
 
     render() {
@@ -2766,6 +2800,41 @@ export class Avatar {
             this.requestPath(point.x, point.y);
             }
         }
+    }
+
+    grab() {
+     if (this.state.pickup.current) return;    
+
+      let [x, y] = rotate(0, this.state.pickup.reachDistance, (this.trans.rotation) * 180 / Math.PI);
+      let {width, height} = this.state.pickup.hitbox;    
+ 
+             for (let i in $CURRENT_MAP.moveables) {
+               let obj = $CURRENT_MAP.moveables[i];               
+
+               if ((Math.abs(x - obj.trans.offsetX) < (obj.width / 2 + width / 2)) && (Math.abs(y - obj.trans.offsetY) < (obj.height / 2 + height / 2))) {
+                 this.state.pickup.offset.x = obj.trans.offsetX;
+                 this.state.pickup.offset.y = obj.trans.offsetY;
+                 this.state.pickup.offset.aRotation = (this.trans.rotation * 180 / Math.PI);
+                 this.state.pickup.offset.bRotation = obj.trans.rotation;
+                 this.state.pickup.current = obj;
+                 break;
+               }
+             }
+    }
+
+    movePickup() {
+        if (this.state.pickup.current) {
+           let {offsetX, offsetY} = this.state.pickup.current.trans, pickup = this.state.pickup.current, rotation = (this.trans.rotation * 180 / Math.PI);
+           let [x2, y2] = rotate((this.state.pickup.offset.x),(this.state.pickup.offset.y),rotation-this.state.pickup.offset.aRotation);
+
+         pickup.translate(x2-offsetX, y2-offsetY,this.state.pickup.offset.bRotation + (this.state.pickup.offset.aRotation - rotation), true);
+        } 
+    }
+
+    drop() {
+     if (this.state.pickup.current) {
+      this.state.pickup.current = undefined;
+     }
     }
 
     requestPath(x, y) {
@@ -3178,6 +3247,7 @@ export class _Map_ {
         this.objects = {};
         this.avatars = {};
         this.obstacles = {};
+        this.moveables = {};
         this.locations = {};
         this.clusters = {};
         this.interactables = {};
@@ -3301,6 +3371,7 @@ export class _Map_ {
             this.objects[obj.id] = obj;
             if (obj.obstacle) this.obstacles[obj.id] = obj;
             if (obj.pickup) this.pickups[obj.id] = obj;
+            if (obj.moveable) this.moveables[obj.id] = obj;
             if (obj.interactable) this.interactables[obj.id] = obj;
             if (obj.type === "avatar") this.avatars[obj.id] = obj;
 
@@ -3472,6 +3543,7 @@ export class _Map_ {
         if (this.move) {
             if (!this.noclip) {
                 for (let i in this.obstacles) {
+                  if (this.obstacles[i] === $AVATAR.state.pickup.current) continue;
                     for (let segment of this.obstacles[i].segments) {
 
                         let [ox,
@@ -3725,6 +3797,7 @@ export class _Button_ extends _Object_ {
 
             gl.bindTexture(gl.TEXTURE_2D, this.texture);
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureSrc);
+            //gl.generateMipmap(gl.TEXTURE_2D);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
@@ -3734,6 +3807,7 @@ export class _Button_ extends _Object_ {
 
             gl.bindTexture(gl.TEXTURE_2D, this.textureActive);
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureActiveSrc);
+            //gl.generateMipmap(gl.TEXTURE_2D);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
@@ -3780,7 +3854,7 @@ export class _Button_ extends _Object_ {
 
 export class _Joystick_ extends _Object_ {
 
-    constructor(left, scale = 1) {
+    constructor(left, scale = 1, fixed = false, position = {x: 0, y: 0}) {
         super([
             0, 0, 1, 0, 0, 30, 0, 1, 1, 0, 0, 30, 1, 0, 1, 30, 0, 1, 1, 0, 0, 30, 1, 0, 1, 30, 30, 1, 1, 1
         ], function() {
@@ -3805,7 +3879,8 @@ export class _Joystick_ extends _Object_ {
             gl.disableVertexAttribArray(locations.textrUnit);
 
         }, function() {
-            if (this.base.anchored) {
+            if (!this.base.anchored && !this.fixed) return;
+            
                 ext.bindVertexArrayOES(this.vao);
                 gl.uniform2fv(locations.translation, [this.base.x * scale, this.base.y * scale]);
                 gl.uniform1f(locations.rotation, 0);
@@ -3825,27 +3900,30 @@ export class _Joystick_ extends _Object_ {
                 gl.uniform1f(locations.transparency, 1);
 
                 if ($CURRENT_MAP.move) {
-                    if (left) {
+                    if (left && this.base.anchored) {
                         $CURRENT_MAP.translate((this.distance.x * this.scale) * movementMultFactor, (this.distance.y * this.scale) * movementMultFactor);
+                       
+             if ($CURRENT_MAP.move) $AVATAR.state.walking = true;
                     }
 
-                    $AVATAR.trans.rotation = this.rotation;
+    if (this.base.anchored) $AVATAR.trans.rotation = this.rotation;
+    if ($CURRENT_MAP.move && this.base.anchored && !left) $AVATAR.drawWeapon();
                 }
-
-            }
         }, 30, 30);
+        this.position = Object.create(position);
         this.base = {
-            x: 0,
-            y: 0,
+            x: position.x,
+            y: position.y,
             width: 30 / scale,
             height: 30 / scale,
             anchored: false,
             radius: 15 / scale
         };
         this.scale = scale;
+        this.fixed = fixed;
         this.thumb = {
-            x: 0,
-            y: 0,
+            x: position.x,
+            y: position.y,
             width: 16.66 / scale,
             height: 16.66 / scale
         };
@@ -3859,6 +3937,7 @@ export class _Joystick_ extends _Object_ {
         this.ratio = 0;
         this.left = left;
         this.id = undefined;
+        this.fix();
     }
 
     unanchor() {
@@ -3869,13 +3948,25 @@ export class _Joystick_ extends _Object_ {
             $AVATAR.state.fire = false;
         }
     }
+ 
+    fix() {
+     if (!this.fixed) return;     
+
+          let {x,y} = this.position;      
+ 
+          this.base.x = x - this.base.width / 2;
+          this.base.y = y - this.base.height / 2; 
+          this.thumb.x = x - this.thumb.width / 2;
+          this.thumb.y = y - this.thumb.height / 2;
+    } 
 
     translate(x, y) {
 
         if (!this.base.anchored) {
-
-            this.base.x = x - this.base.width / 2;
-            this.base.y = y - this.base.height / 2;
+             if (!this.fixed) {
+               this.base.x = x - this.base.width / 2;
+               this.base.y = y - this.base.height / 2;
+             }
             this.base.anchored = true;
         }
         this.thumb.x = x - this.thumb.width / 2;
