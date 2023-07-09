@@ -605,7 +605,7 @@ export class _MixedStaticCluster_ {
     }
 
     translateVertices(index, vertices, x = 0, y = 0, rotation = 0) {
-        this.vertices[index] = offsetVertices(vertices, x, y, rotation, this.stride);
+        this.vertices[index] = offsetVertices(vertices, x, y, -rotation, this.stride);
 
         ext.bindVertexArrayOES(this.vao);
         gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
@@ -1553,6 +1553,11 @@ export class Door extends _StaticClusterClient_ {
                 $AVATAR.rotate(180);
                 this.map.move = true;
 
+                if ($AVATAR.state.pickup.current) {
+                  $AVATAR.state.pickup.current.delete();
+                  $CURRENT_MAP.link($AVATAR.state.pickup.current);
+                }
+
                 if (this.outPoint) {
                     let [x, y] = this.outPoint;
                     if (this.buildingExit && this.map.building) {
@@ -1565,7 +1570,7 @@ export class Door extends _StaticClusterClient_ {
                         $CURRENT_MAP.translate((-$CURRENT_MAP.centerX) + x, (-$CURRENT_MAP.centerY) + y);
                         $CURRENT_MAP.noclip = false;
                     }
-                }
+                } 
             }).bind(this));
         }
     }
@@ -1626,6 +1631,11 @@ export class _Building_ extends _StaticClusterClient_ {
                     $CURRENT_MAP = this.rooms[i[2]];
                     $AVATAR.rotate(180);
                     this.map.move = true;
+
+                    if ($AVATAR.state.pickup.current) {
+                      $AVATAR.state.pickup.current.delete();
+                      $CURRENT_MAP.link($AVATAR.state.pickup.current);
+                    }
 
                     if (i[3]) {
                         let [x, y] = i[3];
@@ -1804,7 +1814,6 @@ export class _Pickup_ extends _InstancedClusterClient_ {
         super(initialX, initialY, typeof initialRotation === "number" || random(360));
 
         this.ring = new PickupRing(this.trans.offsetX, this.trans.offsetY);
-        this.ring.exclude = true;
     }
 
     pickup = true;
@@ -1825,14 +1834,16 @@ export class _Pickup_ extends _InstancedClusterClient_ {
     }
 
     translate(x, y, rotation = false, translateVertices) {
-        this.ring.translate(x, y, rotation, translateVertices);
 
         this.trans.offsetX += x;
-        this.trans.offsetY += y;
+        this.trans.offsetY += y; 
+        this.ring.translate(this.trans.offsetX-this.ring.trans.offsetX, this.trans.offsetY-this.ring.trans.offsetY, false, translateVertices);
+
         if (rotation) {
             this.trans.rotation = rotation;
         }
-        if (translateVertices) this.cluster.translateVertices(this.clusterIndex, x, y, this.trans.rotation * (Math.PI / 180));
+
+        if (translateVertices) this.cluster.translateVertices(this.clusterIndex, x, y, this.trans.rotation);
     }
 }
 
@@ -1993,7 +2004,9 @@ export class PickupRing extends _InstancedClusterClient_ {
     height = 8.56;
     name = "pickup ring";
     clusterName = "pickup ring";
+    exclude = true;
     texture = textures.pickupring;
+    managedMovement = true;
 
     constructor(initialX, initialY, initialRotation) {
         super(initialX, initialY, initialRotation);
@@ -2946,7 +2959,6 @@ export class VisibleBarrier extends _Object_ {
             [-width / 2, -height / 2, width, height]
         ];
         this.obstacle = true;
-        this.moveable = true;
         this.name = "visible barrier";
         this.type = "barrier";
     }
@@ -3785,6 +3797,7 @@ export class _Button_ extends _Object_ {
 
             gl.bindTexture(gl.TEXTURE_2D, this.texture);
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureSrc);
+            //gl.generateMipmap(gl.TEXTURE_2D);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
@@ -3794,6 +3807,7 @@ export class _Button_ extends _Object_ {
 
             gl.bindTexture(gl.TEXTURE_2D, this.textureActive);
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureActiveSrc);
+            //gl.generateMipmap(gl.TEXTURE_2D);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
