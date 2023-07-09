@@ -17,5 +17,4 @@
 4. Create avatar skin managment system
 5. Add avatar settings inupt object
 6. Implement explovives
-7. Add Mipmapping to controls
-8. Implement textured floors
+7. Implement textured floors

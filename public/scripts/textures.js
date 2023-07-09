@@ -270,7 +270,7 @@ export let ACTION_BUTTON_TEXTURE = new TextureData(0, 0, 1, "control", {
 
     ctx.fillStyle = "white";
     ctx.stroke();
-}, [], 600, 600);
+});
 
 export let RELOAD_BUTTON_TEXTURE = new TextureData(0, 0, 3, "control", {
     width: 600,
