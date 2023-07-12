@@ -18,7 +18,7 @@ The player will have three different vital stats to maintain in order to stay al
 
 * Hydration - This specifies the player's current water satisfaction. If this value reaches 0, the pleayer's health will steadily decrease until they die or they regain hydration. The player's hydration will increase if they consume any type of drink, and decrease steadily when the EE is not drinking.
 
-* Armour - The player's armour level will
+* Armour - The player's armour level will extend their health. This value can be increased by equipping armour, and decreases when the player is harmed. The player's health will be uneffected if their armour is over 0, otherwise their health will begin to decrease when harmed. 
 
 2. **Inteligence**
 
@@ -38,4 +38,4 @@ The player's speed will control how fast they travel. This value can be increase
 
 4. **Money**
 
-The player's amount of money will determine weather or not they're able to purchase certain items. The player's money can increase by completing work hours at a job, selling items at the pawn shop, or investing in the stock market. This value will start at 100 and will decrease when a purchase is made. 
+The player's amount of money will determine weather or not they're able to purchase certain items. The player's money can increase by completing work hours at a job, selling items at the pawn shop, or investing in the stock market. This value will start at 100 and will decrease when a purchase is made.
