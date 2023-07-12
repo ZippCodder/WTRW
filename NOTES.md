@@ -19,4 +19,4 @@
 6. Implement explovives
 7. Implement textured floors
 8. Implement wallpapers
-9. Implement preset cluster layers
+9. Deprecate clusters and have all objects rendered as separate.

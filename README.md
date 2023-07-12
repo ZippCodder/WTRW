@@ -4,7 +4,7 @@ Welcome to the real world: An open world game where players can participate in v
 
 ## In Game Features
 
-### Character Statistics 
+### Character Statistics
 
 The player's character will have various stats that they'll have to maintain. Each of these stats will be assessed by different functions of the game, granting each player special abilities or privleiges.
 
@@ -39,3 +39,29 @@ The player's speed will control how fast they travel. This value can be increase
 4. **Money**
 
 The player's amount of money will determine weather or not they're able to purchase certain items. The player's money can increase by completing work hours at a job, selling items at the pawn shop, or investing in the stock market. This value will start at 100 and will decrease when a purchase is made.
+
+### Inventory System
+
+The player will have a personal inventory which they can use to store items for immediate access. The player will have a personal inventory limit of 10 items, however this can be doubled if the player equips a backpack. The player can store additional items if they exceed their inventory limit by storing items in the vault at the bank, or buying chests to store items in.
+
+### Items
+
+The game features many items which may have specific functions that can aid the player. These objects can be bought at stores and markets, and can be stored in the player's inventory, the bank vault or chests. These objects fall under several categories.
+
+1. **Tools**
+
+2. **Weapons**
+
+3. **Food**
+
+4. **Clothing**
+
+5. **Furniture**
+
+6. **Resources**
+
+### Housing 
+
+The player can buy one of many houses for sale around the city, which once purchased the player can populate with furniture and chests, and can serve as a safe house. The player can sell their current house for a partial refund and purchase a new house at any time. There are 20 different houses the player can potencially buy.
+
+### 
