@@ -18,3 +18,5 @@
 5. Add avatar settings inupt object
 6. Implement explovives
 7. Implement textured floors
+8. Implement wallpapers
+9. Implement preset cluster layers
