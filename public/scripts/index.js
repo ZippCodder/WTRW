@@ -337,7 +337,8 @@ window.onload = async () => {
         avatarmode1: document.querySelector("#avatarmode1"),
         avatarmode2: document.querySelector("#avatarmode2"),
         dropitem1: document.querySelector("#dropitem1"),
-        dropitem2: document.querySelector("#dropitem2")
+        dropitem2: document.querySelector("#dropitem2"),
+        offroader: document.querySelector("#offroader")
     }
 
     gl.uniform1f(locations.worldUnitX, worldUnitX);

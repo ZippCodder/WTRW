@@ -45,7 +45,8 @@
       NXR_44_MAG,
       GP_K100,
       KC_357,
-      USP_45
+      USP_45,
+      OffRoader
   } from "/public/scripts/objects.js";
 
   $AVATAR = new Avatar("R O B I N H O O D");

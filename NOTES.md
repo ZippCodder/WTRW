@@ -20,3 +20,4 @@
 7. Implement textured floors
 8. Implement wallpapers
 9. Deprecate clusters and have all objects rendered as separate.
+10. Shrink button textures

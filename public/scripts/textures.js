@@ -2522,6 +2522,330 @@ export let GLOCK_20 = new TextureData(0, 30, 0.2, "firearm", {
     ctx.restore();
 });
 
+export let OFF_ROADER = new TextureData(0, 0, 0.25, "avatar", {
+    width: 1816,
+    height: 2214
+}, [
+    [0, 0, 1816, 2214]
+], 0, undefined, function(ctx) {
+
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.scale(this.size, this.size);
+
+    ctx.strokeStyle = "#1A1A1A";
+    ctx.lineWidth = 15;
+    ctx.fillStyle = "white";
+    ctx.lineJoin = "bevel";
+
+    // REAR AXEL  
+    ctx.fillStyle = "#636363";
+    // left bar 
+    ctx.moveTo(550,-50);
+    ctx.lineTo(850,200);
+    ctx.lineTo(850,140);
+    ctx.lineTo(620,-50);
+
+    // right bar 
+    ctx.moveTo(1950,-50);
+    ctx.lineTo(1650,200);
+    ctx.lineTo(1650,140);
+    ctx.lineTo(1880,-50);
+    ctx.fill();
+    ctx.stroke(); 
+
+    ctx.fillRect(550,-100,1400,50);
+    ctx.strokeRect(550,-100,1400,50);
+
+    // FRONT AXEL
+    ctx.beginPath();
+    ctx.fillRect(650,1700,1200,50);
+    ctx.strokeRect(650,1700,1200,50);
+   
+    // left bar  
+    ctx.moveTo(650,1700);
+    ctx.lineTo(920,1500);
+    ctx.lineTo(1000,1500);
+    ctx.lineTo(720,1700);
+    ctx.lineTo(650,1700);
+
+    // right bar  
+    ctx.moveTo(1850,1700);
+    ctx.lineTo(1580,1500);
+    ctx.lineTo(1500,1500);
+    ctx.lineTo(1780,1700);
+    ctx.lineTo(1850,1700);
+
+    ctx.fill();
+    ctx.stroke();
+
+    // BASE PLATE
+    ctx.fillStyle = "#363636";
+    ctx.fillRect(910, -100, 680, 1800);
+    ctx.fillStyle = "#242424"; 
+    ctx.fillRect(910, -100, 680, 1000);
+    ctx.strokeRect(910, -100, 680, 1800);
+ 
+    // SEAT - top half
+    ctx.fillStyle = "#8a8a8a";
+    ctx.fillRect(1050,600,400,700);  
+    ctx.fillStyle = "#707070"; 
+    ctx.fillRect(1050,600,400,350); 
+    ctx.fillStyle = "#525252";  
+    ctx.fillRect(1050,600,400,50); 
+    ctx.fillStyle = "#707070"; 
+    ctx.fillRect(1050,1250,400,50); 
+    ctx.strokeRect(1050,600,400,700);   
+    ctx.strokeRect(1050,600,400,350);   
+ 
+    // INNER FRAME
+    ctx.beginPath();
+    ctx.fillStyle = "#555555";
+
+    // top bar
+    ctx.moveTo(825,340);
+    ctx.lineTo(1675,340);
+    ctx.lineTo(1600,400);
+    ctx.lineTo(900,400);
+    ctx.lineTo(825,340);
+
+    // left bar 
+    ctx.moveTo(900,400);
+    ctx.lineTo(1050,1400);
+    ctx.lineTo(1000,1450);
+    ctx.lineTo(825,340);
+    ctx.lineTo(900,400);
+
+    // right bar
+    ctx.moveTo(1600,400);
+    ctx.lineTo(1450,1400);
+    ctx.lineTo(1500,1450);
+    ctx.lineTo(1675,340);
+    ctx.lineTo(1600,400);
+ 
+    // bottom bar 
+    ctx.moveTo(1000,1450);
+    ctx.lineTo(1500,1450);
+    ctx.lineTo(1450,1400);
+    ctx.lineTo(1050,1400);
+    ctx.lineTo(1000,1450);
+    ctx.fill();
+    ctx.stroke();
+
+    // OUTER FRAME
+
+    // left short bar 
+    ctx.beginPath();
+    ctx.fillStyle = "#999999";
+    ctx.moveTo(825,340);
+    ctx.lineTo(600,600);
+    ctx.lineTo(680,600);
+    ctx.lineTo(835,420);
+    ctx.lineTo(825,340)
+
+    // right short bar 
+    ctx.moveTo(1675,340);
+    ctx.lineTo(1900,600);
+    ctx.lineTo(1820,600);
+    ctx.lineTo(1665,420);
+    ctx.lineTo(1675,340);
+
+    // rear left bar 
+    ctx.moveTo(830,-100);
+    ctx.lineTo(600,600);
+    ctx.lineTo(680,500);
+    ctx.lineTo(830,50);
+
+    // rear right bar 
+    ctx.moveTo(1670,-100);
+    ctx.lineTo(1900,600);
+    ctx.lineTo(1820,500);
+    ctx.lineTo(1670,50);
+
+    // long left frame
+    ctx.moveTo(680,600);
+    ctx.lineTo(600,600);
+    ctx.lineTo(830,1700);
+    ctx.lineTo(910,1700);
+    ctx.lineTo(680,600);
+
+    // long right frame
+    ctx.moveTo(1820,600);
+    ctx.lineTo(1900,600);
+    ctx.lineTo(1670,1700);
+    ctx.lineTo(1590,1700);
+    ctx.lineTo(1820,600);
+    ctx.fill();
+    ctx.stroke();
+
+    // REAR FRAME
+
+    // top bar 
+    ctx.beginPath();
+    ctx.moveTo(1000,-200);
+    ctx.lineTo(1500,-200);
+    ctx.lineTo(1550,-100);
+    ctx.lineTo(950,-100);
+    ctx.lineTo(1000,-200);
+
+    // exahust pipes
+    ctx.fillStyle = "#888888";
+    ctx.fillRect(1000,-250,150,50);
+    ctx.fillRect(1350,-250,150,50);
+    ctx.strokeRect(1000,-250,150,50);
+    ctx.strokeRect(1350,-250,150,50);
+
+    // middle box 
+    ctx.fillStyle = "#666666";
+    ctx.fillRect(830, -100, 840, 440);
+    ctx.fillStyle = "#999999";
+    ctx.fillRect(890, -50, 720, 30);
+    ctx.fillStyle = "#444444";
+    ctx.fillRect(890, -20, 720, 360);
+    ctx.strokeRect(830, -100, 840, 440);
+    ctx.strokeRect(890, -20, 720, 360);
+    ctx.fill();
+    ctx.stroke();
+  
+    // middle bars
+    ctx.fillStyle = "#666666"; 
+    ctx.fillRect(1050, -50, 50, 390);
+    ctx.fillRect(1400, -50, 50, 390);
+    ctx.strokeRect(1050, -50, 50, 390);
+    ctx.strokeRect(1400, -50, 50, 390);
+
+    // engine
+    ctx.fillStyle = "#999999";
+    ctx.strokeRect(1100, -20, 300, 360);
+    ctx.fillRect(1200,40,100,100);
+    ctx.fillRect(1200,180,100,100);
+    ctx.strokeRect(1200,40,100,100);
+    ctx.strokeRect(1200,40,100,50);
+    ctx.strokeRect(1200,180,100,100); 
+
+    // BOTTOM PLATE
+    ctx.fillStyle = "#bdbdbd";
+    ctx.fillRect(830, 1700, 840, 50);
+    ctx.strokeRect(830, 1700, 840, 50);
+    ctx.fillRect(930, 1725, 640, 150);
+    ctx.fillStyle = "#8f8f8f";
+    ctx.fillRect(930, 1725, 640, 50);
+    ctx.strokeRect(930, 1725, 640, 150);
+
+    // FRONT PLATE
+    ctx.beginPath();
+    ctx.fillStyle = "#4d4d4d";
+    ctx.moveTo(1000,1450);
+    ctx.lineTo(830, 1700);
+    ctx.lineTo(1670, 1700); 
+    ctx.lineTo(1500, 1450);
+    ctx.lineTo(1000,1450);
+    ctx.fill();
+    ctx.stroke();
+
+    // RIGHT REAR TIRE
+    ctx.translate(-150,-700);
+    ctx.fillStyle = "#2e2e2e"; 
+    ctx.moveTo(2000,500); 
+    ctx.lineTo(2050,450);
+    ctx.lineTo(2100,500);
+    ctx.lineTo(2150,450);
+    ctx.lineTo(2200,500);
+    ctx.lineTo(2250,450);
+    ctx.lineTo(2300,500);
+    ctx.lineTo(2300,850);
+    ctx.lineTo(2250,900);
+    ctx.lineTo(2200,850);
+    ctx.lineTo(2150,900);
+    ctx.lineTo(2100,850);
+    ctx.lineTo(2050,900);
+    ctx.lineTo(2000,850);
+    ctx.lineTo(2000,495);
+    ctx.moveTo(2100,500);
+    ctx.lineTo(2100,850);
+    ctx.moveTo(2200,500);
+    ctx.lineTo(2200,850);
+    ctx.fill(); 
+    ctx.stroke();
+
+    // RIGHT REAR TIRE
+    ctx.translate(-1500,0);
+    ctx.fillStyle = "#2e2e2e"; 
+    ctx.moveTo(2000,500); 
+    ctx.lineTo(2050,450);
+    ctx.lineTo(2100,500);
+    ctx.lineTo(2150,450);
+    ctx.lineTo(2200,500);
+    ctx.lineTo(2250,450);
+    ctx.lineTo(2300,500);
+    ctx.lineTo(2300,850);
+    ctx.lineTo(2250,900);
+    ctx.lineTo(2200,850);
+    ctx.lineTo(2150,900);
+    ctx.lineTo(2100,850);
+    ctx.lineTo(2050,900);
+    ctx.lineTo(2000,850);
+    ctx.lineTo(2000,495);
+    ctx.moveTo(2100,500);
+    ctx.lineTo(2100,850);
+    ctx.moveTo(2200,500);
+    ctx.lineTo(2200,850);
+    ctx.fill(); 
+    ctx.stroke();
+
+    // FRONT LEFT TIRE
+    ctx.translate(50,1750);
+    ctx.fillStyle = "#2e2e2e"; 
+    ctx.moveTo(2000,500); 
+    ctx.lineTo(2050,450);
+    ctx.lineTo(2100,500);
+    ctx.lineTo(2150,450);
+    ctx.lineTo(2200,500);
+    ctx.lineTo(2250,450);
+    ctx.lineTo(2300,500);
+    ctx.lineTo(2300,850);
+    ctx.lineTo(2250,900);
+    ctx.lineTo(2200,850);
+    ctx.lineTo(2150,900);
+    ctx.lineTo(2100,850);
+    ctx.lineTo(2050,900);
+    ctx.lineTo(2000,850);
+    ctx.lineTo(2000,495);
+    ctx.moveTo(2100,500);
+    ctx.lineTo(2100,850);
+    ctx.moveTo(2200,500);
+    ctx.lineTo(2200,850);
+    ctx.fill(); 
+    ctx.stroke();
+
+    // FRONT RIGHT TIRE
+    ctx.translate(1400,0);
+    ctx.fillStyle = "#2e2e2e"; 
+    ctx.moveTo(2000,500); 
+    ctx.lineTo(2050,450);
+    ctx.lineTo(2100,500);
+    ctx.lineTo(2150,450);
+    ctx.lineTo(2200,500);
+    ctx.lineTo(2250,450);
+    ctx.lineTo(2300,500);
+    ctx.lineTo(2300,850);
+    ctx.lineTo(2250,900);
+    ctx.lineTo(2200,850);
+    ctx.lineTo(2150,900);
+    ctx.lineTo(2100,850);
+    ctx.lineTo(2050,900);
+    ctx.lineTo(2000,850);
+    ctx.lineTo(2000,495);
+    ctx.moveTo(2100,500);
+    ctx.lineTo(2100,850);
+    ctx.moveTo(2200,500);
+    ctx.lineTo(2200,850);
+    ctx.fill(); 
+    ctx.stroke();
+
+    ctx.restore();
+},[],0,0,-342,258);
+
 // @AVATARS
 
 export let MAIN_AVATAR_DEFAULT = new TextureData(0, 0, 0.2, "avatar", {
@@ -2569,7 +2893,7 @@ export let MAIN_AVATAR_DEFAULT = new TextureData(0, 0, 0.2, "avatar", {
     ctx.strokeRect(231, 60, 250, 75);
 
     ctx.restore();
-}, [0], 0, 0, 3000, 10000);
+}, [0], 0, 0, 1200, 1600);
 
 export let MAIN_AVATAR_DRAW_WEAPON = new TextureData(0, 0, 0.2, "avatar", {
     width: 702,

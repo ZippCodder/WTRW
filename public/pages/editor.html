@@ -15,7 +15,7 @@
                 border: solid;
                 width: 50%;
                 height: 50%;
-                background: gray;
+                background: white;
             }
 
             a {
@@ -103,6 +103,7 @@
             RELOAD_BUTTON_TEXTURE,
             AVATAR_MODE_BUTTON_TEXTURE,
             DROP_ITEM_BUTTON_TEXTURE,
+            OFF_ROADER,
             Sheet
         } from "/public/scripts/textures.js";
 
@@ -149,19 +150,20 @@
         //CAFE(-18, -18, 0.2);
         //MAIN_AVATAR_DEFAULT(-5, -5, 0.2);
   
-        resize(1024, 1024); // 1474 1864
+        resize(512, 1024); // 1474 1864
         // export function draw(a, w, h, iw, ih, s, lw, attribs=[],canvas) {
-        let texture = ACTION_BUTTON_TEXTURE//new Sheet([ROAD_RAIL,ROAD_SIGN,URBAN_FENCE_HALF,URBAN_FENCE,URBAN_FENCE_VERTICAL], 1024, 1024);
+        let texture = OFF_ROADER//new Sheet([ROAD_RAIL,ROAD_SIGN,URBAN_FENCE_HALF,URBAN_FENCE,URBAN_FENCE_VERTICAL], 1024, 1024);
+
         //ACTION_BUTTON_TEXTURE.render(ctx);
-        //MAIN_AVATAR_DEFAULT.render(ctx);
         //GLOCK_20.render(ctx);
         //URBAN_FENCE.render(ctx);
         //PICNIC_TABLE.render(ctx);
         texture.render(ctx);
+        //MAIN_AVATAR_DEFAULT.render(ctx);
         //GLOCK_20_TOP.render(ctx,-90); 
        // log(texture.getData());
           log(texture.getData());
           console.log(texture.textureDimensions);
-        setSource(`ACTION_BUTTON_TEXTURE_2.png`); 
+        setSource(`OFF_ROADER.png`); 
     </script>
 </html>
