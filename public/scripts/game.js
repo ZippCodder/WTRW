@@ -46,7 +46,11 @@
       GP_K100,
       KC_357,
       USP_45,
-      OffRoader
+      OffRoader, 
+      Grass, 
+      Grass2,
+      Rocks1, 
+      Rocks2, 
   } from "/public/scripts/objects.js";
 
   $AVATAR = new Avatar("R O B I N H O O D");

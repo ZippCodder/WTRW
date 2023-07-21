@@ -936,7 +936,7 @@ export class DownwardLight extends _Object_ {
 
             gl.drawArrays(gl.TRIANGLES, 0, this.vertices.length / 5);
 
-            gl.uniform1f(locations.darkness, this.map.darkness + globalDarkness);
+            gl.uniform1f(locations.darkness, 1);
             gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
             gl.uniform4fv(locations.lightColor, [0, 0, 0, 0]);
         }, 70, 70, initialX, initialY, initialRotation);
@@ -2054,6 +2054,8 @@ export class Avatar {
         this.nameObj = new Text(name, 25);
         this.nameObj.translate(initialX + 0, initialY + 10);
         this.vao = ext.createVertexArrayOES();
+        ext.bindVertexArrayOES(this.vao);
+
         this.body = [
             [-7.0200000000000005, 4.28, 1, 0, 0, 0, 7.0200000000000005, 4.28, 1, 0.5484375, 0, 0, -7.0200000000000005, -4.28, 1, 0, 0.66875, 0, 7.0200000000000005, 4.28, 1, 0.5484375, 0, 0, -7.0200000000000005, -4.28, 1, 0, 0.66875, 0, 7.0200000000000005, -4.28, 1, 0.5484375, 0.66875, 0],
             [-7.12, 21.5, 1, -0.00390625, -0.001953125, 0, 6.920000000000001, 21.5, 1, 0.54453125, -0.001953125, 0, -7.12, -21.299999999999997, 1, -0.00390625, 0.833984375, 0, 6.920000000000001, 21.5, 1, 0.54453125, -0.001953125, 0, -7.12, -21.299999999999997, 1, -0.00390625, 0.833984375, 0, 6.920000000000001, -21.299999999999997, 1, 0.54453125, 0.833984375, 0]
@@ -2342,11 +2344,18 @@ export class Avatar {
         this.textures = [];
 
         ext.bindVertexArrayOES(this.vao);
-
-        this.buffer = gl.createBuffer();
+        this.buffer = gl.createBuffer();       
         gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([...this.body[this.state.position.body.vertices], ...this.eyes[this.state.position.eyes.vertices]]), gl.STATIC_DRAW);
+        gl.vertexAttribPointer(locations.coords, 3, gl.FLOAT, false, 24, 0); // 20
+        gl.vertexAttribPointer(locations.tcoords, 2, gl.FLOAT, false, 24, 12);
+        gl.vertexAttribPointer(locations.textrUnit, 1, gl.FLOAT, false, 24, 20);
+        gl.enableVertexAttribArray(locations.coords);
+        gl.enableVertexAttribArray(locations.tcoords);
+        gl.enableVertexAttribArray(locations.textrUnit);
+        gl.disableVertexAttribArray(locations.offset);
 
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([...this.body[this.state.position.body.vertices], ...this.eyes[this.state.position.eyes.vertices]]), gl.STATIC_DRAW);
+ 
         this.textures[0] = gl.createTexture();
 
         gl.activeTexture(gl.TEXTURE0);
@@ -2413,13 +2422,6 @@ export class Avatar {
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
-        gl.vertexAttribPointer(locations.coords, 3, gl.FLOAT, false, 24, 0); // 20
-        gl.vertexAttribPointer(locations.tcoords, 2, gl.FLOAT, false, 24, 12);
-        gl.vertexAttribPointer(locations.textrUnit, 1, gl.FLOAT, false, 24, 20);
-        gl.enableVertexAttribArray(locations.coords);
-        gl.enableVertexAttribArray(locations.tcoords);
-        gl.enableVertexAttribArray(locations.textrUnit);
-        gl.disableVertexAttribArray(locations.offset);
         gl.useProgram(program);
     }
 

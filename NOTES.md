@@ -19,5 +19,6 @@
 6. Implement explovives
 7. Implement textured floors
 8. Implement wallpapers
-9. Deprecate clusters and have all objects rendered as separate.
-10. Shrink button textures
+9. Implement map object-type layers
+10. Implement cluster layer system
+11. Shrink button textures
