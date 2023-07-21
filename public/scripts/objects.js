@@ -322,11 +322,7 @@ export class _BulletCluster_ {
         gl.enableVertexAttribArray(locations.offset);
     }
 
-    link(xOffset = 0, yOffset = 0, rotation = 0, bullet) {
-        if (!this.linked) {
-            $CURRENT_MAP.link(this);
-            this.linked = true;
-        }
+    link(xOffset = 0, yOffset = 0, rotation = 0, bullet) { 
 
         let m = this.members * 3;
         let t = this.members * 2;
@@ -472,7 +468,7 @@ export class _InstancedCluster_ {
         gl.enableVertexAttribArray(locations.offset);
     }
 
-    link(xOffset = 0, yOffset = 0, rotation = 0) {
+    link(xOffset = 0, yOffset = 0, rotation = 0) { 
 
         let m = this.members * 3;
 
@@ -620,12 +616,7 @@ export class _MixedStaticCluster_ {
     }
 
     link(vertices, xOffset = 0, yOffset = 0, rotation = 0) {
-
-        if (!this.linked) {
-            $CURRENT_MAP.link(this);
-            this.linked = true;
-        }
-
+ 
         this.vertices.push(offsetVertices(vertices, xOffset, yOffset, rotation, this.stride));
 
         let v = this.vertices.flat(1);
@@ -1638,6 +1629,7 @@ export class _Building_ extends _StaticClusterClient_ {
 
         this.setup = setup;
         this.doors = [];
+        this.type = "building";
         this.rooms = rooms || [new _Map_(150, 80, false).init([
             [0 + doorOffset, 35]
         ], doorOffset)];
@@ -3272,6 +3264,14 @@ export class _Map_ {
         this.moveables = {};
         this.locations = {};
         this.clusters = {};
+        this.subLayers = {
+         1: [],
+         2: [],
+         3: [],
+         4: [],
+         5: [],
+         6: [] 
+        };
         this.interactables = {};
         this.GRAPH = new _Graph_(this.units.width, this.units.height, true);
         this.GRAPH.map = this; 
@@ -3310,18 +3310,18 @@ export class _Map_ {
             let ob = this.objects[i];
             if (ob.preRender && !this.freeze) ob.preRender();
 
-            if (!(ob instanceof Barrier || ob instanceof Trigger || ob instanceof Avatar) && !ob.bottomLayer && !ob.topLayer && !ob.hasCluster && !ob.hidden && this.show) {
+            if (!(ob instanceof Barrier || ob instanceof Trigger || ob instanceof Avatar) && !ob.bottomLayer && !ob.topLayer && !ob.hasCluster && !ob.hidden && !ob.subLayer && this.show) {
                 ob.render();
             }
         }
+
+        if (this.show) this.renderSubLayers();
   
         for (let i in this.avatars) {
             let av = this.avatars[i];
 
             if (av.preRender && !this.freeze) av.preRender();
-            if (this.show) {
-              av.render();
-            }
+            if (this.show) av.render();
         } 
     }
 
@@ -3331,10 +3331,12 @@ export class _Map_ {
 
                 let ob = this.objects[i];
 
-                if (!(ob instanceof Barrier || ob instanceof Trigger) && !ob.bottomLayer && ob.topLayer && !ob.hasCluster && !ob.hidden) {
+                if (!(ob instanceof Barrier || ob instanceof Trigger || ob instanceof Avatar) && !ob.bottomLayer && ob.topLayer && !ob.hasCluster && !ob.hidden && !ob.subLayer) {
                     ob.render();
                 }
             }
+
+            this.renderSubLayers("topLayer");
 
             if (!this._lineMatrix.hidden) this._lineMatrix.render();
         }
@@ -3346,11 +3348,23 @@ export class _Map_ {
 
                 let ob = this.objects[i];
 
-                if (!(ob instanceof Barrier || ob instanceof Trigger) && !ob.topLayer && ob.bottomLayer && !ob.hasCluster && !ob.hidden) {
+                if (!(ob instanceof Barrier || ob instanceof Trigger || ob instanceof Avatar) && !ob.topLayer && ob.bottomLayer && !ob.hasCluster && !ob.hidden && !ob.subLayer) {
                     ob.render();
                 }
             }
+ 
+            this.renderSubLayers("bottomLayer");
         }
+    }
+  
+    renderSubLayers(layer) {
+     for (let l in this.subLayers) {
+       for (let ob of this.subLayers[l]) {
+         if (!(ob instanceof Barrier || ob instanceof Trigger || ob instanceof Avatar) && (ob[layer] || !layer) && !ob.hasCluster && !ob.hidden) {
+            ob.render();
+         }
+       } 
+     }     
     }
 
     link(obj) {
@@ -3359,26 +3373,50 @@ export class _Map_ {
             if (obj.hasCluster) {
                 switch (obj.clusterType) {
                     case _StaticCluster_: {
-                        if (!this.clusters[obj.clusterName]) this.registerCluster(obj.clusterName, new obj.clusterType(obj.texture, obj.topLayer));
+                        if (!this.clusters[obj.clusterName]) {
+                          let cluster = new obj.clusterType(obj.texture, obj.topLayer);
+ 
+                          cluster.bottomLayer = obj.bottomLayer;
+                          cluster.topLayer = obj.topLayer;
+                          cluster.subLayer = obj.subLayer;
+
+                           this.registerCluster(obj.clusterName, cluster);
+                        }
+ 
                         obj.cluster = this.clusters[obj.clusterName];
-                        obj.cluster.bottomLayer = obj.bottomLayer;
-                        obj.cluster.topLayer = obj.topLayer;
+
                         obj.clusterIndex = this.clusters[obj.clusterName].link(obj.constructor._defaultVertices, -this.clusters[obj.clusterName].trans.offsetX + obj.trans.offsetX, -this.clusters[obj.clusterName].trans.offsetY + obj.trans.offsetY, obj.trans.rotation);
                     };
                     break;
                     case _InstancedCluster_: {
-                        if (!this.clusters[obj.clusterName]) this.registerCluster(obj.clusterName, new obj.clusterType(obj.constructor._defaultVertices, obj.texture, obj.type === "light"));
+                        if (!this.clusters[obj.clusterName]) {
+                         let cluster = new obj.clusterType(obj.constructor._defaultVertices, obj.texture, obj.type === "light");
+
+                         cluster.bottomLayer = obj.bottomLayer;
+                         cluster.topLayer = obj.topLayer;
+                         cluster.subLayer = obj.subLayer;
+
+                         this.registerCluster(obj.clusterName, cluster);
+                        }
+                        
                         obj.cluster = this.clusters[obj.clusterName];
-                        obj.cluster.bottomLayer = obj.bottomLayer;
-                        obj.cluster.topLayer = obj.topLayer;
+                        
                         obj.clusterIndex = this.clusters[obj.clusterName].link(-this.clusters[obj.clusterName].trans.offsetX + obj.trans.offsetX, -this.clusters[obj.clusterName].trans.offsetY + obj.trans.offsetY, obj.trans.rotation);
                     };
                     break;
                     case _MixedStaticCluster_: {
-                        if (!this.clusters[obj.clusterName]) this.registerCluster(obj.clusterName, new obj.clusterType(_MixedStaticCluster_.groupings[obj.grouping]));
+                        if (!this.clusters[obj.clusterName]) {
+                         let cluster = new obj.clusterType(_MixedStaticCluster_.groupings[obj.grouping]);                         
+
+                         cluster.bottomLayer = obj.bottomLayer;
+                         cluster.topLayer = obj.topLayer;
+                         cluster.subLayer = obj.subLayer;
+
+                         this.registerCluster(obj.clusterName, cluster);
+                        }
+
                         obj.cluster = this.clusters[obj.clusterName];
-                        obj.cluster.bottomLayer = obj.bottomLayer;
-                        obj.cluster.topLayer = obj.topLayer;
+                        
                         obj.clusterIndex = this.clusters[obj.clusterName].link(obj.constructor._defaultVertices, -this.clusters[obj.clusterName].trans.offsetX + obj.trans.offsetX, -this.clusters[obj.clusterName].trans.offsetY + obj.trans.offsetY, obj.trans.rotation);
                     };
                     break;
@@ -3391,11 +3429,13 @@ export class _Map_ {
             obj.index = this.objectCount;
 
             this.objects[obj.id] = obj;
+
             if (obj.obstacle) this.obstacles[obj.id] = obj;
             if (obj.pickup) this.pickups[obj.id] = obj;
             if (obj.moveable) this.moveables[obj.id] = obj;
             if (obj.interactable) this.interactables[obj.id] = obj;
             if (obj.type === "avatar") this.avatars[obj.id] = obj;
+            if (obj.subLayer && !obj.hasCluster) this.subLayers[obj.subLayer].push(obj);
 
             if (obj.isCluster) obj.linked = true;
 

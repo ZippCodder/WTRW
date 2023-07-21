@@ -220,7 +220,7 @@ window.onload = async () => {
           fragment[0] = lightColor[0]/d;
           fragment[1] = lightColor[1]/d;
           fragment[2] = lightColor[2]/d;
-        }
+          }
                    
         gl_FragColor = fragment;
         }

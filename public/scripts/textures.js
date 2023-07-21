@@ -272,11 +272,11 @@ export let ACTION_BUTTON_TEXTURE = new TextureData(0, 0, 1, "control", {
     ctx.stroke();
 });
 
-export let RELOAD_BUTTON_TEXTURE = new TextureData(0, 0, 3, "control", {
-    width: 600,
-    height: 600
+export let RELOAD_BUTTON_TEXTURE = new TextureData(0, 0, 1.5, "control", {
+    width: 300,
+    height: 300
 }, [
-    [0, 0, 600, 600]
+    [0, 0, 300, 300]
 ], 0, undefined, function(ctx) {
     // base body: 600x600, texture: 1024x1024, size: 20
     ctx.scale(this.size || 0, this.size || 0);
@@ -316,7 +316,7 @@ export let RELOAD_BUTTON_TEXTURE = new TextureData(0, 0, 3, "control", {
     ctx.lineTo(361,323);
     ctx.stroke(); 
 
-}, [], 600, 600);
+}, [], 300, 300);
 
 export let AVATAR_MODE_BUTTON_TEXTURE = new TextureData(0, 0, 1, "control", {
     width: 600,
