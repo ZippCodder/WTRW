@@ -453,6 +453,14 @@ export class _InstancedCluster_ {
         this.trans.offsetX += x;
         this.trans.offsetY += y;
     }
+ 
+    updateBuffer() {
+       ext.bindVertexArrayOES(this.vao);
+       gl.bindBuffer(gl.ARRAY_BUFFER, this.offsetBuffer);
+       gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.offsets), gl.DYNAMIC_DRAW);
+       gl.vertexAttribPointer(locations.offset, 3, gl.FLOAT, false, 12, 0);
+       gl.enableVertexAttribArray(locations.offset);
+    }
 
     translateVertices(index, x = 0, y = 0, rotation = 0) {
         let i = index * 3;
@@ -460,12 +468,8 @@ export class _InstancedCluster_ {
         this.offsets[i] += x;
         this.offsets[i + 1] += y;
         this.offsets[i + 2] = (-rotation) * (Math.PI / 180);
-
-        ext.bindVertexArrayOES(this.vao);
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.offsetBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.offsets), gl.DYNAMIC_DRAW);
-        gl.vertexAttribPointer(locations.offset, 3, gl.FLOAT, false, 12, 0);
-        gl.enableVertexAttribArray(locations.offset);
+  
+        this.updateBuffer();
     }
 
     link(xOffset = 0, yOffset = 0, rotation = 0) { 
@@ -476,12 +480,7 @@ export class _InstancedCluster_ {
         this.offsets[m + 1] = yOffset;
         this.offsets[m + 2] = (-rotation) * (Math.PI / 180);
 
-        ext.bindVertexArrayOES(this.vao);
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.offsetBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.offsets), gl.DYNAMIC_DRAW);
-        gl.vertexAttribPointer(locations.offset, 3, gl.FLOAT, false, 12, 0);
-        gl.enableVertexAttribArray(locations.offset);
-
+        this.updateBuffer();     
         this.instances++;
 
         return this.members++;
@@ -494,11 +493,7 @@ export class _InstancedCluster_ {
         delete this.offsets[i + 1];
         delete this.offsets[i + 2];
 
-        ext.bindVertexArrayOES(this.vao);
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.offsetBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.offsets), gl.DYNAMIC_DRAW);
-        gl.vertexAttribPointer(locations.offset, 3, gl.FLOAT, false, 12, 0);
-        gl.enableVertexAttribArray(locations.offset);
+        this.updateBuffer();
     }
 
     render() {
@@ -786,6 +781,11 @@ export class _MixedStaticClusterClient_ {
         if (translateVertices) this.cluster.translateVertices(this.clusterIndex, this.constructor._defaultVertices, -this.cluster.trans.offsetX + this.trans.offsetX, -this.cluster.trans.offsetY + this.trans.offsetY, this.trans.rotation);
     }
 
+    moveToTop() {
+      this.cluster.unlink(this.clusterIndex);
+      this.clusterIndex = this.cluster.link(this.constructor._defaultVertices, -this.cluster.trans.offsetX + this.trans.offsetX, -this.cluster.trans.offsetY + this.trans.offsetY, this.trans.rotation);
+    }
+
     delete() {
         this.map.unlink(this.id);
     }
@@ -812,6 +812,11 @@ export class _StaticClusterClient_ {
             this.trans.rotation = rotation;
         }
         if (translateVertices) this.cluster.translateVertices(this.clusterIndex, this.constructor._defaultVertices, -this.cluster.trans.offsetX + this.trans.offsetX, -this.cluster.trans.offsetY + this.trans.offsetY, this.trans.rotation);
+    }
+ 
+    moveToTop() {
+     this.cluster.unlink(this.clusterIndex);
+     this.clusterIndex = this.cluster.link(this.constructor._defaultVertices, -this.cluster.trans.offsetX + this.trans.offsetX, -this.cluster.trans.offsetY + this.trans.offsetY, this.trans.rotation);
     }
 
     delete() {
@@ -841,6 +846,11 @@ export class _InstancedClusterClient_ {
         }
         if (translateVertices) this.cluster.translateVertices(this.clusterIndex, x, y, this.trans.rotation);
     }
+ 
+    moveToTop() {
+      this.cluster.unlink(this.clusterIndex);
+      this.clusterIndex = this.cluster.link(-this.cluster.trans.offsetX + this.trans.offsetX, -this.cluster.trans.offsetY + this.trans.offsetY, this.trans.rotation);
+    }  
 
     delete() {
         this.map.unlink(this.id);
@@ -927,7 +937,7 @@ export class DownwardLight extends _Object_ {
 
             gl.drawArrays(gl.TRIANGLES, 0, this.vertices.length / 5);
 
-            gl.uniform1f(locations.darkness, 1);
+            gl.uniform1f(locations.darkness, this.map.darkness);
             gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
             gl.uniform4fv(locations.lightColor, [0, 0, 0, 0]);
         }, 70, 70, initialX, initialY, initialRotation);
