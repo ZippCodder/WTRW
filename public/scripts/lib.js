@@ -57,7 +57,7 @@ export function draw(a, w, h, iw, ih, s, lw, tx, ty, attribs = [], canvas) {
 
             x -= (w / 2) + (lw / 2);
             y += th;
-            y = ((h / 2) + (lw / 2)) - y;
+            y = ((h / 2) - (lw / 2)) - y;
 
             tw += lw;
             th += lw; 

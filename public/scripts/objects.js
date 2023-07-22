@@ -1398,7 +1398,7 @@ export class PicnicTable extends _StaticClusterClient_ {
     clusterName = "picnic table";
     texture = textures.picnictable;
     segments = [
-        [-14.2,-11.7,8.4,18.4],[-6.2,-11.3,12.4,20.4],[5.8,-11.7,8.4,18.4]
+        [-14.2,-12.1,8.4,18.4],[-6.2,-11.7,12.4,20.4],[5.8,-12.1,8.4,18.4]
     ];
     interactable = true;
     minDistance = 20;
@@ -1623,7 +1623,7 @@ export class Table extends _StaticClusterClient_ {
     texture = textures.table;
     obstacle = true;
     segments = [
-        [-14.2,-6.7,28.4,16.4]
+        [-14.2,-7.1,28.4,16.4]
     ];
 
     constructor(initialX, initialY, initialRotation) {
@@ -2660,25 +2660,21 @@ export class Avatar {
                     }
 
                     this.trans.rotation = Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX)) - 1.5708;
-                    if (!this.state.draw) {
-                        this.drawWeapon();
-                        this.state.fire = true;
-                    }
+                    if (!this.state.draw) this.drawWeapon();
+                    if (this.state.target.shot) this.state.fire = true;
+   
                 } else if (dist < this.state.attack.slowdownDistance) {
                     this.trans.rotation = Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX)) - 1.5708;
-                    if (!this.state.draw) {
-                        this.drawWeapon();
-                        this.state.fire = true;
-                    }
+                    if (!this.state.draw) this.drawWeapon();
+                    if (this.state.target.shot) this.state.fire = true;
 
                     if (!this.state.follow.rush || !this.state.follow.target) this.state.speed = this.state.baseSpeed * (this.state.attack.attackSpeed/3);
                 } else if (dist < this.state.attack.engageDistance) {
                     this.state.speed = this.state.baseSpeed * this.state.attack.attackSpeed;
                     this.trans.rotation = Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX)) - 1.5708;
-                    if (!this.state.draw) {
-                        this.drawWeapon();
-                        this.state.fire = true;
-                    }
+                    if (!this.state.draw) this.drawWeapon();
+                    if (this.state.target.shot) this.state.fire = true;
+                    
                     if (!this.state.path.engaged && !this.state.follow.target) {
                         this.requestPath(targetX + m.centerX, targetY + m.centerY);
                     }

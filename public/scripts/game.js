@@ -161,9 +161,9 @@ $MAP.translate(0, 0);
       a.addItem(new GLOCK_20(0, 0, 0, 1000));
       a.state.fireAnimation.rate = 0.5 / 1;
       a.state.targetId = id;
-      a.killTarget([b.id]);
-  } */
-
+      a.killTarget([$AVATAR.id]);
+  } 
+*/
   // Developer console
 
   let consoleActive = false;
