@@ -4706,25 +4706,25 @@ export let ROAD_RAIL_VERTICAL = new TextureData(-58, -18, 0.2, "prop", {
 });
 
 export let PLUS_100 = new TextureData(0, 0, 0.2, "prop", {
-    width: 394,
+    width: 415,
     height: 110
 }, [
-    [0, 0, 394, 110]
+    [0, 0, 415, 110]
 ], 0, undefined, function(ctx) {
     ctx.save();
     ctx.translate(this.offset.vx, this.offset.vy);
     ctx.scale(this.size, this.size);
-    ctx.beginPath();
 
     ctx.strokeStyle = "#2cd158";
-    ctx.textBaseline = "top";
-    ctx.lineWidth = 20;
+    ctx.fillStyle = "#2cd158";
+    ctx.lineWidth = 40;
+    ctx.strokeRect(595,20,50,70);
+    ctx.strokeRect(490,20,50,70);
 
-      ctx.font = "200px Geo";
-      ctx.strokeText("+100", 206, -1);
-      ctx.restore();
-},[],0,0,-200,-60);
+    ctx.fillRect(405,0,40,110);
+    ctx.fillRect(365,0,40,40);
+    ctx.fillRect(285,0,40,110);
+    ctx.fillRect(250,35,110,40);
 
-
-
-
+    ctx.restore();
+},[],0,0,-250,0);

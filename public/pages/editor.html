@@ -153,8 +153,6 @@
   
         resize(128, 32); // 1474 1864
         // export function draw(a, w, h, iw, ih, s, lw, attribs=[],canvas) {
-        let font = new FontFace("Geo","url(https://fonts.gstatic.com/s/geo/v19/CSRz4zRZluflKHpn.woff2)"); 
-    font.load().then(() => {
         //MAIN_AVATAR_DEFAULT.render(ctx);
         let texture = PLUS_100//new Sheet([ROAD_RAIL,ROAD_SIGN,URBAN_FENCE_HALF,URBAN_FENCE,URBAN_FENCE_VERTICAL], 1024, 1024);
 
@@ -168,6 +166,5 @@
           log(texture.getData());
           console.log(texture.textureDimensions);
         setSource(`PLUS_100.png`); 
-});
     </script>
 </html>

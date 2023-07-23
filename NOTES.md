@@ -19,8 +19,6 @@
 6. Implement explovives
 7. Implement textured floors
 8. Implement wallpapers
-9. Implement map object-type layers
-10. Implement cluster layer system
-11. Re-add bullet texture
-12. Refine fireAnimation logic
-13. Implement +100 message popup on enemy death
+9. Implement cluster layer system
+10. Re-add bullet texture
+11. Refine fireAnimation logic
