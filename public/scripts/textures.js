@@ -3929,7 +3929,7 @@ export let BULLETSHELL = new TextureData(0, 0, 0.2, "prop", {
     [0, 0, 90, 50]
 ], 0, undefined, function(ctx) {
     ctx.save();
-    ctx.translate(this.offset.x, this.offset.y);
+    ctx.translate(this.offset.vx, this.offset.vy);
     ctx.scale(this.size, this.size);
     ctx.beginPath();
     ctx.lineWidth = 10;
@@ -3948,7 +3948,7 @@ export let BULLETSHELL = new TextureData(0, 0, 0.2, "prop", {
     ctx.stroke();
 
     ctx.restore();
-});
+},[],0,0,5,5);
 
 export let ROAD_SIGN = new TextureData(10, 10, 0.2, "prop", {
     width: 400,

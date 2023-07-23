@@ -21,4 +21,6 @@
 8. Implement wallpapers
 9. Implement map object-type layers
 10. Implement cluster layer system
-11. Shrink button textures
+11. Re-add bullet texture
+12. Refine fireAnimation logic
+13. Implement +100 message popup on enemy death

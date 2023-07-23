@@ -977,6 +977,40 @@ export class Grass extends _InstancedClusterClient_ {
     }
 }
 
+export class BulletShell extends _InstancedClusterClient_ {
+
+    static _defaultVertices = [-0.9,0.5,1,0,0,0.9,0.5,1,0.5625,0,-0.9,-0.5,1,0,0.625,0.9,0.5,1,0.5625,0,-0.9,-0.5,1,0,0.625,0.9,-0.5,1,0.5625,0.625];
+
+    width = 1.8;
+    height = 1;
+    name = "bullet shell";
+    clusterName = "bullet shell";
+    texture = textures.bulletshell;
+    exclude = true;
+    bottomLayer = true;
+    preserveCluster = true;
+
+    constructor(initialX, initialY, directionX, directionY) {
+        super(initialX, initialY, random(360));
+        
+        this.directionX = directionX;
+        this.directionY = directionY;
+        this.animation = new LoopAnimation(function() {
+          this.translate(directionX/=2,directionY/=2,this.trans.rotation-(this.trans.rotation*2),true);
+        },this,0.01);
+        this.timeout = new MultiFrameLinearAnimation([function() {
+          this.delete();
+        }], this, [0.2]);
+    }
+ 
+    preRender() {
+       this.animation.run();
+       this.timeout.start();
+       this.timeout.run();
+    }
+}
+
+
 export class Grass2 extends _InstancedClusterClient_ {
 
     static _defaultVertices = [-1.5, 1.5, 1, 0, 0, 1.5, 1.5, 1, 0.9375, 0, -1.5, -1.5, 1, 0, 0.9375, 1.5, 1.5, 1, 0.9375, 0, -1.5, -1.5, 1, 0, 0.9375, 1.5, -1.5, 1, 0.9375, 0.9375];
@@ -1940,7 +1974,7 @@ export class GLOCK_20 extends _Gun_ {
         damage: 10,
         accuracy: 5,
         nozzelLength: 13,
-        capacity: 15,
+        capacity: 1000,
         reloadTime: 3
     }
 
@@ -2459,6 +2493,13 @@ export class Avatar {
 
             map.link(new Bullet(nx + this.trans.offsetX, ny + this.trans.offsetY, ((this.trans.rotation) * 180 / Math.PI) + 90, (x) * this.state.equippedItems.mainTool.constructor._properties.bulletSpeed, (y) * this.state.equippedItems.mainTool.constructor._properties.bulletSpeed, this.state.equippedItems.mainTool.constructor._properties.damage, this));
 
+            let [shellDirectionX,shellDirectionY] = rotate(20,0,(this.trans.rotation) * 180 / Math.PI), randomShellRotation = random(10);
+            let [randomShellDirectionX,randomShellDirectionY] = rotate(shellDirectionX,shellDirectionY,(Math.random() < 0.5) ? -randomShellRotation:randomShellRotation);
+
+            let [shellInitialX, shellInitialY] = rotate(0,8,(this.trans.rotation) * 180 / Math.PI);
+
+            map.link(new BulletShell(this.trans.offsetX+shellInitialX,this.trans.offsetY+shellInitialY,randomShellDirectionX,randomShellDirectionY));
+
             this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo--;
 
             this.state.reload.progress++;
@@ -2832,6 +2873,8 @@ export class Avatar {
                let obj = $CURRENT_MAP.moveables[i];               
 
                if ((Math.abs(x - obj.trans.offsetX) < (obj.width / 2 + width / 2)) && (Math.abs(y - obj.trans.offsetY) < (obj.height / 2 + height / 2))) {
+                 obj.moveToTop();
+
                  this.state.pickup.offset.x = obj.trans.offsetX;
                  this.state.pickup.offset.y = obj.trans.offsetY;
                  this.state.pickup.offset.aRotation = (this.trans.rotation * 180 / Math.PI);
@@ -3463,7 +3506,7 @@ export class _Map_ {
         if (this.objects[id]) {
 
             if (this.objects[id].clean) this.objects[id].clean();
-            if (this.objects[id].hasCluster) {
+            if (this.objects[id].hasCluster && !this.objects[id].preserveCluster) {
                 this.objects[id].cluster.unlink(this.objects[id].clusterIndex);
                 this.objects[id].cluster = undefined;
             }
