@@ -51,7 +51,8 @@
       Grass2,
       Rocks1, 
       Rocks2,
-      BulletShell 
+      BulletShell,
+      Plus100 
   } from "/public/scripts/objects.js";
 
   $AVATAR = new Avatar("R O B I N H O O D");

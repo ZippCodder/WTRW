@@ -2893,7 +2893,7 @@ export let MAIN_AVATAR_DEFAULT = new TextureData(0, 0, 0.2, "avatar", {
     ctx.strokeRect(231, 60, 250, 75);
 
     ctx.restore();
-}, [0], 0, 0, 1200, 1600);
+}, [0], 0, 0, 0, 0);
 
 export let MAIN_AVATAR_DRAW_WEAPON = new TextureData(0, 0, 0.2, "avatar", {
     width: 702,
@@ -4704,3 +4704,27 @@ export let ROAD_RAIL_VERTICAL = new TextureData(-58, -18, 0.2, "prop", {
 
     ctx.restore();
 });
+
+export let PLUS_100 = new TextureData(0, 0, 0.2, "prop", {
+    width: 394,
+    height: 110
+}, [
+    [0, 0, 394, 110]
+], 0, undefined, function(ctx) {
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.scale(this.size, this.size);
+    ctx.beginPath();
+
+    ctx.strokeStyle = "#2cd158";
+    ctx.textBaseline = "top";
+    ctx.lineWidth = 20;
+
+      ctx.font = "200px Geo";
+      ctx.strokeText("+100", 206, -1);
+      ctx.restore();
+},[],0,0,-200,-60);
+
+
+
+

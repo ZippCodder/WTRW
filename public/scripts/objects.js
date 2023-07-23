@@ -1010,6 +1010,29 @@ export class BulletShell extends _InstancedClusterClient_ {
     }
 }
 
+export class Plus100 extends _InstancedClusterClient_ {
+
+    static _defaultVertices = [-3.9400000000000004,1.1,1,0,0,3.9400000000000004,1.1,1,0.6156250000000001,0,-3.9400000000000004,-1.1,1,0,0.6875,3.9400000000000004,1.1,1,0.6156250000000001,0,-3.9400000000000004,-1.1,1,0,0.6875,3.9400000000000004,-1.1,1,0.6156250000000001,0.6875];
+
+    width = 7.88;
+    height = 2.2;
+    name = "plus 100";
+    clusterName = "plus 100";
+    texture = textures.plus100;
+
+    constructor(initialX, initialY, initialRotation) {
+        super(initialX, initialY, initialRotation);
+ 
+        this.animation = new LoopAnimation(function() {
+          this.translate(0,0.2,0,true);
+          if (this.trans.offsetY > initialY+10) this.delete();     
+        },this,0.01);
+    }
+
+    preRender() {
+     this.animation.run();
+    }
+}
 
 export class Grass2 extends _InstancedClusterClient_ {
 
@@ -2514,6 +2537,9 @@ export class Avatar {
             if (this.state.vitals.health <= 0) {
                 let a = (this.map ?? $CURRENT_MAP).avatars[owner.id];
                 if (a) a.state.kills += 1;
+
+                if (owner.id === $AVATAR.id) this.map.link(new Plus100(this.trans.offsetX,this.trans.offsetY+10)); 
+
                 this.purgeItems(5);
                 this.delete();
                 return;

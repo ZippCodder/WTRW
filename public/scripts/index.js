@@ -339,7 +339,8 @@ window.onload = async () => {
         dropitem1: document.querySelector("#dropitem1"),
         dropitem2: document.querySelector("#dropitem2"),
         offroader: document.querySelector("#offroader"),
-        bulletshell: document.querySelector("#bulletshell")
+        bulletshell: document.querySelector("#bulletshell"),
+        plus100: document.querySelector("#plus100")
     }
 
     gl.uniform1f(locations.worldUnitX, worldUnitX);
