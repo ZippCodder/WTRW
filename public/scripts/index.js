@@ -331,7 +331,7 @@ window.onload = async () => {
         roads: document.querySelector("#roads"),
         fences: document.querySelector("#fences"),
         luxuryapartment: document.querySelector("#luxuryapartment"),
-        house1: document.querySelector("#house1"), 
+        house1: document.querySelector("#house1"),
         reloadbutton: document.querySelector("#reloadbutton"),
         reloadbuttonactive: document.querySelector("#reloadbuttonactive"),
         avatarmode1: document.querySelector("#avatarmode1"),
@@ -386,7 +386,7 @@ window.onload = async () => {
     }
 
     $OBJECTS.push($AVATAR);
-    $CONTROLS.push($JOYSTICK_L,$JOYSTICK_R,$ACTION_BUTTON,$RELOAD_BUTTON,$AVATAR_MODE_BUTTON,$DROP_ITEM_BUTTON);
+    $CONTROLS.push($JOYSTICK_L, $JOYSTICK_R, $ACTION_BUTTON, $RELOAD_BUTTON, $AVATAR_MODE_BUTTON, $DROP_ITEM_BUTTON);
 
     let loadingScreen = document.querySelector("#loading-screen");
     let gameStats = document.querySelector("#game-stats");

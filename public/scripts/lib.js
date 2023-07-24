@@ -47,7 +47,7 @@ export function draw(a, w, h, iw, ih, s, lw, tx, ty, attribs = [], canvas) {
         let bounds = [];
 
         for (let i of a) {
-          if (i[4] === 0) continue;
+            if (i[4] === 0) continue;
 
             let [x,
                 y,
@@ -60,7 +60,7 @@ export function draw(a, w, h, iw, ih, s, lw, tx, ty, attribs = [], canvas) {
             y = ((h / 2) - (lw / 2)) - y;
 
             tw += lw;
-            th += lw; 
+            th += lw;
 
             bounds.push([x / s, y / s, tw / s, th / s]);
         }
@@ -316,21 +316,69 @@ export function random(max, mirror) {
 }
 
 export function isIntersecting(a1, b1, a2, b2) {
-  function getOrientation(p, q, r) {
-    let o = (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y);
-    return o === 0 ? 0 : o < 1 ? -1 : 1;
-  }
+    function getOrientation(p, q, r) {
+        let o = (q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y);
+        return o === 0 ? 0 : o < 1 ? -1 : 1;
+    }
 
-  let o1 = getOrientation(a1, b1, a2);
-  let o2 = getOrientation(a1, b1, b2);
-  let o3 = getOrientation(a2, b2, a1);
-  let o4 = getOrientation(a2, b2, b1);
+    let o1 = getOrientation(a1, b1, a2);
+    let o2 = getOrientation(a1, b1, b2);
+    let o3 = getOrientation(a2, b2, a1);
+    let o4 = getOrientation(a2, b2, b1);
 
-  return o1 !== o2 && o3 !== o4;
+    return o1 !== o2 && o3 !== o4;
 }
 
 export function lineIntersectsBox(p1, p2, p3, p4, bx, by, bw, bh) {
-  return isIntersecting({x: p1, y: p2},{x: p3, y: p4},{x:  bx, y: by},{x: bx+bw, y: by}) || isIntersecting({x: p1, y: p2},{x: p3, y: p4},{x:  bx, y: by},{x: bx, y: by+bh}) || isIntersecting({x: p1, y: p2},{x: p3, y: p4},{x:  bx+bw, y: by+bh},{x: bx, y: by+bh}) || isIntersecting({x: p1, y: p2},{x: p3, y: p4},{x:  bx+bw, y: by+bh},{x: bx+bw, y: by}); 
+    return isIntersecting({
+        x: p1,
+        y: p2
+    }, {
+        x: p3,
+        y: p4
+    }, {
+        x: bx,
+        y: by
+    }, {
+        x: bx + bw,
+        y: by
+    }) || isIntersecting({
+        x: p1,
+        y: p2
+    }, {
+        x: p3,
+        y: p4
+    }, {
+        x: bx,
+        y: by
+    }, {
+        x: bx,
+        y: by + bh
+    }) || isIntersecting({
+        x: p1,
+        y: p2
+    }, {
+        x: p3,
+        y: p4
+    }, {
+        x: bx + bw,
+        y: by + bh
+    }, {
+        x: bx,
+        y: by + bh
+    }) || isIntersecting({
+        x: p1,
+        y: p2
+    }, {
+        x: p3,
+        y: p4
+    }, {
+        x: bx + bw,
+        y: by + bh
+    }, {
+        x: bx + bw,
+        y: by
+    });
 }
 
 // Animation creation objects
@@ -425,7 +473,7 @@ export class MultiFrameLinearAnimation {
                 this.running = true;
                 this.lastFrameDraw = Date.now();
             }
- 
+
             if (this.fill) this.frames[this.nextFrame]();
 
             this.lapsedTime = (Date.now() - this.lastFrameDraw) / 1000;

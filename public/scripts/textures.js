@@ -118,7 +118,7 @@ class TextureData {
 
             i[2] *= this.size;
             i[3] *= this.size;
-           
+
         }
     }
 
@@ -198,7 +198,7 @@ export let JOYSTICK_DISC_TEXTURE = new TextureData(0, 0, 1, "general", {
     ctx.moveTo(300, 300);
     ctx.arc(300, 300, 300, 0, 2 * Math.PI);
     ctx.fill();
- 
+
 }, [], 600, 600);
 
 export let PICKUP_RING = new TextureData(0, 0, 0.2, "general", {
@@ -290,31 +290,31 @@ export let RELOAD_BUTTON_TEXTURE = new TextureData(0, 0, 1.5, "control", {
     ctx.arc(300, 300, 100, 0, 2 * Math.PI);
     ctx.fill();
 
-    ctx.translate(300,300);
+    ctx.translate(300, 300);
     ctx.rotate(10);
-    ctx.translate(-300,-300);
+    ctx.translate(-300, -300);
 
     ctx.beginPath();
 
-    ctx.translate(300,300);
+    ctx.translate(300, 300);
     ctx.rotate(0.15);
-    ctx.translate(-300,-300);
+    ctx.translate(-300, -300);
 
-    ctx.arc(300, 300, 40, 0, (2 * Math.PI)*0.75);
+    ctx.arc(300, 300, 40, 0, (2 * Math.PI) * 0.75);
 
-    ctx.translate(300,300);
+    ctx.translate(300, 300);
     ctx.rotate(-0.15);
-    ctx.translate(-300,-300);
+    ctx.translate(-300, -300);
 
-    ctx.translate(-2.5,-11);
-    ctx.moveTo(338.5,320); // 321
-    ctx.lineTo(352,305);
+    ctx.translate(-2.5, -11);
+    ctx.moveTo(338.5, 320); // 321
+    ctx.lineTo(352, 305);
 
-    ctx.moveTo(349,298);
-    ctx.lineTo(320.2,318);
-    ctx.moveTo(340,298);
-    ctx.lineTo(361,323);
-    ctx.stroke(); 
+    ctx.moveTo(349, 298);
+    ctx.lineTo(320.2, 318);
+    ctx.moveTo(340, 298);
+    ctx.lineTo(361, 323);
+    ctx.stroke();
 
 }, [], 300, 300);
 
@@ -331,11 +331,11 @@ export let AVATAR_MODE_BUTTON_TEXTURE = new TextureData(0, 0, 1, "control", {
     ctx.globalAlpha = 0.5;
     ctx.lineWidth = 15;
     ctx.strokeStyle = "white";
-   
+
     ctx.moveTo(300, 300);
     ctx.arc(300, 300, 300, 0, 2 * Math.PI);
-    ctx.fill(); 
- 
+    ctx.fill();
+
     ctx.lineWidth = 30;
     ctx.fillStyle = "white";
     ctx.font = "300px Arial";
@@ -343,7 +343,7 @@ export let AVATAR_MODE_BUTTON_TEXTURE = new TextureData(0, 0, 1, "control", {
     ctx.textBaseline = "middle";
     //ctx.strokeText("P", 300, 320);
     ctx.strokeText("H", 300, 320);
- 
+
 }, [], 600, 600);
 
 export let DROP_ITEM_BUTTON_TEXTURE = new TextureData(0, 0, 1, "control", {
@@ -362,17 +362,17 @@ export let DROP_ITEM_BUTTON_TEXTURE = new TextureData(0, 0, 1, "control", {
 
     ctx.moveTo(300, 300);
     ctx.arc(300, 300, 300, 0, 2 * Math.PI);
-    ctx.fill(); 
- 
+    ctx.fill();
+
     ctx.beginPath();
     ctx.moveTo(300, 120);
     ctx.lineTo(300, 340);
-    
-    ctx.moveTo(319,370);    
-    ctx.lineTo(203,255);
 
-    ctx.moveTo(277,370);
-    ctx.lineTo(393,255);
+    ctx.moveTo(319, 370);
+    ctx.lineTo(203, 255);
+
+    ctx.moveTo(277, 370);
+    ctx.lineTo(393, 255);
 
     ctx.stroke();
 
@@ -381,7 +381,7 @@ export let DROP_ITEM_BUTTON_TEXTURE = new TextureData(0, 0, 1, "control", {
     ctx.moveTo(220, 450);
     ctx.lineTo(380, 450);
     ctx.stroke();
- 
+
 }, [], 600, 600);
 
 /* icon container */
@@ -2541,40 +2541,40 @@ export let OFF_ROADER = new TextureData(0, 0, 0.25, "avatar", {
     // REAR AXEL  
     ctx.fillStyle = "#636363";
     // left bar 
-    ctx.moveTo(550,-50);
-    ctx.lineTo(850,200);
-    ctx.lineTo(850,140);
-    ctx.lineTo(620,-50);
+    ctx.moveTo(550, -50);
+    ctx.lineTo(850, 200);
+    ctx.lineTo(850, 140);
+    ctx.lineTo(620, -50);
 
     // right bar 
-    ctx.moveTo(1950,-50);
-    ctx.lineTo(1650,200);
-    ctx.lineTo(1650,140);
-    ctx.lineTo(1880,-50);
+    ctx.moveTo(1950, -50);
+    ctx.lineTo(1650, 200);
+    ctx.lineTo(1650, 140);
+    ctx.lineTo(1880, -50);
     ctx.fill();
-    ctx.stroke(); 
+    ctx.stroke();
 
-    ctx.fillRect(550,-100,1400,50);
-    ctx.strokeRect(550,-100,1400,50);
+    ctx.fillRect(550, -100, 1400, 50);
+    ctx.strokeRect(550, -100, 1400, 50);
 
     // FRONT AXEL
     ctx.beginPath();
-    ctx.fillRect(650,1700,1200,50);
-    ctx.strokeRect(650,1700,1200,50);
-   
+    ctx.fillRect(650, 1700, 1200, 50);
+    ctx.strokeRect(650, 1700, 1200, 50);
+
     // left bar  
-    ctx.moveTo(650,1700);
-    ctx.lineTo(920,1500);
-    ctx.lineTo(1000,1500);
-    ctx.lineTo(720,1700);
-    ctx.lineTo(650,1700);
+    ctx.moveTo(650, 1700);
+    ctx.lineTo(920, 1500);
+    ctx.lineTo(1000, 1500);
+    ctx.lineTo(720, 1700);
+    ctx.lineTo(650, 1700);
 
     // right bar  
-    ctx.moveTo(1850,1700);
-    ctx.lineTo(1580,1500);
-    ctx.lineTo(1500,1500);
-    ctx.lineTo(1780,1700);
-    ctx.lineTo(1850,1700);
+    ctx.moveTo(1850, 1700);
+    ctx.lineTo(1580, 1500);
+    ctx.lineTo(1500, 1500);
+    ctx.lineTo(1780, 1700);
+    ctx.lineTo(1850, 1700);
 
     ctx.fill();
     ctx.stroke();
@@ -2582,53 +2582,53 @@ export let OFF_ROADER = new TextureData(0, 0, 0.25, "avatar", {
     // BASE PLATE
     ctx.fillStyle = "#363636";
     ctx.fillRect(910, -100, 680, 1800);
-    ctx.fillStyle = "#242424"; 
+    ctx.fillStyle = "#242424";
     ctx.fillRect(910, -100, 680, 1000);
     ctx.strokeRect(910, -100, 680, 1800);
- 
+
     // SEAT - top half
     ctx.fillStyle = "#8a8a8a";
-    ctx.fillRect(1050,600,400,700);  
-    ctx.fillStyle = "#707070"; 
-    ctx.fillRect(1050,600,400,350); 
-    ctx.fillStyle = "#525252";  
-    ctx.fillRect(1050,600,400,50); 
-    ctx.fillStyle = "#707070"; 
-    ctx.fillRect(1050,1250,400,50); 
-    ctx.strokeRect(1050,600,400,700);   
-    ctx.strokeRect(1050,600,400,350);   
- 
+    ctx.fillRect(1050, 600, 400, 700);
+    ctx.fillStyle = "#707070";
+    ctx.fillRect(1050, 600, 400, 350);
+    ctx.fillStyle = "#525252";
+    ctx.fillRect(1050, 600, 400, 50);
+    ctx.fillStyle = "#707070";
+    ctx.fillRect(1050, 1250, 400, 50);
+    ctx.strokeRect(1050, 600, 400, 700);
+    ctx.strokeRect(1050, 600, 400, 350);
+
     // INNER FRAME
     ctx.beginPath();
     ctx.fillStyle = "#555555";
 
     // top bar
-    ctx.moveTo(825,340);
-    ctx.lineTo(1675,340);
-    ctx.lineTo(1600,400);
-    ctx.lineTo(900,400);
-    ctx.lineTo(825,340);
+    ctx.moveTo(825, 340);
+    ctx.lineTo(1675, 340);
+    ctx.lineTo(1600, 400);
+    ctx.lineTo(900, 400);
+    ctx.lineTo(825, 340);
 
     // left bar 
-    ctx.moveTo(900,400);
-    ctx.lineTo(1050,1400);
-    ctx.lineTo(1000,1450);
-    ctx.lineTo(825,340);
-    ctx.lineTo(900,400);
+    ctx.moveTo(900, 400);
+    ctx.lineTo(1050, 1400);
+    ctx.lineTo(1000, 1450);
+    ctx.lineTo(825, 340);
+    ctx.lineTo(900, 400);
 
     // right bar
-    ctx.moveTo(1600,400);
-    ctx.lineTo(1450,1400);
-    ctx.lineTo(1500,1450);
-    ctx.lineTo(1675,340);
-    ctx.lineTo(1600,400);
- 
+    ctx.moveTo(1600, 400);
+    ctx.lineTo(1450, 1400);
+    ctx.lineTo(1500, 1450);
+    ctx.lineTo(1675, 340);
+    ctx.lineTo(1600, 400);
+
     // bottom bar 
-    ctx.moveTo(1000,1450);
-    ctx.lineTo(1500,1450);
-    ctx.lineTo(1450,1400);
-    ctx.lineTo(1050,1400);
-    ctx.lineTo(1000,1450);
+    ctx.moveTo(1000, 1450);
+    ctx.lineTo(1500, 1450);
+    ctx.lineTo(1450, 1400);
+    ctx.lineTo(1050, 1400);
+    ctx.lineTo(1000, 1450);
     ctx.fill();
     ctx.stroke();
 
@@ -2637,44 +2637,44 @@ export let OFF_ROADER = new TextureData(0, 0, 0.25, "avatar", {
     // left short bar 
     ctx.beginPath();
     ctx.fillStyle = "#999999";
-    ctx.moveTo(825,340);
-    ctx.lineTo(600,600);
-    ctx.lineTo(680,600);
-    ctx.lineTo(835,420);
-    ctx.lineTo(825,340)
+    ctx.moveTo(825, 340);
+    ctx.lineTo(600, 600);
+    ctx.lineTo(680, 600);
+    ctx.lineTo(835, 420);
+    ctx.lineTo(825, 340)
 
     // right short bar 
-    ctx.moveTo(1675,340);
-    ctx.lineTo(1900,600);
-    ctx.lineTo(1820,600);
-    ctx.lineTo(1665,420);
-    ctx.lineTo(1675,340);
+    ctx.moveTo(1675, 340);
+    ctx.lineTo(1900, 600);
+    ctx.lineTo(1820, 600);
+    ctx.lineTo(1665, 420);
+    ctx.lineTo(1675, 340);
 
     // rear left bar 
-    ctx.moveTo(830,-100);
-    ctx.lineTo(600,600);
-    ctx.lineTo(680,500);
-    ctx.lineTo(830,50);
+    ctx.moveTo(830, -100);
+    ctx.lineTo(600, 600);
+    ctx.lineTo(680, 500);
+    ctx.lineTo(830, 50);
 
     // rear right bar 
-    ctx.moveTo(1670,-100);
-    ctx.lineTo(1900,600);
-    ctx.lineTo(1820,500);
-    ctx.lineTo(1670,50);
+    ctx.moveTo(1670, -100);
+    ctx.lineTo(1900, 600);
+    ctx.lineTo(1820, 500);
+    ctx.lineTo(1670, 50);
 
     // long left frame
-    ctx.moveTo(680,600);
-    ctx.lineTo(600,600);
-    ctx.lineTo(830,1700);
-    ctx.lineTo(910,1700);
-    ctx.lineTo(680,600);
+    ctx.moveTo(680, 600);
+    ctx.lineTo(600, 600);
+    ctx.lineTo(830, 1700);
+    ctx.lineTo(910, 1700);
+    ctx.lineTo(680, 600);
 
     // long right frame
-    ctx.moveTo(1820,600);
-    ctx.lineTo(1900,600);
-    ctx.lineTo(1670,1700);
-    ctx.lineTo(1590,1700);
-    ctx.lineTo(1820,600);
+    ctx.moveTo(1820, 600);
+    ctx.lineTo(1900, 600);
+    ctx.lineTo(1670, 1700);
+    ctx.lineTo(1590, 1700);
+    ctx.lineTo(1820, 600);
     ctx.fill();
     ctx.stroke();
 
@@ -2682,18 +2682,18 @@ export let OFF_ROADER = new TextureData(0, 0, 0.25, "avatar", {
 
     // top bar 
     ctx.beginPath();
-    ctx.moveTo(1000,-200);
-    ctx.lineTo(1500,-200);
-    ctx.lineTo(1550,-100);
-    ctx.lineTo(950,-100);
-    ctx.lineTo(1000,-200);
+    ctx.moveTo(1000, -200);
+    ctx.lineTo(1500, -200);
+    ctx.lineTo(1550, -100);
+    ctx.lineTo(950, -100);
+    ctx.lineTo(1000, -200);
 
     // exahust pipes
     ctx.fillStyle = "#888888";
-    ctx.fillRect(1000,-250,150,50);
-    ctx.fillRect(1350,-250,150,50);
-    ctx.strokeRect(1000,-250,150,50);
-    ctx.strokeRect(1350,-250,150,50);
+    ctx.fillRect(1000, -250, 150, 50);
+    ctx.fillRect(1350, -250, 150, 50);
+    ctx.strokeRect(1000, -250, 150, 50);
+    ctx.strokeRect(1350, -250, 150, 50);
 
     // middle box 
     ctx.fillStyle = "#666666";
@@ -2706,9 +2706,9 @@ export let OFF_ROADER = new TextureData(0, 0, 0.25, "avatar", {
     ctx.strokeRect(890, -20, 720, 360);
     ctx.fill();
     ctx.stroke();
-  
+
     // middle bars
-    ctx.fillStyle = "#666666"; 
+    ctx.fillStyle = "#666666";
     ctx.fillRect(1050, -50, 50, 390);
     ctx.fillRect(1400, -50, 50, 390);
     ctx.strokeRect(1050, -50, 50, 390);
@@ -2717,11 +2717,11 @@ export let OFF_ROADER = new TextureData(0, 0, 0.25, "avatar", {
     // engine
     ctx.fillStyle = "#999999";
     ctx.strokeRect(1100, -20, 300, 360);
-    ctx.fillRect(1200,40,100,100);
-    ctx.fillRect(1200,180,100,100);
-    ctx.strokeRect(1200,40,100,100);
-    ctx.strokeRect(1200,40,100,50);
-    ctx.strokeRect(1200,180,100,100); 
+    ctx.fillRect(1200, 40, 100, 100);
+    ctx.fillRect(1200, 180, 100, 100);
+    ctx.strokeRect(1200, 40, 100, 100);
+    ctx.strokeRect(1200, 40, 100, 50);
+    ctx.strokeRect(1200, 180, 100, 100);
 
     // BOTTOM PLATE
     ctx.fillStyle = "#bdbdbd";
@@ -2735,116 +2735,116 @@ export let OFF_ROADER = new TextureData(0, 0, 0.25, "avatar", {
     // FRONT PLATE
     ctx.beginPath();
     ctx.fillStyle = "#4d4d4d";
-    ctx.moveTo(1000,1450);
+    ctx.moveTo(1000, 1450);
     ctx.lineTo(830, 1700);
-    ctx.lineTo(1670, 1700); 
+    ctx.lineTo(1670, 1700);
     ctx.lineTo(1500, 1450);
-    ctx.lineTo(1000,1450);
+    ctx.lineTo(1000, 1450);
     ctx.fill();
     ctx.stroke();
 
     // RIGHT REAR TIRE
-    ctx.translate(-150,-700);
-    ctx.fillStyle = "#2e2e2e"; 
-    ctx.moveTo(2000,500); 
-    ctx.lineTo(2050,450);
-    ctx.lineTo(2100,500);
-    ctx.lineTo(2150,450);
-    ctx.lineTo(2200,500);
-    ctx.lineTo(2250,450);
-    ctx.lineTo(2300,500);
-    ctx.lineTo(2300,850);
-    ctx.lineTo(2250,900);
-    ctx.lineTo(2200,850);
-    ctx.lineTo(2150,900);
-    ctx.lineTo(2100,850);
-    ctx.lineTo(2050,900);
-    ctx.lineTo(2000,850);
-    ctx.lineTo(2000,495);
-    ctx.moveTo(2100,500);
-    ctx.lineTo(2100,850);
-    ctx.moveTo(2200,500);
-    ctx.lineTo(2200,850);
-    ctx.fill(); 
+    ctx.translate(-150, -700);
+    ctx.fillStyle = "#2e2e2e";
+    ctx.moveTo(2000, 500);
+    ctx.lineTo(2050, 450);
+    ctx.lineTo(2100, 500);
+    ctx.lineTo(2150, 450);
+    ctx.lineTo(2200, 500);
+    ctx.lineTo(2250, 450);
+    ctx.lineTo(2300, 500);
+    ctx.lineTo(2300, 850);
+    ctx.lineTo(2250, 900);
+    ctx.lineTo(2200, 850);
+    ctx.lineTo(2150, 900);
+    ctx.lineTo(2100, 850);
+    ctx.lineTo(2050, 900);
+    ctx.lineTo(2000, 850);
+    ctx.lineTo(2000, 495);
+    ctx.moveTo(2100, 500);
+    ctx.lineTo(2100, 850);
+    ctx.moveTo(2200, 500);
+    ctx.lineTo(2200, 850);
+    ctx.fill();
     ctx.stroke();
 
     // RIGHT REAR TIRE
-    ctx.translate(-1500,0);
-    ctx.fillStyle = "#2e2e2e"; 
-    ctx.moveTo(2000,500); 
-    ctx.lineTo(2050,450);
-    ctx.lineTo(2100,500);
-    ctx.lineTo(2150,450);
-    ctx.lineTo(2200,500);
-    ctx.lineTo(2250,450);
-    ctx.lineTo(2300,500);
-    ctx.lineTo(2300,850);
-    ctx.lineTo(2250,900);
-    ctx.lineTo(2200,850);
-    ctx.lineTo(2150,900);
-    ctx.lineTo(2100,850);
-    ctx.lineTo(2050,900);
-    ctx.lineTo(2000,850);
-    ctx.lineTo(2000,495);
-    ctx.moveTo(2100,500);
-    ctx.lineTo(2100,850);
-    ctx.moveTo(2200,500);
-    ctx.lineTo(2200,850);
-    ctx.fill(); 
+    ctx.translate(-1500, 0);
+    ctx.fillStyle = "#2e2e2e";
+    ctx.moveTo(2000, 500);
+    ctx.lineTo(2050, 450);
+    ctx.lineTo(2100, 500);
+    ctx.lineTo(2150, 450);
+    ctx.lineTo(2200, 500);
+    ctx.lineTo(2250, 450);
+    ctx.lineTo(2300, 500);
+    ctx.lineTo(2300, 850);
+    ctx.lineTo(2250, 900);
+    ctx.lineTo(2200, 850);
+    ctx.lineTo(2150, 900);
+    ctx.lineTo(2100, 850);
+    ctx.lineTo(2050, 900);
+    ctx.lineTo(2000, 850);
+    ctx.lineTo(2000, 495);
+    ctx.moveTo(2100, 500);
+    ctx.lineTo(2100, 850);
+    ctx.moveTo(2200, 500);
+    ctx.lineTo(2200, 850);
+    ctx.fill();
     ctx.stroke();
 
     // FRONT LEFT TIRE
-    ctx.translate(50,1750);
-    ctx.fillStyle = "#2e2e2e"; 
-    ctx.moveTo(2000,500); 
-    ctx.lineTo(2050,450);
-    ctx.lineTo(2100,500);
-    ctx.lineTo(2150,450);
-    ctx.lineTo(2200,500);
-    ctx.lineTo(2250,450);
-    ctx.lineTo(2300,500);
-    ctx.lineTo(2300,850);
-    ctx.lineTo(2250,900);
-    ctx.lineTo(2200,850);
-    ctx.lineTo(2150,900);
-    ctx.lineTo(2100,850);
-    ctx.lineTo(2050,900);
-    ctx.lineTo(2000,850);
-    ctx.lineTo(2000,495);
-    ctx.moveTo(2100,500);
-    ctx.lineTo(2100,850);
-    ctx.moveTo(2200,500);
-    ctx.lineTo(2200,850);
-    ctx.fill(); 
+    ctx.translate(50, 1750);
+    ctx.fillStyle = "#2e2e2e";
+    ctx.moveTo(2000, 500);
+    ctx.lineTo(2050, 450);
+    ctx.lineTo(2100, 500);
+    ctx.lineTo(2150, 450);
+    ctx.lineTo(2200, 500);
+    ctx.lineTo(2250, 450);
+    ctx.lineTo(2300, 500);
+    ctx.lineTo(2300, 850);
+    ctx.lineTo(2250, 900);
+    ctx.lineTo(2200, 850);
+    ctx.lineTo(2150, 900);
+    ctx.lineTo(2100, 850);
+    ctx.lineTo(2050, 900);
+    ctx.lineTo(2000, 850);
+    ctx.lineTo(2000, 495);
+    ctx.moveTo(2100, 500);
+    ctx.lineTo(2100, 850);
+    ctx.moveTo(2200, 500);
+    ctx.lineTo(2200, 850);
+    ctx.fill();
     ctx.stroke();
 
     // FRONT RIGHT TIRE
-    ctx.translate(1400,0);
-    ctx.fillStyle = "#2e2e2e"; 
-    ctx.moveTo(2000,500); 
-    ctx.lineTo(2050,450);
-    ctx.lineTo(2100,500);
-    ctx.lineTo(2150,450);
-    ctx.lineTo(2200,500);
-    ctx.lineTo(2250,450);
-    ctx.lineTo(2300,500);
-    ctx.lineTo(2300,850);
-    ctx.lineTo(2250,900);
-    ctx.lineTo(2200,850);
-    ctx.lineTo(2150,900);
-    ctx.lineTo(2100,850);
-    ctx.lineTo(2050,900);
-    ctx.lineTo(2000,850);
-    ctx.lineTo(2000,495);
-    ctx.moveTo(2100,500);
-    ctx.lineTo(2100,850);
-    ctx.moveTo(2200,500);
-    ctx.lineTo(2200,850);
-    ctx.fill(); 
+    ctx.translate(1400, 0);
+    ctx.fillStyle = "#2e2e2e";
+    ctx.moveTo(2000, 500);
+    ctx.lineTo(2050, 450);
+    ctx.lineTo(2100, 500);
+    ctx.lineTo(2150, 450);
+    ctx.lineTo(2200, 500);
+    ctx.lineTo(2250, 450);
+    ctx.lineTo(2300, 500);
+    ctx.lineTo(2300, 850);
+    ctx.lineTo(2250, 900);
+    ctx.lineTo(2200, 850);
+    ctx.lineTo(2150, 900);
+    ctx.lineTo(2100, 850);
+    ctx.lineTo(2050, 900);
+    ctx.lineTo(2000, 850);
+    ctx.lineTo(2000, 495);
+    ctx.moveTo(2100, 500);
+    ctx.lineTo(2100, 850);
+    ctx.moveTo(2200, 500);
+    ctx.lineTo(2200, 850);
+    ctx.fill();
     ctx.stroke();
 
     ctx.restore();
-},[],0,0,-342,258);
+}, [], 0, 0, -342, 258);
 
 // @AVATARS
 
@@ -2953,6 +2953,121 @@ export let MAIN_AVATAR_DRAW_WEAPON = new TextureData(0, 0, 0.2, "avatar", {
     ctx.restore();
 }, [0], 0, 0, -1, -1);
 
+export let GP_K100_TOP = new TextureData(282, 900, 0.2, "firearm", {
+    width: 900,
+    height: 200
+}, [
+    [0, 0, 900, 200]
+], 0, undefined, function(ctx, r = 0) {
+    // body: 439x309, texture: 1024,512, size: 0.15
+    // -8 -20
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.rotate(r * Math.PI / 180);
+    ctx.scale(this.size || 0, this.size || 0);
+    ctx.lineWidth = 15;
+
+    ctx.fillStyle = "#F3F3F3";
+    ctx.strokeStyle = "#1A1A1A";
+    // handle
+
+    ctx.beginPath();
+    ctx.fillRect(90, 50, 370, 60);
+    ctx.strokeRect(90, 50, 370, 60);
+
+    // scilencer 
+
+    ctx.fillRect(485, 53, 296, 55);
+    ctx.strokeRect(485, 53, 296, 55);
+
+    ctx.lineWidth = 10;
+    ctx.fillStyle = "#787878";
+    ctx.fillRect(460, 63, 20, 35);
+    ctx.strokeRect(460, 63, 20, 35);
+
+    // rear tip
+    ctx.lineWidth = 15;
+    ctx.fillRect(60, 55, 30, 50);
+    ctx.strokeRect(60, 55, 30, 50);
+
+    ctx.lineWidth = 10;
+    // details
+    ctx.strokeRect(110, 50, 10, 60);
+    ctx.strokeRect(130, 50, 10, 60);
+    ctx.strokeRect(140, 50, 10, 60);
+
+    ctx.strokeRect(250, 85, 50, 20);
+
+    ctx.stroke();
+
+    ctx.restore();
+    ctx.save();
+    ctx.scale(this.size || 0, this.size || 0);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "red";
+    //ctx.strokeRect(0,0,900,200);
+    ctx.restore();
+}, [], 0, 0, 0, 0);
+
+export let GP_K100_TOP_2 = new TextureData(282, 900, 0.2, "firearm", {
+    width: 900,
+    height: 200
+}, [
+    [0, 0, 900, 200]
+], 0, undefined, function(ctx, r = 0) {
+    // body: 439x309, texture: 1024,512, size: 0.15
+    // -8 -20
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.rotate(r * Math.PI / 180);
+    ctx.scale(this.size || 0, this.size || 0);
+    ctx.lineWidth = 15;
+
+    ctx.fillStyle = "#F3F3F3";
+    ctx.strokeStyle = "#1A1A1A";
+    // handle
+
+    ctx.fillRect(90, 60, 370, 40);
+    ctx.strokeRect(90, 60, 370, 40);
+
+    ctx.beginPath();
+    ctx.fillRect(50, 50, 370, 60);
+    ctx.strokeRect(50, 50, 370, 60);
+
+    // scilencer 
+
+    ctx.fillRect(485, 53, 296, 55);
+    ctx.strokeRect(485, 53, 296, 55);
+
+    ctx.lineWidth = 10;
+    ctx.fillStyle = "#787878";
+    ctx.fillRect(460, 63, 20, 35);
+    ctx.strokeRect(460, 63, 20, 35);
+
+    // rear tip
+    ctx.lineWidth = 15;
+    ctx.fillRect(20, 55, 30, 50);
+    ctx.strokeRect(20, 55, 30, 50);
+
+    ctx.lineWidth = 10;
+    // details
+    ctx.strokeRect(70, 50, 10, 60);
+    ctx.strokeRect(50, 50, 10, 60);
+    ctx.strokeRect(60, 50, 10, 60);
+
+    ctx.strokeRect(210, 85, 50, 20);
+
+    ctx.stroke();
+
+    ctx.restore();
+    ctx.save();
+    ctx.scale(this.size || 0, this.size || 0);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "red";
+    //ctx.strokeRect(0,0,900,200);
+    ctx.restore();
+}, [], 0, 0, 0, 0);
+
 export let GLOCK_20_TOP = new TextureData(54, 182, 0.2, "firearm", {
     width: 900,
     height: 200
@@ -2962,7 +3077,7 @@ export let GLOCK_20_TOP = new TextureData(54, 182, 0.2, "firearm", {
     // body: 439x309, texture: 1024,512, size: 0.15
     // -8 -20
     ctx.save();
-    ctx.translate(this.offset.x, this.offset.y);
+    ctx.translate(this.offset.vx, this.offset.vy);
     ctx.rotate(r * Math.PI / 180);
     ctx.scale(this.size || 0, this.size || 0);
     ctx.lineWidth = 15;
@@ -3948,7 +4063,7 @@ export let BULLETSHELL = new TextureData(0, 0, 0.2, "prop", {
     ctx.stroke();
 
     ctx.restore();
-},[],0,0,5,5);
+}, [], 0, 0, 5, 5);
 
 export let ROAD_SIGN = new TextureData(10, 10, 0.2, "prop", {
     width: 400,
@@ -4352,7 +4467,8 @@ export let STREET_LIGHT = new TextureData(730, -190, 0.2, "prop", {
     width: 1550,
     height: 2450
 }, [
-    [0, 0, 1550, 2450],[30, 2200, 60, 430]
+    [0, 0, 1550, 2450],
+    [30, 2200, 60, 430]
 ], 0, undefined, function(ctx) {
     ctx.save();
     ctx.translate(this.offset.vx, this.offset.vy);
@@ -4718,13 +4834,13 @@ export let PLUS_100 = new TextureData(0, 0, 0.2, "prop", {
     ctx.strokeStyle = "#2cd158";
     ctx.fillStyle = "#2cd158";
     ctx.lineWidth = 40;
-    ctx.strokeRect(595,20,50,70);
-    ctx.strokeRect(490,20,50,70);
+    ctx.strokeRect(595, 20, 50, 70);
+    ctx.strokeRect(490, 20, 50, 70);
 
-    ctx.fillRect(405,0,40,110);
-    ctx.fillRect(365,0,40,40);
-    ctx.fillRect(285,0,40,110);
-    ctx.fillRect(250,35,110,40);
+    ctx.fillRect(405, 0, 40, 110);
+    ctx.fillRect(365, 0, 40, 40);
+    ctx.fillRect(285, 0, 40, 110);
+    ctx.fillRect(250, 35, 110, 40);
 
     ctx.restore();
-},[],0,0,-250,0);
+}, [], 0, 0, -250, 0);

@@ -24,29 +24,35 @@
   } from "/public/scripts/objects.js";
 
 
-  $JOYSTICK_L = new _Joystick_(true, joystickSizes.left, fixedJoysticks, {x: (-worldWidth/2) + 20, y: (-worldHeight/2) + 20});
+  $JOYSTICK_L = new _Joystick_(true, joystickSizes.left, fixedJoysticks, {
+      x: (-worldWidth / 2) + 20,
+      y: (-worldHeight / 2) + 20
+  });
 
-  $JOYSTICK_R = new _Joystick_(false, joystickSizes.right, fixedJoysticks, {x: (worldWidth/2) - 20, y: (-worldHeight/2) + 20});
+  $JOYSTICK_R = new _Joystick_(false, joystickSizes.right, fixedJoysticks, {
+      x: (worldWidth / 2) - 20,
+      y: (-worldHeight / 2) + 20
+  });
 
-  $ACTION_BUTTON = new _Button_(textures.actionbutton, textures.actionbuttonactive, (worldWidth / 2) - 20, (-worldHeight/2) + 39, function(pX, pY) {
+  $ACTION_BUTTON = new _Button_(textures.actionbutton, textures.actionbuttonactive, (worldWidth / 2) - 20, (-worldHeight / 2) + 39, function(pX, pY) {
       const i = $CURRENT_MAP.interactables[$CURRENT_MAP.currentInteractable.id];
       if (i) i.action();
   }, 8.5, 1.5);
 
   $RELOAD_BUTTON = new _Button_(textures.reloadbutton, textures.reloadbuttonactive, (worldWidth / 2) - 38, -(worldHeight / 2) + 20, function(pX, pY) {
-     if (this.enabled) {
-      $AVATAR.reload();
-      this.enabled = false;
-     } 
+      if (this.enabled) {
+          $AVATAR.reload();
+          this.enabled = false;
+      }
   }, 8.5, 2.2);
-   
- $AVATAR_MODE_BUTTON = new _Button_(textures.avatarmode2, textures.avatarmode1, (worldWidth / 2) - 10, (worldHeight/2) - 15, function(pX, pY) {
-   this.on = !this.on;
-   $AVATAR.state.hostile = !$AVATAR.state.hostile;
+
+  $AVATAR_MODE_BUTTON = new _Button_(textures.avatarmode2, textures.avatarmode1, (worldWidth / 2) - 10, (worldHeight / 2) - 15, function(pX, pY) {
+      this.on = !this.on;
+      $AVATAR.state.hostile = !$AVATAR.state.hostile;
   }, 8.5, 3, true);
 
- $DROP_ITEM_BUTTON = new _Button_(textures.dropitem1, textures.dropitem2, (worldWidth / 2) - 35, -(worldHeight / 2) + 30, function(pX, pY) {
-   $AVATAR.drop(); 
+  $DROP_ITEM_BUTTON = new _Button_(textures.dropitem1, textures.dropitem2, (worldWidth / 2) - 35, -(worldHeight / 2) + 30, function(pX, pY) {
+      $AVATAR.drop();
   }, 8.5, 2.2);
 
 
@@ -97,20 +103,20 @@
           let pX = aofb(aisofb(pageX, window.innerWidth), worldWidth) - (worldWidth / 2);
           let pY = aofb(100 - aisofb(pageY, window.innerHeight), worldHeight) - (worldHeight / 2);
 
-              let {
-                  width,
-                  height,
-                  x,
-                  y,
-                  radius
-              } = stick.base;
-              x += width / 2;
-              y += height / 2;
+          let {
+              width,
+              height,
+              x,
+              y,
+              radius
+          } = stick.base;
+          x += width / 2;
+          y += height / 2;
 
-              let d = distance(x, y, pX, pY),
-                  t = radius / d;
+          let d = distance(x, y, pX, pY),
+              t = radius / d;
 
-          if (stick.base.anchored) { 
+          if (stick.base.anchored) {
               if (d > radius) {
                   pX = (((1 - t) * x) + (t * pX));
                   pY = (((1 - t) * y) + (t * pY));
@@ -179,7 +185,7 @@
       if (!uL) {
           $AVATAR.state.walking = false;
           $JOYSTICK_L.unanchor();
-          $JOYSTICK_L.fix(); 
+          $JOYSTICK_L.fix();
           $JOYSTICK_L.id = undefined;
       }
 

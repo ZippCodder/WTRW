@@ -322,7 +322,7 @@ export class _BulletCluster_ {
         gl.enableVertexAttribArray(locations.offset);
     }
 
-    link(xOffset = 0, yOffset = 0, rotation = 0, bullet) { 
+    link(xOffset = 0, yOffset = 0, rotation = 0, bullet) {
 
         let m = this.members * 3;
         let t = this.members * 2;
@@ -453,13 +453,13 @@ export class _InstancedCluster_ {
         this.trans.offsetX += x;
         this.trans.offsetY += y;
     }
- 
+
     updateBuffer() {
-       ext.bindVertexArrayOES(this.vao);
-       gl.bindBuffer(gl.ARRAY_BUFFER, this.offsetBuffer);
-       gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.offsets), gl.DYNAMIC_DRAW);
-       gl.vertexAttribPointer(locations.offset, 3, gl.FLOAT, false, 12, 0);
-       gl.enableVertexAttribArray(locations.offset);
+        ext.bindVertexArrayOES(this.vao);
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.offsetBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.offsets), gl.DYNAMIC_DRAW);
+        gl.vertexAttribPointer(locations.offset, 3, gl.FLOAT, false, 12, 0);
+        gl.enableVertexAttribArray(locations.offset);
     }
 
     translateVertices(index, x = 0, y = 0, rotation = 0) {
@@ -468,11 +468,11 @@ export class _InstancedCluster_ {
         this.offsets[i] += x;
         this.offsets[i + 1] += y;
         this.offsets[i + 2] = (-rotation) * (Math.PI / 180);
-  
+
         this.updateBuffer();
     }
 
-    link(xOffset = 0, yOffset = 0, rotation = 0) { 
+    link(xOffset = 0, yOffset = 0, rotation = 0) {
 
         let m = this.members * 3;
 
@@ -480,7 +480,7 @@ export class _InstancedCluster_ {
         this.offsets[m + 1] = yOffset;
         this.offsets[m + 2] = (-rotation) * (Math.PI / 180);
 
-        this.updateBuffer();     
+        this.updateBuffer();
         this.instances++;
 
         return this.members++;
@@ -611,7 +611,7 @@ export class _MixedStaticCluster_ {
     }
 
     link(vertices, xOffset = 0, yOffset = 0, rotation = 0) {
- 
+
         this.vertices.push(offsetVertices(vertices, xOffset, yOffset, rotation, this.stride));
 
         let v = this.vertices.flat(1);
@@ -782,8 +782,8 @@ export class _MixedStaticClusterClient_ {
     }
 
     moveToTop() {
-      this.cluster.unlink(this.clusterIndex);
-      this.clusterIndex = this.cluster.link(this.constructor._defaultVertices, -this.cluster.trans.offsetX + this.trans.offsetX, -this.cluster.trans.offsetY + this.trans.offsetY, this.trans.rotation);
+        this.cluster.unlink(this.clusterIndex);
+        this.clusterIndex = this.cluster.link(this.constructor._defaultVertices, -this.cluster.trans.offsetX + this.trans.offsetX, -this.cluster.trans.offsetY + this.trans.offsetY, this.trans.rotation);
     }
 
     delete() {
@@ -813,10 +813,10 @@ export class _StaticClusterClient_ {
         }
         if (translateVertices) this.cluster.translateVertices(this.clusterIndex, this.constructor._defaultVertices, -this.cluster.trans.offsetX + this.trans.offsetX, -this.cluster.trans.offsetY + this.trans.offsetY, this.trans.rotation);
     }
- 
+
     moveToTop() {
-     this.cluster.unlink(this.clusterIndex);
-     this.clusterIndex = this.cluster.link(this.constructor._defaultVertices, -this.cluster.trans.offsetX + this.trans.offsetX, -this.cluster.trans.offsetY + this.trans.offsetY, this.trans.rotation);
+        this.cluster.unlink(this.clusterIndex);
+        this.clusterIndex = this.cluster.link(this.constructor._defaultVertices, -this.cluster.trans.offsetX + this.trans.offsetX, -this.cluster.trans.offsetY + this.trans.offsetY, this.trans.rotation);
     }
 
     delete() {
@@ -846,11 +846,11 @@ export class _InstancedClusterClient_ {
         }
         if (translateVertices) this.cluster.translateVertices(this.clusterIndex, x, y, this.trans.rotation);
     }
- 
+
     moveToTop() {
-      this.cluster.unlink(this.clusterIndex);
-      this.clusterIndex = this.cluster.link(-this.cluster.trans.offsetX + this.trans.offsetX, -this.cluster.trans.offsetY + this.trans.offsetY, this.trans.rotation);
-    }  
+        this.cluster.unlink(this.clusterIndex);
+        this.clusterIndex = this.cluster.link(-this.cluster.trans.offsetX + this.trans.offsetX, -this.cluster.trans.offsetY + this.trans.offsetY, this.trans.rotation);
+    }
 
     delete() {
         this.map.unlink(this.id);
@@ -979,7 +979,7 @@ export class Grass extends _InstancedClusterClient_ {
 
 export class BulletShell extends _InstancedClusterClient_ {
 
-    static _defaultVertices = [-0.9,0.5,1,0,0,0.9,0.5,1,0.5625,0,-0.9,-0.5,1,0,0.625,0.9,0.5,1,0.5625,0,-0.9,-0.5,1,0,0.625,0.9,-0.5,1,0.5625,0.625];
+    static _defaultVertices = [-0.9, 0.5, 1, 0, 0, 0.9, 0.5, 1, 0.5625, 0, -0.9, -0.5, 1, 0, 0.625, 0.9, 0.5, 1, 0.5625, 0, -0.9, -0.5, 1, 0, 0.625, 0.9, -0.5, 1, 0.5625, 0.625];
 
     width = 1.8;
     height = 1;
@@ -992,27 +992,27 @@ export class BulletShell extends _InstancedClusterClient_ {
 
     constructor(initialX, initialY, directionX, directionY) {
         super(initialX, initialY, random(360));
-        
+
         this.directionX = directionX;
         this.directionY = directionY;
         this.animation = new LoopAnimation(function() {
-          this.translate(directionX/=2,directionY/=2,this.trans.rotation-(this.trans.rotation*2),true);
-        },this,0.01);
+            this.translate(directionX /= 2, directionY /= 2, this.trans.rotation - (this.trans.rotation * 2), true);
+        }, this, 0.01);
         this.timeout = new MultiFrameLinearAnimation([function() {
-          this.delete();
+            this.delete();
         }], this, [0.2]);
     }
- 
+
     preRender() {
-       this.animation.run();
-       this.timeout.start();
-       this.timeout.run();
+        this.animation.run();
+        this.timeout.start();
+        this.timeout.run();
     }
 }
 
 export class Plus100 extends _InstancedClusterClient_ {
 
-    static _defaultVertices = [-4.15,1.1,1,0,0,4.15,1.1,1,0.6484375,0,-4.15,-1.1,1,0,0.6875,4.15,1.1,1,0.6484375,0,-4.15,-1.1,1,0,0.6875,4.15,-1.1,1,0.6484375,0.6875];
+    static _defaultVertices = [-4.15, 1.1, 1, 0, 0, 4.15, 1.1, 1, 0.6484375, 0, -4.15, -1.1, 1, 0, 0.6875, 4.15, 1.1, 1, 0.6484375, 0, -4.15, -1.1, 1, 0, 0.6875, 4.15, -1.1, 1, 0.6484375, 0.6875];
 
     width = 8.3;
     height = 2.2;
@@ -1022,15 +1022,15 @@ export class Plus100 extends _InstancedClusterClient_ {
 
     constructor(initialX, initialY, initialRotation) {
         super(initialX, initialY, initialRotation);
- 
+
         this.animation = new LoopAnimation(function() {
-          this.translate(0,0.2,0,true);
-          if (this.trans.offsetY > initialY+10) this.delete();     
-        },this,0.01);
+            this.translate(0, 0.2, 0, true);
+            if (this.trans.offsetY > initialY + 10) this.delete();
+        }, this, 0.01);
     }
 
     preRender() {
-     this.animation.run();
+        this.animation.run();
     }
 }
 
@@ -1164,7 +1164,7 @@ export class StreetLight extends _StaticClusterClient_ {
     texture = textures.streetlight;
     obstacle = true;
     segments = [
-       [-0.3,-24.3,1.2,8.6]
+        [-0.3, -24.3, 1.2, 8.6]
     ];
     topLayer = true;
     on = false;
@@ -1313,7 +1313,7 @@ export class Chair extends _StaticClusterClient_ {
     interactable = true;
     minDistance = 12;
     segments = [
-        [-5,-5.7,10,13]
+        [-5, -5.7, 10, 13]
     ];
 
     action() {
@@ -1376,7 +1376,7 @@ export class Laptop extends _StaticClusterClient_ {
     clusterName = "laptop";
     texture = textures.laptop;
     height = 9.72;
-    moveable = true; 
+    moveable = true;
     name = "laptop";
 
     constructor(initialX, initialY, initialRotation) {
@@ -1455,7 +1455,9 @@ export class PicnicTable extends _StaticClusterClient_ {
     clusterName = "picnic table";
     texture = textures.picnictable;
     segments = [
-        [-14.2,-12.1,8.4,18.4],[-6.2,-11.7,12.4,20.4],[5.8,-12.1,8.4,18.4]
+        [-14.2, -12.1, 8.4, 18.4],
+        [-6.2, -11.7, 12.4, 20.4],
+        [5.8, -12.1, 8.4, 18.4]
     ];
     interactable = true;
     minDistance = 20;
@@ -1612,8 +1614,8 @@ export class Door extends _StaticClusterClient_ {
                 this.map.move = true;
 
                 if ($AVATAR.state.pickup.current) {
-                  $AVATAR.state.pickup.current.delete();
-                  $CURRENT_MAP.link($AVATAR.state.pickup.current);
+                    $AVATAR.state.pickup.current.delete();
+                    $CURRENT_MAP.link($AVATAR.state.pickup.current);
                 }
 
                 if (this.outPoint) {
@@ -1628,7 +1630,7 @@ export class Door extends _StaticClusterClient_ {
                         $CURRENT_MAP.translate((-$CURRENT_MAP.centerX) + x, (-$CURRENT_MAP.centerY) + y);
                         $CURRENT_MAP.noclip = false;
                     }
-                } 
+                }
             }).bind(this));
         }
     }
@@ -1651,8 +1653,8 @@ export class Door extends _StaticClusterClient_ {
 
 export class OffRoader extends _StaticClusterClient_ {
 
-    static _defaultVertices = [-22.7,27.675,1,0,0,22.7,27.675,1,0.88671875,0,-22.7,-27.675,1,0,0.54052734375,22.7,27.675,1,0.88671875,0,-22.7,-27.675,1,0,0.54052734375,22.7,-27.675,1,0.88671875,0.54052734375];
- 
+    static _defaultVertices = [-22.7, 27.675, 1, 0, 0, 22.7, 27.675, 1, 0.88671875, 0, -22.7, -27.675, 1, 0, 0.54052734375, 22.7, 27.675, 1, 0.88671875, 0, -22.7, -27.675, 1, 0, 0.54052734375, 22.7, -27.675, 1, 0.88671875, 0.54052734375];
+
     width = 45.4;
     height = 55.35;
     name = "off roader";
@@ -1660,7 +1662,7 @@ export class OffRoader extends _StaticClusterClient_ {
     texture = textures.offroader;
     obstacle = false;
     segments = [
-        [-14.2,-6.7,28.4,16.4]
+        [-14.2, -6.7, 28.4, 16.4]
     ];
 
     constructor(initialX, initialY, initialRotation) {
@@ -1680,7 +1682,7 @@ export class Table extends _StaticClusterClient_ {
     texture = textures.table;
     obstacle = true;
     segments = [
-        [-14.2,-7.1,28.4,16.4]
+        [-14.2, -7.1, 28.4, 16.4]
     ];
 
     constructor(initialX, initialY, initialRotation) {
@@ -1712,8 +1714,8 @@ export class _Building_ extends _StaticClusterClient_ {
                     this.map.move = true;
 
                     if ($AVATAR.state.pickup.current) {
-                      $AVATAR.state.pickup.current.delete();
-                      $CURRENT_MAP.link($AVATAR.state.pickup.current);
+                        $AVATAR.state.pickup.current.delete();
+                        $CURRENT_MAP.link($AVATAR.state.pickup.current);
                     }
 
                     if (i[3]) {
@@ -1774,7 +1776,16 @@ export class House1 extends _Building_ {
     texture = textures.house1;
     obstacle = true;
     segments = [
-       [12.5,-49,50,24],[-71.5,-41,34,34],[-73.5,23,111,70],[2.5,-27,70,30],[2.5,-51,10,30],[62.5,-51,10,30],[2.5,21,70,64],[2.5,1,6,64],[66.5,1,6,64],[-71.5,-35,78,120]     
+        [12.5, -49, 50, 24],
+        [-71.5, -41, 34, 34],
+        [-73.5, 23, 111, 70],
+        [2.5, -27, 70, 30],
+        [2.5, -51, 10, 30],
+        [62.5, -51, 10, 30],
+        [2.5, 21, 70, 64],
+        [2.5, 1, 6, 64],
+        [66.5, 1, 6, 64],
+        [-71.5, -35, 78, 120]
     ];
 
     constructor(initialX, initialY, initialRotation) {
@@ -1915,8 +1926,8 @@ export class _Pickup_ extends _InstancedClusterClient_ {
     translate(x, y, rotation = false, translateVertices) {
 
         this.trans.offsetX += x;
-        this.trans.offsetY += y; 
-        this.ring.translate(this.trans.offsetX-this.ring.trans.offsetX, this.trans.offsetY-this.ring.trans.offsetY, false, translateVertices);
+        this.trans.offsetY += y;
+        this.ring.translate(this.trans.offsetX - this.ring.trans.offsetX, this.trans.offsetY - this.ring.trans.offsetY, false, translateVertices);
 
         if (rotation) {
             this.trans.rotation = rotation;
@@ -2155,20 +2166,20 @@ export class Avatar {
             passive: false,
             aggressive: false,
             pickup: {
-              hitbox: {
-               x: 0,
-               y: 0,
-               width: 5,
-               height: 5
-              },
-              offset: {
-               x: 0,
-               y: 0,
-               aRotation: 0,
-               bRotation: 0,
-              },
-              current: false,
-              reachDistance: 2.5
+                hitbox: {
+                    x: 0,
+                    y: 0,
+                    width: 5,
+                    height: 5
+                },
+                offset: {
+                    x: 0,
+                    y: 0,
+                    aRotation: 0,
+                    bRotation: 0,
+                },
+                current: false,
+                reachDistance: 2.5
             },
             vitals: {
                 health: 100,
@@ -2237,35 +2248,35 @@ export class Avatar {
             openCarry: false,
             equippedItems: {
                 mainTool: undefined
-            }, 
+            },
             shotCheckAnimation: new LoopAnimation(function() {
                 this.state.target.shot = true;
-                
+
                 outer: for (let o in this.map.obstacles) {
-                  let obstacle = this.map.obstacles[o];
-		   
-                         if (obstacle.id === this.id || obstacle.id === this.state.target.current.id) continue;
-                        
-                         for (let segment of obstacle.segments) {
-                            let [ox, oy, ow, oh] = segment;
+                    let obstacle = this.map.obstacles[o];
 
-                            ox = ox + obstacle.trans.offsetX;
-                            oy = oy + obstacle.trans.offsetY;
+                    if (obstacle.id === this.id || obstacle.id === this.state.target.current.id) continue;
 
-                            let p1 = this.trans.offsetX;
-                            let p2 = this.trans.offsetY;
-                            let p3 = this.state.target.current.trans.offsetX;
-                            let p4 = this.state.target.current.trans.offsetY;
+                    for (let segment of obstacle.segments) {
+                        let [ox, oy, ow, oh] = segment;
 
-                            let result = lineIntersectsBox(p1,p2,p3,p4,ox,oy,ow,oh);
+                        ox = ox + obstacle.trans.offsetX;
+                        oy = oy + obstacle.trans.offsetY;
 
-                            if (result) {
-                              this.state.target.shot = !result;
-                              break outer;
-                            }
+                        let p1 = this.trans.offsetX;
+                        let p2 = this.trans.offsetY;
+                        let p3 = this.state.target.current.trans.offsetX;
+                        let p4 = this.state.target.current.trans.offsetY;
+
+                        let result = lineIntersectsBox(p1, p2, p3, p4, ox, oy, ow, oh);
+
+                        if (result) {
+                            this.state.target.shot = !result;
+                            break outer;
                         }
-                     }
-            }, this, 0.5), 
+                    }
+                }
+            }, this, 0.5),
             reloadTimeout: new MultiFrameLinearAnimation([function() {
                 this.state.reload.progress = 0;
                 this.state.reload.loaded = true;
@@ -2333,7 +2344,7 @@ export class Avatar {
                 if (this.state.goto.y !== this.trans.offsetY) {
                     ty = (Math.abs(this.state.goto.y - this.trans.offsetY) < this.state.speed) ? (this.state.goto.y - this.trans.offsetY) : (this.trans.offsetY < this.state.goto.y) ? this.state.speed : -this.state.speed;
                 }
- 
+
                 this.translate(tx, ty);
 
                 if (this.state.goto.x === this.trans.offsetX && this.state.goto.y === this.trans.offsetY) {
@@ -2403,7 +2414,7 @@ export class Avatar {
         this.textures = [];
 
         ext.bindVertexArrayOES(this.vao);
-        this.buffer = gl.createBuffer();       
+        this.buffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
         gl.vertexAttribPointer(locations.coords, 3, gl.FLOAT, false, 24, 0); // 20
         gl.vertexAttribPointer(locations.tcoords, 2, gl.FLOAT, false, 24, 12);
@@ -2414,7 +2425,7 @@ export class Avatar {
         gl.disableVertexAttribArray(locations.offset);
 
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([...this.body[this.state.position.body.vertices], ...this.eyes[this.state.position.eyes.vertices]]), gl.STATIC_DRAW);
- 
+
         this.textures[0] = gl.createTexture();
 
         gl.activeTexture(gl.TEXTURE0);
@@ -2506,26 +2517,26 @@ export class Avatar {
             this.state.recoilAnimation.start();
 
             const map = (this.map || $CURRENT_MAP);
-            const [initialX, initialY] = rotate(0, 1, (this.trans.rotation) * 180 / Math.PI);
+            const [initialTrajectoryX, initialTrajectoryY] = rotate(0, 1, (this.trans.rotation) * 180 / Math.PI);
 
-            let r = random(this.state.equippedItems.mainTool.constructor._properties.accuracy || 0);
-            r = (Math.random() < 0.5) ? -r : r;
-            let [x, y, ro] = rotate(initialX, initialY, r);
+            let randomBulletRotation = random(this.state.equippedItems.mainTool.constructor._properties.accuracy || 0);
+            randomBulletRotation = (Math.random() < 0.5) ? -randomBulletRotation : randomBulletRotation;
 
-            let [nx, ny] = rotate(0, this.state.equippedItems.mainTool.constructor._properties.nozzelLength, (this.trans.rotation) * 180 / Math.PI);
+            let [finalTrajectoryX, finalTrajectoryY] = rotate(initialTrajectoryX, initialTrajectoryY, randomBulletRotation);
+            let [initialPointX, initialPointY] = rotate(0, this.state.equippedItems.mainTool.constructor._properties.nozzelLength, (this.trans.rotation) * 180 / Math.PI);
 
-            map.link(new Bullet(nx + this.trans.offsetX, ny + this.trans.offsetY, ((this.trans.rotation) * 180 / Math.PI) + 90, (x) * this.state.equippedItems.mainTool.constructor._properties.bulletSpeed, (y) * this.state.equippedItems.mainTool.constructor._properties.bulletSpeed, this.state.equippedItems.mainTool.constructor._properties.damage, this));
+            map.link(new Bullet(initialPointX + this.trans.offsetX, initialPointY + this.trans.offsetY, ((this.trans.rotation) * 180 / Math.PI) + 90, finalTrajectoryX * this.state.equippedItems.mainTool.constructor._properties.bulletSpeed, finalTrajectoryY * this.state.equippedItems.mainTool.constructor._properties.bulletSpeed, this.state.equippedItems.mainTool.constructor._properties.damage, this));
 
-            let [shellDirectionX,shellDirectionY] = rotate(20,0,(this.trans.rotation) * 180 / Math.PI), randomShellRotation = random(10);
-            let [randomShellDirectionX,randomShellDirectionY] = rotate(shellDirectionX,shellDirectionY,(Math.random() < 0.5) ? -randomShellRotation:randomShellRotation);
 
-            let [shellInitialX, shellInitialY] = rotate(0,8,(this.trans.rotation) * 180 / Math.PI);
+            let [shellDirectionX, shellDirectionY] = rotate(20, 0, (this.trans.rotation) * 180 / Math.PI), randomShellRotation = random(10);
+            let [randomShellDirectionX, randomShellDirectionY] = rotate(shellDirectionX, shellDirectionY, (Math.random() < 0.5) ? -randomShellRotation : randomShellRotation);
+            let [shellInitialX, shellInitialY] = rotate(0, 8, (this.trans.rotation) * 180 / Math.PI);
 
-            map.link(new BulletShell(this.trans.offsetX+shellInitialX,this.trans.offsetY+shellInitialY,randomShellDirectionX,randomShellDirectionY));
+            map.link(new BulletShell(this.trans.offsetX + shellInitialX, this.trans.offsetY + shellInitialY, randomShellDirectionX, randomShellDirectionY));
 
             this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo--;
-
             this.state.reload.progress++;
+
             if (this.state.reload.progress === this.state.equippedItems.mainTool.constructor._properties.capacity) this.state.reload.loaded = false;
 
         }, this, 0);
@@ -2535,10 +2546,8 @@ export class Avatar {
         if (!this.state.invinsible) {
             (this.state.armor > 0) ? this.state.armor -= damage: this.state.vitals.health -= damage;
             if (this.state.vitals.health <= 0) {
-                let a = (this.map ?? $CURRENT_MAP).avatars[owner.id];
-                if (a) a.state.kills += 1;
-
-                if (owner.id === $AVATAR.id) this.map.link(new Plus100(this.trans.offsetX,this.trans.offsetY+10)); 
+                let attacker = (this.map ?? $CURRENT_MAP).avatars[owner.id];
+                if (attacker) attacker.state.kills += 1;
 
                 this.purgeItems(5);
                 this.delete();
@@ -2574,14 +2583,14 @@ export class Avatar {
     reload() {
         this.state.reloadTimeout.start();
     }
-   
+
     follow(id) {
-       this.state.speed = (this.state.follow.run) ? this.state.runningSpeed:this.state.baseSpeed;
-       this.state.follow.target = this.map.avatars[id];
+        this.state.speed = (this.state.follow.run) ? this.state.runningSpeed : this.state.baseSpeed;
+        this.state.follow.target = this.map.avatars[id];
     }
- 
+
     disengageFollow() {
-     this.state.follow.target = undefined;
+        this.state.follow.target = undefined;
     }
 
     addItem(item, slot) {
@@ -2641,25 +2650,25 @@ export class Avatar {
 
     preRender() {
         // run animations
-       
+
         this.state.blinkingAnimation.run();
-        
+
         if (this.state.walking && this.state.draw === false) {
             this.state.walkingAnimation.run();
         } else {
-           this.state.walkingAnimation.end();
+            this.state.walkingAnimation.end();
         }
-        
+
         if (this.state.draw) {
             this.state.position.body.texture = 4;
             this.state.position.body.vertices = 1;
-        } 
+        }
 
         if (this.state.fire && this.state.target.shot && this.state.reload.loaded && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo) {
             this.state.fireAnimation.run();
         }
 
-	this.state.recoilAnimation.run();
+        this.state.recoilAnimation.run();
         if (!this.state.reload.loaded) this.state.reloadTimeout.run();
 
         if (this.state.recording.useRecording) this.state.recordAnimation.run();
@@ -2687,15 +2696,15 @@ export class Avatar {
                 this.map.GRAPH.reserved.push(next);
 
                 this.goto(x + 5, y - 5);
-            
+
                 let r = (Math.atan2(this.state.goto.y - this.trans.offsetY, this.state.goto.x - this.trans.offsetX) - 1.5708);
                 this.trans.rotation = r;
- 
+
             } else {
                 this.disengagePath();
                 this.requestPath(this.state.path.end.x, this.state.path.end.y);
                 break walk;
-            } 
+            }
 
             this.state.path.index++;
         }
@@ -2723,30 +2732,30 @@ export class Avatar {
                     if (this.state.path.request && !this.state.path.engaged && !this.state.follow.target) this.requestPath(targetX + m.centerX, targetY + m.centerY);
                 } else if (dist < this.state.attack.settleDistance) {
                     if (this.state.target.shot && this.state.path.engaged && !this.state.follow.target) {
-                     this.disengagePath();
+                        this.disengagePath();
                     }
 
                     this.trans.rotation = Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX)) - 1.5708;
                     if (!this.state.draw) this.drawWeapon();
                     if (this.state.target.shot) this.state.fire = true;
-   
+
                 } else if (dist < this.state.attack.slowdownDistance) {
                     this.trans.rotation = Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX)) - 1.5708;
                     if (!this.state.draw) this.drawWeapon();
                     if (this.state.target.shot) this.state.fire = true;
 
-                    if (!this.state.follow.rush || !this.state.follow.target) this.state.speed = this.state.baseSpeed * (this.state.attack.attackSpeed/3);
+                    if (!this.state.follow.rush || !this.state.follow.target) this.state.speed = this.state.baseSpeed * (this.state.attack.attackSpeed / 3);
                 } else if (dist < this.state.attack.engageDistance) {
                     this.state.speed = this.state.baseSpeed * this.state.attack.attackSpeed;
                     this.trans.rotation = Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX)) - 1.5708;
                     if (!this.state.draw) this.drawWeapon();
                     if (this.state.target.shot) this.state.fire = true;
-                    
+
                     if (!this.state.path.engaged && !this.state.follow.target) {
                         this.requestPath(targetX + m.centerX, targetY + m.centerY);
                     }
                 }
- 
+
                 if (!this.state.target.shot && this.state.path.request && !this.state.path.engaged && !this.state.follow.target) this.requestPath(targetX + m.centerX, targetY + m.centerY)
 
                 break attack;
@@ -2754,32 +2763,32 @@ export class Avatar {
 
             this.disengageTarget();
         }
-  
-       // follow target
 
-       follow: if (this.state.follow.target) {
+        // follow target
 
-                const {
-                    offsetX: targetX,
-                    offsetY: targetY
-                } = this.state.follow.target.trans, dist = distance(this.trans.offsetX, this.trans.offsetY, targetX, targetY), speed = (this.state.follow.run) ? this.state.runningSpeed*this.state.baseSpeed:this.state.baseSpeed;
+        follow: if (this.state.follow.target) {
 
-                if (dist > this.state.follow.settleDistance) {
-                    this.state.speed = speed;
-                    if (this.state.path.request && !this.state.path.engaged) {
-                      this.requestPath(targetX + this.map.centerX, targetY + this.map.centerY);
-                    }
-                } 
+            const {
+                offsetX: targetX,
+                offsetY: targetY
+            } = this.state.follow.target.trans, dist = distance(this.trans.offsetX, this.trans.offsetY, targetX, targetY), speed = (this.state.follow.run) ? this.state.runningSpeed * this.state.baseSpeed : this.state.baseSpeed;
 
-                if (dist < this.state.follow.slowdownDistance && dist > this.state.settleDistance) {
-                    this.state.speed = speed/3;
-                } else if (dist < this.state.follow.settleDistance) {
-                  if (this.state.path.engaged) {
+            if (dist > this.state.follow.settleDistance) {
+                this.state.speed = speed;
+                if (this.state.path.request && !this.state.path.engaged) {
+                    this.requestPath(targetX + this.map.centerX, targetY + this.map.centerY);
+                }
+            }
+
+            if (dist < this.state.follow.slowdownDistance && dist > this.state.settleDistance) {
+                this.state.speed = speed / 3;
+            } else if (dist < this.state.follow.settleDistance) {
+                if (this.state.path.engaged) {
                     this.disengagePath();
-                  }
-                } 
+                }
+            }
         }
-      this.movePickup();
+        this.movePickup();
     }
 
     render() {
@@ -2883,47 +2892,53 @@ export class Avatar {
             let point = this.map.GRAPH.getRandomPoint();
 
             if (point) {
-            this.state.speed = this.state.runningSpeed * this.state.baseSpeed;
-            this.requestPath(point.x, point.y);
+                this.state.speed = this.state.runningSpeed * this.state.baseSpeed;
+                this.requestPath(point.x, point.y);
             }
         }
     }
 
     grab() {
-     if (this.state.pickup.current) return;    
+        if (this.state.pickup.current) return;
 
-      let [x, y] = rotate(0, this.state.pickup.reachDistance, (this.trans.rotation) * 180 / Math.PI);
-      let {width, height} = this.state.pickup.hitbox;    
- 
-             for (let i in $CURRENT_MAP.moveables) {
-               let obj = $CURRENT_MAP.moveables[i];               
+        let [x, y] = rotate(0, this.state.pickup.reachDistance, (this.trans.rotation) * 180 / Math.PI);
+        let {
+            width,
+            height
+        } = this.state.pickup.hitbox;
 
-               if ((Math.abs(x - obj.trans.offsetX) < (obj.width / 2 + width / 2)) && (Math.abs(y - obj.trans.offsetY) < (obj.height / 2 + height / 2))) {
-                 obj.moveToTop();
+        for (let i in $CURRENT_MAP.moveables) {
+            let obj = $CURRENT_MAP.moveables[i];
 
-                 this.state.pickup.offset.x = obj.trans.offsetX;
-                 this.state.pickup.offset.y = obj.trans.offsetY;
-                 this.state.pickup.offset.aRotation = (this.trans.rotation * 180 / Math.PI);
-                 this.state.pickup.offset.bRotation = obj.trans.rotation;
-                 this.state.pickup.current = obj;
-                 break;
-               }
-             }
+            if ((Math.abs(x - obj.trans.offsetX) < (obj.width / 2 + width / 2)) && (Math.abs(y - obj.trans.offsetY) < (obj.height / 2 + height / 2))) {
+                obj.moveToTop();
+
+                this.state.pickup.offset.x = obj.trans.offsetX;
+                this.state.pickup.offset.y = obj.trans.offsetY;
+                this.state.pickup.offset.aRotation = (this.trans.rotation * 180 / Math.PI);
+                this.state.pickup.offset.bRotation = obj.trans.rotation;
+                this.state.pickup.current = obj;
+                break;
+            }
+        }
     }
 
     movePickup() {
         if (this.state.pickup.current) {
-           let {offsetX, offsetY} = this.state.pickup.current.trans, pickup = this.state.pickup.current, rotation = (this.trans.rotation * 180 / Math.PI);
-           let [x2, y2] = rotate((this.state.pickup.offset.x),(this.state.pickup.offset.y),rotation-this.state.pickup.offset.aRotation);
+            let {
+                offsetX,
+                offsetY
+            } = this.state.pickup.current.trans, pickup = this.state.pickup.current, rotation = (this.trans.rotation * 180 / Math.PI);
+            let [x2, y2] = rotate((this.state.pickup.offset.x), (this.state.pickup.offset.y), rotation - this.state.pickup.offset.aRotation);
 
-         pickup.translate(x2-offsetX, y2-offsetY,this.state.pickup.offset.bRotation + (this.state.pickup.offset.aRotation - rotation), true);
-        } 
+            pickup.translate(x2 - offsetX, y2 - offsetY, this.state.pickup.offset.bRotation + (this.state.pickup.offset.aRotation - rotation), true);
+        }
     }
 
     drop() {
-     if (this.state.pickup.current) {
-      this.state.pickup.current = undefined;
-     }
+        if (this.state.pickup.current) {
+            this.state.pickup.current = undefined;
+        }
     }
 
     requestPath(x, y) {
@@ -2946,7 +2961,7 @@ export class Avatar {
 
     findPathTo(path) {
         if (path.result && this.state.path.start) {
-            this.state.path.current = path.path; 
+            this.state.path.current = path.path;
             this.state.path.index = 0;
             this.state.path.engaged = true;
         }
@@ -3273,8 +3288,11 @@ class _Graph_ {
         while (!p || (this.blocked.includes(p.id) && this.blocked.length !== this.nodeCount)) {
             p = this.nodes[random(this.nodeCount) || 1];
         }
-       
-        return (p) ? {x: p.position.x - this.map.centerX, y: p.position.y - this.map.centerY}:p;
+
+        return (p) ? {
+            x: p.position.x - this.map.centerX,
+            y: p.position.y - this.map.centerY
+        } : p;
     }
 
     evalObstacle(x, y, width, height) {
@@ -3340,16 +3358,16 @@ export class _Map_ {
         this.locations = {};
         this.clusters = {};
         this.subLayers = {
-         1: [],
-         2: [],
-         3: [],
-         4: [],
-         5: [],
-         6: [] 
+            1: [],
+            2: [],
+            3: [],
+            4: [],
+            5: [],
+            6: []
         };
         this.interactables = {};
         this.GRAPH = new _Graph_(this.units.width, this.units.height, true);
-        this.GRAPH.map = this; 
+        this.GRAPH.map = this;
         this.SUB_MAP_COUNT = 0;
         this.SUB_MAPS = {};
         this.PARENT_MAP = undefined;
@@ -3391,13 +3409,13 @@ export class _Map_ {
         }
 
         if (this.show) this.renderSubLayers();
-  
+
         for (let i in this.avatars) {
             let av = this.avatars[i];
 
             if (av.preRender && !this.freeze) av.preRender();
             if (this.show) av.render();
-        } 
+        }
     }
 
     renderTopLayer() {
@@ -3427,19 +3445,19 @@ export class _Map_ {
                     ob.render();
                 }
             }
- 
+
             this.renderSubLayers("bottomLayer");
         }
     }
-  
+
     renderSubLayers(layer) {
-     for (let l in this.subLayers) {
-       for (let ob of this.subLayers[l]) {
-         if (!(ob instanceof Barrier || ob instanceof Trigger || ob instanceof Avatar) && (ob[layer] || !layer) && !ob.hasCluster && !ob.hidden) {
-            ob.render();
-         }
-       } 
-     }     
+        for (let l in this.subLayers) {
+            for (let ob of this.subLayers[l]) {
+                if (!(ob instanceof Barrier || ob instanceof Trigger || ob instanceof Avatar) && (ob[layer] || !layer) && !ob.hasCluster && !ob.hidden) {
+                    ob.render();
+                }
+            }
+        }
     }
 
     link(obj) {
@@ -3449,15 +3467,15 @@ export class _Map_ {
                 switch (obj.clusterType) {
                     case _StaticCluster_: {
                         if (!this.clusters[obj.clusterName]) {
-                          let cluster = new obj.clusterType(obj.texture, obj.topLayer);
- 
-                          cluster.bottomLayer = obj.bottomLayer;
-                          cluster.topLayer = obj.topLayer;
-                          cluster.subLayer = obj.subLayer;
+                            let cluster = new obj.clusterType(obj.texture, obj.topLayer);
 
-                           this.registerCluster(obj.clusterName, cluster);
+                            cluster.bottomLayer = obj.bottomLayer;
+                            cluster.topLayer = obj.topLayer;
+                            cluster.subLayer = obj.subLayer;
+
+                            this.registerCluster(obj.clusterName, cluster);
                         }
- 
+
                         obj.cluster = this.clusters[obj.clusterName];
 
                         obj.clusterIndex = this.clusters[obj.clusterName].link(obj.constructor._defaultVertices, -this.clusters[obj.clusterName].trans.offsetX + obj.trans.offsetX, -this.clusters[obj.clusterName].trans.offsetY + obj.trans.offsetY, obj.trans.rotation);
@@ -3465,33 +3483,33 @@ export class _Map_ {
                     break;
                     case _InstancedCluster_: {
                         if (!this.clusters[obj.clusterName]) {
-                         let cluster = new obj.clusterType(obj.constructor._defaultVertices, obj.texture, obj.type === "light");
+                            let cluster = new obj.clusterType(obj.constructor._defaultVertices, obj.texture, obj.type === "light");
 
-                         cluster.bottomLayer = obj.bottomLayer;
-                         cluster.topLayer = obj.topLayer;
-                         cluster.subLayer = obj.subLayer;
+                            cluster.bottomLayer = obj.bottomLayer;
+                            cluster.topLayer = obj.topLayer;
+                            cluster.subLayer = obj.subLayer;
 
-                         this.registerCluster(obj.clusterName, cluster);
+                            this.registerCluster(obj.clusterName, cluster);
                         }
-                        
+
                         obj.cluster = this.clusters[obj.clusterName];
-                        
+
                         obj.clusterIndex = this.clusters[obj.clusterName].link(-this.clusters[obj.clusterName].trans.offsetX + obj.trans.offsetX, -this.clusters[obj.clusterName].trans.offsetY + obj.trans.offsetY, obj.trans.rotation);
                     };
                     break;
                     case _MixedStaticCluster_: {
                         if (!this.clusters[obj.clusterName]) {
-                         let cluster = new obj.clusterType(_MixedStaticCluster_.groupings[obj.grouping]);                         
+                            let cluster = new obj.clusterType(_MixedStaticCluster_.groupings[obj.grouping]);
 
-                         cluster.bottomLayer = obj.bottomLayer;
-                         cluster.topLayer = obj.topLayer;
-                         cluster.subLayer = obj.subLayer;
+                            cluster.bottomLayer = obj.bottomLayer;
+                            cluster.topLayer = obj.topLayer;
+                            cluster.subLayer = obj.subLayer;
 
-                         this.registerCluster(obj.clusterName, cluster);
+                            this.registerCluster(obj.clusterName, cluster);
                         }
 
                         obj.cluster = this.clusters[obj.clusterName];
-                        
+
                         obj.clusterIndex = this.clusters[obj.clusterName].link(obj.constructor._defaultVertices, -this.clusters[obj.clusterName].trans.offsetX + obj.trans.offsetX, -this.clusters[obj.clusterName].trans.offsetY + obj.trans.offsetY, obj.trans.rotation);
                     };
                     break;
@@ -3680,7 +3698,7 @@ export class _Map_ {
         if (this.move) {
             if (!this.noclip) {
                 for (let i in this.obstacles) {
-                  if (this.obstacles[i] === $AVATAR.state.pickup.current) continue;
+                    if (this.obstacles[i] === $AVATAR.state.pickup.current) continue;
                     for (let segment of this.obstacles[i].segments) {
 
                         let [ox,
@@ -3959,21 +3977,21 @@ export class _Button_ extends _Object_ {
             gl.useProgram(program);
         }, function() {
             ext.bindVertexArrayOES(this.vao);
-            gl.uniform2fv(locations.translation, [this.trans.offsetX*this.scale, this.trans.offsetY*this.scale]);
+            gl.uniform2fv(locations.translation, [this.trans.offsetX * this.scale, this.trans.offsetY * this.scale]);
             gl.uniform1f(locations.rotation, this.trans.rotation);
             gl.uniform1f(locations.scale, this.scale);
-   
-            (this.enabled) ? gl.uniform1f(locations.transparency, 1/controlTransparency):gl.uniform1f(locations.transparency, 0.5/controlTransparency);
+
+            (this.enabled) ? gl.uniform1f(locations.transparency, 1 / controlTransparency): gl.uniform1f(locations.transparency, 0.5 / controlTransparency);
 
             gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
             gl.activeTexture(gl.TEXTURE0);
- 
-              if ((this.active && !toggle) || (toggle && !this.on)) {
-                  gl.bindTexture(gl.TEXTURE_2D, this.textureActive);
-              } else if ((!this.active && !toggle) || (toggle && this.on)) {
-                  gl.bindTexture(gl.TEXTURE_2D, this.texture);
-              }
-            
+
+            if ((this.active && !toggle) || (toggle && !this.on)) {
+                gl.bindTexture(gl.TEXTURE_2D, this.textureActive);
+            } else if ((!this.active && !toggle) || (toggle && this.on)) {
+                gl.bindTexture(gl.TEXTURE_2D, this.texture);
+            }
+
             gl.useProgram(program);
 
             gl.drawArrays(gl.TRIANGLES, 0, this.vertices.length / 5);
@@ -3983,7 +4001,7 @@ export class _Button_ extends _Object_ {
         this.scale = scale;
         this.enabled = true;
         this.active = false;
-        this.radius = radius/scale;
+        this.radius = radius / scale;
         this.on = false;
         this.action = action.bind(this);
     }
@@ -3991,7 +4009,10 @@ export class _Button_ extends _Object_ {
 
 export class _Joystick_ extends _Object_ {
 
-    constructor(left, scale = 1, fixed = false, position = {x: 0, y: 0}) {
+    constructor(left, scale = 1, fixed = false, position = {
+        x: 0,
+        y: 0
+    }) {
         super([
             0, 0, 1, 0, 0, 30, 0, 1, 1, 0, 0, 30, 1, 0, 1, 30, 0, 1, 1, 0, 0, 30, 1, 0, 1, 30, 30, 1, 1, 1
         ], function() {
@@ -4017,35 +4038,35 @@ export class _Joystick_ extends _Object_ {
 
         }, function() {
             if (!this.base.anchored && !this.fixed) return;
-            
-                ext.bindVertexArrayOES(this.vao);
-                gl.uniform2fv(locations.translation, [this.base.x * scale, this.base.y * scale]);
-                gl.uniform1f(locations.rotation, 0);
-                gl.uniform1f(locations.scale, this.scale);
-                gl.uniform1f(locations.transparency, 1/controlTransparency);
 
-                gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
-                gl.bufferData(gl.ARRAY_BUFFER, this.vertices, gl.DYNAMIC_DRAW);
-                gl.activeTexture(gl.TEXTURE0);
-                gl.bindTexture(gl.TEXTURE_2D, this.texture);
-                gl.useProgram(program);
-                gl.drawArrays(gl.TRIANGLES, 0, 6);
+            ext.bindVertexArrayOES(this.vao);
+            gl.uniform2fv(locations.translation, [this.base.x * scale, this.base.y * scale]);
+            gl.uniform1f(locations.rotation, 0);
+            gl.uniform1f(locations.scale, this.scale);
+            gl.uniform1f(locations.transparency, 1 / controlTransparency);
 
-                gl.uniform2fv(locations.translation, [this.thumb.x * scale, this.thumb.y * scale]);
-                gl.bufferData(gl.ARRAY_BUFFER, this.thumbVertices, gl.DYNAMIC_DRAW);
-                gl.drawArrays(gl.TRIANGLES, 0, 6);
-                gl.uniform1f(locations.transparency, 1);
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
+            gl.bufferData(gl.ARRAY_BUFFER, this.vertices, gl.DYNAMIC_DRAW);
+            gl.activeTexture(gl.TEXTURE0);
+            gl.bindTexture(gl.TEXTURE_2D, this.texture);
+            gl.useProgram(program);
+            gl.drawArrays(gl.TRIANGLES, 0, 6);
 
-                if ($CURRENT_MAP.move) {
-                    if (left && this.base.anchored) {
-                        $CURRENT_MAP.translate((this.distance.x * this.scale) * movementMultFactor, (this.distance.y * this.scale) * movementMultFactor);
-                       
-             if ($CURRENT_MAP.move) $AVATAR.state.walking = true;
-                    }
+            gl.uniform2fv(locations.translation, [this.thumb.x * scale, this.thumb.y * scale]);
+            gl.bufferData(gl.ARRAY_BUFFER, this.thumbVertices, gl.DYNAMIC_DRAW);
+            gl.drawArrays(gl.TRIANGLES, 0, 6);
+            gl.uniform1f(locations.transparency, 1);
 
-    if (this.base.anchored) $AVATAR.trans.rotation = this.rotation;
-    if ($CURRENT_MAP.move && this.base.anchored && !left) $AVATAR.drawWeapon();
+            if ($CURRENT_MAP.move) {
+                if (left && this.base.anchored) {
+                    $CURRENT_MAP.translate((this.distance.x * this.scale) * movementMultFactor, (this.distance.y * this.scale) * movementMultFactor);
+
+                    if ($CURRENT_MAP.move) $AVATAR.state.walking = true;
                 }
+
+                if (this.base.anchored) $AVATAR.trans.rotation = this.rotation;
+                if ($CURRENT_MAP.move && this.base.anchored && !left) $AVATAR.drawWeapon();
+            }
         }, 30, 30);
         this.position = Object.create(position);
         this.base = {
@@ -4085,25 +4106,28 @@ export class _Joystick_ extends _Object_ {
             $AVATAR.state.fire = false;
         }
     }
- 
-    fix() {
-     if (!this.fixed) return;     
 
-          let {x,y} = this.position;      
- 
-          this.base.x = x - this.base.width / 2;
-          this.base.y = y - this.base.height / 2; 
-          this.thumb.x = x - this.thumb.width / 2;
-          this.thumb.y = y - this.thumb.height / 2;
-    } 
+    fix() {
+        if (!this.fixed) return;
+
+        let {
+            x,
+            y
+        } = this.position;
+
+        this.base.x = x - this.base.width / 2;
+        this.base.y = y - this.base.height / 2;
+        this.thumb.x = x - this.thumb.width / 2;
+        this.thumb.y = y - this.thumb.height / 2;
+    }
 
     translate(x, y) {
 
         if (!this.base.anchored) {
-             if (!this.fixed) {
-               this.base.x = x - this.base.width / 2;
-               this.base.y = y - this.base.height / 2;
-             }
+            if (!this.fixed) {
+                this.base.x = x - this.base.width / 2;
+                this.base.y = y - this.base.height / 2;
+            }
             this.base.anchored = true;
         }
         this.thumb.x = x - this.thumb.width / 2;

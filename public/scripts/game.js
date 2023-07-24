@@ -38,7 +38,7 @@
       Text,
       VisibleBarrier,
       DownwardLight,
-      Barrier, 
+      Barrier,
       Laptop,
       Book1,
       Book2,
@@ -46,13 +46,13 @@
       GP_K100,
       KC_357,
       USP_45,
-      OffRoader, 
-      Grass, 
+      OffRoader,
+      Grass,
       Grass2,
-      Rocks1, 
+      Rocks1,
       Rocks2,
       BulletShell,
-      Plus100 
+      Plus100
   } from "/public/scripts/objects.js";
 
   $AVATAR = new Avatar("R O B I N H O O D");
@@ -75,65 +75,64 @@
   $MAP.translate(0, 0);
 
   let id = genObjectId();
-/*
+
   let b = new Avatar("Keanu Reeves", 0, 50);
-  //$MAP.link(b);
+  $MAP.link(b);
   b.exclude = true;
   b.state.armor = 5000;
   b.state.aggressive = false;
   b.addItem(new GLOCK_20(0, 0, 0, 1000));
   b.state.targetId = b.id;
-  b.state.baseSpeed = 1;
-  b.state.reloadTimeout.timingConfig[0] = 0.5/5;
-  b.state.targetUpdateAnimation.rate = 0.5/5;
-  b.state.fireAnimation.rate = 0.5 / 10; 
-  //b.follow($AVATAR.id);
-  b.killTarget([$AVATAR.id], true);
-  //b.translate(0,30);
+  b.state.baseSpeed = 2;
+  b.state.reloadTimeout.timingConfig[0] = 0.5 / 5;
+  b.state.targetUpdateAnimation.rate = 0.5 / 5;
+  b.state.fireAnimation.rate = 0.5 / 10;
+  //b.killTarget([$AVATAR.id], true, true);
+  b.translate(0, 30);
 
   $MAP.darkness = 1;
-  $MAP.lighting = false;     */
+  $MAP.lighting = false;
   //$MAP.lighting = true;
   //$MAP.darkness = 10;
- /* 
-  let c = new Avatar("Beatrice", 5, 5);
-  $MAP.link(c);
-  c.state.armor = 3000;
-  c.state.aggressive = false;
-  c.state.follow.settleDistance = 20;
-  c.state.follow.rush = true;
-  c.addItem(new GLOCK_20(0, 0, 0, 1000));
-  c.state.targetId = b.id;
-  c.follow($AVATAR.id);
-  //c.killTarget([id], true);
+  /* 
+   let c = new Avatar("Beatrice", 5, 5);
+   $MAP.link(c);
+   c.state.armor = 3000;
+   c.state.aggressive = false;
+   c.state.follow.settleDistance = 20;
+   c.state.follow.rush = true;
+   c.addItem(new GLOCK_20(0, 0, 0, 1000));
+   c.state.targetId = b.id;
+   c.follow($AVATAR.id);
+   //c.killTarget([id], true);
 
-  let d = new Avatar("Walter", 5, 5);
-  $MAP.link(d);
-  d.state.armor = 3000;
-  d.state.aggressive = false;
-  d.state.follow.settleDistance = 20;
-  d.state.follow.rush = true;
-  d.addItem(new GLOCK_20(0, 0, 0, 1000));
-  d.state.targetId = b.id;
-  d.follow($AVATAR.id);
-  //c.killTarget([id], true);
+   let d = new Avatar("Walter", 5, 5);
+   $MAP.link(d);
+   d.state.armor = 3000;
+   d.state.aggressive = false;
+   d.state.follow.settleDistance = 20;
+   d.state.follow.rush = true;
+   d.addItem(new GLOCK_20(0, 0, 0, 1000));
+   d.state.targetId = b.id;
+   d.follow($AVATAR.id);
+   //c.killTarget([id], true);
 
-  let e = new Avatar("Hammy Onion", 5, 5);
-  $MAP.link(e);
-  e.state.armor = 3000;
-  e.state.aggressive = false;
-  e.state.follow.settleDistance = 20;
-  e.state.follow.rush = true;
-  e.addItem(new GLOCK_20(0, 0, 0, 1000));
-  e.state.targetId = b.id;
-  e.follow($AVATAR.id);
-  //c.killTarget([id], true); */
+   let e = new Avatar("Hammy Onion", 5, 5);
+   $MAP.link(e);
+   e.state.armor = 3000;
+   e.state.aggressive = false;
+   e.state.follow.settleDistance = 20;
+   e.state.follow.rush = true;
+   e.addItem(new GLOCK_20(0, 0, 0, 1000));
+   e.state.targetId = b.id;
+   e.follow($AVATAR.id);
+   //c.killTarget([id], true); */
 
   //$MAP.link(new VisibleBarrier(0,0,40,40));
   //$MAP.link(new VisibleBarrier(-80,0,40,40));
   //$MAP.link(new VisibleBarrier(80,0,40,40));
   //$MAP.link(new VisibleBarrier(0,0,40,40));
- // $MAP.link(new VisibleBarrier(-80,0,40,40));
+  // $MAP.link(new VisibleBarrier(-80,0,40,40));
   //$MAP.link(new Chair(0,0));
   //$MAP.link(new VisibleBarrier(80,0,40,40));
   /*
@@ -149,9 +148,12 @@
       c.killTarget([id],true); */
 
   for (let i = 1; i <= 10; i++) {
-      let {x,y} = $MAP.GRAPH.getRandomPoint();
-      
-      let a = new Avatar(String(i), x+5, y-5);
+      let {
+          x,
+          y
+      } = $MAP.GRAPH.getRandomPoint();
+
+      let a = new Avatar(String(i), x + 5, y - 5);
       $MAP.link(a);
       a.state.attack.engageDistance = 300;
       a.state.attack.disengageDistance = 500;
@@ -159,12 +161,12 @@
       a.state.armor = 0;
       a.state.aggressive = false;
       a.state.passive = false;
-      a.state.targetUpdateAnimation.rate = 1/5;
+      a.state.targetUpdateAnimation.rate = 1 / 5;
       a.addItem(new GLOCK_20(0, 0, 0, 1000));
       a.state.fireAnimation.rate = 0.5 / 1;
       a.state.targetId = id;
       a.killTarget([$AVATAR.id]);
-  } 
+  }
 
   // Developer console
 
