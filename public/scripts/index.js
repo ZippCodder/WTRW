@@ -364,6 +364,7 @@ window.onload = async () => {
     gl.vertexAttrib3fv(locations.offset, new Float32Array([0, 0, 0.001]));
     gl.vertexAttrib1f(locations.textrUnit, 0);
 
+    await import("/public/scripts/textures.js");
     await import("/public/scripts/objects.js");
     await import("/public/scripts/game.js");
     await import("/public/scripts/controls.js");

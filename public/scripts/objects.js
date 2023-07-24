@@ -90,14 +90,14 @@ export class _Object_ {
 }
 
 export class _StaticCluster_ {
-    constructor(textureSrc, topLayer) {
+    constructor(texture, topLayer) {
 
         this.vao = ext.createVertexArrayOES();
         this.linked = false;
         this.isCluster = true;
         this.vertices = [];
-        this.textureSrc = textureSrc;
         this.verticesCount = 0;
+        this.texture = texture;
         this.members = 0;
         this.trans = {
             offsetX: 0,
@@ -115,17 +115,6 @@ export class _StaticCluster_ {
         this.buffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.DYNAMIC_DRAW);
-
-        this.texture = gl.createTexture();
-
-        gl.bindTexture(gl.TEXTURE_2D, this.texture);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureSrc);
-        //gl.generateMipmap(gl.TEXTURE_2D);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-
         gl.disableVertexAttribArray(locations.offset);
         gl.disableVertexAttribArray(locations.textrUnit);
     }
@@ -201,6 +190,7 @@ export class _StaticCluster_ {
         gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
 
         gl.activeTexture(gl.TEXTURE0);
+        console.log(this.texture);
         gl.bindTexture(gl.TEXTURE_2D, this.texture);
         gl.useProgram(program);
 
@@ -1161,7 +1151,7 @@ export class StreetLight extends _StaticClusterClient_ {
     height = 49;
     name = "street light";
     clusterName = "street light";
-    texture = textures.streetlight;
+    texture = tex.furniture.streetlight;
     obstacle = true;
     segments = [
         [-0.3, -24.3, 1.2, 8.6]
@@ -1279,7 +1269,7 @@ export class LightSwitch extends _StaticClusterClient_ {
     width = 3.2;
     height = 4.8;
     clusterName = "light switch";
-    texture = textures.lightswitch;
+    texture = tex.furniture.lightswitch;
     name = "light switch";
     interactable = true;
     minDistance = 18;
@@ -1308,7 +1298,7 @@ export class Chair extends _StaticClusterClient_ {
     height = 15;
     name = "chair";
     clusterName = "chair";
-    texture = textures.chair;
+    texture = tex.furniture.chair;
     obstacle = true;
     interactable = true;
     minDistance = 12;
@@ -1374,7 +1364,7 @@ export class Laptop extends _StaticClusterClient_ {
 
     width = 8.72;
     clusterName = "laptop";
-    texture = textures.laptop;
+    texture = tex.furniture.laptop;
     height = 9.72;
     moveable = true;
     name = "laptop";
@@ -1453,7 +1443,7 @@ export class PicnicTable extends _StaticClusterClient_ {
     name = "picnic table";
     obstacle = true;
     clusterName = "picnic table";
-    texture = textures.picnictable;
+    texture = tex.furniture.picnictable;
     segments = [
         [-14.2, -12.1, 8.4, 18.4],
         [-6.2, -11.7, 12.4, 20.4],
@@ -1572,7 +1562,7 @@ export class Door extends _StaticClusterClient_ {
     width = 14.6;
     height = 20.4;
     clusterName = "door";
-    texture = textures.door;
+    texture = tex.furniture.door;
     name = "door";
     obstacle = true;
     segments = [
@@ -1679,7 +1669,7 @@ export class Table extends _StaticClusterClient_ {
     height = 18.6;
     name = "table";
     clusterName = "table";
-    texture = textures.table;
+    texture = tex.furniture.table;
     obstacle = true;
     segments = [
         [-14.2, -7.1, 28.4, 16.4]
@@ -1773,7 +1763,7 @@ export class House1 extends _Building_ {
     height = 186.4;
     name = "house 1";
     clusterName = "house 1";
-    texture = textures.house1;
+    texture = tex.furniture.house1;
     obstacle = true;
     segments = [
         [12.5, -49, 50, 24],
