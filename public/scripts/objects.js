@@ -118,11 +118,6 @@ export class _StaticCluster_ {
         gl.disableVertexAttribArray(locations.offset);
         gl.disableVertexAttribArray(locations.textrUnit);
     }
-    texture;
-    buffer;
-    segments;
-    obstacle;
-    pickup;
 
     delete() {
         this.map.unlink(this.id);
@@ -199,7 +194,7 @@ export class _StaticCluster_ {
 }
 
 export class _BulletCluster_ {
-    constructor(vertices, textureSrc) {
+    constructor(vertices, texture) {
         this.vao = ext.createVertexArrayOES();
         this.linked = false;
         this.topLayer = true;
@@ -239,7 +234,7 @@ export class _BulletCluster_ {
         this.vertices = vertices;
         this.bullets = [];
         this.offsets = [];
-        this.textureSrc = textureSrc;
+        this.texture = texture;
         this.verticeCount = vertices.length / 5;
         this.members = 0;
         this.instances = 0;
@@ -269,24 +264,8 @@ export class _BulletCluster_ {
         gl.vertexAttribPointer(locations.offset, 3, gl.FLOAT, false, 12, 0);
         instExt.vertexAttribDivisorANGLE(locations.offset, 1);
         gl.enableVertexAttribArray(locations.offset);
-
-        this.texture = gl.createTexture();
-
-        gl.bindTexture(gl.TEXTURE_2D, this.texture);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureSrc);
-        //gl.generateMipmap(gl.TEXTURE_2D);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-
         gl.disableVertexAttribArray(locations.textrUnit);
     }
-    texture;
-    buffer;
-    segments;
-    obstacle;
-    pickup;
 
     delete() {
         this.map.unlink(this.id);
@@ -377,7 +356,7 @@ export class _BulletCluster_ {
 }
 
 export class _InstancedCluster_ {
-    constructor(vertices, textureSrc, useLight) {
+    constructor(vertices, texture, useLight) {
 
         this.vao = ext.createVertexArrayOES();
         this.linked = false;
@@ -385,7 +364,7 @@ export class _InstancedCluster_ {
         this.vertices = vertices;
         this.offsets = [];
         this.useLight = useLight;
-        this.textureSrc = textureSrc;
+        this.texture = texture;
         this.verticeCount = vertices.length / 5;
         this.members = 0;
         this.instances = 0;
@@ -415,26 +394,10 @@ export class _InstancedCluster_ {
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.offsets), gl.DYNAMIC_DRAW);
         gl.vertexAttribPointer(locations.offset, 3, gl.FLOAT, false, 12, 0);
         instExt.vertexAttribDivisorANGLE(locations.offset, 1);
-        gl.enableVertexAttribArray(locations.offset);
-
-        this.texture = gl.createTexture();
-
-        gl.bindTexture(gl.TEXTURE_2D, this.texture);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureSrc);
-        //gl.generateMipmap(gl.TEXTURE_2D);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-
+        gl.enableVertexAttribArray(locations.offset); 
         gl.disableVertexAttribArray(locations.textrUnit);
     }
-    texture;
-    buffer;
-    segments;
-    obstacle;
-    pickup;
-
+   
     delete() {
         this.map.unlink(this.id);
     }
@@ -498,6 +461,7 @@ export class _InstancedCluster_ {
         gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
 
         gl.activeTexture(gl.TEXTURE0);
+        console.log(this.texture);
         gl.bindTexture(gl.TEXTURE_2D, this.texture);
         gl.useProgram(program);
 
@@ -512,18 +476,18 @@ export class _InstancedCluster_ {
 export class _MixedStaticCluster_ {
 
     static groupings = {
-        "0": [textures.roads],
-        "1": [textures.fences],
+        "0": [textures.objects.roads],
+        "1": [textures.objects.fences],
     };
 
-    constructor(textureSrcs = [], stride = 6, topLayer) {
+    constructor(textures = [], stride = 6, topLayer) {
         this.vao = ext.createVertexArrayOES();
         this.linked = false;
         this.isCluster = true;
         this.stride = stride;
         this.sources = [];
         this.vertices = [];
-        this.textures = [];
+        this.textures = textures;
         this.verticesCount = 0;
         this.members = 0;
         this.trans = {
@@ -542,42 +506,10 @@ export class _MixedStaticCluster_ {
         this.buffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.DYNAMIC_DRAW);
-
-        for (let i = 0; i < textureSrcs.length; i++) {
-            this.textures[i] = gl.createTexture();
-
-            gl.bindTexture(gl.TEXTURE_2D, this.textures[i]);
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureSrcs[i]);
-            //gl.generateMipmap(gl.TEXTURE_2D);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-        }
     }
-    texture;
-    buffer;
-    segments;
-    obstacle;
-    pickup;
 
     delete() {
         this.map.unlink(this.id);
-    }
-
-    addTexture(name, textureSrc) {
-        if (!this.sources.includes(name) && this.textures.length < 8) {
-            this.sources.push(name);
-            this.textures[this.textures.length] = gl.createTexture();
-
-            gl.bindTexture(gl.TEXTURE_2D, this.textures.at(-1));
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureSrc);
-            //gl.generateMipmap(gl.TEXTURE_2D);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-        }
     }
 
     translate(x, y) {
@@ -651,6 +583,7 @@ export class _MixedStaticCluster_ {
 
         for (let i = 0; i < this.textures.length; i++) {
             eval(`gl.activeTexture(gl.TEXTURE${i})`);
+            console.log(this.textures[i]);
             gl.bindTexture(gl.TEXTURE_2D, this.textures[i]);
         }
 
@@ -892,16 +825,7 @@ export class DownwardLight extends _Object_ {
             this.buffer = gl.createBuffer();
             gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);
-
-            this.texture = gl.createTexture();
-
-            gl.bindTexture(gl.TEXTURE_2D, this.texture);
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textures.downwardlight);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-
+ 
             gl.vertexAttribPointer(locations.coords, 3, gl.FLOAT, false, 20, 0); // 20
             gl.vertexAttribPointer(locations.tcoords, 2, gl.FLOAT, false, 20, 12);
             gl.enableVertexAttribArray(locations.coords);
@@ -931,7 +855,7 @@ export class DownwardLight extends _Object_ {
             gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
             gl.uniform4fv(locations.lightColor, [0, 0, 0, 0]);
         }, 70, 70, initialX, initialY, initialRotation);
-        this.textureSrc = textures.downwardlight;
+        this.texture = textures.objects.downwardlight;
         this.name = "downward light";
         this.topLayer = true;
         this.color = color || [0, 0, 0, 0];
@@ -960,7 +884,7 @@ export class Grass extends _InstancedClusterClient_ {
     height = 2;
     name = "grass";
     clusterName = "grass";
-    texture = textures.grass1;
+    texture = textures.objects.grass1;
 
     constructor(initialX, initialY, initialRotation) {
         super(initialX, initialY, initialRotation);
@@ -975,7 +899,7 @@ export class BulletShell extends _InstancedClusterClient_ {
     height = 1;
     name = "bullet shell";
     clusterName = "bullet shell";
-    texture = textures.bulletshell;
+    texture = textures.objects.bulletshell;
     exclude = true;
     bottomLayer = true;
     preserveCluster = true;
@@ -1008,7 +932,7 @@ export class Plus100 extends _InstancedClusterClient_ {
     height = 2.2;
     name = "plus 100";
     clusterName = "plus 100";
-    texture = textures.plus100;
+    texture = textures.misc.plus100;
 
     constructor(initialX, initialY, initialRotation) {
         super(initialX, initialY, initialRotation);
@@ -1032,7 +956,7 @@ export class Grass2 extends _InstancedClusterClient_ {
     height = 2;
     name = "grass2";
     clusterName = "grass2";
-    texture = textures.grass2;
+    texture = textures.objects.grass2;
 
     constructor(initialX, initialY, initialRotation) {
         super(initialX, initialY, initialRotation);
@@ -1046,7 +970,7 @@ export class Rocks1 extends _InstancedClusterClient_ {
     width = 2;
     height = 2;
     clusterName = "three rocks";
-    texture = textures.rocks1;
+    texture = textures.objects.rocks1;
     name = "three rocks";
 
     constructor(initialX, initialY, initialRotation) {
@@ -1061,7 +985,7 @@ export class Rocks2 extends _InstancedClusterClient_ {
     width = 2;
     height = 2;
     clusterName = "two rocks";
-    texture = textures.rocks2;
+    texture = textures.objects.rocks2;
     name = "two rocks";
 
     constructor(initialX, initialY, initialRotation) {
@@ -1079,7 +1003,7 @@ export class Book1 extends _InstancedClusterClient_ {
     height = 8.32;
     name = "black book";
     clusterName = "black book";
-    texture = textures.book1;
+    texture = textures.objects.book1;
     moveable = true;
 
     constructor(initialX, initialY, initialRotation) {
@@ -1095,7 +1019,7 @@ export class Book2 extends _InstancedClusterClient_ {
     height = 8.32;
     name = "white book";
     clusterName = "white book";
-    texture = textures.book2;
+    texture = textures.objects.book2;
     moveable = true;
 
     constructor(initialX, initialY, initialRotation) {
@@ -1110,7 +1034,7 @@ export class RoadRail extends _InstancedClusterClient_ {
     width = 26.4;
     height = 11.4;
     clusterName = "road rail";
-    texture = textures.fences;
+    texture = textures.objects.fences;
     name = "road rail";
     obstacle = true;
     segments = [
@@ -1132,7 +1056,7 @@ export class RoadRailVertical extends _StaticClusterClient_ {
     height = 25.4;
     name = "road rail vertical";
     clusterName = "road rail vertical";
-    texture = textures.roadrailvertical;
+    texture = textures.objects.roadrailvertical;
     obstacle = true;
     segments = [
         [-1.7, -12.7, 3.4, 25.4]
@@ -1151,7 +1075,7 @@ export class StreetLight extends _StaticClusterClient_ {
     height = 49;
     name = "street light";
     clusterName = "street light";
-    texture = tex.furniture.streetlight;
+    texture = textures.objects.streetlight;
     obstacle = true;
     segments = [
         [-0.3, -24.3, 1.2, 8.6]
@@ -1226,7 +1150,7 @@ export class Bench extends _StaticClusterClient_ {
     height = 15.4;
     name = "bench";
     clusterName = "bench";
-    texture = textures.bench;
+    texture = textures.objects.bench;
     obstacle = true;
     segments = [
         [-12.2, -7.7, 24.4, 13.4]
@@ -1253,7 +1177,7 @@ export class Tile extends _StaticClusterClient_ {
     width = 8.4;
     height = 8.4;
     clusterName = "tile";
-    texture = textures.tile;
+    texture = textures.objects.tile;
     bottomLayer = true;
     name = "tile";
 
@@ -1269,7 +1193,7 @@ export class LightSwitch extends _StaticClusterClient_ {
     width = 3.2;
     height = 4.8;
     clusterName = "light switch";
-    texture = tex.furniture.lightswitch;
+    texture = textures.objects.lightswitch;
     name = "light switch";
     interactable = true;
     minDistance = 18;
@@ -1298,7 +1222,7 @@ export class Chair extends _StaticClusterClient_ {
     height = 15;
     name = "chair";
     clusterName = "chair";
-    texture = tex.furniture.chair;
+    texture = textures.objects.chair;
     obstacle = true;
     interactable = true;
     minDistance = 12;
@@ -1324,7 +1248,7 @@ export class SmallPlant extends _StaticClusterClient_ {
 
     width = 5.4;
     height = 16;
-    texture = textures.smallplant;
+    texture = textures.objects.smallplant;
     name = "small plant";
     clusterName = "small plant";
     obstacle = true;
@@ -1346,7 +1270,7 @@ export class RoadSign extends _StaticClusterClient_ {
     height = 30.8;
     name = "road sign";
     clusterName = "road sign";
-    texture = textures.fences;
+    texture = textures.objects.fences;
     topLayer = true;
     obstacle = true;
     segments = [
@@ -1364,7 +1288,7 @@ export class Laptop extends _StaticClusterClient_ {
 
     width = 8.72;
     clusterName = "laptop";
-    texture = tex.furniture.laptop;
+    texture = textures.objects.laptop;
     height = 9.72;
     moveable = true;
     name = "laptop";
@@ -1384,7 +1308,7 @@ export class UrbanFence extends _MixedStaticClusterClient_ {
     obstacle = true;
     clusterName = "urban fence";
     grouping = 1;
-    texture = textures.fences;
+    texture = textures.objects.fences;
     segments = [
         [-24.2, -14.2, 48.4, 28.4]
     ];
@@ -1403,7 +1327,7 @@ export class UrbanFenceVertical extends _MixedStaticClusterClient_ {
     name = "urban fence vertical";
     clusterName = "urban fence";
     grouping = 1;
-    texture = textures.fences;
+    texture = textures.objects.fences;
     obstacle = true;
     segments = [
         [-2.2, -28.2, 4.4, 56.4]
@@ -1423,7 +1347,7 @@ export class UrbanFenceHalf extends _MixedStaticClusterClient_ {
     name = "urban fence half";
     clusterName = "urban fence";
     grouping = 1;
-    texture = textures.fences;
+    texture = textures.objects.urbanfencehalf;
     obstacle = true;
     segments = [
         [-12.2, -14.2, 24.4, 28.4]
@@ -1443,7 +1367,7 @@ export class PicnicTable extends _StaticClusterClient_ {
     name = "picnic table";
     obstacle = true;
     clusterName = "picnic table";
-    texture = tex.furniture.picnictable;
+    texture = textures.objects.picnictable;
     segments = [
         [-14.2, -12.1, 8.4, 18.4],
         [-6.2, -11.7, 12.4, 20.4],
@@ -1480,7 +1404,7 @@ export class Road extends _MixedStaticClusterClient_ {
     name = "road";
     clusterName = "road";
     bottomLayer = true;
-    texture = textures.roads;
+    texture = textures.objects.roads;
     grouping = 0;
 
     constructor(initialX, initialY, initialRotation) {
@@ -1497,7 +1421,7 @@ export class RoadDouble extends _MixedStaticClusterClient_ {
     name = "road double";
     clusterName = "road";
     bottomLayer = true;
-    texture = textures.roads;
+    texture = textures.objects.roads;
     grouping = 0;
 
     constructor(initialX, initialY, initialRotation) {
@@ -1514,7 +1438,7 @@ export class RoadCorner extends _StaticClusterClient_ {
     name = "road corner";
     bottomLayer = true;
     clusterName = "road";
-    texture = textures.roads;
+    texture = textures.objects.roads;
     grouping = 0;
 
     constructor(initialX, initialY, initialRotation) {
@@ -1532,7 +1456,7 @@ export class RoadTriCorner extends _StaticClusterClient_ {
     clusterName = "road";
     grouping = 0;
     bottomLayer = true;
-    texture = textures.roads;
+    texture = textures.objects.roads;
 
     constructor(initialX, initialY, initialRotation) {
         super(initialX, initialY, initialRotation);
@@ -1546,7 +1470,7 @@ export class RoadQuadCorner extends _StaticClusterClient_ {
     width = 28.2;
     height = 28.2;
     clusterName = "road";
-    texture = textures.roads;
+    texture = textures.objects.roads;
     grouping = 0;
     bottomLayer = true;
     name = "road quad corner";
@@ -1562,7 +1486,7 @@ export class Door extends _StaticClusterClient_ {
     width = 14.6;
     height = 20.4;
     clusterName = "door";
-    texture = tex.furniture.door;
+    texture = textures.objects.door;
     name = "door";
     obstacle = true;
     segments = [
@@ -1641,26 +1565,6 @@ export class Door extends _StaticClusterClient_ {
     }
 }
 
-export class OffRoader extends _StaticClusterClient_ {
-
-    static _defaultVertices = [-22.7, 27.675, 1, 0, 0, 22.7, 27.675, 1, 0.88671875, 0, -22.7, -27.675, 1, 0, 0.54052734375, 22.7, 27.675, 1, 0.88671875, 0, -22.7, -27.675, 1, 0, 0.54052734375, 22.7, -27.675, 1, 0.88671875, 0.54052734375];
-
-    width = 45.4;
-    height = 55.35;
-    name = "off roader";
-    clusterName = "off roader";
-    texture = textures.offroader;
-    obstacle = false;
-    segments = [
-        [-14.2, -6.7, 28.4, 16.4]
-    ];
-
-    constructor(initialX, initialY, initialRotation) {
-        super(initialX, initialY, initialRotation);
-    }
-}
-
-
 export class Table extends _StaticClusterClient_ {
 
     static _defaultVertices = [-14.2, 9.3, 1, 0, 0, 14.2, 9.3, 1, 0.5546875, 0, -14.2, -7.1000000000000005, 1, 0, 0.640625, 14.2, 9.3, 1, 0.5546875, 0, -14.2, -7.1000000000000005, 1, 0, 0.640625, 14.2, -7.1000000000000005, 1, 0.5546875, 0.640625, -13.399999999999999, -6.700000000000001, 1, 0.015625, 0.625, -11, -6.700000000000001, 1, 0.0625, 0.625, -13.399999999999999, -9.3, 1, 0.015625, 0.7265625, -11, -6.700000000000001, 1, 0.0625, 0.625, -13.399999999999999, -9.3, 1, 0.015625, 0.7265625, -11, -9.3, 1, 0.0625, 0.7265625, 11, -6.700000000000001, 1, 0.4921875, 0.625, 13.400000000000002, -6.700000000000001, 1, 0.5390625, 0.625, 11, -9.3, 1, 0.4921875, 0.7265625, 13.400000000000002, -6.700000000000001, 1, 0.5390625, 0.625, 11, -9.3, 1, 0.4921875, 0.7265625, 13.400000000000002, -9.3, 1, 0.5390625, 0.7265625];
@@ -1669,7 +1573,7 @@ export class Table extends _StaticClusterClient_ {
     height = 18.6;
     name = "table";
     clusterName = "table";
-    texture = tex.furniture.table;
+    texture = textures.objects.table;
     obstacle = true;
     segments = [
         [-14.2, -7.1, 28.4, 16.4]
@@ -1763,7 +1667,7 @@ export class House1 extends _Building_ {
     height = 186.4;
     name = "house 1";
     clusterName = "house 1";
-    texture = tex.furniture.house1;
+    texture = textures.objects.house1;
     obstacle = true;
     segments = [
         [12.5, -49, 50, 24],
@@ -1784,106 +1688,6 @@ export class House1 extends _Building_ {
             [23, -57, 1],
             [-30, -65, 0]
         ], [new _Map_(150, 100, false).init(), new _Map_(150, 80, false).init(), new _Map_(150, 80, false).init()], undefined);
-    }
-}
-
-export class LuxuryApartment extends _Building_ {
-
-    static _defaultVertices = [-63.7, 77.2, 1, 0, 0, 63.7, 77.2, 1, 0.6220703125, 0, -63.7, -77.2, 1, 0, 0.75390625, 63.7, 77.2, 1, 0.6220703125, 0, -63.7, -77.2, 1, 0, 0.75390625, 63.7, -77.2, 1, 0.6220703125, 0.75390625];
-
-    width = 127.4;
-    height = 154.4;
-    name = "luxury apartment";
-    clusterName = "luxury apartment";
-    texture = textures.luxuryapartment;
-    obstacle = true;
-    segments = [
-        [-63.5, -67, 70, 93.2],
-        [-54.8, 37, 54, 30],
-        [6.5, 31, 6, 40],
-        [56.5, 31, 6, 40],
-        [6.5, -21, 56, 80],
-        [-62.5, 26, 7.7, 43],
-        [-1.1200000000000045, 26, 7.7, 43],
-        [5.5, -77, 1.8, 56],
-        [61.7, -77, 1.8, 56],
-        [5.5, -77, 58, 2],
-        [5.5, -28, 58, 2]
-    ];
-
-    constructor(initialX, initialY, initialRotation) {
-        super(initialX, initialY, initialRotation, [
-            [35, 65, 0],
-            [23, -57, 1],
-            [-30, -65, 0, [-40.37, 18.93]]
-        ], [new _Map_(300, 50, false).init(undefined, -40, [-29.3, -73], true), new _Map_(150, 80, false).init()], undefined, function() {
-            let d1 = new Door("Roof", -1, 30, (this.map.SUB_MAPS[0].height / 2) + 9.2, 0, [34.77, 53.53], true);
-            this.rooms[0].link(d1);
-        });
-    }
-}
-
-export class GenericApartment extends _Building_ {
-
-    static _defaultVertices = [-32.2, 23, 1, 0, 0, 32.2, 23, 1, 0.62890625, 0, -32.2, -7.4, 1, 0, 0.59375, 32.2, 23, 1, 0.62890625, 0, -32.2, -7.4, 1, 0, 0.59375, 32.2, -7.4, 1, 0.62890625, 0.59375, -30.200000000000003, -7, 1, 0.01953125, 0.5859375, 30.199999999999996, -7, 1, 0.609375, 0.5859375, -30.200000000000003, -21.4, 1, 0.01953125, 0.8671875, 30.199999999999996, -7, 1, 0.609375, 0.5859375, -30.200000000000003, -21.4, 1, 0.01953125, 0.8671875, 30.199999999999996, -21.4, 1, 0.609375, 0.8671875, 12.799999999999997, -21, 1, 0.439453125, 0.859375, 25.199999999999996, -21, 1, 0.560546875, 0.859375, 12.799999999999997, -26.4, 1, 0.439453125, 0.96484375, 25.199999999999996, -21, 1, 0.560546875, 0.859375, 12.799999999999997, -26.4, 1, 0.439453125, 0.96484375, 25.199999999999996, -26.4, 1, 0.560546875, 0.96484375];
-
-    width = 64.4;
-    height = 46;
-    name = "generic apartment";
-    clusterName = "generic apartment";
-    texture = textures.genericapartment;
-    obstacle = true;
-    segments = [
-        [-32.2, -23, 64.4, 30.4],
-        [-30.2, 7, 60.4, 14.4]
-    ];
-
-    constructor(initialX, initialY, initialRotation) {
-        super(initialX, initialY, initialRotation, [
-            [19, -20, 0]
-        ]);
-    }
-}
-
-export class Cafe extends _Building_ {
-
-    static _defaultVertices = [-40.2, 30.2, 1, 0, 0, 40.2, 30.2, 1, 0.78515625, 0, -40.2, -12.2, 1, 0, 0.4140625, 40.2, 30.2, 1, 0.78515625, 0, -40.2, -12.2, 1, 0, 0.4140625, 40.2, -12.2, 1, 0.78515625, 0.4140625, -38.2, -9.8, 1, 0.01953125, 0.390625, 38.2, -9.8, 1, 0.765625, 0.390625, -38.2, -30.2, 1, 0.01953125, 0.58984375, 38.2, -9.8, 1, 0.765625, 0.390625, -38.2, -30.2, 1, 0.01953125, 0.58984375, 38.2, -30.2, 1, 0.765625, 0.58984375];
-
-    width = 80.4;
-    height = 60.4;
-    name = "cafe";
-    clusterName = "cafe";
-    texture = textures.cafe;
-    obstacle = true;
-    segments = [
-        [-40.2, -30.2, 80.4, 42.4],
-        [-38.2, 9.8, 76.4, 20.4]
-    ];
-
-    constructor(initialX, initialY, initialRotation) {
-        super(initialX, initialY, initialRotation, [
-            [20, 20, 0]
-        ]);
-    }
-}
-
-export class Supermarket extends _StaticClusterClient_ {
-
-    static _defaultVertices = [-62.2, 26.2, 1, 0, 0, 62.2, 26.2, 1, 0.607421875, 0, -62.2, -8.2, 1, 0, 0.3359375, 62.2, 26.2, 1, 0.607421875, 0, -62.2, -8.2, 1, 0, 0.3359375, 62.2, -8.2, 1, 0.607421875, 0.3359375, -60.2, -7.800000000000001, 1, 0.009765625, 0.33203125, 60.2, -7.800000000000001, 1, 0.59765625, 0.33203125, -60.2, -26.2, 1, 0.009765625, 0.51171875, 60.2, -7.800000000000001, 1, 0.59765625, 0.33203125, -60.2, -26.2, 1, 0.009765625, 0.51171875, 60.2, -26.2, 1, 0.59765625, 0.51171875];
-
-    width = 124.4;
-    height = 52.4;
-    name = "supermarket";
-    clusterName = "supermarket";
-    texture = textures.supermarket;
-    obstacle = true;
-    segments = [
-        [-62.2, -26.2, 124.4, 34.4],
-        [-60.2, 7.8, 120.4, 18.4]
-    ];
-
-    constructor(initialX, initialY, initialRotation) {
-        super(initialX, initialY, initialRotation);
     }
 }
 
@@ -1952,7 +1756,7 @@ export class KitchenKnife extends _Blade_ {
     width = 2.48;
     height = 13.14;
     clusterName = "kitchen knife";
-    texture = textures.kitchenknife;
+    texture = textures.objects.kitchenknife;
     name = "kitchen knife";
 
     constructor(initialX, initialY, initialRotation) {
@@ -1968,7 +1772,7 @@ export class AssassinsKnife extends _Blade_ {
     height = 13.540000000000001;
     name = "assassin's knife";
     clusterName = "assassin's knife";
-    texture = textures.assassinsknife;
+    texture = textures.objects.assassinsknife;
 
     constructor(initialX, initialY, initialRotation) {
         super(initialX, initialY, initialRotation);
@@ -1982,7 +1786,7 @@ export class CombatKnife extends _Blade_ {
     width = 6.9799999999999995;
     height = 9.260000000000002;
     clusterName = "combat knife";
-    texture = textures.combatknife;
+    texture = textures.objects.combatknife;
     name = "combat knife";
 
     constructor(initialX, initialY, initialRotation) {
@@ -2008,7 +1812,7 @@ export class GLOCK_20 extends _Gun_ {
     height = 6.180000000000001;
     name = "glock 20";
     clusterName = "glock 20";
-    texture = textures.glock20;
+    texture = textures.objects.glock20;
 
     constructor(initialX, initialY, initialRotation, bullets) {
         super(initialX, initialY, initialRotation);
@@ -2024,7 +1828,7 @@ export class GP_K100 extends _Gun_ {
     height = 6.180000000000001;
     name = "gp k100";
     clusterName = "gp k100";
-    texture = textures.gpk100;
+    texture = textures.objects.gpk100;
 
     constructor(initialX, initialY, initialRotation) {
         super(initialX, initialY, initialRotation);
@@ -2038,7 +1842,7 @@ export class NXR_44_MAG extends _Gun_ {
     width = 13.820000000000002;
     height = 6.88;
     clusterName = "nxr 44 mag";
-    texture = textures.nxr44mag;
+    texture = textures.objects.nxr44mag;
     name = "nxr 44 mag";
 
     constructor(initialX, initialY, initialRotation) {
@@ -2053,7 +1857,7 @@ export class KC_357 extends _Gun_ {
     width = 8.52;
     height = 5.6;
     clusterName = "kc 357";
-    texture = textures.kc357;
+    texture = textures.objects.kc357;
     name = "kc 357";
 
     constructor(initialX, initialY, initialRotation) {
@@ -2068,7 +1872,7 @@ export class USP_45 extends _Gun_ {
     width = 16.3;
     height = 7.860000000000001;
     clusterName = "usp 45";
-    texture = textures.usp45;
+    texture = textures.objects.usp45;
     name = "usp 45";
 
     constructor(initialX, initialY, initialRotation) {
@@ -2085,7 +1889,7 @@ export class PickupRing extends _InstancedClusterClient_ {
     name = "pickup ring";
     clusterName = "pickup ring";
     exclude = true;
-    texture = textures.pickupring;
+    texture = textures.misc.pickupring;
     managedMovement = true;
 
     constructor(initialX, initialY, initialRotation) {
@@ -3811,7 +3615,7 @@ export class _Map_ {
         [0, 0]
     ], doorOffset = 0, exitPoint, buildingExit, label) {
         // attach any default objects or clusters for all maps, etc.
-        this._bulletMatrix = new _BulletCluster_([-0.9, 0.4, 1, 0, 0, 0.9, 0.4, 1, 0.5625, 0, -0.9, -0.4, 1, 0, 0.5, 0.9, 0.4, 1, 0.5625, 0, -0.9, -0.4, 1, 0, 0.5, 0.9, -0.4, 1, 0.5625, 0.5], textures.bullet);
+        this._bulletMatrix = new _BulletCluster_([-0.9, 0.4, 1, 0, 0, 0.9, 0.4, 1, 0.5625, 0, -0.9, -0.4, 1, 0, 0.5, 0.9, 0.4, 1, 0.5625, 0, -0.9, -0.4, 1, 0, 0.5, 0.9, -0.4, 1, 0.5625, 0.5], tex.furniture.bullet);
         this.link(this._bulletMatrix);
 
         this._lineMatrix = new _LineMatrix_();
@@ -3853,7 +3657,7 @@ export class _Map_ {
 }
 
 export class Text extends _Object_ {
-    constructor(text, size = 30, color, initialX, initialY, initialRotation, textureSrc, segments) {
+    constructor(text, size = 30, color, initialX, initialY, initialRotation, texture, segments) {
         super([], function() {
             let textData = createText(text, size);
 
@@ -3863,20 +3667,12 @@ export class Text extends _Object_ {
             this.height = textData.height;
             this.color = color || [0, 0, 0, 1];
             this.size = size;
+            this.texture = texture || textures.misc.font;
 
             this.buffer = gl.createBuffer();
             gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);
-
-            this.texture = gl.createTexture();
-
-            gl.bindTexture(gl.TEXTURE_2D, this.texture);
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textures.font);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-
+ 
             gl.vertexAttribPointer(locations.coords, 3, gl.FLOAT, false, 20, 0); // 20
             gl.vertexAttribPointer(locations.tcoords, 2, gl.FLOAT, false, 20, 12);
             gl.enableVertexAttribArray(locations.coords);
@@ -3901,7 +3697,6 @@ export class Text extends _Object_ {
             gl.uniform4fv(locations.color, [0, 0, 0, 0]);
             gl.uniform1i(locations.textColor, 0);
         }, undefined, undefined, initialX, initialY, initialRotation);
-        this.textureSrc = textureSrc;
         this.segments = segments;
         this.name = "text";
         this.type = "text";
@@ -3931,34 +3726,17 @@ export class Text extends _Object_ {
 /* GAME CONTROL ELEMENTS */
 
 export class _Button_ extends _Object_ {
-    constructor(textureSrc, textureActiveSrc, initialX, initialY, action, radius, scale = 1, toggle = false) {
+    constructor(texture, textureActive, initialX, initialY, action, radius, scale = 1, toggle = false) {
         super([-8.571428571428571, 8.571428571428571, 1, 0, 0, 8.571428571428571, 8.571428571428571, 1, 1, 0, -8.571428571428571, -8.571428571428571, 1, 0, 1, 8.571428571428571, 8.571428571428571, 1, 1, 0, -8.571428571428571, -8.571428571428571, 1, 0, 1, 8.571428571428571, -8.571428571428571, 1, 1, 1], function() {
 
             this.buffer = gl.createBuffer();
             gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);
 
-            this.texture = gl.createTexture();
+            this.texture = texture;
+            this.textureActive = textureActive;
 
-            gl.bindTexture(gl.TEXTURE_2D, this.texture);
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureSrc);
-            //gl.generateMipmap(gl.TEXTURE_2D);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-
-            this.textureActive = gl.createTexture();
-
-            gl.bindTexture(gl.TEXTURE_2D, this.textureActive);
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textureActiveSrc);
-            //gl.generateMipmap(gl.TEXTURE_2D);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-
-            gl.vertexAttribPointer(locations.coords, 3, gl.FLOAT, false, 20, 0); // 20
+            gl.vertexAttribPointer(locations.coords, 3, gl.FLOAT, false, 20, 0);
             gl.vertexAttribPointer(locations.tcoords, 2, gl.FLOAT, false, 20, 12);
             gl.enableVertexAttribArray(locations.coords);
             gl.enableVertexAttribArray(locations.tcoords);
@@ -4010,14 +3788,8 @@ export class _Joystick_ extends _Object_ {
             this.buffer = gl.createBuffer();
             gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
 
-            this.texture = gl.createTexture();
-            gl.bindTexture(gl.TEXTURE_2D, this.texture);
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, textures.joystick_disc);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-
+            this.texture = textures.misc.joystick_disc;
+            
             gl.vertexAttribPointer(locations.coords, 3, gl.FLOAT, false, 20, 0);
             gl.vertexAttribPointer(locations.tcoords, 2, gl.FLOAT, false, 20, 12);
 

@@ -3052,8 +3052,8 @@ export let GP_K100_TOP_2 = new TextureData(282, 900, 0.2, "firearm", {
     ctx.lineWidth = 10;
     // details
     ctx.strokeRect(70, 50, 10, 60);
-    ctx.strokeRect(50, 50, 10, 60);
-    ctx.strokeRect(60, 50, 10, 60);
+    ctx.strokeRect(90, 50, 10, 60);
+    ctx.strokeRect(100, 50, 10, 60);
 
     ctx.strokeRect(210, 85, 50, 20);
 

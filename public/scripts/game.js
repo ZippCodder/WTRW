@@ -46,7 +46,6 @@
       GP_K100,
       KC_357,
       USP_45,
-      OffRoader,
       Grass,
       Grass2,
       Rocks1,

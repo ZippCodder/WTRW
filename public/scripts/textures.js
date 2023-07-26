@@ -34,17 +34,68 @@ class TextureContainer {
     }
 }
 
-let furniture = new TextureContainer();
+window.textures = {};
 
-await furniture.addTexture("table", "/public/images/textures/TABLE.png");
-await furniture.addTexture("house1", "/public/images/textures/house1.png");
-await furniture.addTexture("chair", "/public/images/textures/CHAIR.png");
-await furniture.addTexture("picnictable", "/public/images/textures/PICNIC_TABLE.png");
-await furniture.addTexture("door", "/public/images/textures/DOOR.png");
-await furniture.addTexture("streetlight", "/public/images/textures/STREET_LIGHT.png");
-await furniture.addTexture("laptop", "/public/images/textures/LAPTOP.png");
-await furniture.addTexture("lightswitch", "/public/images/textures/LIGHT_SWITCH.png");
+textures.controls = new TextureContainer();
 
-window.tex = {
-    furniture: furniture
-}
+await textures.controls.addTexture("joystick_disc", "/public/images/textures/joystick_disc.png");
+await textures.controls.addTexture("actionbutton", "/public/images/textures/ACTION_BUTTON_TEXTURE_1.png");
+await textures.controls.addTexture("actionbuttonactive", "/public/images/textures/ACTION_BUTTON_TEXTURE_2.png");
+await textures.controls.addTexture("reloadbutton", "/public/images/textures/RELOAD_BUTTON_TEXTURE_1.png");
+await textures.controls.addTexture("reloadbuttonactive", "/public/images/textures/RELOAD_BUTTON_TEXTURE_2.png");
+await textures.controls.addTexture("avatarmode1", "/public/images/textures/AVATAR_MODE_BUTTON_TEXTURE_1.png");
+await textures.controls.addTexture("avatarmode2", "/public/images/textures/AVATAR_MODE_BUTTON_TEXTURE_2.png");
+await textures.controls.addTexture("dropitem1", "/public/images/textures/DROP_ITEM_BUTTON_TEXTURE_1.png");
+await textures.controls.addTexture("dropitem2", "/public/images/textures/DROP_ITEM_BUTTON_TEXTURE_2.png");
+
+textures.misc = new TextureContainer();
+
+await textures.misc.addTexture("font", "/public/images/textures/mainfont.png");
+await textures.misc.addTexture("plus100", "/public/images/textures/PLUS_100.png");
+await textures.misc.addTexture("pickupring", "/public/images/textures/PICKUP_RING.png");
+
+textures.objects = new TextureContainer();
+
+await textures.objects.addTexture("avatar", "/public/images/textures/MAIN_AVATAR_DEFAULT.png");
+await textures.objects.addTexture("nxr44mag", "/public/images/textures/NXR_44_MAG.png");
+await textures.objects.addTexture("gpk100", "/public/images/textures/GP_K100.png");
+await textures.objects.addTexture("usp45", "/public/images/textures/USP_45.png");
+await textures.objects.addTexture("glock20", "/public/images/textures/GLOCK_20.png");
+await textures.objects.addTexture("kc357", "/public/images/textures/KC_357.png");
+await textures.objects.addTexture("kitchenknife", "/public/images/textures/KITCHEN_KNIFE.png");
+await textures.objects.addTexture("assassinsknife", "/public/images/textures/ASSASSINS_KNIFE.png");
+await textures.objects.addTexture("combatknife", "/public/images/textures/COMBAT_KNIFE.png");
+await textures.objects.addTexture("laptop", "/public/images/textures/LAPTOP.png");
+await textures.objects.addTexture("book1", "/public/images/textures/BOOK_1.png");
+await textures.objects.addTexture("book2", "/public/images/textures/BOOK_2.png");
+await textures.objects.addTexture("house1", "/public/images/textures/house1.png");
+await textures.objects.addTexture("table", "/public/images/textures/TABLE.png");
+await textures.objects.addTexture("chair", "/public/images/textures/CHAIR.png");
+await textures.objects.addTexture("picnictable", "/public/images/textures/PICNIC_TABLE.png");
+await textures.objects.addTexture("door", "/public/images/textures/DOOR.png");
+await textures.objects.addTexture("streetlight", "/public/images/textures/STREET_LIGHT.png");
+await textures.objects.addTexture("lightswitch", "/public/images/textures/LIGHT_SWITCH.png");
+await textures.objects.addTexture("bullet", "/public/images/textures/BULLET.png");
+await textures.objects.addTexture("bulletshell", "/public/images/textures/BULLETSHELL.png");
+await textures.objects.addTexture("fences", "/public/images/textures/fences.png");
+await textures.objects.addTexture("avatarblinking", "/public/images/textures/MAIN_AVATAR_BLINKING.png");
+await textures.objects.addTexture("avatarwalking1", "/public/images/textures/MAIN_AVATAR_WALKING_1.png");
+await textures.objects.addTexture("avatarwalking2", "/public/images/textures/MAIN_AVATAR_WALKING_2.png");
+await textures.objects.addTexture("roadsign", "/public/images/textures/ROAD_SIGN.png");
+await textures.objects.addTexture("urbanfence", "/public/images/textures/URBAN_FENCE.png");
+await textures.objects.addTexture("urbanfencevertical", "/public/images/textures/URBAN_FENCE_VERTICAL.png");
+await textures.objects.addTexture("urbanfencehalf", "/public/images/textures/URBAN_FENCE_HALF.png");
+await textures.objects.addTexture("smallplant", "/public/images/textures/SMALL_PLANT.png");
+await textures.objects.addTexture("tile", "/public/images/textures/TILE.png");
+await textures.objects.addTexture("bench", "/public/images/textures/BENCH.png");
+await textures.objects.addTexture("grass1", "/public/images/textures/GRASS_1.png");
+await textures.objects.addTexture("grass2", "/public/images/textures/GRASS_2.png");
+await textures.objects.addTexture("rocks1", "/public/images/textures/ROCKS_1.png");
+await textures.objects.addTexture("rocks2", "/public/images/textures/ROCKS_2.png");
+await textures.objects.addTexture("roadrail", "/public/images/textures/ROAD_RAIL.png");
+await textures.objects.addTexture("roadrailvertical", "/public/images/textures/ROAD_RAIL_VERTICAL.png");
+await textures.objects.addTexture("downwardlight", "/public/images/textures/DOWNWARD_LIGHT.png");
+await textures.objects.addTexture("avatardrawweapon", "/public/images/textures/MAIN_AVATAR_DRAW_WEAPON.png");
+await textures.objects.addTexture("avatardrawglock20pullback", "/public/images/textures/MAIN_AVATAR_DRAW_GLOCK_20_PULLBACK.png");
+await textures.objects.addTexture("roads", "/public/images/textures/roads.png");
+await textures.objects.addTexture("bulletshell", "/public/images/textures/BULLETSHELL.png");
