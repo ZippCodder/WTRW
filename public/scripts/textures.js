@@ -54,9 +54,17 @@ await textures.misc.addTexture("font", "/public/images/textures/mainfont.png");
 await textures.misc.addTexture("plus100", "/public/images/textures/PLUS_100.png");
 await textures.misc.addTexture("pickupring", "/public/images/textures/PICKUP_RING.png");
 
+textures.skins = new TextureContainer();
+
+await textures.skins.addTexture("avatar", "/public/images/textures/MAIN_AVATAR_DEFAULT.png");
+await textures.skins.addTexture("avatarblinking", "/public/images/textures/MAIN_AVATAR_BLINKING.png");
+await textures.skins.addTexture("avatarwalking1", "/public/images/textures/MAIN_AVATAR_WALKING_1.png");
+await textures.skins.addTexture("avatarwalking2", "/public/images/textures/MAIN_AVATAR_WALKING_2.png");
+await textures.skins.addTexture("avatardrawweapon", "/public/images/textures/MAIN_AVATAR_DRAW_WEAPON.png");
+await textures.skins.addTexture("avatardrawglock20pullback", "/public/images/textures/MAIN_AVATAR_DRAW_GLOCK_20_PULLBACK.png");
+
 textures.objects = new TextureContainer();
 
-await textures.objects.addTexture("avatar", "/public/images/textures/MAIN_AVATAR_DEFAULT.png");
 await textures.objects.addTexture("nxr44mag", "/public/images/textures/NXR_44_MAG.png");
 await textures.objects.addTexture("gpk100", "/public/images/textures/GP_K100.png");
 await textures.objects.addTexture("usp45", "/public/images/textures/USP_45.png");
@@ -78,9 +86,6 @@ await textures.objects.addTexture("lightswitch", "/public/images/textures/LIGHT_
 await textures.objects.addTexture("bullet", "/public/images/textures/BULLET.png");
 await textures.objects.addTexture("bulletshell", "/public/images/textures/BULLETSHELL.png");
 await textures.objects.addTexture("fences", "/public/images/textures/fences.png");
-await textures.objects.addTexture("avatarblinking", "/public/images/textures/MAIN_AVATAR_BLINKING.png");
-await textures.objects.addTexture("avatarwalking1", "/public/images/textures/MAIN_AVATAR_WALKING_1.png");
-await textures.objects.addTexture("avatarwalking2", "/public/images/textures/MAIN_AVATAR_WALKING_2.png");
 await textures.objects.addTexture("roadsign", "/public/images/textures/ROAD_SIGN.png");
 await textures.objects.addTexture("urbanfence", "/public/images/textures/URBAN_FENCE.png");
 await textures.objects.addTexture("urbanfencevertical", "/public/images/textures/URBAN_FENCE_VERTICAL.png");
@@ -95,7 +100,5 @@ await textures.objects.addTexture("rocks2", "/public/images/textures/ROCKS_2.png
 await textures.objects.addTexture("roadrail", "/public/images/textures/ROAD_RAIL.png");
 await textures.objects.addTexture("roadrailvertical", "/public/images/textures/ROAD_RAIL_VERTICAL.png");
 await textures.objects.addTexture("downwardlight", "/public/images/textures/DOWNWARD_LIGHT.png");
-await textures.objects.addTexture("avatardrawweapon", "/public/images/textures/MAIN_AVATAR_DRAW_WEAPON.png");
-await textures.objects.addTexture("avatardrawglock20pullback", "/public/images/textures/MAIN_AVATAR_DRAW_GLOCK_20_PULLBACK.png");
 await textures.objects.addTexture("roads", "/public/images/textures/roads.png");
 await textures.objects.addTexture("bulletshell", "/public/images/textures/BULLETSHELL.png");

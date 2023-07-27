@@ -23,4 +23,3 @@
 10. Re-add bullet texture
 11. Refine fireAnimation logic
 12. Investigate enemys walking through house 1
-13. Finish implementing texture containers

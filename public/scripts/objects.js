@@ -185,7 +185,6 @@ export class _StaticCluster_ {
         gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
 
         gl.activeTexture(gl.TEXTURE0);
-        console.log(this.texture);
         gl.bindTexture(gl.TEXTURE_2D, this.texture);
         gl.useProgram(program);
 
@@ -461,7 +460,6 @@ export class _InstancedCluster_ {
         gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
 
         gl.activeTexture(gl.TEXTURE0);
-        console.log(this.texture);
         gl.bindTexture(gl.TEXTURE_2D, this.texture);
         gl.useProgram(program);
 
@@ -583,7 +581,6 @@ export class _MixedStaticCluster_ {
 
         for (let i = 0; i < this.textures.length; i++) {
             eval(`gl.activeTexture(gl.TEXTURE${i})`);
-            console.log(this.textures[i]);
             gl.bindTexture(gl.TEXTURE_2D, this.textures[i]);
         }
 
@@ -1803,7 +1800,8 @@ export class GLOCK_20 extends _Gun_ {
         accuracy: 5,
         nozzelLength: 13,
         capacity: 1000,
-        reloadTime: 3
+        reloadTime: 3,
+        useTextures: [4,5]
     }
 
     static _defaultVertices = [-4.390000000000001, 3.0900000000000003, 1, 0, 0, 4.390000000000001, 3.0900000000000003, 1, 0.6859375000000001, 0, -4.390000000000001, -3.0900000000000003, 1, 0, 0.965625, 4.390000000000001, 3.0900000000000003, 1, 0.6859375000000001, 0, -4.390000000000001, -3.0900000000000003, 1, 0, 0.965625, 4.390000000000001, -3.0900000000000003, 1, 0.6859375000000001, 0.965625];
@@ -1918,7 +1916,8 @@ export class Avatar {
         this.nameObj = new Text(name, 25);
         this.nameObj.translate(initialX + 0, initialY + 10);
         this.vao = ext.createVertexArrayOES();
-        this.textures = [textures.objects.avatar, textures.objects.avatarblinking, textures.objects.avatarwalking1, textures.objects.avatarwalking2, textures.objects.avatardrawweapon, textures.objects.avatardrawglock20pullback];
+        this.textures = [textures.skins.avatar, textures.skins.avatarblinking, textures.skins.avatarwalking1, textures.skins.avatarwalking2, textures.skins.avatardrawweapon, textures.skins.avatardrawglock20pullback];
+
         ext.bindVertexArrayOES(this.vao);
 
         this.body = [
@@ -2163,13 +2162,13 @@ export class Avatar {
             fireAnimation: undefined,
             recoilAnimation: new MultiFrameLinearAnimation([function() {
                 this.state.position.body.vertices = 1;
-                this.state.position.body.texture = 5;
+                this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[1];
             }, function() {
                 this.state.position.body.vertices = 1;
-                this.state.position.body.texture = 4;
+                this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
             }], this, [0.05, 0.05], function() {
                 this.state.position.body.vertices = 1;
-                this.state.position.body.texture = 4;
+                this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
             }, 0.5, true),
             walkingAnimation: new MultiFrameLoopAnimation([function() {
                 this.state.position.body.vertices = 0;
@@ -2293,7 +2292,7 @@ export class Avatar {
     drawWeapon() {
         if (this.state.armed) {
             this.state.draw = true;
-            this.state.position.body.texture = 4;
+            this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
             this.state.position.body.vertices = 1;
         }
     }
