@@ -60,8 +60,10 @@ await textures.skins.addTexture("avatar", "/public/images/textures/MAIN_AVATAR_D
 await textures.skins.addTexture("avatarblinking", "/public/images/textures/MAIN_AVATAR_BLINKING.png");
 await textures.skins.addTexture("avatarwalking1", "/public/images/textures/MAIN_AVATAR_WALKING_1.png");
 await textures.skins.addTexture("avatarwalking2", "/public/images/textures/MAIN_AVATAR_WALKING_2.png");
-await textures.skins.addTexture("avatardrawweapon", "/public/images/textures/MAIN_AVATAR_DRAW_WEAPON.png");
-await textures.skins.addTexture("avatardrawglock20pullback", "/public/images/textures/MAIN_AVATAR_DRAW_GLOCK_20_PULLBACK.png");
+await textures.skins.addTexture("avatardrawglock20", "/public/images/textures/MAIN_AVATAR_DRAW_GLOCK20_1.png");
+await textures.skins.addTexture("avatardrawglock20pullback", "/public/images/textures/MAIN_AVATAR_DRAW_GLOCK20_2.png");
+await textures.skins.addTexture("avatardrawgpk100", "/public/images/textures/MAIN_AVATAR_DRAW_GPK100_1.png");
+await textures.skins.addTexture("avatardrawgpk100pullback", "/public/images/textures/MAIN_AVATAR_DRAW_GPK100_2.png");
 
 textures.objects = new TextureContainer();
 

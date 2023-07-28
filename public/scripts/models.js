@@ -2848,7 +2848,7 @@ export let OFF_ROADER = new TextureData(0, 0, 0.25, "avatar", {
 
 // @AVATARS
 
-export let MAIN_AVATAR_DEFAULT = new TextureData(0, 0, 0.2, "avatar", {
+export let MAIN_AVATAR_DEFAULT = new TextureData(0, 0, 1, "avatar", {
     width: 702,
     height: 428
 }, [
@@ -2895,7 +2895,7 @@ export let MAIN_AVATAR_DEFAULT = new TextureData(0, 0, 0.2, "avatar", {
     ctx.restore();
 }, [0], 0, 0, 0, 0);
 
-export let MAIN_AVATAR_DRAW_WEAPON = new TextureData(0, 0, 0.2, "avatar", {
+export let MAIN_AVATAR_DRAW_WEAPON = new TextureData(0, 0, 1, "avatar", {
     width: 702,
     height: 2140
 }, [

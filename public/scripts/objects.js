@@ -1820,6 +1820,17 @@ export class GLOCK_20 extends _Gun_ {
 
 export class GP_K100 extends _Gun_ {
 
+      static _properties = {
+        fireRate: 1,
+        bulletSpeed: 5,
+        damage: 20,
+        accuracy: 5,
+        nozzelLength: 21,
+        capacity: 1000,
+        reloadTime: 3,
+        useTextures: [6,7]
+      }
+
     static _defaultVertices = [-7.4, 3.0900000000000003, 1, 0, 0, 7.4, 3.0900000000000003, 1, 0.578125, 0, -7.4, -3.0900000000000003, 1, 0, 0.965625, 7.4, 3.0900000000000003, 1, 0.578125, 0, -7.4, -3.0900000000000003, 1, 0, 0.965625, 7.4, -3.0900000000000003, 1, 0.578125, 0.965625];
 
     width = 14.8;
@@ -1828,8 +1839,9 @@ export class GP_K100 extends _Gun_ {
     clusterName = "gp k100";
     texture = textures.objects.gpk100;
 
-    constructor(initialX, initialY, initialRotation) {
+    constructor(initialX, initialY, initialRotation, bullets) {
         super(initialX, initialY, initialRotation);
+        this.bullets = bullets ?? 25;
     }
 }
 
@@ -1916,7 +1928,7 @@ export class Avatar {
         this.nameObj = new Text(name, 25);
         this.nameObj.translate(initialX + 0, initialY + 10);
         this.vao = ext.createVertexArrayOES();
-        this.textures = [textures.skins.avatar, textures.skins.avatarblinking, textures.skins.avatarwalking1, textures.skins.avatarwalking2, textures.skins.avatardrawweapon, textures.skins.avatardrawglock20pullback];
+        this.textures = [textures.skins.avatar, textures.skins.avatarblinking, textures.skins.avatarwalking1, textures.skins.avatarwalking2, textures.skins.avatardrawglock20, textures.skins.avatardrawglock20pullback, textures.skins.avatardrawgpk100, textures.skins.avatardrawgpk100pullback];
 
         ext.bindVertexArrayOES(this.vao);
 
@@ -2319,17 +2331,17 @@ export class Avatar {
     }
 
     addItem(item, slot) {
-        let r = this.inventory.addItem(item, slot);
-        if (this.inventory.count === 1) this.equipItem(slot ?? this.inventory.count - 1);
-        return r;
+        return this.inventory.addItem(item, slot);
     }
 
     removeItem(slot) {
-        let item = this.inventory.ejectItem(slot);
+     if (!this.inventory.items[slot]) return false;      
 
+        let item = this.inventory.ejectItem(slot);
+        
         switch (item.type) {
             case "gun": {
-                if (item.slot === this.state.equippedItems.mainTool.slot) {
+                if (this.state.equippedItems.mainTool && item.slot === this.state.equippedItems.mainTool.slot) {
                     this.state.armed = false;
                     this.state.equippedItems.mainTool = undefined;
                 }
@@ -2385,7 +2397,7 @@ export class Avatar {
         }
 
         if (this.state.draw) {
-            this.state.position.body.texture = 4;
+            this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
             this.state.position.body.vertices = 1;
         }
 
@@ -2517,7 +2529,6 @@ export class Avatar {
     }
 
     render() {
-        this.nameObj.render();
 
         gl.uniform2fv(locations.translation, [this.trans.offsetX, this.trans.offsetY]);
         gl.uniform1f(locations.rotation, this.trans.rotation);
@@ -2532,6 +2543,8 @@ export class Avatar {
         gl.useProgram(program);
 
         gl.drawArrays(gl.TRIANGLES, 0, 12);
+
+        this.nameObj.render();
     }
 
     useRecording(rec) {

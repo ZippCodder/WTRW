@@ -516,47 +516,42 @@ export class Inventory {
 
     addItem(item, slot) {
 
-        let result = true;
+        if (!item.pickup || this.count === this.slots) return false;
 
-        if (!item.pickup) return false;
-
-        if (slot) {
-            if (!this.items[slot] && slot < this.slots - 1) {
-                this.items[slot] = item;
-            } else {
-                result = false;
-            }
-        } else if (this.count < this.slots) {
-            this.items.push(item);
+        if (slot && !this.items[slot] && slot < this.slots-1) {
+           item.slot = slot;
+           this.items[slot] = item;
+        } else if (this.items.length < this.slots) {
+           this.items.push(item);
+           item.slot = this.items.length-1;
         } else {
-            result = false;
+            for (let i = 0; i < this.slots; i++) {
+              if (this.items[i] === undefined) {
+                item.slot = i;
+                this.items[i] = item;
+                break;
+              }
+            }
         }
+        
+        if (item.slot === undefined) return false; 
+
+        if (item.map) item.map.unlink(item.id);
+        this.count++;
 
         switch (item.type) {
             case "gun": {
-                if (result) {
-                    if (!this.weapons[item.name]) this.weapons[item.name] = {
-                        ammo: 0,
-                        count: 0
-                    };
-                    this.weapons[item.name].ammo += item.bullets;
-                    this.weapons[item.name].count++;
-                } else if (this.weapons[item.name].count) {
-                    this.weapons[item.name].ammo += item.bullets;
-                    item.bullets = 0;
-                    result = false;
-                }
+               if (!this.weapons[item.name]) this.weapons[item.name] = {
+                  ammo: 0,
+                  count: 0
+               };
+               this.weapons[item.name].ammo += item.bullets;
+               this.weapons[item.name].count++;
             };
             break;
         }
 
-        if (result) {
-            item.slot = slot ?? this.items.length - 1;
-            if (item.map) item.map.unlink(item.id);
-            this.count++;
-        }
-
-        return result;
+        return true;
     }
 
     swapItems(a, b) {
