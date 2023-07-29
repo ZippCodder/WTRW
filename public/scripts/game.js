@@ -67,27 +67,30 @@
   $MAP.avatars[$AVATAR.id] = $AVATAR;
   $AVATAR.state.targetId = $AVATAR.id;
   $AVATAR.addItem(new GP_K100(0, 0, 0, 1000));
+  $AVATAR.equipItem(0);
 
   $MAP.parseLayoutScript("{\"layout\":[[\"UrbanFence\",-16.16610633926025,31.56064491505566,0],[\"House1\",-195.57837280615982,112.60723741422856,0],[\"Text\",\"Abacrombie\",5,[0,0,0,1],-83.4097281596343,41.17754164195297,0,false],[\"Text\",\"<= Park\",5,[0,0,0,1],-35.17687296453927,87.61193164633737,0,false],[\"Text\",\"efjeifjiej\",30,[0,0,0,1],-13.47420046393556,31.128871568980287,0,false],[\"Chair\",-15.61914038187535,31.019264262989083,0],[\"Table\",-15.61914038187535,31.019264262989083,0],[\"VisibleBarrier\",32.845243168118024,47.36627707469752,5,60,[12,132,123]],[\"VisibleBarrier\",32.845243168118024,47.36627707469752,5,60,[12,132,123,1]],[\"VisibleBarrier\",21.429030080644814,1.0190305764656955,30,5,[172,102,12,1]],[\"VisibleBarrier\",8.458547303839854,66.93912826030882,30,5,[172,80,12,1]],[\"VisibleBarrier\",-1.8164140645358628,60.15912826030955,5,30,[122,231,142,1]],[\"PicnicTable\",68.46760718698604,96.28513345428257,0],[\"GLOCK_20\",-25.619120347953025,58.898576950295706,320],[\"Table\",-23.24157713504155,71.88105261749033,0],[\"GP_K100\",-54.704505624571865,63.467419897556574,272]],\"settings\":{\"groundColor\":[255,255,255,1],\"lighting\":false,\"darkness\":1},\"root\":true,\"nodes\":3,\"children\":[{\"layout\":[[\"GLOCK_20\",39.488276047252825,45.52638214311427,-246.96549517830974],[\"StreetLight\",-26.639279762916114,36.09610062434252,0,null],[\"StreetLight\",52.453812065219765,30.130220253659925,0,null],[\"Table\",6.049283909013635,23.32313395113784,0],[\"Laptop\",13.475957357845552,20.7019292711352,-157.60566451974609],[\"Book1\",-4.7557821550269015,20.725845976825234,344.4132744958508],[\"Book2\",-4.565458225089971,22.210578521327534,38.28255072830086],[\"USP_45\",-12.86335275260198,42.89514890950308,-92.34812999765457]],\"settings\":{\"groundColor\":[255,255,255,1],\"lighting\":true,\"darkness\":5},\"root\":false,\"nodes\":0,\"children\":[]},{\"layout\":[],\"settings\":{\"groundColor\":[255,255,255,1],\"lighting\":true,\"darkness\":5},\"root\":false,\"nodes\":0,\"children\":[]},{\"layout\":[],\"settings\":{\"groundColor\":[255,255,255,1],\"lighting\":false,\"darkness\":1},\"root\":false,\"nodes\":0,\"children\":[]}]}");
 
   $MAP.translate(0, 0);
 
   let id = genObjectId();
-/*
+
   let b = new Avatar("Keanu Reeves", 0, 50);
   $MAP.link(b);
   b.exclude = true;
   b.state.armor = 5000;
   b.state.aggressive = false;
   b.addItem(new GP_K100(0, 0, 0, 1000));
+  b.equipItem(0);
   b.state.targetId = b.id;
   b.state.baseSpeed = 2;
   b.state.reloadTimeout.timingConfig[0] = 0.5 / 5;
   b.state.targetUpdateAnimation.rate = 0.5 / 5;
+  b.state.openCarry = true;
   //b.state.fireAnimation.rate = 0.5 / 10;
   b.killTarget([$AVATAR.id], true, true);
   b.translate(0, 30);
- */
+ 
   $MAP.darkness = 1;
   $MAP.lighting = false;
   //$MAP.lighting = true;
@@ -144,7 +147,7 @@
       c.state.targetUpdateAnimation.rate = 1/5; 
       c.state.targetId = c.id;
       c.killTarget([id],true); */
-/*
+
   for (let i = 1; i <= 30; i++) {
       let {
           x,
@@ -157,7 +160,7 @@
       a.state.attack.disengageDistance = 500;
       a.state.attack.attackSpeed = 1;
       a.state.armor = 0;
-      a.state.aggressive = true;
+      //a.state.aggressive = true;
       a.state.passive = false;
       a.state.targetUpdateAnimation.rate = 1 / 5;
       a.addItem(new GLOCK_20(0, 0, 0, 1000));
@@ -166,7 +169,7 @@
       a.state.targetId = id;
       a.killTarget([$AVATAR.id]);
   }
-*/
+
   // Developer console
 
   let consoleActive = false;

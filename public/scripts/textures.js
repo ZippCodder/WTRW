@@ -3,6 +3,7 @@
 class TextureContainer {
     constructor() {
         this.count = 0;
+        this.index = [];
     }
 
     addTexture(name, src) {
@@ -23,6 +24,8 @@ class TextureContainer {
                 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
                 container.count++;
+                container.index.push(container[name]);
+
                 res();
             };
         });

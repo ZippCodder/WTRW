@@ -1796,10 +1796,10 @@ export class GLOCK_20 extends _Gun_ {
     static _properties = {
         fireRate: 1,
         bulletSpeed: 5,
-        damage: 10,
+        damage: 18,
         accuracy: 5,
         nozzelLength: 13,
-        capacity: 1000,
+        capacity: 8,
         reloadTime: 3,
         useTextures: [4,5]
     }
@@ -1814,19 +1814,19 @@ export class GLOCK_20 extends _Gun_ {
 
     constructor(initialX, initialY, initialRotation, bullets) {
         super(initialX, initialY, initialRotation);
-        this.bullets = bullets ?? 30;
+        this.bullets = bullets ?? 65;
     }
 }
 
 export class GP_K100 extends _Gun_ {
 
       static _properties = {
-        fireRate: 1,
-        bulletSpeed: 5,
-        damage: 20,
-        accuracy: 5,
+        fireRate: 3,
+        bulletSpeed: 8,
+        damage: 25,
+        accuracy: 2,
         nozzelLength: 21,
-        capacity: 1000,
+        capacity: 6,
         reloadTime: 3,
         useTextures: [6,7]
       }
@@ -1841,7 +1841,7 @@ export class GP_K100 extends _Gun_ {
 
     constructor(initialX, initialY, initialRotation, bullets) {
         super(initialX, initialY, initialRotation);
-        this.bullets = bullets ?? 25;
+        this.bullets = bullets ?? 58;
     }
 }
 
@@ -1928,17 +1928,13 @@ export class Avatar {
         this.nameObj = new Text(name, 25);
         this.nameObj.translate(initialX + 0, initialY + 10);
         this.vao = ext.createVertexArrayOES();
-        this.textures = [textures.skins.avatar, textures.skins.avatarblinking, textures.skins.avatarwalking1, textures.skins.avatarwalking2, textures.skins.avatardrawglock20, textures.skins.avatardrawglock20pullback, textures.skins.avatardrawgpk100, textures.skins.avatardrawgpk100pullback];
 
         ext.bindVertexArrayOES(this.vao);
 
-        this.body = [
-            [-7.0200000000000005,21.4,1,0,0,0,7.0200000000000005,21.4,1,0.5484375,0,0,-7.0200000000000005,-21.4,1,0,0.8359375,0,7.0200000000000005,21.4,1,0.5484375,0,0,-7.0200000000000005,-21.4,1,0,0.8359375,0,7.0200000000000005,-21.4,1,0.5484375,0.8359375,0],[-7.0200000000000005,21.4,1,0,0,0,7.0200000000000005,21.4,1,0.5484375,0,0,-7.0200000000000005,-21.4,1,0,0.8359375,0,7.0200000000000005,21.4,1,0.5484375,0,0,-7.0200000000000005,-21.4,1,0,0.8359375,0,7.0200000000000005,-21.4,1,0.5484375,0.8359375,0]
-        ];
-
-        this.eyes = [
-           [-2.7,3.379999999999999,1,0.16875,0.351953125,1,2.7,3.379999999999999,1,0.3796875,0.351953125,1,-2.7,1.4800000000000004,1,0.16875,0.3890625,1,2.7,3.379999999999999,1,0.3796875,0.351953125,1,-2.7,1.4800000000000004,1,0.16875,0.3890625,1,2.7,1.4800000000000004,1,0.3796875,0.3890625,1]
-         ];
+        this.vertices = {
+          body: [-7.0200000000000005,21.4,1,0,0,0,7.0200000000000005,21.4,1,0.5484375,0,0,-7.0200000000000005,-21.4,1,0,0.8359375,0,7.0200000000000005,21.4,1,0.5484375,0,0,-7.0200000000000005,-21.4,1,0,0.8359375,0,7.0200000000000005,-21.4,1,0.5484375,0.8359375,0],
+          eyes: [-2.7,3.379999999999999,1,0.16875,0.351953125,1,2.7,3.379999999999999,1,0.3796875,0.351953125,1,-2.7,1.4800000000000004,1,0.16875,0.3890625,1,2.7,3.379999999999999,1,0.3796875,0.351953125,1,-2.7,1.4800000000000004,1,0.16875,0.3890625,1,2.7,1.4800000000000004,1,0.3796875,0.3890625,1]
+        }
 
         this.trans = {
             offsetX: initialX || 0,
@@ -1960,6 +1956,7 @@ export class Avatar {
         this.inventory = new Inventory();
         this.type = "avatar";
         this.name = "avatar";
+
         this.state = {
             hostile: false,
             baseSpeed: 1,
@@ -2198,12 +2195,10 @@ export class Avatar {
             }], this, [5 * Math.random(), 1, 1]),
             position: {
                 body: {
-                    texture: 0,
-                    vertices: 0
+                    texture: 0
                 },
                 eyes: {
-                    texture: 0,
-                    vertices: 0
+                    texture: 0
                 }
             }
         }
@@ -2211,7 +2206,7 @@ export class Avatar {
         ext.bindVertexArrayOES(this.vao);
         this.buffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
-        gl.vertexAttribPointer(locations.coords, 3, gl.FLOAT, false, 24, 0); // 20
+        gl.vertexAttribPointer(locations.coords, 3, gl.FLOAT, false, 24, 0);
         gl.vertexAttribPointer(locations.tcoords, 2, gl.FLOAT, false, 24, 12);
         gl.vertexAttribPointer(locations.textrUnit, 1, gl.FLOAT, false, 24, 20);
         gl.enableVertexAttribArray(locations.coords);
@@ -2219,7 +2214,8 @@ export class Avatar {
         gl.enableVertexAttribArray(locations.textrUnit);
         gl.disableVertexAttribArray(locations.offset);
 
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([...this.body[this.state.position.body.vertices], ...this.eyes[this.state.position.eyes.vertices]]), gl.STATIC_DRAW);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([...this.vertices.body, ...this.vertices.eyes]), gl.STATIC_DRAW);
+
         gl.useProgram(program);
     }
 
@@ -2517,17 +2513,16 @@ export class Avatar {
     }
 
     render() {
-
         gl.uniform2fv(locations.translation, [this.trans.offsetX, this.trans.offsetY]);
         gl.uniform1f(locations.rotation, this.trans.rotation);
+
         ext.bindVertexArrayOES(this.vao);
         gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([...this.body[this.state.position.body.vertices], ...this.eyes[this.state.position.eyes.vertices]]), gl.STATIC_DRAW);
 
         gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, this.textures[this.state.position.body.texture]);
+        gl.bindTexture(gl.TEXTURE_2D, textures.skins.index[this.state.position.body.texture]);
         gl.activeTexture(gl.TEXTURE1);
-        gl.bindTexture(gl.TEXTURE_2D, this.textures[this.state.position.eyes.texture]);
+        gl.bindTexture(gl.TEXTURE_2D, textures.skins.index[this.state.position.eyes.texture]);
         gl.useProgram(program);
 
         gl.drawArrays(gl.TRIANGLES, 0, 12);
