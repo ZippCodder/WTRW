@@ -1933,13 +1933,12 @@ export class Avatar {
         ext.bindVertexArrayOES(this.vao);
 
         this.body = [
-            [-7.0200000000000005, 4.28, 1, 0, 0, 0, 7.0200000000000005, 4.28, 1, 0.5484375, 0, 0, -7.0200000000000005, -4.28, 1, 0, 0.66875, 0, 7.0200000000000005, 4.28, 1, 0.5484375, 0, 0, -7.0200000000000005, -4.28, 1, 0, 0.66875, 0, 7.0200000000000005, -4.28, 1, 0.5484375, 0.66875, 0],
-            [-7.12, 21.5, 1, -0.00390625, -0.001953125, 0, 6.920000000000001, 21.5, 1, 0.54453125, -0.001953125, 0, -7.12, -21.299999999999997, 1, -0.00390625, 0.833984375, 0, 6.920000000000001, 21.5, 1, 0.54453125, -0.001953125, 0, -7.12, -21.299999999999997, 1, -0.00390625, 0.833984375, 0, 6.920000000000001, -21.299999999999997, 1, 0.54453125, 0.833984375, 0]
+            [-7.0200000000000005,21.4,1,0,0,0,7.0200000000000005,21.4,1,0.5484375,0,0,-7.0200000000000005,-21.4,1,0,0.8359375,0,7.0200000000000005,21.4,1,0.5484375,0,0,-7.0200000000000005,-21.4,1,0,0.8359375,0,7.0200000000000005,-21.4,1,0.5484375,0.8359375,0],[-7.0200000000000005,21.4,1,0,0,0,7.0200000000000005,21.4,1,0.5484375,0,0,-7.0200000000000005,-21.4,1,0,0.8359375,0,7.0200000000000005,21.4,1,0.5484375,0,0,-7.0200000000000005,-21.4,1,0,0.8359375,0,7.0200000000000005,-21.4,1,0.5484375,0.8359375,0]
         ];
 
         this.eyes = [
-            [-2.58, 3.2800000000000002, 1, 0.17265625, 0.078125, 1, 2.8200000000000003, 3.2800000000000002, 1, 0.38359375, 0.078125, 1, -2.58, 1.3800000000000008, 1, 0.17265625, 0.2265625, 1, 2.8200000000000003, 3.2800000000000002, 1, 0.38359375, 0.078125, 1, -2.58, 1.3800000000000008, 1, 0.17265625, 0.2265625, 1, 2.8200000000000003, 1.3800000000000008, 1, 0.38359375, 0.2265625, 1]
-        ];
+           [-2.7,3.379999999999999,1,0.16875,0.351953125,1,2.7,3.379999999999999,1,0.3796875,0.351953125,1,-2.7,1.4800000000000004,1,0.16875,0.3890625,1,2.7,3.379999999999999,1,0.3796875,0.351953125,1,-2.7,1.4800000000000004,1,0.16875,0.3890625,1,2.7,1.4800000000000004,1,0.3796875,0.3890625,1]
+         ];
 
         this.trans = {
             offsetX: initialX || 0,
@@ -2173,29 +2172,21 @@ export class Avatar {
             }, this, 0.01),
             fireAnimation: undefined,
             recoilAnimation: new MultiFrameLinearAnimation([function() {
-                this.state.position.body.vertices = 1;
                 this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[1];
             }, function() {
-                this.state.position.body.vertices = 1;
                 this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
             }], this, [0.05, 0.05], function() {
-                this.state.position.body.vertices = 1;
                 this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
             }, 0.5, true),
             walkingAnimation: new MultiFrameLoopAnimation([function() {
-                this.state.position.body.vertices = 0;
                 this.state.position.body.texture = 2;
             }, function() {
-                this.state.position.body.vertices = 0;
                 this.state.position.body.texture = 0;
             }, function() {
-                this.state.position.body.vertices = 0;
                 this.state.position.body.texture = 3;
             }, function() {
-                this.state.position.body.vertices = 0;
                 this.state.position.body.texture = 0;
             }], this, [0.08, 0.08, 0.08, 0.08], function() {
-                this.state.position.body.vertices = 0;
                 this.state.position.body.texture = 0;
             }, 0.5),
             blinkingAnimation: new MultiFrameLoopAnimation([function() {
@@ -2305,7 +2296,6 @@ export class Avatar {
         if (this.state.armed) {
             this.state.draw = true;
             this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
-            this.state.position.body.vertices = 1;
         }
     }
 
@@ -2313,7 +2303,6 @@ export class Avatar {
         if (this.state.armed) {
             this.state.draw = false;
             this.state.position.body.texture = 0;
-            this.state.position.body.vertices = 0;
         }
     }
 
@@ -2334,7 +2323,7 @@ export class Avatar {
         return this.inventory.addItem(item, slot);
     }
 
-    removeItem(slot) {
+    dropItem(slot) {
      if (!this.inventory.items[slot]) return false;      
 
         let item = this.inventory.ejectItem(slot);
@@ -2360,7 +2349,7 @@ export class Avatar {
 
     purgeItems(limit) {
         for (let i = 0; i < limit; i++) {
-            if (this.inventory.items[i]) this.removeItem(i);
+            if (this.inventory.items[i]) this.dropItem(i);
         }
     }
 
@@ -2398,7 +2387,6 @@ export class Avatar {
 
         if (this.state.draw) {
             this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
-            this.state.position.body.vertices = 1;
         }
 
         if (this.state.fire && this.state.target.shot && this.state.reload.loaded && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo) {

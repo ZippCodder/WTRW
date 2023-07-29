@@ -2848,11 +2848,11 @@ export let OFF_ROADER = new TextureData(0, 0, 0.25, "avatar", {
 
 // @AVATARS
 
-export let MAIN_AVATAR_DEFAULT = new TextureData(0, 0, 1, "avatar", {
+export let MAIN_AVATAR_DEFAULT = new TextureData(0, 0, 0.2, "avatar", {
     width: 702,
-    height: 428
+    height: 2140
 }, [
-    [0, 0, 702, 428]
+    [0,0, 702, 2140] 
 ], 0, undefined, function(ctx) {
     // body: 700x428, texture: 1024,512, size: 0.15, boxes: [[152, 15, 408, 408],[561, 145, 136, 136],[15, 145, 136, 136]]
     // -1, -1
@@ -2890,12 +2890,12 @@ export let MAIN_AVATAR_DEFAULT = new TextureData(0, 0, 1, "avatar", {
 
     ctx.lineWidth = 2;
     ctx.strokeStyle = "red";
-    ctx.strokeRect(231, 60, 250, 75);
+   // ctx.strokeRect(221, 50, 270, 95);
 
     ctx.restore();
-}, [0], 0, 0, 0, 0);
+}, [0], 0, 0, -5, 851);
 
-export let MAIN_AVATAR_DRAW_WEAPON = new TextureData(0, 0, 1, "avatar", {
+export let MAIN_AVATAR_DRAW_WEAPON = new TextureData(0, 0, 0.2, "avatar", {
     width: 702,
     height: 2140
 }, [
@@ -3218,14 +3218,12 @@ export let DOOR = new TextureData(0, 0, 0.2, "pickup", {
     ctx.restore();
 });
 
-export let MAIN_AVATAR_BLINKING = new TextureData(-1, -1, 0.2, "avatar", {
-    width: 700,
-    height: 428
+export let MAIN_AVATAR_BLINKING = new TextureData(-5, 851, 1, "avatar", {
+    width: 702,
+    height: 2140
 }, [
-    [152, 15, 408, 408],
-    [561, 145, 136, 136],
-    [15, 145, 136, 136]
-], 20, undefined, function(ctx) {
+   [0,0, 702, 2140]
+], 0, undefined, function(ctx) {
     // body: 700x428, texture: 1024,512, size: 0.15, boxes: [[152, 15, 408, 408],[561, 145, 136, 136],[15, 145, 136, 136]]
     ctx.save();
     ctx.translate(this.offset.x, this.offset.y);
@@ -3263,14 +3261,12 @@ export let MAIN_AVATAR_BLINKING = new TextureData(-1, -1, 0.2, "avatar", {
     ctx.restore();
 }, [0]);
 
-export let MAIN_AVATAR_WALKING_1 = new TextureData(-1, -1, 0.2, "avatar", {
-    width: 700,
-    height: 428
+export let MAIN_AVATAR_WALKING_1 = new TextureData(-5, 851, 1, "avatar", {
+    width: 702,
+    height: 2140
 }, [
-    [152, 15, 408, 408],
-    [561, 195, 136, 136],
-    [15, 95, 136, 136]
-], 20, undefined, function(ctx) {
+    [0,0, 702, 2140]
+], 0, undefined, function(ctx) {
     // body: 700x428, texture: 1024,512, size: 0.15, boxes: [[152, 15, 408, 408],[561, 145, 136, 136],[15, 145, 136, 136]]
     ctx.save();
     ctx.translate(this.offset.x, this.offset.y);
@@ -3308,14 +3304,12 @@ export let MAIN_AVATAR_WALKING_1 = new TextureData(-1, -1, 0.2, "avatar", {
     ctx.restore();
 }, [0]);
 
-export let MAIN_AVATAR_WALKING_2 = new TextureData(-1, -1, 0.2, "avatar", {
-    width: 700,
-    height: 428
+export let MAIN_AVATAR_WALKING_2 = new TextureData(-5, 851, 1, "avatar", {
+    width: 702,
+    height: 2140
 }, [
-    [152, 15, 408, 408],
-    [561, 95, 136, 136],
-    [15, 195, 136, 136]
-], 20, undefined, function(ctx) {
+    [0,0, 702, 2140]
+], 0, undefined, function(ctx) {
     // body: 700x428, texture: 1024,512, size: 0.15, boxes: [[152, 15, 408, 408],[561, 145, 136, 136],[15, 145, 136, 136]]
     ctx.save();
     ctx.translate(this.offset.x, this.offset.y);
