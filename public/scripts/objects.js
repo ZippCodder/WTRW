@@ -823,7 +823,7 @@ export class DownwardLight extends _Object_ {
             gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);
  
-            gl.vertexAttribPointer(locations.coords, 3, gl.FLOAT, false, 20, 0); // 20
+            gl.vertexAttribPointer(locations.coords, 3, gl.FLOAT, false, 20, 0);
             gl.vertexAttribPointer(locations.tcoords, 2, gl.FLOAT, false, 20, 12);
             gl.enableVertexAttribArray(locations.coords);
             gl.enableVertexAttribArray(locations.tcoords);
@@ -1826,7 +1826,7 @@ export class GP_K100 extends _Gun_ {
         damage: 25,
         accuracy: 2,
         nozzelLength: 21,
-        capacity: 6,
+        capacity: 1000,
         reloadTime: 3,
         useTextures: [6,7]
       }
@@ -2987,14 +2987,15 @@ class _Graph_ {
 
         return result;
     }
+ 
+    getFixedCoordinate(x, y) {
+       let coord = {x: (this.width % 2 === 0) ? (Math.floor(x * 0.1) * 10) : (Math.round(x * 0.1) * 10) - 5, y: (this.height % 2 === 0) ? (Math.ceil(y * 0.1) * 10) : (y % 5 === 0 && y % 2 !== 0) ? (Math.round(y * 0.1) * 10) - 5 : (Math.round(y * 0.1) * 10) + 5};
+ 
+       return coord;
+    }
 
     getPoint(x, y) {
-
-        let p = {
-                x: (this.width % 2 === 0) ? (Math.floor(x * 0.1) * 10) : (Math.round(x * 0.1) * 10) - 5,
-                y: (this.height % 2 === 0) ? (Math.ceil(y * 0.1) * 10) : (y % 5 === 0 && y % 2 !== 0) ? (Math.round(y * 0.1) * 10) - 5 : (Math.round(y * 0.1) * 10) + 5
-            },
-            unit = this.find(p.x, p.y);
+        let p = this.getFixedCoordinate(x, y), unit = this.find(p.x, p.y);
 
         return (unit) ? {
             x: p.x,
@@ -3018,16 +3019,18 @@ class _Graph_ {
 
     evalObstacle(x, y, width, height) {
 
-        let xAndWidth = (x + width) - 1,
-            yAndHeight = (y - height) + 1;
+        let xAndWidth = (x + width),
+            yAndHeight = (y + height);
 
-        const cornerA = this.getPoint(x, y);
-        const cornerB = this.getPoint(xAndWidth, y);
-        const cornerC = this.getPoint(xAndWidth, yAndHeight);
+        const cornerA = this.getFixedCoordinate(x, y);
+        const cornerB = this.getFixedCoordinate(xAndWidth, y);
+        const cornerC = this.getFixedCoordinate(xAndWidth, yAndHeight);
 
-        if (cornerA && cornerB && cornerC) {
+        let inBounds = (Math.abs(x + width/2) < (this.map.width/2) + width/2) && (Math.abs(y + height/2) < (this.map.height/2) + height/2);
+         
+        if (inBounds) {
             for (let i = cornerA.x; i <= cornerB.x; i += 10) {
-                for (let j = cornerB.y; j >= cornerC.y; j -= 10) {
+                for (let j = cornerB.y; j <= cornerC.y; j += 10) {
                     let unit = this.find(i, j);
                     if (unit) this.blocked.push(unit.id);
                 }
@@ -3257,7 +3260,7 @@ export class _Map_ {
 
             if (obj.obstacle) {
                 for (let i of obj.segments) {
-                    this.GRAPH.evalObstacle((i[0] + obj.trans.offsetX) + this.centerX, (-(i[1]) + obj.trans.offsetY) + this.centerY, i[2], i[3]);
+                    this.GRAPH.evalObstacle((i[0] + obj.trans.offsetX) + this.centerX, (i[1] + obj.trans.offsetY) + this.centerY, i[2], i[3]);
                 }
             }
 
@@ -3311,7 +3314,7 @@ export class _Map_ {
         for (let o in this.obstacles) {
             let obj = this.obstacles[o];
             for (let i of obj.segments) {
-                this.GRAPH.evalObstacle((i[0] + obj.trans.offsetX) + this.centerX, (-(i[1]) + obj.trans.offsetY) + this.centerY, i[2], i[3]);
+                this.GRAPH.evalObstacle((i[0] + obj.trans.offsetX) + this.centerX, (i[1] + obj.trans.offsetY) + this.centerY, i[2], i[3]);
             }
         }
     }
@@ -3600,7 +3603,7 @@ export class Text extends _Object_ {
             gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);
  
-            gl.vertexAttribPointer(locations.coords, 3, gl.FLOAT, false, 20, 0); // 20
+            gl.vertexAttribPointer(locations.coords, 3, gl.FLOAT, false, 20, 0);
             gl.vertexAttribPointer(locations.tcoords, 2, gl.FLOAT, false, 20, 12);
             gl.enableVertexAttribArray(locations.coords);
             gl.enableVertexAttribArray(locations.tcoords);
@@ -3639,7 +3642,7 @@ export class Text extends _Object_ {
         ext.bindVertexArrayOES(this.vao);
         gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);
-        gl.vertexAttribPointer(locations.coords, 3, gl.FLOAT, false, 20, 0); // 20
+        gl.vertexAttribPointer(locations.coords, 3, gl.FLOAT, false, 20, 0);
         gl.vertexAttribPointer(locations.tcoords, 2, gl.FLOAT, false, 20, 12);
         gl.enableVertexAttribArray(locations.coords);
         gl.enableVertexAttribArray(locations.tcoords);

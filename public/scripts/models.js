@@ -1215,7 +1215,7 @@ export let HOUSE_1 = new TextureData(-1190, 3510, 0.2, "building", {
     ctx.strokeRect(3516, 550, 50, 280);
 
     ctx.restore();
-}, undefined, 0, 0);
+}, undefined, 0, 0, 0, 0);
 
 export let GENERIC_APARTMENT = new TextureData(-98, -338, 0.2, "building", {
     width: 3200,
@@ -3352,8 +3352,8 @@ export let TABLE = new TextureData(10, 10, 0.2, "avatar", {
     height: 910
 }, [
     [0, 0, 1400, 800],
-    [40, 800, 100, 110, 0],
-    [1260, 800, 100, 110, 0]
+   // [40, 800, 100, 110, 0],
+  //  [1260, 800, 100, 110, 0]
 ], 20, undefined, function(ctx) {
     ctx.save();
     ctx.translate(this.offset.vx, this.offset.vy);
