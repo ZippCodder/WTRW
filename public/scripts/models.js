@@ -4404,12 +4404,12 @@ export let SMALL_PLANT = new TextureData(2, 17, 0.2, "prop", {
     ctx.restore();
 });
 
-export let TILE = new TextureData(2, 2, 0.2, "prop", {
-    width: 400,
-    height: 400
+export let TILE = new TextureData(10, 10, 0.2, "prop", {
+    width: 420,
+    height: 420
 }, [
-    [0, 0, 400, 400]
-], 20, undefined, function(ctx) {
+    [0, 0, 420, 420]
+], 0, undefined, function(ctx) {
     ctx.save();
     ctx.translate(this.offset.x, this.offset.y);
     ctx.scale(this.size, this.size);

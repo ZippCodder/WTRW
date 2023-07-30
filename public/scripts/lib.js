@@ -23,8 +23,7 @@ export function cut(ar, lw = 0, atrbs = [], vertices = false) {
             [x + w, y, ...atrbs],
             [x, y + h, ...atrbs],
             [x + w, y + h, ...atrbs]
-        ]);
-
+        ]); 
     }
 
     return (vertices) ? res.flat(1) : res;

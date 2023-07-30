@@ -104,6 +104,7 @@ window.onload = async () => {
         uniform vec2 translation;
         uniform float rotation;
         uniform float scale;
+        uniform vec2 size;
 
         void translate() {
         float transX = offset[0] + translation.x;
@@ -124,15 +125,18 @@ window.onload = async () => {
 
         float tempX = x;
         float r = offset[2];
-        
-        /* Set offset rotation to 10.0 to cancel instancing */
-        
+               
         if (offset[2] == 0.001) {
             r = rotation;
         }
 
         x = (cos(r)*x)+(-sin(r)*y);
         y = (sin(r)*tempX)+(cos(r)*y);
+        }
+
+        void resize() {
+         x *= size[0];
+         y *= size[1];
         }
 
         void main() {
@@ -142,6 +146,7 @@ window.onload = async () => {
  
         /* Pipeline Functions */
 
+        resize();
         rotate();
         translate();
 
@@ -268,7 +273,8 @@ window.onload = async () => {
         transparency: gl.getUniformLocation(program, "transparency"),
         color: gl.getUniformLocation(program, "color"),
         textColor: gl.getUniformLocation(program, "textColor"),
-        lightColor: gl.getUniformLocation(program, "lightColor")
+        lightColor: gl.getUniformLocation(program, "lightColor"),
+        size: gl.getUniformLocation(program, "size")
     }
 
     gl.uniform1f(locations.worldUnitX, worldUnitX);
@@ -288,6 +294,7 @@ window.onload = async () => {
     gl.uniform4fv(locations.color, [0, 0, 0, 0]);
     gl.uniform1i(locations.textColor, 0);
     gl.uniform4fv(locations.lightColor, [0, 0, 0, 0]);
+    gl.uniform2fv(locations.size, [1, 1]);
 
     gl.vertexAttrib3fv(locations.offset, new Float32Array([0, 0, 0.001]));
     gl.vertexAttrib1f(locations.textrUnit, 0);

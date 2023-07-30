@@ -2709,6 +2709,51 @@ export class Avatar {
     }
 }
 
+export class Floor extends _Object_ {
+    constructor(initialX, initialY, width, height, texture) {
+        super([], function() {
+
+            this.vertices = [-4.2, 4.2, 1, 0, 0, 4.2, 4.2, 1, 0.65625, 0, -4.2, -4.2, 1, 0, 0.65625, 4.2, 4.2, 1, 0.65625, 0, -4.2, -4.2, 1, 0, 0.65625, 4.2, -4.2, 1, 0.65625, 0.65625];
+            this.texture = texture;
+            this.width = width;
+            this.height = height;
+
+            this.buffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);
+
+            gl.vertexAttribPointer(locations.coords, 3, gl.FLOAT, false, 20, 0);
+            gl.vertexAttribPointer(locations.tcoords, 2, gl.FLOAT, false, 20, 12);
+            gl.enableVertexAttribArray(locations.coords);
+            gl.enableVertexAttribArray(locations.tcoords);
+            gl.disableVertexAttribArray(locations.textrUnit);
+
+            gl.useProgram(program);
+        }, function() {
+            ext.bindVertexArrayOES(this.vao);
+            gl.uniform2fv(locations.translation, [this.trans.offsetX, this.trans.offsetY]);
+            gl.uniform2fv(locations.size, [2, 2]);
+
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
+            gl.activeTexture(gl.TEXTURE0);
+            gl.bindTexture(gl.TEXTURE_2D, this.texture);
+            gl.useProgram(program);
+
+            gl.drawArrays(gl.TRIANGLES, 0, this.vertices.length / 5);
+            gl.uniform2fv(locations.size, [1, 1]);
+        }, width, height, initialX, initialY, 0); 
+        this.name = "floor";
+        this.type = "floor";
+        this.bottomLayer = true;
+        this.subLayer = 1;
+    }
+
+    delete() {
+        this.map.unlink(this.id);
+    }
+}
+
+
 // Class for invisible barriers
 export class Barrier {
     constructor(x, y, width, height) {
@@ -2772,8 +2817,6 @@ export class VisibleBarrier extends _Object_ {
             gl.uniform1i(locations.lines, 1);
 
             gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
-            gl.activeTexture(gl.TEXTURE0);
-            gl.bindTexture(gl.TEXTURE_2D, this.texture);
             gl.useProgram(program);
 
             gl.drawArrays(gl.TRIANGLES, 0, this.vertices.length / 3);
@@ -3164,6 +3207,9 @@ export class _Map_ {
 
     renderBottomLayer() {
         if (this.show) {
+
+            this.renderSubLayers("bottomLayer");
+
             for (let i in this.objects) {
 
                 let ob = this.objects[i];
@@ -3172,15 +3218,13 @@ export class _Map_ {
                     ob.render();
                 }
             }
-
-            this.renderSubLayers("bottomLayer");
         }
     }
 
     renderSubLayers(layer) {
         for (let l in this.subLayers) {
             for (let ob of this.subLayers[l]) {
-                if (!(ob instanceof Barrier || ob instanceof Trigger || ob instanceof Avatar) && (ob[layer] || !layer) && !ob.hasCluster && !ob.hidden) {
+                if (!(ob instanceof Barrier || ob instanceof Trigger || ob instanceof Avatar) && (ob[layer] || (!layer && !ob.bottomLayer && !ob.topLayer)) && !ob.hasCluster && !ob.hidden) {
                     ob.render();
                 }
             }

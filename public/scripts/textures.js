@@ -6,12 +6,14 @@ class TextureContainer {
         this.index = [];
     }
 
-    addTexture(name, src) {
+    addTexture(name, src, repeat) {
         let container = this;
 
         return new Promise((res, rej) => {
             let img = new Image();
             img.src = src;
+
+            let textureWrap = (repeat) ? gl.REPEAT:gl.CLAMP_TO_EDGE;
 
             img.onload = function() {
                 container[name] = gl.createTexture();
@@ -20,8 +22,8 @@ class TextureContainer {
                 gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
                 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
                 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, textureWrap);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, textureWrap);
 
                 container.count++;
                 container.index.push(container[name]);
@@ -96,7 +98,8 @@ await textures.objects.addTexture("urbanfence", "/public/images/textures/URBAN_F
 await textures.objects.addTexture("urbanfencevertical", "/public/images/textures/URBAN_FENCE_VERTICAL.png");
 await textures.objects.addTexture("urbanfencehalf", "/public/images/textures/URBAN_FENCE_HALF.png");
 await textures.objects.addTexture("smallplant", "/public/images/textures/SMALL_PLANT.png");
-await textures.objects.addTexture("tile", "/public/images/textures/TILE.png");
+await textures.objects.addTexture("tile", "/public/images/textures/TILE.png", true);
+await textures.objects.addTexture("floortile", "/public/images/textures/FLOOR_TILE.png", true);
 await textures.objects.addTexture("bench", "/public/images/textures/BENCH.png");
 await textures.objects.addTexture("grass1", "/public/images/textures/GRASS_1.png");
 await textures.objects.addTexture("grass2", "/public/images/textures/GRASS_2.png");
