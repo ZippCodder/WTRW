@@ -3019,6 +3019,9 @@ class _Graph_ {
 
     evalObstacle(x, y, width, height) {
 
+        x = Math.round(x);
+        y = Math.round(y);
+
         let xAndWidth = (x + width),
             yAndHeight = (y + height);
 
@@ -3027,7 +3030,7 @@ class _Graph_ {
         const cornerC = this.getFixedCoordinate(xAndWidth, yAndHeight);
 
         let inBounds = (Math.abs(x + width/2) < (this.map.width/2) + width/2) && (Math.abs(y + height/2) < (this.map.height/2) + height/2);
-         
+       
         if (inBounds) {
             for (let i = cornerA.x; i <= cornerB.x; i += 10) {
                 for (let j = cornerB.y; j <= cornerC.y; j += 10) {

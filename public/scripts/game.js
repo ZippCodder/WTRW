@@ -59,7 +59,7 @@
 
   // Game setup and initialization
 
-  $MAP = new _Map_(200, 200).init();
+  $MAP = new _Map_(500, 500).init();
   //$MAP.parseLayoutScript(Map1);
 
   $CURRENT_MAP = $MAP;
@@ -151,7 +151,7 @@
       c.state.targetId = c.id;
       c.killTarget([id],true); */
 /*
-  for (let i = 1; i <= 30; i++) {
+  for (let i = 1; i <= 1; i++) {
       let {
           x,
           y
