@@ -14,12 +14,9 @@
 1. Add changable avatar follow target
 2. Implement avatar death and respawn system
 3. Fix avatar stacking
-4. Create avatar skin managment system
+4. Fix avatar path request lag and strange behavior on large maps
 5. Add avatar settings inupt object
 6. Implement explovives
 7. Implement textured floors
 8. Implement wallpapers
-9. Implement cluster layer system
-10. Re-add bullet texture
-11. Refine fireAnimation logic
-12. Investigate enemys walking through house 1
+9. Re-add bullet texture
