@@ -1686,7 +1686,9 @@ export class House1 extends _Building_ {
             [-30, -65, 0]
         ], [new _Map_(150, 100, false).init(), new _Map_(150, 80, false).init(), new _Map_(150, 80, false).init()], undefined);
  
-      this.rooms[0].link(new Floor(0,0,150,100,0));
+      let floor = new Floor(0,0,150,100,0);
+      floor.exclude = true;
+      this.rooms[0].link(floor);
     }
 }
 
@@ -2729,8 +2731,11 @@ export class Floor extends _Object_ {
 
             this.vertices = tile.vertices; 
             this.texture = tile.texture;
-            this.width = width/tile.width; 
-            this.height = height/tile.height; 
+            this.width = width; 
+            this.height = height; 
+            this.tileType = tileType;
+            this.renderDimensions = {width: width/tile.width, height: height/tile.height};
+
             this.buffer = gl.createBuffer();
             gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);
@@ -2745,8 +2750,8 @@ export class Floor extends _Object_ {
         }, function() {
             ext.bindVertexArrayOES(this.vao);
             gl.uniform2fv(locations.translation, [this.trans.offsetX, this.trans.offsetY]);
-            gl.uniform2fv(locations.size, [this.width, this.height]);
-            gl.uniform2fv(locations.textureRange, [this.width,this.height]);
+            gl.uniform2fv(locations.size, [this.renderDimensions.width, this.renderDimensions.height]);
+            gl.uniform2fv(locations.textureRange, [this.renderDimensions.width,this.renderDimensions.height]);
 
             gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
             gl.activeTexture(gl.TEXTURE0);
@@ -3436,6 +3441,9 @@ export class _Map_ {
                     case "street light":
                         frame = frame.concat([ob.trans.offsetX, ob.trans.offsetY, ob.trans.rotation, ob._color]);
                         break;
+                    case "floor": 
+                        frame = frame.concat([ob.trans.offsetX, ob.trans.offsetY, ob.width, ob.height, ob.tileType]);
+                        break;
                     default:
                         frame = frame.concat([ob.trans.offsetX, ob.trans.offsetY, ob.trans.rotation]);
                         break;
@@ -3606,6 +3614,10 @@ export class _Map_ {
     init(spawns = [
         [0, 0]
     ], doorOffset = 0, exitPoint, buildingExit, label) {
+        // attach $AVATAR to map
+  
+        this.avatars[$AVATAR.id] = $AVATAR;
+
         // attach any default objects or clusters for all maps, etc.
         this._bulletMatrix = new _BulletCluster_([-0.9, 0.4, 1, 0, 0, 0.9, 0.4, 1, 0.5625, 0, -0.9, -0.4, 1, 0, 0.5, 0.9, 0.4, 1, 0.5625, 0, -0.9, -0.4, 1, 0, 0.5, 0.9, -0.4, 1, 0.5625, 0.5], textures.objects.bullet);
         this.link(this._bulletMatrix);
