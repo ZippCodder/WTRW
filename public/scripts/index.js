@@ -96,6 +96,9 @@ window.onload = async () => {
 
         uniform float worldUnitX;
         uniform float worldUnitY;
+ 
+        float texCoordX;
+        float texCoordY;
 
         float x;
         float y;
@@ -105,6 +108,7 @@ window.onload = async () => {
         uniform float rotation;
         uniform float scale;
         uniform vec2 size;
+        uniform vec2 textureRange;
 
         void translate() {
         float transX = offset[0] + translation.x;
@@ -139,6 +143,31 @@ window.onload = async () => {
          y *= size[1];
         }
 
+        void setTextureRange() {
+
+          texCoordX = tcoords[0];
+          texCoordY = tcoords[1];
+ 
+          float textureRangeX = (textureRange.x - 1.0)/2.0;
+          float textureRangeY = (textureRange.y - 1.0)/2.0;
+
+         if (textureRangeX > 0.0) {
+           if (texCoordX > 0.5) {
+             texCoordX += textureRangeX;
+           } else if (texCoordX < 0.5) {
+             texCoordX -= textureRangeX;
+           }
+         }
+
+         if (textureRangeY > 0.0) {
+           if (texCoordY > 0.5) {
+             texCoordY += textureRangeY;
+           } else if (texCoordY < 0.5) {
+             texCoordY -= textureRangeY;
+           }
+         }
+        }
+
         void main() {
 
         x = coords.x;
@@ -149,12 +178,13 @@ window.onload = async () => {
         resize();
         rotate();
         translate();
+        setTextureRange();
 
         x *= worldUnitX;
         y *= worldUnitY;
 
         gl_Position = vec4(x,y,coords.z,scale);
-        textrCoords = tcoords;
+        textrCoords = vec2(texCoordX, texCoordY);
         textr = textrUnit;
         }
         `;
@@ -274,7 +304,8 @@ window.onload = async () => {
         color: gl.getUniformLocation(program, "color"),
         textColor: gl.getUniformLocation(program, "textColor"),
         lightColor: gl.getUniformLocation(program, "lightColor"),
-        size: gl.getUniformLocation(program, "size")
+        size: gl.getUniformLocation(program, "size"),
+        textureRange: gl.getUniformLocation(program, "textureRange")
     }
 
     gl.uniform1f(locations.worldUnitX, worldUnitX);
@@ -295,6 +326,7 @@ window.onload = async () => {
     gl.uniform1i(locations.textColor, 0);
     gl.uniform4fv(locations.lightColor, [0, 0, 0, 0]);
     gl.uniform2fv(locations.size, [1, 1]);
+    gl.uniform2fv(locations.textureRange, [0, 0]);
 
     gl.vertexAttrib3fv(locations.offset, new Float32Array([0, 0, 0.001]));
     gl.vertexAttrib1f(locations.textrUnit, 0);

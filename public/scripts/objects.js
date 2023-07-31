@@ -1685,6 +1685,8 @@ export class House1 extends _Building_ {
             [23, -57, 1],
             [-30, -65, 0]
         ], [new _Map_(150, 100, false).init(), new _Map_(150, 80, false).init(), new _Map_(150, 80, false).init()], undefined);
+ 
+      this.rooms[0].link(new Floor(0,0,150,100,0));
     }
 }
 
@@ -2710,14 +2712,25 @@ export class Avatar {
 }
 
 export class Floor extends _Object_ {
-    constructor(initialX, initialY, width, height, texture) {
+
+            static _tileTypes = {
+              0: {
+               vertices: [-6.390000000000001,6.390000000000001,1,0,0,6.390000000000001,6.390000000000001,1,0.9984375000000001,0,-6.390000000000001,-6.390000000000001,1,0,0.9984375000000001,6.390000000000001,6.390000000000001,1,0.9984375000000001,0,-6.390000000000001,-6.390000000000001,1,0,0.9984375000000001,6.390000000000001,-6.390000000000001,1,0.9984375000000001,0.9984375000000001],
+               width: 12.780000000000001, 
+               height: 12.780000000000001, 
+               texture: textures.objects.floortile
+              } 
+            }
+ 
+    constructor(initialX, initialY, width, height, tileType = 0) {
         super([], function() {
+           
+            let tile = Floor._tileTypes[tileType];
 
-            this.vertices = [-4.2, 4.2, 1, 0, 0, 4.2, 4.2, 1, 0.65625, 0, -4.2, -4.2, 1, 0, 0.65625, 4.2, 4.2, 1, 0.65625, 0, -4.2, -4.2, 1, 0, 0.65625, 4.2, -4.2, 1, 0.65625, 0.65625];
-            this.texture = texture;
-            this.width = width;
-            this.height = height;
-
+            this.vertices = tile.vertices; 
+            this.texture = tile.texture;
+            this.width = width/tile.width; 
+            this.height = height/tile.height; 
             this.buffer = gl.createBuffer();
             gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);
@@ -2732,7 +2745,8 @@ export class Floor extends _Object_ {
         }, function() {
             ext.bindVertexArrayOES(this.vao);
             gl.uniform2fv(locations.translation, [this.trans.offsetX, this.trans.offsetY]);
-            gl.uniform2fv(locations.size, [2, 2]);
+            gl.uniform2fv(locations.size, [this.width, this.height]);
+            gl.uniform2fv(locations.textureRange, [this.width,this.height]);
 
             gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
             gl.activeTexture(gl.TEXTURE0);
@@ -2741,6 +2755,7 @@ export class Floor extends _Object_ {
 
             gl.drawArrays(gl.TRIANGLES, 0, this.vertices.length / 5);
             gl.uniform2fv(locations.size, [1, 1]);
+            gl.uniform2fv(locations.textureRange, [0, 0]);
         }, width, height, initialX, initialY, 0); 
         this.name = "floor";
         this.type = "floor";

@@ -4427,6 +4427,47 @@ export let TILE = new TextureData(10, 10, 0.2, "prop", {
     ctx.restore();
 });
 
+export let FLOOR_TILE = new TextureData(0, 0, 0.2, "prop", {
+    width: 639,
+    height: 639
+}, [
+    [0, 0, 639, 639]
+], 0, undefined, function(ctx) {
+    ctx.save();
+    ctx.translate(this.offset.x, this.offset.y);
+    ctx.scale(this.size, this.size);
+    ctx.beginPath();
+    ctx.lineWidth = 20;
+
+    ctx.strokeStyle = "#737373";
+
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, 320, 320);
+    ctx.fillStyle = "#CCCCCC";
+    ctx.fillRect(0, 280, 320, 40);
+    ctx.strokeRect(0, 0, 320, 320);
+
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 320, 320, 320);
+    ctx.fillStyle = "#CCCCCC";
+    ctx.fillRect(0, 600, 320, 40);
+    ctx.strokeRect(0, 320, 320, 320);
+
+    ctx.fillStyle = "white";
+    ctx.fillRect(320, 0, 320, 320);
+    ctx.fillStyle = "#CCCCCC";
+    ctx.fillRect(320, 280, 320, 40);
+    ctx.strokeRect(320, 0, 320, 320);
+
+    ctx.fillStyle = "white";
+    ctx.fillRect(320, 320, 320, 320);
+    ctx.fillStyle = "#CCCCCC";
+    ctx.fillRect(320, 600, 320, 40);
+    ctx.strokeRect(320, 320, 320, 320);
+
+    ctx.restore();
+});
+
 export let LIGHT_SWITCH = new TextureData(2, 2, 0.2, "prop", {
     width: 160,
     height: 240

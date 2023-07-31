@@ -98,7 +98,7 @@ await textures.objects.addTexture("urbanfence", "/public/images/textures/URBAN_F
 await textures.objects.addTexture("urbanfencevertical", "/public/images/textures/URBAN_FENCE_VERTICAL.png");
 await textures.objects.addTexture("urbanfencehalf", "/public/images/textures/URBAN_FENCE_HALF.png");
 await textures.objects.addTexture("smallplant", "/public/images/textures/SMALL_PLANT.png");
-await textures.objects.addTexture("tile", "/public/images/textures/TILE.png", true);
+await textures.objects.addTexture("tile", "/public/images/textures/TILE.png");
 await textures.objects.addTexture("floortile", "/public/images/textures/FLOOR_TILE.png", true);
 await textures.objects.addTexture("bench", "/public/images/textures/BENCH.png");
 await textures.objects.addTexture("grass1", "/public/images/textures/GRASS_1.png");
