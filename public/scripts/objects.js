@@ -3732,8 +3732,8 @@ export class Text extends _Object_ {
 /* GAME CONTROL ELEMENTS */
 
 export class _Button_ extends _Object_ {
-    constructor(texture, textureActive, initialX, initialY, action, radius, scale = 1, toggle = false) {
-        super([-8.571428571428571, 8.571428571428571, 1, 0, 0, 8.571428571428571, 8.571428571428571, 1, 1, 0, -8.571428571428571, -8.571428571428571, 1, 0, 1, 8.571428571428571, 8.571428571428571, 1, 1, 0, -8.571428571428571, -8.571428571428571, 1, 0, 1, 8.571428571428571, -8.571428571428571, 1, 1, 1], function() {
+    constructor(texture, textureActive, initialX, initialY, action, radius, scale = 1, toggle = false, vertices) {
+        super(vertices || [-8.571428571428571, 8.571428571428571, 1, 0, 0, 8.571428571428571, 8.571428571428571, 1, 1, 0, -8.571428571428571, -8.571428571428571, 1, 0, 1, 8.571428571428571, 8.571428571428571, 1, 1, 0, -8.571428571428571, -8.571428571428571, 1, 0, 1, 8.571428571428571, -8.571428571428571, 1, 1, 1], function() {
 
             this.buffer = gl.createBuffer();
             gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
@@ -3787,9 +3787,7 @@ export class _Joystick_ extends _Object_ {
         x: 0,
         y: 0
     }) {
-        super([
-            0, 0, 1, 0, 0, 30, 0, 1, 1, 0, 0, 30, 1, 0, 1, 30, 0, 1, 1, 0, 0, 30, 1, 0, 1, 30, 30, 1, 1, 1
-        ], function() {
+        super([-15,15,1,0,0,15,15,1,0.5859375,0,-15,-15,1,0,0.5859375,15,15,1,0.5859375,0,-15,-15,1,0,0.5859375,15,-15,1,0.5859375,0.5859375], function() {
 
             this.buffer = gl.createBuffer();
             gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
@@ -3850,10 +3848,10 @@ export class _Joystick_ extends _Object_ {
         this.thumb = {
             x: position.x,
             y: position.y,
-            width: 16.66 / scale,
-            height: 16.66 / scale
+            width: 15 / scale,
+            height: 15 / scale
         };
-        this.thumbVertices = new Float32Array([0, 0, 1, 0, 0, 16.666666666666668, 0, 1, 1, 0, 0, 16.666666666666668, 1, 0, 1, 16.666666666666668, 0, 1, 1, 0, 0, 16.666666666666668, 1, 0, 1, 16.666666666666668, 16.666666666666668, 1, 1, 1]);
+        this.thumbVertices = new Float32Array([-7.5,7.5,1,0,0,7.5,7.5,1,0.5859375,0,-7.5,-7.5,1,0,0.5859375,7.5,7.5,1,0.5859375,0,-7.5,-7.5,1,0,0.5859375,7.5,-7.5,1,0.5859375,0.5859375]);
         this.distance = {
             x: 0,
             y: 0,
@@ -3883,25 +3881,25 @@ export class _Joystick_ extends _Object_ {
             y
         } = this.position;
 
-        this.base.x = x - this.base.width / 2;
-        this.base.y = y - this.base.height / 2;
-        this.thumb.x = x - this.thumb.width / 2;
-        this.thumb.y = y - this.thumb.height / 2;
+        this.base.x = x;
+        this.base.y = y;
+        this.thumb.x = x;
+        this.thumb.y = y;
     }
 
     translate(x, y) {
 
         if (!this.base.anchored) {
             if (!this.fixed) {
-                this.base.x = x - this.base.width / 2;
-                this.base.y = y - this.base.height / 2;
+                this.base.x = x;
+                this.base.y = y;
             }
             this.base.anchored = true;
         }
-        this.thumb.x = x - this.thumb.width / 2;
-        this.thumb.y = y - this.thumb.height / 2;
+        this.thumb.x = x;
+        this.thumb.y = y;
 
-        this.distance.absolute = Math.round(distance(this.base.x + this.base.width / 2, this.base.y + this.base.height / 2, x, y));
+        this.distance.absolute = Math.round(distance(this.base.x, this.base.y, x, y));
 
         // activate player firing state when the left joystick is at the edge, and viceversa
         if (!this.left && $CURRENT_MAP.move) {
@@ -3912,9 +3910,9 @@ export class _Joystick_ extends _Object_ {
             }
         }
 
-        this.distance.x = ((this.thumb.x + (this.thumb.width / 2)) - (this.base.x + (this.base.width / 2)));
-        this.distance.y = ((this.thumb.y + (this.thumb.height / 2)) - (this.base.y + (this.base.height / 2)));
-        this.rotation = Math.atan2((this.thumb.y + this.thumb.width / 2) - (this.base.y + this.base.height / 2), (this.thumb.x + this.thumb.width / 2) - (this.base.x + this.base.width / 2)) - 1.5708;
+        this.distance.x = (this.thumb.x - this.base.x);
+        this.distance.y = (this.thumb.y - this.base.y);
+        this.rotation = Math.atan2(this.thumb.y - this.base.y, this.thumb.x - this.base.x) - 1.5708;
         this.ratio = this.distance.x / this.distance.y;
     }
 }

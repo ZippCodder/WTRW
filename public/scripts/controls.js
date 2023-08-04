@@ -37,23 +37,23 @@
   $ACTION_BUTTON = new _Button_(textures.controls.actionbutton, textures.controls.actionbuttonactive, (worldWidth / 2) - 20, (-worldHeight / 2) + 39, function(pX, pY) {
       const i = $CURRENT_MAP.interactables[$CURRENT_MAP.currentInteractable.id];
       if (i) i.action();
-  }, 8.5, 1.5);
+  }, 18, 1.5, false, [-9,9,1,0,0,9,9,1,0.703125,0,-9,-9,1,0,0.703125,9,9,1,0.703125,0,-9,-9,1,0,0.703125,9,-9,1,0.703125,0.703125]);
 
   $RELOAD_BUTTON = new _Button_(textures.controls.reloadbutton, textures.controls.reloadbuttonactive, (worldWidth / 2) - 38, -(worldHeight / 2) + 20, function(pX, pY) {
       if (this.enabled) {
           $AVATAR.reload();
           this.enabled = false;
       }
-  }, 8.5, 2.2);
+  }, 8.5, 1.5, false, [-6,6,1,0,0,6,6,1,0.9375,0,-6,-6,1,0,0.9375,6,6,1,0.9375,0,-6,-6,1,0,0.9375,6,-6,1,0.9375,0.9375]);
 
   $AVATAR_MODE_BUTTON = new _Button_(textures.controls.avatarmode2, textures.controls.avatarmode1, (worldWidth / 2) - 10, (worldHeight / 2) - 15, function(pX, pY) {
       this.on = !this.on;
       $AVATAR.state.hostile = !$AVATAR.state.hostile;
-  }, 8.5, 3, true);
+  }, 9, 1.5, true, [-4.5,4.5,1,0,0,4.5,4.5,1,0.703125,0,-4.5,-4.5,1,0,0.703125,4.5,4.5,1,0.703125,0,-4.5,-4.5,1,0,0.703125,4.5,-4.5,1,0.703125,0.703125]);
 
   $DROP_ITEM_BUTTON = new _Button_(textures.controls.dropitem1, textures.controls.dropitem2, (worldWidth / 2) - 35, -(worldHeight / 2) + 30, function(pX, pY) {
       $AVATAR.drop();
-  }, 8.5, 2.2);
+  }, 8.5, 1.5, false, [-6,6,1,0,0,6,6,1,0.9375,0,-6,-6,1,0,0.9375,6,6,1,0.9375,0,-6,-6,1,0,0.9375,6,-6,1,0.9375,0.9375]);
 
 
   function moveJoystick(e, m = true) {
@@ -110,8 +110,6 @@
               y,
               radius
           } = stick.base;
-          x += width / 2;
-          y += height / 2;
 
           let d = distance(x, y, pX, pY),
               t = radius / d;

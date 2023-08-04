@@ -6,22 +6,26 @@ class TextureContainer {
         this.index = [];
     }
 
-    addTexture(name, src, repeat) {
+    addTexture(name, src, settings = {mipmap: false, repeat: false}) {
         let container = this;
 
         return new Promise((res, rej) => {
             let img = new Image();
             img.src = src;
 
-            let textureWrap = (repeat) ? gl.REPEAT:gl.CLAMP_TO_EDGE;
+            let textureWrap = (settings.repeat) ? gl.REPEAT:gl.CLAMP_TO_EDGE;
+            let minFilter = (settings.mipmap) ? gl.LINEAR_MIPMAP_LINEAR:gl.LINEAR;
 
             img.onload = function() {
                 container[name] = gl.createTexture();
 
                 gl.bindTexture(gl.TEXTURE_2D, container[name]);
                 gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+          
+                if (settings.mipmap) gl.generateMipmap(gl.TEXTURE_2D);
+
                 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, minFilter);
                 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, textureWrap);
                 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, textureWrap);
 
@@ -99,7 +103,7 @@ await textures.objects.addTexture("urbanfencevertical", "/public/images/textures
 await textures.objects.addTexture("urbanfencehalf", "/public/images/textures/URBAN_FENCE_HALF.png");
 await textures.objects.addTexture("smallplant", "/public/images/textures/SMALL_PLANT.png");
 await textures.objects.addTexture("tile", "/public/images/textures/TILE.png");
-await textures.objects.addTexture("floortile", "/public/images/textures/FLOOR_TILE.png", true);
+await textures.objects.addTexture("floortile", "/public/images/textures/FLOOR_TILE.png", {repeat: true});
 await textures.objects.addTexture("bench", "/public/images/textures/BENCH.png");
 await textures.objects.addTexture("grass1", "/public/images/textures/GRASS_1.png");
 await textures.objects.addTexture("grass2", "/public/images/textures/GRASS_2.png");
