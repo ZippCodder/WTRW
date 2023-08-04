@@ -11,12 +11,14 @@
 
 ## TODO
 
-1. Add changable avatar follow target
-2. Implement avatar death and respawn system
-3. Fix avatar stacking
-4. Fix avatar path request lag and strange behavior on large maps
-5. Add avatar settings inupt object
-6. Implement explovives
-7. Implement textured floors
-8. Implement wallpapers
-9. Re-add bullet texture
+* Fix lag caused by lights
+* Make controls better quality, implement with html
+* Add changable avatar follow target
+* Implement avatar death and respawn system
+* Fix avatar stacking
+* Fix avatar path request lag and strange behavior on large maps
+* Add avatar settings inupt object
+* Implement explovives
+* Separate Avatar objects in to specialized class types
+* Implement wallpapers
+* Re-add bullet texture

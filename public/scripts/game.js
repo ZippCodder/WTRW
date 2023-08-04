@@ -148,7 +148,7 @@
       c.state.targetUpdateAnimation.rate = 1/5; 
       c.state.targetId = c.id;
       c.killTarget([id],true); */
-/*
+
   for (let i = 1; i <= 10; i++) {
       let {
           x,
@@ -169,7 +169,7 @@
       a.state.targetId = id;
       a.killTarget([$AVATAR.id]);
   }
-*/
+
   // Developer console
 
   let consoleActive = false;

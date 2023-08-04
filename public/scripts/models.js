@@ -195,8 +195,8 @@ export let JOYSTICK_DISC_TEXTURE = new TextureData(0, 0, 1, "general", {
 
     // Joystick base
 
-    ctx.moveTo(300, 300);
-    ctx.arc(300, 300, 300, 0, 2 * Math.PI);
+    ctx.moveTo(100, 100);
+    ctx.arc(100, 100, 100, 0, 2 * Math.PI);
     ctx.fill();
 
 }, [], 600, 600);
@@ -223,7 +223,7 @@ export let PICKUP_RING = new TextureData(0, 0, 0.2, "general", {
 
 });
 
-export let ACTION_BUTTON_TEXTURE = new TextureData(0, 0, 1, "control", {
+export let ACTION_BUTTON_TEXTURE = new TextureData(0, 0, 0.167, "control", {
     width: 600,
     height: 600
 }, [
@@ -272,11 +272,11 @@ export let ACTION_BUTTON_TEXTURE = new TextureData(0, 0, 1, "control", {
     ctx.stroke();
 });
 
-export let RELOAD_BUTTON_TEXTURE = new TextureData(0, 0, 1.5, "control", {
-    width: 300,
-    height: 300
+export let RELOAD_BUTTON_TEXTURE = new TextureData(0, 0, 0.25, "control", {
+    width: 50,
+    height: 50
 }, [
-    [0, 0, 300, 300]
+    [0, 0, 50, 50]
 ], 0, undefined, function(ctx) {
     // base body: 600x600, texture: 1024x1024, size: 20
     ctx.scale(this.size || 0, this.size || 0);
@@ -318,7 +318,7 @@ export let RELOAD_BUTTON_TEXTURE = new TextureData(0, 0, 1.5, "control", {
 
 }, [], 300, 300);
 
-export let AVATAR_MODE_BUTTON_TEXTURE = new TextureData(0, 0, 1, "control", {
+export let AVATAR_MODE_BUTTON_TEXTURE = new TextureData(0, 0, 0.083, "control", {
     width: 600,
     height: 600
 }, [
@@ -341,12 +341,12 @@ export let AVATAR_MODE_BUTTON_TEXTURE = new TextureData(0, 0, 1, "control", {
     ctx.font = "300px Arial";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    //ctx.strokeText("P", 300, 320);
-    ctx.strokeText("H", 300, 320);
+    ctx.strokeText("P", 300, 320);
+    //ctx.strokeText("H", 300, 320);
 
 }, [], 600, 600);
 
-export let DROP_ITEM_BUTTON_TEXTURE = new TextureData(0, 0, 1, "control", {
+export let DROP_ITEM_BUTTON_TEXTURE = new TextureData(0, 0, 0.083, "control", {
     width: 600,
     height: 600
 }, [
@@ -356,7 +356,7 @@ export let DROP_ITEM_BUTTON_TEXTURE = new TextureData(0, 0, 1, "control", {
     ctx.scale(this.size || 0, this.size || 0);
 
     ctx.fillStyle = "black";
-    ctx.globalAlpha = 0.5;
+    ctx.globalAlpha = 0.7;
     ctx.lineWidth = 60;
     ctx.strokeStyle = "white";
 

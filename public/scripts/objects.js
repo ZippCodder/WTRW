@@ -1589,7 +1589,9 @@ export class _Building_ extends _StaticClusterClient_ {
 
         this.setup = setup;
         this.doors = [];
-        this.type = "building";
+        this.type = "building";  
+        this.bottomLayer = true;
+        this.subLayer = 1;
         this.rooms = rooms || [new _Map_(150, 80, false).init([
             [0 + doorOffset, 35]
         ], doorOffset)];

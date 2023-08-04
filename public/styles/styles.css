@@ -142,7 +142,7 @@ html,body {
           
           .controls-container__inv {
             position: absolute;
-            top: calc((100vh - 7vmax) - 1em);
+            top: calc((100% - 7vmax) - 1em);
             width: 35vmax;
             height: 7vmax;
             left: calc((50% - 17.5vmax) - 4vmin);
