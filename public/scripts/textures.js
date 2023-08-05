@@ -1,20 +1,27 @@
 // Texture managment
 
 class TextureContainer {
-    constructor() {
+    constructor(settings = {mipmap: false, repeat: false}) {
         this.count = 0;
         this.index = [];
+        this.settings = settings;
     }
 
-    addTexture(name, src, settings = {mipmap: false, repeat: false}) {
+    addTexture(name, src, settings = {mipmap: undefined, repeat: undefined}) {
         let container = this;
 
         return new Promise((res, rej) => {
             let img = new Image();
             img.src = src;
 
-            let textureWrap = (settings.repeat) ? gl.REPEAT:gl.CLAMP_TO_EDGE;
-            let minFilter = (settings.mipmap) ? gl.LINEAR_MIPMAP_LINEAR:gl.LINEAR;
+            let textureWrapS = ((settings.repeat || this.settings.repeat) && settings.repeat !== false) ? gl.REPEAT:(settings.textureWrapS || this.settings.textureWrapS || gl.CLAMP_TO_EDGE);
+
+            let textureWrapT = ((settings.repeat || this.settings.repeat) && settings.repeat !== false) ? gl.REPEAT:(settings.textureWrapT || this.settings.textureWrapT || gl.CLAMP_TO_EDGE);
+
+            let minFilter = ((settings.mipmap || this.settings.mipmap) && settings.mipmap !== false) ? gl.LINEAR_MIPMAP_NEAREST:gl.LINEAR;
+            minFilter = settings.minFilter || this.settings.minFilter || minFilter;
+
+            let magFilter = settings.magFilter || this.settings.magFilter || gl.LINEAR; 
 
             img.onload = function() {
                 container[name] = gl.createTexture();
@@ -22,12 +29,12 @@ class TextureContainer {
                 gl.bindTexture(gl.TEXTURE_2D, container[name]);
                 gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
           
-                if (settings.mipmap) gl.generateMipmap(gl.TEXTURE_2D);
+                if ((settings.mipmap || container.settings.mipmap) && settings.mipmap !== false) gl.generateMipmap(gl.TEXTURE_2D);
 
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, magFilter);
                 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, minFilter);
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, textureWrap);
-                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, textureWrap);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, textureWrapS);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, textureWrapT);
 
                 container.count++;
                 container.index.push(container[name]);
