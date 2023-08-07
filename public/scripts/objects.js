@@ -2322,7 +2322,7 @@ export class Avatar {
     }
 
     addItem(item, slot) {
-      if (this.inventory.addItem(item, slot)) {
+      if (this === $AVATAR && this.inventory.addItem(item, slot)) {
         updateInventoryItem(item.slot,item.name);
       }
     }
@@ -2330,7 +2330,7 @@ export class Avatar {
     dropItem(slot) {
      if (!this.inventory.items[slot]) return false;      
 
-        updateInventoryItem(this.inventory.items[slot].slot,this.inventory.items[slot].name,true);
+        if (this === $AVATAR) updateInventoryItem(this.inventory.items[slot].slot,this.inventory.items[slot].name,true);
         this.unequipItem(slot);
  
         let item = this.inventory.ejectItem(slot);

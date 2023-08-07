@@ -555,8 +555,8 @@ export class Inventory {
         this.items[a] = this.items[b];
         this.items[b] = c;
 
-        this.items[a].slot = a;
-        this.items[b].slot = b;
+        if (this.items[a]) this.items[a].slot = a;
+        if (this.items[b]) this.items[b].slot = b;
     }
 
     ejectItem(slot, newItem) {

@@ -222,11 +222,11 @@
    "gp k100": "<h3>GP K100</h3>This quick and reliable handgun features good capacity, and a basic scilencer and is perfect for a good ol' gun-fight.</br></br><strong>Damage _____ 25</strong></br><strong>Fire Rate _____ 3</strong></br><strong>Accuracy _____ 2</strong></br><strong>Capacity _____ 12</strong>"
   }  
 
-  let equippedIndex = 0, selectedIndex = undefined, switchMode = false;
+  let equippedIndex = Infinity, selectedIndex = undefined, switchMode = false;
 
   function equipSlot(i) {
     if (!$AVATAR.equipItem(i)) return;
-    
+  
     if (equippedIndex < 5) quickAccessItems.item(equippedIndex).style.backgroundColor = "rgba(0,0,0,0.3)";
     inventoryItems.item(equippedIndex).style.borderBottom = "none";
 
@@ -237,7 +237,7 @@
      equippedIndex = i;
     } else {
      $AVATAR.unequipItem(i);
-     equippedIndex = undefined;
+     equippedIndex = Infinity;
     }
   }
 
@@ -252,9 +252,9 @@
   }
 
   function selectSlot(i) {
-    if (!$AVATAR.inventory.items[i]) return;
-
-     updateDescription($AVATAR.inventory.items[i].name); 
+     if (!$AVATAR.inventory.items[i] && !switchMode) return;
+ 
+     updateDescription($AVATAR.inventory.items[i]?.name || "default"); 
 
      controlButtonsContainer.style.opacity = 1;
      inventoryItems.item(selectedIndex).style.backgroundColor = "rgba(0,0,0,0.2)";
@@ -262,8 +262,8 @@
 
      if (switchMode) {
        $AVATAR.inventory.swapItems(selectedIndex,i);
-       updateInventoryItem(selectedIndex, $AVATAR.inventory.items[selectedIndex].name); 
-       updateInventoryItem(i, $AVATAR.inventory.items[i].name);
+       updateInventoryItem(selectedIndex, $AVATAR.inventory.items[selectedIndex]?.name); 
+       updateInventoryItem(i, $AVATAR.inventory.items[i]?.name);
 
        if (equippedIndex === i) {
          equipSlot(selectedIndex);
@@ -292,9 +292,13 @@
 
   window.updateInventoryItem = function (slot, name, drop) {
    if (!drop) {
-    if (slot < 5) quickAccessItems.item(slot).style.backgroundImage = `url(\"/public/images/icons/${name.replaceAll(" ","_")}_icon.png\")`;
-   inventoryItems.item(slot).style.backgroundImage = `url(\"/public/images/icons/${name.replaceAll(" ","_")}_icon.png\")`;  
-
+    if (name) {
+     if (slot < 5) quickAccessItems.item(slot).style.backgroundImage = `url(\"/public/images/icons/${name.replaceAll(" ","_")}_icon.png\")`;
+     inventoryItems.item(slot).style.backgroundImage = `url(\"/public/images/icons/${name.replaceAll(" ","_")}_icon.png\")`;  
+     } else {
+    if (slot < 5) quickAccessItems.item(slot).style.backgroundImage = `none`;
+     inventoryItems.item(slot).style.backgroundImage = `none`;  
+    }
     return;
    }
 
@@ -319,6 +323,8 @@ const controlDropButton = document.querySelector(".main-inventory__controls-drop
 controlDropButton.onclick = function() {
  controlSwitchButton.style.opacity = 1;
  switchMode = false;
+
+ if (equippedIndex === selectedIndex) equippedIndex = Infinity;
 
  $AVATAR.dropItem(selectedIndex);
  updateDescription("default");
