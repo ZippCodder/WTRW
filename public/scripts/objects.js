@@ -1739,7 +1739,8 @@ export class _Gun_ extends _Pickup_ {
     constructor(initialX, initialY, initialRotation) {
         super(initialX, initialY, initialRotation);
     }
-
+ 
+    loaded = true;
     type = "gun";
 }
 
@@ -2021,7 +2022,6 @@ export class Avatar {
             },
             reload: {
                 progress: 0,
-                loaded: true
             },
             follow: {
                 target: undefined,
@@ -2087,7 +2087,7 @@ export class Avatar {
             }, this, 0.5),
             reloadTimeout: new MultiFrameLinearAnimation([function() {
                 this.state.reload.progress = 0;
-                this.state.reload.loaded = true;
+                this.state.equippedItems.mainTool = true;
             }], this, [0]),
             pathRequestRateLimit: new MultiFrameLinearAnimation([function() {
                 this.state.path.request = true;
@@ -2267,7 +2267,7 @@ export class Avatar {
             this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo--;
             this.state.reload.progress++;
 
-            if (this.state.reload.progress === this.state.equippedItems.mainTool.constructor._properties.capacity) this.state.reload.loaded = false;
+            if (this.state.reload.progress === this.state.equippedItems.mainTool.constructor._properties.capacity) this.state.equippedItems.mainTool.loaded = false;
 
         }, this, 0);
     }
@@ -2359,7 +2359,7 @@ export class Avatar {
                     this.state.armed = true;
                     this.state.equippedItems.mainTool = item;
                     this.state.reload.progress = 0;
-                    this.state.reload.loaded = true;
+                    this.state.equippedItems.mainTool.loaded = item.loaded;
                     this.state.reloadTimeout.timingConfig[0] = this.state.equippedItems.mainTool.constructor._properties.reloadTime;
                     this.state.fireAnimation.rate = 0.5 / this.state.equippedItems.mainTool.constructor._properties.fireRate;
                 }
@@ -2404,12 +2404,12 @@ export class Avatar {
             this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
         }
 
-        if (this.state.fire && this.state.target.shot && this.state.reload.loaded && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo) {
+        if (this.state.fire && this.state.target.shot && this.state.equippedItems.mainTool?.loaded && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo) {
             this.state.fireAnimation.run();
         }
 
         this.state.recoilAnimation.run();
-        if (!this.state.reload.loaded) this.state.reloadTimeout.run();
+        if (!this.state.equippedItems.mainTool?.loaded) this.state.reloadTimeout.run();
 
         if (this.state.recording.useRecording) this.state.recordAnimation.run();
         if (this.state.goto.engaged) this.state.gotoAnimation.run();
@@ -2456,7 +2456,7 @@ export class Avatar {
         attack: if (this.state.target.current && this.state.target.engaged && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo > 0) {
             const m = this.map || $CURRENT_MAP;
             if (this.map.avatars[this.state.target.current.id]) {
-                if (!this.state.reload.loaded && !this.state.reloadTimeout.running) this.reload();
+                if (!this.state.equippedItems.mainTool?.loaded && !this.state.reloadTimeout.running) this.reload();
                 this.state.shotCheckAnimation.run();
 
                 const {

@@ -520,7 +520,7 @@ export class Inventory {
         if (slot && !this.items[slot] && slot < this.slots-1) {
            item.slot = slot;
            this.items[slot] = item;
-        } else if (this.items.length < this.slots) {
+        } else if (this.count < this.slots) {
             for (let i = 0; i < this.slots; i++) {
               if (this.items[i] === undefined) {
                 item.slot = i;
