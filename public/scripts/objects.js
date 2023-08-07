@@ -1832,7 +1832,7 @@ export class GP_K100 extends _Gun_ {
         damage: 25,
         accuracy: 2,
         nozzelLength: 21,
-        capacity: 1000,
+        capacity: 12,
         reloadTime: 3,
         useTextures: [6,7]
       }
@@ -2322,24 +2322,19 @@ export class Avatar {
     }
 
     addItem(item, slot) {
-        return this.inventory.addItem(item, slot);
+      if (this.inventory.addItem(item, slot)) {
+        updateInventoryItem(item.slot,item.name);
+      }
     }
 
     dropItem(slot) {
      if (!this.inventory.items[slot]) return false;      
 
+        updateInventoryItem(this.inventory.items[slot].slot,this.inventory.items[slot].name,true);
+        this.unequipItem(slot);
+ 
         let item = this.inventory.ejectItem(slot);
-        
-        switch (item.type) {
-            case "gun": {
-                if (this.state.equippedItems.mainTool && item.slot === this.state.equippedItems.mainTool.slot) {
-                    this.state.armed = false;
-                    this.state.equippedItems.mainTool = undefined;
-                }
-            };
-            break;
-        }
-
+         
         item.ring.trans.offsetX = item.trans.offsetX = this.trans.offsetX + random(10, true);
         item.ring.trans.offsetY = item.trans.offsetY = this.trans.offsetY + random(10, true);
         item.trans.rotation = random(360);
@@ -2374,6 +2369,24 @@ export class Avatar {
             return true;
         }
         return false;
+    }
+
+    unequipItem(slot) {
+      if (!this.inventory.items[slot]) return false;      
+
+        let item = this.inventory.items[slot];
+        
+        switch (item.type) {
+            case "gun": {
+                if (this.state.equippedItems.mainTool && item.slot === this.state.equippedItems.mainTool.slot) {
+                    this.state.armed = false;
+                    this.state.equippedItems.mainTool = undefined;
+                }
+            };
+            break;
+        }
+
+     return true;
     }
 
     preRender() {

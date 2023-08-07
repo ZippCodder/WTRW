@@ -64,7 +64,7 @@ window.onload = async () => {
         left: 1.5,
         right: 1.5
     };
-    window.fixedJoysticks = true;
+    window.fixedJoysticks = false;
     window.controlTransparency = 1;
     window.bulletResolution = 0.001;
     window.viewportRatio = maxViewport / minViewport;
@@ -333,8 +333,8 @@ window.onload = async () => {
 
     await import("/public/scripts/textures.js");
     await import("/public/scripts/objects.js");
-    await import("/public/scripts/game.js");
     await import("/public/scripts/controls.js");
+    await import("/public/scripts/game.js");
 
     function renderObjects() {
         $OBJECTS.forEach(v => {

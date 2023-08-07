@@ -159,6 +159,9 @@ html,body {
             height: auto;
             background: rgba(1,1,1,0.3);
             border-bottom: 5px solid rgba(0,0,0,0.5);
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-position: bottom right; 
           }
           
           .controls-container__item::after {
@@ -169,36 +172,7 @@ html,body {
               background: none;
               margin-left: 5px;
           }
-             
-          .controls-container__item:nth-child(1) {
-             background-image: url("./images/glock_20_icon.png");
-             background-size: contain;
-          }
-          
-           .controls-container__item:nth-child(2) {
-             background-image: url("./images/usp_45_icon.png");
-             background-size: contain;
-          }
-          
-           .controls-container__item:nth-child(3) {
-             background-image: url("./images/kitchen_knife_icon.png");
-             background-size: contain;
-          }
-          
-           .controls-container__item:nth-child(4) {
-             background-image: url("./images/white_book_icon.png");
-             background-size: contain;
-          }
-          
-           .controls-container__item:nth-child(5) {
-             background-image: url("./images/kc_357_icon.png");
-             background-size: contain;
-          }
-          
-          .controls-container__item {
-            background-image: none !important; 
-          }
-          
+            
           .controls-container__buttons {
               float: right;
               background: rgba(1,1,1,0.5);
@@ -300,21 +274,33 @@ html,body {
           }
           
           #main-inventory {
+              user-select: none;
               background: #3C3C3C;
-              width: 80vw;
-              height: 90vh;
+              width: 80%;
+              height: 90%;
               position: absolute;
-              left: 10vw;
-              top: 5vh;
+              left: 10%;
+              top: 5%;
               font-family: var(--main-font);
               color: white;
               display: grid;
+              font-size: 1em;
               grid-template-columns: 40% 60%;
-              grid-template-rows: 10% 80% 10%;
+              grid-template-rows: 2.5em calc(100% - 6em) 3.5em;
               display: none;
               box-shadow: 0px 0px 10px black;
           }
-          
+
+          .main-inventory__description {
+              box-sizing: border-box;
+              border: 10px solid #222222;
+              grid-area: 2/1/4/2;
+              font-size: 0.8em;
+              padding: 0.5em;
+              display: block;
+              overflow: scroll;
+          }
+
           .main-inventory__title {
               background: #222222;
               width: 100%;
@@ -322,34 +308,103 @@ html,body {
               margin: 0;
               grid-area: 1/1/2/3;
               line-height: 100%;
-              font-size: 6vh;
+              font-size: 1.5em;
               box-sizing: border-box;
               padding: 0.3em;
               padding-left: 10px;
               padding-right: 10px;
           }
-          
+
+          .main-inventory__items {
+              box-sizing: border-box;   
+              width: 100%;
+              height: 100%;
+              font-size: 0.8em;
+              border: 10px solid #222222;
+              border-left: none;
+              grid-area: 2/2/3/2;
+              padding: 0.5em;
+              border-bottom: none;
+          }
+
+          .main-inventory__controls {
+            grid-area: 3/2/3/3;
+            width: 100%;
+            height: 100%;
+            border-bottom: 10px solid #222222;
+            border-right: 10px solid #222222;
+            box-sizing: border-box;
+          }
+
+          @media screen and (orientation: portrait) {
+            #main-inventory {
+              grid-template-columns: 100%;
+              grid-template-rows: 2.5em calc(60% - 6em) 40% 3.5em;
+            }
+      
+            .main-inventory__description {
+             grid-area: 2/1/2/2;
+            }
+
+            .main-inventory__title {
+             grid-area: 1/1/2/1;
+            }
+
+            .main-inventory__items {
+             grid-area: 3/1/3/1;
+             border-left: 10px solid #222222;
+             border-top: none;
+            }
+
+            .main-inventory__controls {
+              grid-area: 4/1/4/1;
+              border-left: 10px solid #222222;
+            }
+          }
+                    
           .main-inventory__close {
             font-family: inherit;
-            font-size: 5vh;
+            font-size: 0.7em;
             background: var(--light-red);
             float: right;
             color: inherit;
             border: none;
             border-bottom: 5px solid #c40d00;
           }
-          
-          .main-inventory__items {
-              box-sizing: border-box;
-              border: 10px solid #222222;
-              border-left: none;
-              grid-area: 2/2/4/2;
-              padding: 0.5em;
+             
+         .main-inventory__buttons {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            opacity: 0.5;
+         }
+
+          .inv-controls__btn {
+            font-family: inherit;
+            font-size: 1.2em;
+            background: var(--light-red);
+            color: inherit;
+            border: none;
+            margin-right: 1em;
+            border-bottom: 5px solid #c40d00;
           }
+
+          .main-inventory__controls-equip {
+            background-color: var(--light-green); 
+            border-color: #4c992f; 
+           }
+
+           .main-inventory__controls-switch {
+            color: black;
+            background-color: white; 
+            border-color: gray; 
+           }
           
           .main-inventory__items-container {
               width: 100%;
-              height: 70%;
+              height: 80%;
               display: grid;
               justify-content: center;
               grid-template-columns: repeat(5, 20%);
@@ -360,18 +415,14 @@ html,body {
           }
           
           .main-inventory__item {
+              box-sizing: border-box;
               background: rgba(1,1,1,0.2);
               aspect-ratio: 1/1;
+              background-repeat: no-repeat;
+              background-size: contain;
               margin: 5%;
           }
-          
-          .main-inventory__description {
-               box-sizing: border-box;
-              border: 10px solid #222222;
-              grid-area: 2/1/4/2;
-              padding: 0.5em;
-          }
-          
+                    
           .main-inventory__items h2, .main-inventory__description h2 {
               text-align: center;
               width: auto;
@@ -388,11 +439,11 @@ html,body {
           }
           
           .main-inventory__item:nth-child(-n+5) {
-              border: 1px solid white;
+              outline: 1px solid white;
           }
-          
-          .main-inventory__item:nth-child(-n+5)::after {
-              color: white;
+
+          .main-inventory__item::after {
+              color: black;
               counter-increment: item-index;
               content: counter(item-index);
               width: 10px;
@@ -400,44 +451,16 @@ html,body {
               background: none;
               margin-left: 5px;
           }
-          
+
+          .main-inventory__item:nth-child(-n+5)::after {
+              color: white;
+          }
+                    
           .main-inventory__markers {
               box-sizing: border-box;
               grid-area: 3/1/4/3;
           }
-          
-          .main-inventory__nav {
-              height: min-content;
-              width: 50%;
-              margin: auto;
-              margin-top: 1em;
-              text-align: center;
-          }
-          
-          #inv-prev, #inv-next {
-              font-size: 1em;
-              font-family: inherit;
-              color: white;
-              border: none;
-              background: rgba(1,1,1,0.3);
-              border-bottom: 5px solid #1e1e1e;
-          }
-          
-          #inv-next {
-              float: right;
-          }
-          
-          #inv-prev {
-              float: left;
-          }
-          
-          .main-inventory__page {
-              display: inline-block;
-              margin: 0;
-              height: 0;  
-              font-size: 1.5em;
-          }
-          
+                   
           #game-stats {
               color: black;
               font-family: var(--main-font);

@@ -508,7 +508,7 @@ export class Inventory {
     constructor(defaultItems = [], slots) {
         this.items = defaultItems;
         this.weapons = {};
-        this.slots = slots || defaultItems.length || 5;
+        this.slots = slots || defaultItems.length || 15;
         this.count = defaultItems.length;
         this.activeSlot = 0;
     }
@@ -521,9 +521,6 @@ export class Inventory {
            item.slot = slot;
            this.items[slot] = item;
         } else if (this.items.length < this.slots) {
-           this.items.push(item);
-           item.slot = this.items.length-1;
-        } else {
             for (let i = 0; i < this.slots; i++) {
               if (this.items[i] === undefined) {
                 item.slot = i;

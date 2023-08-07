@@ -1809,7 +1809,7 @@ export let NXR_44_MAG = new TextureData(-2, -7, 0.2, "firearm", {
     ctx.restore();
 });
 
-export let GP_K100 = new TextureData(-8, -20, 0.2, "firearm", {
+export let GP_K100 = new TextureData(-8, -20, 0.22, "firearm", {
     width: 740,
     height: 309
 }, [
@@ -1818,7 +1818,7 @@ export let GP_K100 = new TextureData(-8, -20, 0.2, "firearm", {
     // body: 744x315, texture: 1024,512, size: 0.15
     // -8 -20
     ctx.save();
-    ctx.translate(this.offset.x, this.offset.y);
+    ctx.translate(this.offset.vx, this.offset.vy);
     ctx.scale(this.size || 0, this.size || 0);
     ctx.lineWidth = 15;
 
@@ -1993,7 +1993,7 @@ export let GP_K100 = new TextureData(-8, -20, 0.2, "firearm", {
     ctx.lineTo(241, 225);
     ctx.stroke();
     ctx.restore();
-});
+},[], 0, 0, 30, 200);
 
 export let USP_45 = new TextureData(-8, -5, 0.2, "firearm", {
     width: 815,
@@ -2358,7 +2358,7 @@ export let KC_357 = new TextureData(1, -30, 0.2, "firearm", {
     ctx.restore();
 });
 
-export let GLOCK_20 = new TextureData(0, 30, 0.2, "firearm", {
+export let GLOCK_20 = new TextureData(0, 0, 0.22, "firearm", {
     width: 439,
     height: 309
 }, [
@@ -2368,7 +2368,7 @@ export let GLOCK_20 = new TextureData(0, 30, 0.2, "firearm", {
     // -8 -20
 
     ctx.save();
-    ctx.translate(this.offset.x, this.offset.y);
+    ctx.translate(this.offset.vx, this.offset.vy);
     ctx.scale(this.size || 0, this.size || 0);
     ctx.lineWidth = 15;
 
@@ -2522,7 +2522,7 @@ export let GLOCK_20 = new TextureData(0, 30, 0.2, "firearm", {
     ctx.lineTo(241, 225);
     ctx.stroke();
     ctx.restore();
-});
+}, [], false, false, 180, 200);
 
 export let OFF_ROADER = new TextureData(0, 0, 0.25, "avatar", {
     width: 1816,

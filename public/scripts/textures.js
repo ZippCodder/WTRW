@@ -52,7 +52,7 @@ class TextureContainer {
 
 window.textures = {};
 
-textures.controls = new TextureContainer();
+textures.controls = new TextureContainer({mipmap: true});
 
 await textures.controls.addTexture("joystick_disc", "/public/images/textures/joystick_disc.png");
 await textures.controls.addTexture("actionbutton", "/public/images/textures/ACTION_BUTTON_TEXTURE_1.png");

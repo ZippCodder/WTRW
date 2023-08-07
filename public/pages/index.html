@@ -23,9 +23,9 @@
             <div class="controls-container__inv">
                 <div class="controls-container__item item-1"></div>
                 <div class="controls-container__item item-2"></div>
-                <div class="controls-container__item item-2"></div>
+                <div class="controls-container__item item-3"></div>
                 <div class="controls-container__item item-4"></div>
-                <div class="controls-container__item item-4"></div>
+                <div class="controls-container__item item-5"></div>
                 </div>
                 
                 <p id="game-stats">FPS: 0</p>
@@ -40,7 +40,7 @@
                 
                 <div id="main-inventory">
                     <h1 class="main-inventory__title">Inventory<button class="main-inventory__close">Close</button></h1>
-                    <div class="main-inventory__description"><h2>Description</h2><p class="main-inventory__description-content">Select an item to see a full description of its use. Oh wait, what items? You're a noob.</p></div>
+                    <div class="main-inventory__description"><h2>Description</h2><p class="main-inventory__description-content">Click to select an item and see a full description of its use. Press <strong>Equip</strong> to equip the selected item, and <strong>Drop</strong> to drop it. Press <strong>Switch</strong> and then click another slot to switch the selected item with another.</br></br>Oh wait, what items? You're a noob.</p></div>
                     <div class="main-inventory__items">
                         <h2>Items</h2>
                         <div id="main-items-container" class="main-inventory__items-container">
@@ -59,9 +59,15 @@
                         <div id="inv-item-13" class="main-inventory__item"></div>
                         <div id="inv-item-14" class="main-inventory__item"></div>
                         <div id="inv-item-15" class="main-inventory__item"></div>
-                                        </div>
-                                        <div class="main-inventory__nav"><button id="inv-prev">&lt;</button><p class="main-inventory__page">1</p><button id="inv-next">&gt;</button></div>
-                    </div>
+                        </div>
+                      </div>
+                      <div class="main-inventory__controls">
+                       <div class="main-inventory__buttons">
+                          <button class="main-inventory__controls-equip inv-controls__btn">Equip</button>
+                          <button class="main-inventory__controls-switch inv-controls__btn">Switch</button>
+                          <button class="main-inventory__controls-drop inv-controls__btn">Drop</button>
+                        </div>
+                      </div>
                 </div>
 </body>
 <script type="module" src="/public/scripts/index.js"></script>
