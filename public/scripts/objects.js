@@ -2380,6 +2380,7 @@ export class Avatar {
             case "gun": {
                 if (this.state.equippedItems.mainTool && item.slot === this.state.equippedItems.mainTool.slot) {
                     this.state.armed = false;
+                    this.state.draw = false;
                     this.state.equippedItems.mainTool = undefined;
                 }
             };
@@ -2400,15 +2401,15 @@ export class Avatar {
             this.state.walkingAnimation.end();
         }
 
-        if (this.state.draw) {
+        if (this.state.armed && this.state.draw) {
             this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
         }
 
-        if (this.state.fire && this.state.target.shot && this.state.equippedItems.mainTool?.loaded && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo) {
+        if (this.state.fire && this.state.armed && this.state.target.shot && this.state.equippedItems.mainTool?.loaded && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo) {
             this.state.fireAnimation.run();
         }
 
-        this.state.recoilAnimation.run();
+        if (this.state.armed) this.state.recoilAnimation.run();
         if (!this.state.equippedItems.mainTool?.loaded) this.state.reloadTimeout.run();
 
         if (this.state.recording.useRecording) this.state.recordAnimation.run();
