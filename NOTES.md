@@ -11,8 +11,8 @@
 
 ## TODO
 
-* Fix lag caused by lights
-* Make controls better quality, implement with html
+* Implement avatar punching 
+* Implement buttons in HTML
 * Add changable avatar follow target
 * Implement avatar death and respawn system
 * Fix avatar stacking

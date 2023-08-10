@@ -24,22 +24,15 @@
   } from "/public/scripts/objects.js";
 
 
-  $JOYSTICK_L = new _Joystick_(true, joystickSizes.left, fixedJoysticks, {
-      x: (-worldWidth / 2) + 20,
-      y: (-worldHeight / 2) + 20
-  });
+  $JOYSTICK_L = new _Joystick_(true, joystickSizes.left, fixedJoysticks, joystickPositions.left);
 
-  $JOYSTICK_R = new _Joystick_(false, joystickSizes.right, fixedJoysticks, {
-      x: (worldWidth / 2) - 20,
-      y: (-worldHeight / 2) + 20
-  });
+  $JOYSTICK_R = new _Joystick_(false, joystickSizes.right, fixedJoysticks, joystickPositions.right);
 
   $ACTION_BUTTON = new _Button_(textures.controls.actionbutton, textures.controls.actionbuttonactive, (worldWidth / 2) - 20, (-worldHeight / 2) + 39, function(pX, pY) {
       const i = $CURRENT_MAP.interactables[$CURRENT_MAP.currentInteractable.id];
       if (i) i.action();
   }, 18, 1.5, false, [-9,9,1,0,0,9,9,1,0.703125,0,-9,-9,1,0,0.703125,9,9,1,0.703125,0,-9,-9,1,0,0.703125,9,-9,1,0.703125,0.703125]);
-  $ACTION_BUTTON.hidden = true;
-
+ 
   $RELOAD_BUTTON = new _Button_(textures.controls.reloadbutton, textures.controls.reloadbuttonactive, (worldWidth / 2) - 38, -(worldHeight / 2) + 20, function(pX, pY) {
       if (this.enabled) {
           $AVATAR.reload();
@@ -202,24 +195,30 @@
 
 
   const inventoryButton = document.querySelector("#inventory-button");
-  const inventoryClose = document.querySelector(".main-inventory__close");
+  const inventoryCloseButton = document.querySelector(".main-inventory__close");
   const inventoryWindow = document.querySelector("#main-inventory");
   const inventoryItemsContainer = document.querySelector("#main-items-container");
 
-  inventoryClose.ontouchstart = () => {
-      inventoryWindow.style.display = "none";
+  function closeInventory() {
+    inventoryWindow.style.display = "none";
+  }
+ 
+  function openInventory() {
+    inventoryWindow.style.display = "grid";
   }
 
-  inventoryButton.ontouchstart = () => {
-      inventoryWindow.style.display = "grid";
-  }
+  inventoryCloseButton.ontouchstart = closeInventory;
+  inventoryCloseButton.onclick = closeInventory;
+
+  inventoryButton.ontouchstart = openInventory;
+  inventoryButton.onclick = openInventory;
 
   // Inventory data binding...
 
   const itemDescriptions = {
-    default: "Click to select an item and see a full description of its use. Press <strong>Equip</strong> to equip the selected item, and <strong>Drop</strong> to drop it. Press <strong>Switch</strong> and then click another slot to switch the selected item with another.</br></br>Oh wait, what items? You're a noob.", 
-   "glock 20": "<h3>GLOCK 20</h3>A simple, compact and lightweight handgun built for self defense and petty crime. Careful, there's no saftey!</br></br><strong>Damage _____ 18</strong></br><strong>Fire Rate _____ 1</strong></br><strong>Accuracy _____ 5</strong></br><strong>Capacity _____ 8</strong>",
-   "gp k100": "<h3>GP K100</h3>This quick and reliable handgun features good capacity, and a basic scilencer and is perfect for a good ol' gun-fight.</br></br><strong>Damage _____ 25</strong></br><strong>Fire Rate _____ 3</strong></br><strong>Accuracy _____ 2</strong></br><strong>Capacity _____ 12</strong>"
+    default: "<strong>Pro tip:</strong> Click an item to select it and see a full description of its properties and usage.</br></br>Oh wait, what items? You're a noob lol.", 
+   "glock 20": "<h3><u>GLOCK 20</u></h3>A simple, compact and lightweight handgun built for self defense and petty crime. Careful, there's no saftey!</br></br><strong>Damage _____ 18</strong></br><strong>Fire Rate _____ 1</strong></br><strong>Accuracy _____ 5</strong></br><strong>Capacity _____ 8</strong>",
+   "gp k100": "<h3><u>GP K100</u></h3>This quick and reliable handgun features good capacity, and a basic scilencer and is perfect for a good ol' gun-fight.</br></br><strong>Damage _____ 25</strong></br><strong>Fire Rate _____ 3</strong></br><strong>Accuracy _____ 2</strong></br><strong>Capacity _____ 12</strong>"
   }  
 
   let equippedIndex = Infinity, selectedIndex = undefined, switchMode = false;
@@ -248,13 +247,14 @@
   let controlSwitchButton;
    
   function updateDescription(itemName) {
+   if (!itemName) return;
    itemDescription.innerHTML = itemDescriptions[itemName];
   }
 
   function selectSlot(i) {
      if (!$AVATAR.inventory.items[i] && !switchMode) return;
  
-     updateDescription($AVATAR.inventory.items[i]?.name || "default"); 
+     updateDescription($AVATAR.inventory.items[i]?.name); 
 
      controlButtonsContainer.style.opacity = 1;
      inventoryItems.item(selectedIndex).style.backgroundColor = "rgba(0,0,0,0.2)";
@@ -312,11 +312,56 @@
    quickAccessItems.item(slot).style.backgroundImage = "none";
    quickAccessItems.item(slot).style.backgroundColor = "rgba(0,0,0,0.3)";
    }
+
+   selectedIndex = undefined;
   }
 
 const controlEquipButton = document.querySelector(".main-inventory__controls-equip");
 controlEquipButton.onclick = function() {
  equipSlot(selectedIndex);
+}
+
+const helpContainer = document.querySelector(".main-inventory__help");
+const statsContainer = document.querySelector(".main-inventory__stats");
+const descriptionContainer = document.querySelector(".main-inventory__description");
+const viewStatsButton = document.querySelector(".main-inventory__view-stats");
+
+function showHelp() {
+ descriptionContainer.style.display = "none";
+ statsContainer.style.display = "none";
+ helpContainer.style.display = "block";
+}
+
+function showDescription() {
+  descriptionContainer.style.display = "block";
+  helpContainer.style.display = "none";
+  statsContainer.style.display = "none";
+  viewStatsButton.innerText = "View Stats";
+}
+
+function showStats() {
+ descriptionContainer.style.display = "none";
+ helpContainer.style.display = "none";
+ statsContainer.style.display = "block";
+ viewStatsButton.innerText = "View Desc";
+}
+
+viewStatsButton.onclick = function() {
+  if (statsContainer.style.display !== "block") {
+      showStats();
+      return;
+  }
+
+  showDescription();
+}
+
+const controlHelpButton = document.querySelector(".main-inventory__controls-help");
+controlHelpButton.onclick = function() {
+ if (helpContainer.style.display !== "block") {
+  showHelp();
+  return;
+ } 
+ showDescription();
 }
 
 const controlDropButton = document.querySelector(".main-inventory__controls-drop");
@@ -332,6 +377,8 @@ controlDropButton.onclick = function() {
 
 controlSwitchButton = document.querySelector(".main-inventory__controls-switch");
 controlSwitchButton.onclick = function() {
+ if (selectedIndex === undefined) return;
+
  if (!switchMode) {
    switchMode = true;
    controlSwitchButton.style.opacity = 0.5;

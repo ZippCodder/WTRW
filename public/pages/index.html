@@ -39,8 +39,32 @@
                 </div>
                 
                 <div id="main-inventory">
-                    <h1 class="main-inventory__title">Inventory<button class="main-inventory__close">Close</button></h1>
-                    <div class="main-inventory__description"><h2>Description</h2><p class="main-inventory__description-content">Click to select an item and see a full description of its use. Press <strong>Equip</strong> to equip the selected item, and <strong>Drop</strong> to drop it. Press <strong>Switch</strong> and then click another slot to switch the selected item with another.</br></br>Oh wait, what items? You're a noob.</p></div>
+                    <h1 class="main-inventory__title">Inventory<button class="main-inventory__close">Close</button><button class="main-inventory__view-stats">View Stats</button></h1>
+
+                    <div class="main-inventory__description"><h2>Description</h2><p class="main-inventory__description-content">
+<strong>Pro tip:</strong> Click an item to select it and see a full description of its properties and usage.
+</br>
+</br>
+Oh wait, what items? You're a noob lol.
+</p>
+</div>
+
+<div class="main-inventory__help"><h2>Help</h2><p class="main-inventory__help-content">Click to select an item and see a full description of its use. Use <strong>View Stats</strong> to view character statistics and money.</br></br>Press <strong>Equip</strong> to equip the selected item, and <strong>Drop</strong> to drop it. Press <strong>Switch</strong> and then click another slot to switch the selected item with another.</p>
+  </br>
+  <small><strong>Note:</strong> The highlight color of an item when equipped represents one of the following types</small>
+  </br>
+  </br>
+  <div class="main-inventory__help-reference">
+   <p class="main-inventory__type-tool">Tool</p>
+   <p class="main-inventory__type-shirt">Shirt</p>
+   <p class="main-inventory__type-hat">Hat</p>
+   <p class="main-inventory__type-pants">Pants</p>
+   <p class="main-inventory__type-shoes">Shoes</p>
+  </div>
+</div>
+
+                    <div class="main-inventory__stats"><h2>Stats</h2><p class="main-inventory__stats-content">Click to select an item and see a full description of its use. Press <strong>Equip</strong> to equip the selected item, and <strong>Drop</strong> to drop it. Press <strong>Switch</strong> and then click another slot to switch the selected item with another.</br></br>Oh wait, what items? You're a noob.</p></div> 
+
                     <div class="main-inventory__items">
                         <h2>Items</h2>
                         <div id="main-items-container" class="main-inventory__items-container">
@@ -67,6 +91,7 @@
                           <button class="main-inventory__controls-switch inv-controls__btn">Switch</button>
                           <button class="main-inventory__controls-drop inv-controls__btn">Drop</button>
                         </div>
+                          <button class="main-inventory__controls-help">?</button>
                       </div>
                 </div>
 </body>

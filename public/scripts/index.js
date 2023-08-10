@@ -10,6 +10,81 @@ window.onload = async () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
+    window.$OBJECTS = [];
+    window.$CONTROLS = [];
+    window.$JOYSTICK_L = null;
+    window.$JOYSTICK_R = null;
+    window.$CURRENT_MAP = null;
+    window.$ACTION_BUTTON = null;
+    window.$RELOAD_BUTTON = null;
+    window.$AVATAR_MODE_BUTTON = null;
+    window.$DROP_ITEM_BUTTON = null;
+    window.$AVATAR = null;
+    window.$MAP = null;
+    window.scale = 1.2;
+    window.bulletResolution = 0.001;
+    window.movementMultFactor = 0.05;
+    window.globalDarkness = 0;
+    window.useTransition = true;
+    window.joystickSizes = {
+        left: 1.5,
+        right: 1.5
+    };
+    window.fixedJoysticks = true;
+    window.controlTransparency = 1;
+    window.ext = gl.getExtension("OES_vertex_array_object");
+    window.instExt = gl.getExtension("ANGLE_instanced_arrays");
+
+    function setWorldMeasurements() {
+      window.viewportWidth = window.innerWidth;
+      window.viewportHeight = window.innerHeight;
+      window.maxViewport = Math.max(viewportWidth, viewportHeight);
+      window.minViewport = Math.min(viewportWidth, viewportHeight);
+
+      window.viewportRatio = maxViewport / minViewport;
+      window.worldUnitX = (maxViewport === viewportWidth) ? 0.01 + (0.01 / viewportRatio) : 0.01 + (0.01 * viewportRatio);
+      window.worldUnitY = (maxViewport === viewportWidth) ? 0.01 + (0.01 * viewportRatio) : 0.01 + (0.01 / viewportRatio);
+      window.worldWidth = 2 / worldUnitX;
+      window.worldHeight = 2 / worldUnitY;
+      window.joystickPositions = {
+       left: {
+        x: (-worldWidth / 2) + 20,
+        y: (-worldHeight / 2) + 20
+       },
+       right: {
+        x: (worldWidth / 2) - 20,
+        y: (-worldHeight / 2) + 20
+       }
+      };
+
+      if (maxViewport === viewportHeight) {
+        joystickPositions.left.y += 10;
+        joystickPositions.right.y += 10;
+      }
+    }
+
+    setWorldMeasurements();
+
+    window.onresize = function() { 
+      gl.viewport(0, 0, window.innerWidth, window.innerHeight);
+
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      setWorldMeasurements();
+ 
+      $JOYSTICK_L.position = Object.create(joystickPositions.left);
+      $JOYSTICK_R.position = Object.create(joystickPositions.right);
+
+      if (fixedJoysticks) {
+       $JOYSTICK_L.fix();
+       $JOYSTICK_R.fix();
+      }
+
+      gl.uniform1f(locations.worldUnitX, worldUnitX);
+      gl.uniform1f(locations.worldUnitY, worldUnitY);
+    }
+
     let transitioning = false;
     let transitionSpeed;
     let phase = 0;
@@ -44,39 +119,6 @@ window.onload = async () => {
         transitionSpeed = speed;
         transitioning = true;
     };
-    window.$OBJECTS = [];
-    window.$CONTROLS = [];
-    window.$JOYSTICK_L = null;
-    window.$JOYSTICK_R = null;
-    window.$CURRENT_MAP = null;
-    window.$ACTION_BUTTON = null;
-    window.$RELOAD_BUTTON = null;
-    window.$AVATAR_MODE_BUTTON = null;
-    window.$DROP_ITEM_BUTTON = null;
-    window.$AVATAR = null;
-    window.$MAP = null;
-    window.viewportWidth = window.innerWidth;
-    window.viewportHeight = window.innerHeight;
-    window.maxViewport = Math.max(viewportWidth, viewportHeight);
-    window.minViewport = Math.min(viewportWidth, viewportHeight);
-    window.scale = 1.2;
-    window.joystickSizes = {
-        left: 1.5,
-        right: 1.5
-    };
-    window.fixedJoysticks = false;
-    window.controlTransparency = 1;
-    window.bulletResolution = 0.001;
-    window.viewportRatio = maxViewport / minViewport;
-    window.worldUnitX = (maxViewport === viewportWidth) ? 0.01 + (0.01 / viewportRatio) : 0.01 + (0.01 * viewportRatio);
-    window.worldUnitY = (maxViewport === viewportWidth) ? 0.01 + (0.01 * viewportRatio) : 0.01 + (0.01 / viewportRatio);
-    window.movementMultFactor = 0.05;
-    window.globalDarkness = 0;
-    window.useTransition = true;
-    window.worldWidth = 2 / worldUnitX;
-    window.worldHeight = 2 / worldUnitY;
-    window.ext = gl.getExtension("OES_vertex_array_object");
-    window.instExt = gl.getExtension("ANGLE_instanced_arrays");
 
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);

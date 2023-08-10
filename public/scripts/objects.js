@@ -1739,7 +1739,8 @@ export class _Gun_ extends _Pickup_ {
     constructor(initialX, initialY, initialRotation) {
         super(initialX, initialY, initialRotation);
     }
- 
+
+    reloadProgress = 0; 
     loaded = true;
     type = "gun";
 }
@@ -2020,9 +2021,6 @@ export class Avatar {
                 engaged: false,
                 shot: true
             },
-            reload: {
-                progress: 0,
-            },
             follow: {
                 target: undefined,
                 rush: false,
@@ -2086,7 +2084,7 @@ export class Avatar {
                 }
             }, this, 0.5),
             reloadTimeout: new MultiFrameLinearAnimation([function() {
-                this.state.reload.progress = 0;
+                this.state.equippedItems.mainTool.reloadProgress = 0; 
                 this.state.equippedItems.mainTool = true;
             }], this, [0]),
             pathRequestRateLimit: new MultiFrameLinearAnimation([function() {
@@ -2265,9 +2263,9 @@ export class Avatar {
             map.link(new BulletShell(this.trans.offsetX + shellInitialX, this.trans.offsetY + shellInitialY, randomShellDirectionX, randomShellDirectionY));
 
             this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo--;
-            this.state.reload.progress++;
+            this.state.equippedItems.mainTool.reloadProgress++; 
 
-            if (this.state.reload.progress === this.state.equippedItems.mainTool.constructor._properties.capacity) this.state.equippedItems.mainTool.loaded = false;
+            if (this.state.equippedItems.mainTool.reloadProgress === this.state.equippedItems.mainTool.constructor._properties.capacity) this.state.equippedItems.mainTool.loaded = false;
 
         }, this, 0);
     }
@@ -2358,7 +2356,7 @@ export class Avatar {
                 case "gun": {
                     this.state.armed = true;
                     this.state.equippedItems.mainTool = item;
-                    this.state.reload.progress = 0;
+                    this.state.equippedItems.mainTool.reloadProgress = item.reloadProgress; 
                     this.state.equippedItems.mainTool.loaded = item.loaded;
                     this.state.reloadTimeout.timingConfig[0] = this.state.equippedItems.mainTool.constructor._properties.reloadTime;
                     this.state.fireAnimation.rate = 0.5 / this.state.equippedItems.mainTool.constructor._properties.fireRate;
