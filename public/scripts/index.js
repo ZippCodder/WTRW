@@ -30,7 +30,7 @@ window.onload = async () => {
         left: 1.5,
         right: 1.5
     };
-    window.fixedJoysticks = true;
+    window.fixedJoysticks = false;
     window.controlTransparency = 1;
     window.ext = gl.getExtension("OES_vertex_array_object");
     window.instExt = gl.getExtension("ANGLE_instanced_arrays");

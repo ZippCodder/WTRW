@@ -107,7 +107,10 @@
             PLUS_100,
             GP_K100_TOP,
             GP_K100_TOP_2,
-            FLOOR_TILE, 
+            FLOOR_TILE,
+            GEAR_ICON,
+            BAG_ICON,
+            MAP_ICON, 
             Sheet
         } from "/public/scripts/models.js";
 
@@ -117,10 +120,12 @@
         const ctx = canvas.getContext("2d");
         const link = document.querySelector("a");
         const text = document.querySelector("textarea");
+       
+        let sharpness = 1;
 
         function resize(width, height) {
-            canvas.width = width;
-            canvas.height = height;
+            canvas.width = width*sharpness;
+            canvas.height = height*sharpness;
             canvas.style.width = `${width}px`;
             canvas.style.height = `${height}px`;
         }
@@ -153,11 +158,11 @@
         //SUPERMARKET(-98, -338, 0.2);
         //CAFE(-18, -18, 0.2);
         //MAIN_AVATAR_DEFAULT(-5, -5, 0.2);
-  
-        resize(200, 200); // 702 2140
+        resize(300, 300); // 702 2140
         // export function draw(a, w, h, iw, ih, s, lw, attribs=[],canvas) {
         //MAIN_AVATAR_DEFAULT.render(ctx);
-        let texture = GLOCK_20//new Sheet([ROAD_RAIL,ROAD_SIGN,URBAN_FENCE_HALF,URBAN_FENCE,URBAN_FENCE_VERTICAL], 1024, 1024);
+        let texture = MAP_ICON;
+//new Sheet([ROAD_RAIL,ROAD_SIGN,URBAN_FENCE_HALF,URBAN_FENCE,URBAN_FENCE_VERTICAL], 1024, 1024);
 
         //ACTION_BUTTON_TEXTURE.render(ctx);
         //URBAN_FENCE.render(ctx);
@@ -168,6 +173,6 @@
        // log(texture.getData());
           log(texture.getData());
           console.log(texture.textureDimensions);
-        setSource(`glock_20_icon.png`); 
+        setSource(`MAP_ICON.png`); 
     </script>
 </html>

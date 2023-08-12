@@ -21,7 +21,7 @@
   import {
       _Joystick_,
       _Button_
-  } from "/public/scripts/objects.js";
+  } from "/public/scripts/objects.js"; 
 
 
   $JOYSTICK_L = new _Joystick_(true, joystickSizes.left, fixedJoysticks, joystickPositions.left);
@@ -194,24 +194,30 @@
   });
 
 
-  const inventoryButton = document.querySelector("#inventory-button");
+  window.addEventListener("contextmenu",function(e) {
+   e.preventDefault(); 
+  }); 
+
+  const inventoryButton = document.querySelectorAll(".controls-container__button").item(0);
   const inventoryCloseButton = document.querySelector(".main-inventory__close");
   const inventoryWindow = document.querySelector("#main-inventory");
   const inventoryItemsContainer = document.querySelector("#main-items-container");
 
-  function closeInventory() {
+  function closeInventory(e) {
+    e.preventDefault();
     inventoryWindow.style.display = "none";
   }
  
-  function openInventory() {
+  function openInventory(e) {
+    e.preventDefault();
     inventoryWindow.style.display = "grid";
   }
 
+  inventoryCloseButton.onmousedown = closeInventory;
+  inventoryButton.onmousedown = openInventory;
+  
   inventoryCloseButton.ontouchstart = closeInventory;
-  inventoryCloseButton.onclick = closeInventory;
-
   inventoryButton.ontouchstart = openInventory;
-  inventoryButton.onclick = openInventory;
 
   // Inventory data binding...
 
