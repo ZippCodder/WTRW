@@ -235,7 +235,7 @@ export let ACTION_BUTTON_TEXTURE = new TextureData(0, 0, 0.3, "control", {
     ctx.scale(this.size || 0, this.size || 0);
 
     ctx.fillStyle = "black";
-    ctx.globalAlpha = 0.5;
+    ctx.globalAlpha = 0.7;
     ctx.lineWidth = 20;
     ctx.strokeStyle = "white";
     ctx.moveTo(300, 300);

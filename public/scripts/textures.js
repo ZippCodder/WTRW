@@ -19,7 +19,7 @@ class TextureContainer {
             let textureWrapT = ((settings.repeat || this.settings.repeat) && settings.repeat !== false) ? gl.REPEAT:(settings.textureWrapT || this.settings.textureWrapT || gl.CLAMP_TO_EDGE);
 
             let minFilter = settings.minFilter || this.settings.minFilter || gl.LINEAR;
-            minFilter = ((settings.mipmap || this.settings.mipmap) && settings.mipmap !== false) ? gl.LINEAR_MIPMAP_NEAREST:minFilter;
+            minFilter = ((settings.mipmap || this.settings.mipmap) && settings.mipmap !== false) ? settings.minFilter || this.settings.minFilter || gl.LINEAR_MIPMAP_NEAREST:minFilter;
 
             let magFilter = settings.magFilter || this.settings.magFilter || gl.LINEAR; 
 

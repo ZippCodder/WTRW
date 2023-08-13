@@ -12,7 +12,7 @@
 ## TODO
 
 * Implement avatar punching 
-* Implement buttons in HTML
+* Fix texture aliasing and artifacting 
 * Add changable avatar follow target
 * Implement avatar death and respawn system
 * Fix avatar stacking

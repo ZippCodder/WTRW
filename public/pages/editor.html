@@ -121,15 +121,14 @@
         const link = document.querySelector("a");
         const text = document.querySelector("textarea");
        
-        let sharpness = 1;
 
         function resize(width, height) {
-            canvas.width = width*sharpness;
-            canvas.height = height*sharpness;
+            canvas.width = width;
+            canvas.height = height;
             canvas.style.width = `${width}px`;
             canvas.style.height = `${height}px`;
         }
-
+ 
         function setSource(name) {
             canvas.toBlob(blob => {
                 link.href = URL.createObjectURL(blob);
@@ -158,21 +157,22 @@
         //SUPERMARKET(-98, -338, 0.2);
         //CAFE(-18, -18, 0.2);
         //MAIN_AVATAR_DEFAULT(-5, -5, 0.2);
-        resize(300, 300); // 702 2140
+       
+        resize(256, 256);
         // export function draw(a, w, h, iw, ih, s, lw, attribs=[],canvas) {
-        //MAIN_AVATAR_DEFAULT.render(ctx);
-        let texture = MAP_ICON;
+        //MAIN_AVATAR_DEFAULT.render(ctx);  
+        let texture = ACTION_BUTTON_TEXTURE;
 //new Sheet([ROAD_RAIL,ROAD_SIGN,URBAN_FENCE_HALF,URBAN_FENCE,URBAN_FENCE_VERTICAL], 1024, 1024);
 
         //ACTION_BUTTON_TEXTURE.render(ctx);
         //URBAN_FENCE.render(ctx);
         //PICNIC_TABLE.render(ctx);
-        texture.render(ctx);
+         texture.render(ctx);
          //GP_K100_TOP_2.render(ctx,-90);
         //GLOCK_20_TOP.render(ctx,-90); 
        // log(texture.getData());
           log(texture.getData());
           console.log(texture.textureDimensions);
-        setSource(`MAP_ICON.png`); 
+        setSource(`ACTION_BUTTON_TEXTURE_2.png`); 
     </script>
 </html>
