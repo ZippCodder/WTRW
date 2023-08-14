@@ -16,7 +16,8 @@ import {
     fromRGB,
     toRGB,
     rotate,
-    lineIntersectsBox
+    lineIntersectsBox,
+    normalizeRotation
 } from "/public/scripts/lib.js";
 
 const pathfinder = new Worker("/public/scripts/pathfinder.js");
@@ -2055,6 +2056,18 @@ export class Avatar {
             equippedItems: {
                 mainTool: undefined
             },
+            rotationSpeed: 0.1,
+            rotationTarget: undefined,
+            rotationAnimation: new LoopAnimation(function() {
+                let rotation = this.trans.rotation*180/Math.PI;
+
+                if (rotation !== this.state.rotationTarget && this !== $AVATAR) {
+   
+                  let difference = (Math.max(this.state.rotationTarget,rotation) - Math.min(this.state.rotationTarget,rotation)), rotationFactor = Math.min(difference,360 - difference)*this.state.rotationSpeed;     
+
+               this.rotate(normalizeRotation(rotation + (((difference < 180 && this.state.rotationTarget > rotation) || (difference > 180 && rotation > this.state.rotationTarget)) ? rotationFactor:-rotationFactor))); 
+               }
+            }, this, 0.01),
             shotCheckAnimation: new LoopAnimation(function() {
                 this.state.target.shot = true;
 
@@ -2085,7 +2098,7 @@ export class Avatar {
             }, this, 0.5),
             reloadTimeout: new MultiFrameLinearAnimation([function() {
                 this.state.equippedItems.mainTool.reloadProgress = 0; 
-                this.state.equippedItems.mainTool = true;
+                this.state.equippedItems.mainTool.loaded = true;
             }], this, [0]),
             pathRequestRateLimit: new MultiFrameLinearAnimation([function() {
                 this.state.path.request = true;
@@ -2320,7 +2333,7 @@ export class Avatar {
     }
 
     addItem(item, slot) {
-      if (this === $AVATAR && this.inventory.addItem(item, slot)) {
+      if (this.inventory.addItem(item, slot) && this === $AVATAR) {
         updateInventoryItem(item.slot,item.name);
       }
     }
@@ -2350,7 +2363,7 @@ export class Avatar {
 
     equipItem(slot) {
         let item = this.inventory.items[slot];
-
+       
         if (item) {
             switch (item.type) {
                 case "gun": {
@@ -2366,6 +2379,7 @@ export class Avatar {
 
             return true;
         }
+      
         return false;
     }
 
@@ -2392,6 +2406,7 @@ export class Avatar {
         // run animations
 
         this.state.blinkingAnimation.run();
+        if (this.state.rotationTarget) this.state.rotationAnimation.run();
 
         if (this.state.walking && this.state.draw === false) {
             this.state.walkingAnimation.run();
@@ -2435,10 +2450,8 @@ export class Avatar {
                 this.map.GRAPH.reserved.push(next);
 
                 this.goto(x + 5, y - 5);
-
-                let r = (Math.atan2(this.state.goto.y - this.trans.offsetY, this.state.goto.x - this.trans.offsetX) - 1.5708);
-                this.trans.rotation = r;
-
+                 
+                this.state.rotationTarget = normalizeRotation((Math.atan2(this.state.goto.y - this.trans.offsetY, this.state.goto.x - this.trans.offsetX)*180/Math.PI) - 90);
             } else {
                 this.disengagePath();
                 this.requestPath(this.state.path.end.x, this.state.path.end.y);
@@ -2468,25 +2481,27 @@ export class Avatar {
                     this.state.speed = this.state.baseSpeed * this.state.attack.attackSpeed;
                     this.state.fire = false;
                     if (!this.state.openCarry && this.state.draw) this.holsterWeapon();
-                    if (this.state.path.request && !this.state.path.engaged && !this.state.follow.target) this.requestPath(targetX + m.centerX, targetY + m.centerY);
+                    if (!this.state.path.engaged && !this.state.follow.target) this.requestPath(targetX + m.centerX, targetY + m.centerY);
                 } else if (dist < this.state.attack.settleDistance) {
                     if (this.state.target.shot && this.state.path.engaged && !this.state.follow.target) {
                         this.disengagePath();
                     }
 
-                    this.trans.rotation = Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX)) - 1.5708;
+                    this.state.rotationTarget = normalizeRotation((Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX))*180/Math.PI) - 90);
                     if (!this.state.draw) this.drawWeapon();
                     if (this.state.target.shot) this.state.fire = true;
 
                 } else if (dist < this.state.attack.slowdownDistance) {
-                    this.trans.rotation = Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX)) - 1.5708;
+                    this.state.rotationTarget = normalizeRotation((Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX))*180/Math.PI) - 90);
+
                     if (!this.state.draw) this.drawWeapon();
                     if (this.state.target.shot) this.state.fire = true;
 
                     if (!this.state.follow.rush || !this.state.follow.target) this.state.speed = this.state.baseSpeed * (this.state.attack.attackSpeed / 3);
                 } else if (dist < this.state.attack.engageDistance) {
                     this.state.speed = this.state.baseSpeed * this.state.attack.attackSpeed;
-                    this.trans.rotation = Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX)) - 1.5708;
+                    this.state.rotationTarget = normalizeRotation((Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX))*180/Math.PI) - 90);
+
                     if (!this.state.draw) this.drawWeapon();
                     if (this.state.target.shot) this.state.fire = true;
 
@@ -2514,7 +2529,7 @@ export class Avatar {
 
             if (dist > this.state.follow.settleDistance) {
                 this.state.speed = speed;
-                if (this.state.path.request && !this.state.path.engaged) {
+                if (!this.state.path.engaged) {
                     this.requestPath(targetX + this.map.centerX, targetY + this.map.centerY);
                 }
             }

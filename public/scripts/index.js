@@ -433,7 +433,7 @@ window.onload = async () => {
 
         T2 = performance.now();
 
-        gameStats.innerHTML = `FPS: ${frameRate}, Time: ${T2-T1}`;
+        gameStats.innerHTML = `FPS: ${frameRate}`;
         globalFrameRun++;
         times.push(T2 - T1);
 

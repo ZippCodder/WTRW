@@ -298,6 +298,16 @@ export function toRGB(color) {
     return [aofb(aisofb(color[0], 1), 255), aofb(aisofb(color[1], 1), 255), aofb(aisofb(color[2], 1), 255), color[3]];
 }
 
+export function normalizeRotation(rotation) {
+  if (rotation < 0) {
+    rotation = 360 + rotation;
+  } else if (rotation > 360) {
+    rotation = rotation - 360;
+  }
+
+  return rotation;
+}
+
 export function genObjectId(length = 10) {
     let cy = "abcdefghijklmnopqqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
     let res = [];
