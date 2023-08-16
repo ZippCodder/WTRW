@@ -21,6 +21,8 @@ window.onload = async () => {
     window.$DROP_ITEM_BUTTON = null;
     window.$AVATAR = null;
     window.$MAP = null;
+    window.$HEALTH_BAR = null;
+    window.$GAME_LOOP = function(){};
     window.scale = 1.2;
     window.bulletResolution = 0.001;
     window.movementMultFactor = 0.05;
@@ -73,8 +75,10 @@ window.onload = async () => {
 
       setWorldMeasurements();
  
-      $JOYSTICK_L.position = Object.create(joystickPositions.left);
-      $JOYSTICK_R.position = Object.create(joystickPositions.right);
+      if ($JOYSTICK_L && $JOYSTICK_R) {
+       $JOYSTICK_L.position = Object.create(joystickPositions.left);
+       $JOYSTICK_R.position = Object.create(joystickPositions.right);
+      }
 
       if (fixedJoysticks) {
        $JOYSTICK_L.fix();
@@ -430,6 +434,8 @@ window.onload = async () => {
         renderObjects();
         $CURRENT_MAP?.renderTopLayer();
         renderControls();
+
+        $GAME_LOOP();
 
         T2 = performance.now();
 

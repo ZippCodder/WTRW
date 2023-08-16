@@ -1067,16 +1067,16 @@ export class RoadRailVertical extends _StaticClusterClient_ {
 
 export class StreetLight extends _StaticClusterClient_ {
 
-    static _defaultVertices = [-15.5, 24.5, 1, 0, 0, 15.5, 24.5, 1, 0.60546875, 0, -15.5, -24.5, 1, 0, 0.95703125, 15.5, 24.5, 1, 0.60546875, 0, -15.5, -24.5, 1, 0, 0.95703125, 15.5, -24.5, 1, 0.60546875, 0.95703125];
+    static _defaultVertices = [-15.5,18.2,1,0,0,15.5,18.2,1,0.60546875,0,-15.5,-18.2,1,0,0.7109375,15.5,18.2,1,0.60546875,0,-15.5,-18.2,1,0,0.7109375,15.5,-18.2,1,0.60546875,0.7109375];
 
     width = 31;
-    height = 49;
+    height = 36.4;
     name = "street light";
     clusterName = "street light";
     texture = textures.objects.streetlight;
     obstacle = true;
     segments = [
-        [-0.3, -24.3, 1.2, 8.6]
+        [-0.3,-17.8,1.2,1.2]
     ];
     topLayer = true;
     on = false;
@@ -1084,7 +1084,7 @@ export class StreetLight extends _StaticClusterClient_ {
     constructor(initialX, initialY, initialRotation, color) {
         super(initialX, initialY, initialRotation);
         this._color = color || undefined;
-        this.lights = [new DownwardLight(this.trans.offsetX - 13, this.trans.offsetY - 11.5, 0, this._color), new DownwardLight(this.trans.offsetX + 13, this.trans.offsetY - 11.5, 0, this._color)];
+        this.lights = [new DownwardLight(this.trans.offsetX - 13, this.trans.offsetY - 17.5, 0, this._color), new DownwardLight(this.trans.offsetX + 13, this.trans.offsetY - 17.5, 0, this._color)];
     }
 
     set color(c) {
@@ -1805,10 +1805,10 @@ export class GLOCK_20 extends _Gun_ {
     static _properties = {
         fireRate: 1,
         bulletSpeed: 5,
-        damage: 18,
+        damage: 100,
         accuracy: 5,
         nozzelLength: 13,
-        capacity: 8,
+        capacity: 30,
         reloadTime: 3,
         useTextures: [4,5]
     }
@@ -1832,7 +1832,7 @@ export class GP_K100 extends _Gun_ {
       static _properties = {
         fireRate: 3,
         bulletSpeed: 8,
-        damage: 25,
+        damage: 7,
         accuracy: 2,
         nozzelLength: 21,
         capacity: 12,
@@ -2040,7 +2040,10 @@ export class Avatar {
                 multiple: false,
                 forget: false,
                 invertTargets: false,
-                reactionTime: 1
+                reactionTime: {
+                 targetUpdateRate: 1,
+                 shotCheckRate: 1
+                }
             },
             recording: {
                 useRecording: false,
@@ -2095,7 +2098,7 @@ export class Avatar {
                         }
                     }
                 }
-            }, this, 0.5),
+            }, this, 1),
             reloadTimeout: new MultiFrameLinearAnimation([function() {
                 this.state.equippedItems.mainTool.reloadProgress = 0; 
                 this.state.equippedItems.mainTool.loaded = true;
@@ -2251,7 +2254,8 @@ export class Avatar {
 
     postLink() {
 
-        this.state.targetUpdateAnimation.rate = this.state.attack.reactionTime;
+        this.state.targetUpdateAnimation.rate = this.state.attack.reactionTime.targetUpdateRate;
+        this.state.shotCheckAnimation.rate = this.state.attack.reactionTime.shotCheckRate;
 
         this.state.fireAnimation = new LoopAnimation(function() {
 
@@ -2286,6 +2290,9 @@ export class Avatar {
     hit(damage, x, y, owner) {
         if (!this.state.invinsible) {
             (this.state.armor > 0) ? this.state.armor -= damage: this.state.vitals.health -= damage;
+
+            if (this === $AVATAR) updateHealthBar();
+
             if (this.state.vitals.health <= 0) {
                 let attacker = (this.map ?? $CURRENT_MAP).avatars[owner.id];
                 if (attacker) attacker.state.kills += 1;
@@ -3154,6 +3161,7 @@ export class _Map_ {
         this.id = genObjectId();
         this.root = root;
         this.objectCount = 0;
+        this.avatarCount = 0;
         this.lighting = false;
         this.spawnPoints = [];
         this.centerX = 0;
@@ -3347,7 +3355,10 @@ export class _Map_ {
             if (obj.pickup) this.pickups[obj.id] = obj;
             if (obj.moveable) this.moveables[obj.id] = obj;
             if (obj.interactable) this.interactables[obj.id] = obj;
-            if (obj.type === "avatar") this.avatars[obj.id] = obj;
+            if (obj.type === "avatar") {
+              this.avatars[obj.id] = obj;
+              this.avatarCount++;
+            }
             if (obj.subLayer && !obj.hasCluster) this.subLayers[obj.subLayer].push(obj);
 
             if (obj.isCluster) obj.linked = true;
@@ -3375,6 +3386,7 @@ export class _Map_ {
                 this.objects[id].cluster = undefined;
             }
             if (!this.objects[id].pickup) this.objects[id].map = undefined;
+            if (this.objects[id].type === "avatar") this.avatarCount--;
 
             delete this.interactables[id];
             delete this.objects[id];
@@ -3521,7 +3533,7 @@ export class _Map_ {
         if (this.move) {
             if (!this.noclip) {
                 for (let i in this.obstacles) {
-                    if (this.obstacles[i] === $AVATAR.state.pickup.current) continue;
+                    if (this.obstacles[i] === $AVATAR.state.pickup.current || this.obstacles[i] === $AVATAR) continue;
                     for (let segment of this.obstacles[i].segments) {
 
                         let [ox,

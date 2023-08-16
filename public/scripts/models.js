@@ -4741,12 +4741,12 @@ export let LIGHT_SWITCH = new TextureData(2, 2, 0.2, "prop", {
     ctx.restore();
 });
 
-export let STREET_LIGHT = new TextureData(730, -190, 0.2, "prop", {
+export let STREET_LIGHT = new TextureData(0, 0, 0.2, "prop", {
     width: 1550,
-    height: 2450
+    height: 1820
 }, [
-    [0, 0, 1550, 2450],
-    [30, 2200, 60, 430]
+     [0, 0, 1550, 1820],
+     [760, 1740, 60, 60]
 ], 0, undefined, function(ctx) {
     ctx.save();
     ctx.translate(this.offset.vx, this.offset.vy);
@@ -4785,8 +4785,11 @@ export let STREET_LIGHT = new TextureData(730, -190, 0.2, "prop", {
 
     ctx.fillStyle = "#A3A3A3";
 
-    ctx.fillRect(30, 200, 60, 2430);
-    ctx.strokeRect(30, 200, 60, 2430);
+    //ctx.fillRect(30, 200, 60, 2430);
+    //ctx.strokeRect(30, 200, 60, 2430);
+    ctx.fillRect(30, 200, 60, 1800);
+    ctx.strokeRect(30, 200, 60, 1800);
+
 
     ctx.lineWidth = 10;
     ctx.moveTo(20, 260);
@@ -4796,7 +4799,7 @@ export let STREET_LIGHT = new TextureData(730, -190, 0.2, "prop", {
     //ctx.strokeRect(-700,50,1510,260);
 
     ctx.restore();
-});
+},[], 0, 0, 730, -190);
 
 export let GRASS_1 = new TextureData(0, 0, 0.2, "prop", {
     width: 150,
