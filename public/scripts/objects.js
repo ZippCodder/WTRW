@@ -1067,16 +1067,16 @@ export class RoadRailVertical extends _StaticClusterClient_ {
 
 export class StreetLight extends _StaticClusterClient_ {
 
-    static _defaultVertices = [-15.5,18.2,1,0,0,15.5,18.2,1,0.60546875,0,-15.5,-18.2,1,0,0.7109375,15.5,18.2,1,0.60546875,0,-15.5,-18.2,1,0,0.7109375,15.5,-18.2,1,0.60546875,0.7109375];
+ static _defaultVertices = [-15.5, 24.5, 1, 0, 0, 15.5, 24.5, 1, 0.60546875, 0, -15.5, -24.5, 1, 0, 0.95703125, 15.5, 24.5, 1, 0.60546875, 0, -15.5, -24.5, 1, 0, 0.95703125, 15.5, -24.5, 1, 0.60546875, 0.95703125];
 
     width = 31;
-    height = 36.4;
+    height = 49;
     name = "street light";
     clusterName = "street light";
     texture = textures.objects.streetlight;
     obstacle = true;
     segments = [
-        [-0.3,-17.8,1.2,1.2]
+        [-0.3, -24.3, 1.2, 8.6]
     ];
     topLayer = true;
     on = false;
@@ -1084,7 +1084,7 @@ export class StreetLight extends _StaticClusterClient_ {
     constructor(initialX, initialY, initialRotation, color) {
         super(initialX, initialY, initialRotation);
         this._color = color || undefined;
-        this.lights = [new DownwardLight(this.trans.offsetX - 13, this.trans.offsetY - 17.5, 0, this._color), new DownwardLight(this.trans.offsetX + 13, this.trans.offsetY - 17.5, 0, this._color)];
+        this.lights = [new DownwardLight(this.trans.offsetX - 13, this.trans.offsetY - 11.5, 0, this._color), new DownwardLight(this.trans.offsetX + 13, this.trans.offsetY - 11.5, 0, this._color)];
     }
 
     set color(c) {
