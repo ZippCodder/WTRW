@@ -11,10 +11,7 @@
 
 ## TODO
 
-* Fix empty first shot with guns
-* Implement health, dying and respawning
-* Implement avatar punching
-* Fix janky avtar follow feature 
+* Implement avatar punching 
 * Fix texture aliasing and artifacting 
 * Add changable avatar follow target
 * Implement avatar death and respawn system

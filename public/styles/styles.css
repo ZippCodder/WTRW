@@ -402,10 +402,6 @@ html,body {
             .controls-container__button {
               display: block;
             }
-
-            .controls-container__inv {
-              transform: translate(0,-2em);
-            }
           }
 
           .main-inventory__controls-help {
@@ -538,13 +534,11 @@ html,body {
           #game-stats {
               color: black;
               font-family: var(--main-font);
-              font-size: 0.8em;
+              font-size: 1em;
               position: absolute;
               left: 0;
               bottom: 0;
-              margin: 1rem;
-              border-radius: 2px;
-              padding: 0.2em;
+              margin: 1em;
           }
    
           .onscreen-button {

@@ -23,12 +23,6 @@
       _Button_
   } from "/public/scripts/objects.js"; 
 
- 
-  $HEALTH_BAR = document.querySelector("#healthbar");
-  
-  window.updateHealthBar = function() {
-    $HEALTH_BAR.style.width = `${aisofb($AVATAR.state.vitals.health,100)}%`;
-  }
 
   $JOYSTICK_L = new _Joystick_(true, joystickSizes.left, fixedJoysticks, joystickPositions.left);
 
