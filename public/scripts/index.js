@@ -22,7 +22,7 @@ window.onload = async () => {
     window.$AVATAR = null;
     window.$MAP = null;
     window.$HEALTH_BAR = null;
-    window.$GAME_LOOP = function(){};
+    window.$GAME_LOOP = function() {};
     window.scale = 1.2;
     window.bulletResolution = 0.001;
     window.movementMultFactor = 0.05;
@@ -38,55 +38,55 @@ window.onload = async () => {
     window.instExt = gl.getExtension("ANGLE_instanced_arrays");
 
     function setWorldMeasurements() {
-      window.viewportWidth = window.innerWidth;
-      window.viewportHeight = window.innerHeight;
-      window.maxViewport = Math.max(viewportWidth, viewportHeight);
-      window.minViewport = Math.min(viewportWidth, viewportHeight);
+        window.viewportWidth = window.innerWidth;
+        window.viewportHeight = window.innerHeight;
+        window.maxViewport = Math.max(viewportWidth, viewportHeight);
+        window.minViewport = Math.min(viewportWidth, viewportHeight);
 
-      window.viewportRatio = maxViewport / minViewport;
-      window.worldUnitX = (maxViewport === viewportWidth) ? 0.01 + (0.01 / viewportRatio) : 0.01 + (0.01 * viewportRatio);
-      window.worldUnitY = (maxViewport === viewportWidth) ? 0.01 + (0.01 * viewportRatio) : 0.01 + (0.01 / viewportRatio);
-      window.worldWidth = 2 / worldUnitX;
-      window.worldHeight = 2 / worldUnitY;
-      window.joystickPositions = {
-       left: {
-        x: (-worldWidth / 2) + 20,
-        y: (-worldHeight / 2) + 20
-       },
-       right: {
-        x: (worldWidth / 2) - 20,
-        y: (-worldHeight / 2) + 20
-       }
-      };
+        window.viewportRatio = maxViewport / minViewport;
+        window.worldUnitX = (maxViewport === viewportWidth) ? 0.01 + (0.01 / viewportRatio) : 0.01 + (0.01 * viewportRatio);
+        window.worldUnitY = (maxViewport === viewportWidth) ? 0.01 + (0.01 * viewportRatio) : 0.01 + (0.01 / viewportRatio);
+        window.worldWidth = 2 / worldUnitX;
+        window.worldHeight = 2 / worldUnitY;
+        window.joystickPositions = {
+            left: {
+                x: (-worldWidth / 2) + 20,
+                y: (-worldHeight / 2) + 20
+            },
+            right: {
+                x: (worldWidth / 2) - 20,
+                y: (-worldHeight / 2) + 20
+            }
+        };
 
-      if (maxViewport === viewportHeight) {
-        joystickPositions.left.y += 10;
-        joystickPositions.right.y += 10;
-      }
+        if (maxViewport === viewportHeight) {
+            joystickPositions.left.y += 10;
+            joystickPositions.right.y += 10;
+        }
     }
 
     setWorldMeasurements();
 
-    window.onresize = function() { 
-      gl.viewport(0, 0, window.innerWidth, window.innerHeight);
+    window.onresize = function() {
+        gl.viewport(0, 0, window.innerWidth, window.innerHeight);
 
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
 
-      setWorldMeasurements();
- 
-      if ($JOYSTICK_L && $JOYSTICK_R) {
-       $JOYSTICK_L.position = Object.create(joystickPositions.left);
-       $JOYSTICK_R.position = Object.create(joystickPositions.right);
-      }
+        setWorldMeasurements();
 
-      if (fixedJoysticks) {
-       $JOYSTICK_L.fix();
-       $JOYSTICK_R.fix();
-      }
+        if ($JOYSTICK_L && $JOYSTICK_R) {
+            $JOYSTICK_L.position = Object.create(joystickPositions.left);
+            $JOYSTICK_R.position = Object.create(joystickPositions.right);
+        }
 
-      gl.uniform1f(locations.worldUnitX, worldUnitX);
-      gl.uniform1f(locations.worldUnitY, worldUnitY);
+        if (fixedJoysticks) {
+            $JOYSTICK_L.fix();
+            $JOYSTICK_R.fix();
+        }
+
+        gl.uniform1f(locations.worldUnitX, worldUnitX);
+        gl.uniform1f(locations.worldUnitY, worldUnitY);
     }
 
     let transitioning = false;
