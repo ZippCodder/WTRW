@@ -394,13 +394,13 @@ export let GEAR_ICON = new TextureData(0, 0, 1, "control", {
 }, [
     [0, 0, 600, 600]
 ], 0, undefined, function(ctx) {
-    ctx.save();
+     ctx.save();
     // base body: 600x600, texture: 1024x1024, size: 20
     ctx.scale(this.size || 0, this.size || 0);
 
-    ctx.lineWidth = 10;
-    ctx.translate(-150, -150);
-
+    ctx.lineWidth = 10;  
+    ctx.translate(-150,-150);
+ 
     ctx.fillStyle = "#777777";
     ctx.strokeStyle = "#777777";
     ctx.lineWidth = 60;
@@ -417,37 +417,37 @@ export let GEAR_ICON = new TextureData(0, 0, 1, "control", {
     ctx.beginPath();
 
     function drawCog(r) {
-        r = r * Math.PI / 180;
+     r = r * Math.PI/180;
+ 
+     ctx.translate(300,300);
+     ctx.rotate(r);
+     ctx.translate(-300,-300); 
+     
+     let i = 4;
+     ctx.moveTo(270,200+i);
+     ctx.lineTo(280,170+i);
+     ctx.lineTo(320,170+i);
+     ctx.lineTo(330,200+i);
+     ctx.lineTo(360,213+i);
 
-        ctx.translate(300, 300);
-        ctx.rotate(r);
-        ctx.translate(-300, -300);
-
-        let i = 4;
-        ctx.moveTo(270, 200 + i);
-        ctx.lineTo(280, 170 + i);
-        ctx.lineTo(320, 170 + i);
-        ctx.lineTo(330, 200 + i);
-        ctx.lineTo(360, 213 + i);
-
-        ctx.translate(300, 300);
-        ctx.rotate(-r);
-        ctx.translate(-300, -300);
+     ctx.translate(300,300);
+     ctx.rotate(-r);
+     ctx.translate(-300,-300); 
     }
 
-    drawCog(0);
-    drawCog(52);
-    drawCog(104);
-    drawCog(155);
-    drawCog(206);
-    drawCog(257);
-    drawCog(308);
+     drawCog(0);
+     drawCog(52);
+     drawCog(104);
+     drawCog(155);
+     drawCog(206);
+     drawCog(257);
+     drawCog(308);
 
-    ctx.moveTo(340, 300);
-    ctx.fill();
-    ctx.arc(300, 300, 40, 0, 2 * Math.PI);
-    ctx.stroke();
-    ctx.restore();
+     ctx.moveTo(340,300);
+     ctx.fill();
+     ctx.arc(300, 300, 40, 0, 2 * Math.PI);
+     ctx.stroke();
+     ctx.restore();
 });
 
 export let BAG_ICON = new TextureData(0, 0, 1, "control", {
@@ -459,55 +459,55 @@ export let BAG_ICON = new TextureData(0, 0, 1, "control", {
     // base body: 600x600, texture: 1024x1024, size: 20
     ctx.save();
     ctx.scale(this.size || 0, this.size || 0);
-    ctx.translate(0, -5);
+    ctx.translate(0,-5);
 
     ctx.strokeStyle = "#1A1A1A";
     ctx.lineWidth = 10;
     ctx.beginPath();
 
     ctx.fillStyle = "#636363";
-    ctx.fillRect(60, 80, 180, 200);
+    ctx.fillRect(60,80,180,200);
     ctx.fillStyle = "#525252";
-    ctx.fillRect(60, 50, 180, 75);
+    ctx.fillRect(60,50,180,75);  
 
-    ctx.strokeRect(60, 50, 180, 230);
-    ctx.fillRect(90, 170, 120, 15);
+    ctx.strokeRect(60,50,180,230);
+    ctx.fillRect(90,170,120,15);
     ctx.fillStyle = "#525252";
-    ctx.strokeRect(90, 170, 120, 80);
+    ctx.strokeRect(90,170,120,80);
 
     ctx.lineWidth = 5;
-    ctx.moveTo(90, 200);
-    ctx.lineTo(210, 200);
+    ctx.moveTo(90,200);
+    ctx.lineTo(210,200);
     ctx.stroke();
 
     ctx.beginPath();
-    ctx.moveTo(60, 145);
-    ctx.lineTo(240, 145);
+    ctx.moveTo(60,145);
+    ctx.lineTo(240,145);
     ctx.stroke();
 
-    ctx.strokeRect(125, 200, 50, 10);
+    ctx.strokeRect(125,200,50,10);
     ctx.lineWidth = 10;
 
     ctx.beginPath();
     ctx.fillStyle = "#343434";
-    ctx.moveTo(100, 30);
-    ctx.lineTo(100, 80);
-    ctx.lineTo(120, 80);
-    ctx.lineTo(120, 50);
-    ctx.lineTo(180, 50);
-    ctx.lineTo(180, 80);
-    ctx.lineTo(200, 80);
-    ctx.lineTo(200, 30);
-    ctx.lineTo(95, 30);
+    ctx.moveTo(100,30);
+    ctx.lineTo(100,80);
+    ctx.lineTo(120,80);
+    ctx.lineTo(120,50);
+    ctx.lineTo(180,50);
+    ctx.lineTo(180,80);
+    ctx.lineTo(200,80);
+    ctx.lineTo(200,30);
+    ctx.lineTo(95,30);
     ctx.fill();
 
     ctx.fillStyle = "#525252";
-    ctx.fillRect(30, 150, 30, 110);
-    ctx.strokeRect(30, 150, 30, 110);
+    ctx.fillRect(30,150,30,110);
+    ctx.strokeRect(30,150,30,110);
 
-    ctx.fillRect(240, 150, 30, 110);
-    ctx.strokeRect(240, 150, 30, 110);
-
+    ctx.fillRect(240,150,30,110);
+    ctx.strokeRect(240,150,30,110);
+ 
     ctx.stroke();
     ctx.restore();
 });
@@ -524,88 +524,88 @@ export let MAP_ICON = new TextureData(0, 0, 1, "control", {
 
     ctx.strokeStyle = "#1A1A1A";
     ctx.lineWidth = 10;
-
-    ctx.translate(0, 45);
+ 
+    ctx.translate(0,45);
     ctx.fillStyle = "#666666";
 
-    ctx.moveTo(48, 50);
-    ctx.lineTo(116.6, 30);
-    ctx.lineTo(183.2, 50);
-    ctx.lineTo(249.8, 30);
+    ctx.moveTo(48,50);
+    ctx.lineTo(116.6,30);
+    ctx.lineTo(183.2,50);
+    ctx.lineTo(249.8,30);
 
-    ctx.lineTo(249.8, 200);
-    ctx.lineTo(183.2, 220);
-    ctx.lineTo(116.6, 200);
-    ctx.lineTo(50, 220);
-    ctx.lineTo(50, 46);
+    ctx.lineTo(249.8,200);
+    ctx.lineTo(183.2,220);
+    ctx.lineTo(116.6,200);
+    ctx.lineTo(50,220);
+    ctx.lineTo(50,46);
     ctx.fill();
-
+ 
     ctx.lineWidth = 5;
     ctx.beginPath();
     ctx.fillStyle = "#888888";
-    ctx.lineTo(116.6, 30);
-    ctx.lineTo(183.2, 50);
-    ctx.lineTo(183.2, 220);
-    ctx.lineTo(116.6, 200);
-    ctx.lineTo(116.6, 30);
+    ctx.lineTo(116.6,30);
+    ctx.lineTo(183.2,50);
+    ctx.lineTo(183.2,220);
+    ctx.lineTo(116.6,200);
+    ctx.lineTo(116.6,30);
     ctx.fill();
     ctx.stroke();
 
     ctx.beginPath();
-    ctx.moveTo(48, 65);
-    ctx.lineTo(116.6, 45);
-    ctx.lineTo(183.2, 65);
-    ctx.lineTo(249.8, 45);
+    ctx.moveTo(48,65);
+    ctx.lineTo(116.6,45);
+    ctx.lineTo(183.2,65);
+    ctx.lineTo(249.8,45);
     ctx.stroke();
 
     ctx.beginPath();
-    ctx.moveTo(48, 165);
-    ctx.lineTo(116.6, 145);
-    ctx.lineTo(183.2, 165);
-    ctx.lineTo(249.8, 145);
+    ctx.moveTo(48,165);
+    ctx.lineTo(116.6,145);
+    ctx.lineTo(183.2,165);
+    ctx.lineTo(249.8,145);
     ctx.stroke();
 
     ctx.lineWidth = 10;
     ctx.beginPath()
-    ctx.moveTo(48, 50);
-    ctx.lineTo(116.6, 30);
-    ctx.lineTo(183.2, 50);
-    ctx.lineTo(249.8, 30);
+    ctx.moveTo(48,50);
+    ctx.lineTo(116.6,30);
+    ctx.lineTo(183.2,50);
+    ctx.lineTo(249.8,30);
 
-    ctx.lineTo(249.8, 200);
-    ctx.lineTo(183.2, 220);
-    ctx.lineTo(116.6, 200);
-    ctx.lineTo(50, 220);
-    ctx.lineTo(50, 46);
+    ctx.lineTo(249.8,200);
+    ctx.lineTo(183.2,220);
+    ctx.lineTo(116.6,200);
+    ctx.lineTo(50,220);
+    ctx.lineTo(50,46);
 
     ctx.stroke();
 
     ctx.fillStyle = "#444444";
-    ctx.scale(2, 2);
-    ctx.translate(-15, -62);
-
+    ctx.scale(2,2);
+    ctx.translate(-15,-62);
+ 
     ctx.beginPath();
     ctx.lineWidth = 5;
-    ctx.moveTo(75, 80);
-    ctx.lineTo(90, 110);
-    ctx.lineTo(105, 80);
+    ctx.moveTo(75,80);
+    ctx.lineTo(90,110);
+    ctx.lineTo(105,80);
+  
+    ctx.lineTo(107,70);
+    ctx.lineTo(106,65);
+    ctx.lineTo(102,57);
+    ctx.lineTo(95,53);
+    ctx.lineTo(90,52.6);
 
-    ctx.lineTo(107, 70);
-    ctx.lineTo(106, 65);
-    ctx.lineTo(102, 57);
-    ctx.lineTo(95, 53);
-    ctx.lineTo(90, 52.6);
-
-    ctx.moveTo(96, 69);
+    ctx.moveTo(96,69);
     ctx.arc(90, 72, 7, 0, 2 * Math.PI);
-
-    ctx.moveTo(92, 52.5);
-    ctx.lineTo(85, 53);
-    ctx.lineTo(78, 57);
-    ctx.lineTo(73, 65);
-    ctx.lineTo(73, 70);
-    ctx.lineTo(75.5, 81);
-
+ 
+    ctx.moveTo(92,52.5);
+    ctx.lineTo(85,53);
+    ctx.lineTo(78,57);
+    ctx.lineTo(73,65);
+    ctx.lineTo(73,70);
+    ctx.lineTo(75.5,81);
+    
     ctx.fill();
 
     ctx.beginPath();
@@ -613,9 +613,9 @@ export let MAP_ICON = new TextureData(0, 0, 1, "control", {
     ctx.stroke();
 
     ctx.beginPath();
-    ctx.moveTo(75, 80);
-    ctx.lineTo(90, 110);
-    ctx.lineTo(105, 80);
+    ctx.moveTo(75,80);
+    ctx.lineTo(90,110);
+    ctx.lineTo(105,80);
     ctx.fill();
     ctx.stroke();
 
@@ -2234,7 +2234,7 @@ export let GP_K100 = new TextureData(-8, -20, 0.22, "firearm", {
     ctx.lineTo(241, 225);
     ctx.stroke();
     ctx.restore();
-}, [], 0, 0, 30, 200);
+},[], 0, 0, 30, 200);
 
 export let USP_45 = new TextureData(-8, -5, 0.2, "firearm", {
     width: 815,
@@ -3095,7 +3095,7 @@ export let MAIN_AVATAR_DEFAULT = new TextureData(0, 0, 0.2, "avatar", {
     width: 702,
     height: 2140
 }, [
-    [0, 0, 702, 2140]
+    [0,0, 702, 2140] 
 ], 0, undefined, function(ctx) {
     // body: 700x428, texture: 1024,512, size: 0.15, boxes: [[152, 15, 408, 408],[561, 145, 136, 136],[15, 145, 136, 136]]
     // -1, -1
@@ -3133,7 +3133,7 @@ export let MAIN_AVATAR_DEFAULT = new TextureData(0, 0, 0.2, "avatar", {
 
     ctx.lineWidth = 2;
     ctx.strokeStyle = "red";
-    // ctx.strokeRect(221, 50, 270, 95);
+   // ctx.strokeRect(221, 50, 270, 95);
 
     ctx.restore();
 }, [0], 0, 0, -5, 851);
@@ -3465,7 +3465,7 @@ export let MAIN_AVATAR_BLINKING = new TextureData(-5, 851, 1, "avatar", {
     width: 702,
     height: 2140
 }, [
-    [0, 0, 702, 2140]
+   [0,0, 702, 2140]
 ], 0, undefined, function(ctx) {
     // body: 700x428, texture: 1024,512, size: 0.15, boxes: [[152, 15, 408, 408],[561, 145, 136, 136],[15, 145, 136, 136]]
     ctx.save();
@@ -3508,7 +3508,7 @@ export let MAIN_AVATAR_WALKING_1 = new TextureData(-5, 851, 1, "avatar", {
     width: 702,
     height: 2140
 }, [
-    [0, 0, 702, 2140]
+    [0,0, 702, 2140]
 ], 0, undefined, function(ctx) {
     // body: 700x428, texture: 1024,512, size: 0.15, boxes: [[152, 15, 408, 408],[561, 145, 136, 136],[15, 145, 136, 136]]
     ctx.save();
@@ -3551,7 +3551,7 @@ export let MAIN_AVATAR_WALKING_2 = new TextureData(-5, 851, 1, "avatar", {
     width: 702,
     height: 2140
 }, [
-    [0, 0, 702, 2140]
+    [0,0, 702, 2140]
 ], 0, undefined, function(ctx) {
     // body: 700x428, texture: 1024,512, size: 0.15, boxes: [[152, 15, 408, 408],[561, 145, 136, 136],[15, 145, 136, 136]]
     ctx.save();
@@ -3595,8 +3595,8 @@ export let TABLE = new TextureData(10, 10, 0.2, "avatar", {
     height: 910
 }, [
     [0, 0, 1400, 800],
-    // [40, 800, 100, 110, 0],
-    //  [1260, 800, 100, 110, 0]
+   // [40, 800, 100, 110, 0],
+  //  [1260, 800, 100, 110, 0]
 ], 20, undefined, function(ctx) {
     ctx.save();
     ctx.translate(this.offset.vx, this.offset.vy);
@@ -4745,8 +4745,8 @@ export let STREET_LIGHT = new TextureData(0, 0, 0.2, "prop", {
     width: 1550,
     height: 1820
 }, [
-    [0, 0, 1550, 1820],
-    [760, 1740, 60, 60]
+     [0, 0, 1550, 1820],
+     [760, 1740, 60, 60]
 ], 0, undefined, function(ctx) {
     ctx.save();
     ctx.translate(this.offset.vx, this.offset.vy);
@@ -4799,7 +4799,7 @@ export let STREET_LIGHT = new TextureData(0, 0, 0.2, "prop", {
     //ctx.strokeRect(-700,50,1510,260);
 
     ctx.restore();
-}, [], 0, 0, 730, -190);
+},[], 0, 0, 730, -190);
 
 export let GRASS_1 = new TextureData(0, 0, 0.2, "prop", {
     width: 150,

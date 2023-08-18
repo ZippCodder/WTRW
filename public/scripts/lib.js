@@ -23,7 +23,7 @@ export function cut(ar, lw = 0, atrbs = [], vertices = false) {
             [x + w, y, ...atrbs],
             [x, y + h, ...atrbs],
             [x + w, y + h, ...atrbs]
-        ]);
+        ]); 
     }
 
     return (vertices) ? res.flat(1) : res;
@@ -299,13 +299,13 @@ export function toRGB(color) {
 }
 
 export function normalizeRotation(rotation) {
-    if (rotation < 0) {
-        rotation = 360 + rotation;
-    } else if (rotation > 360) {
-        rotation = rotation - 360;
-    }
+  if (rotation < 0) {
+    rotation = 360 + rotation;
+  } else if (rotation > 360) {
+    rotation = rotation - 360;
+  }
 
-    return rotation;
+  return rotation;
 }
 
 export function genObjectId(length = 10) {
@@ -527,32 +527,32 @@ export class Inventory {
 
         if (!item.pickup || this.count === this.slots) return false;
 
-        if (slot && !this.items[slot] && slot < this.slots - 1) {
-            item.slot = slot;
-            this.items[slot] = item;
+        if (slot && !this.items[slot] && slot < this.slots-1) {
+           item.slot = slot;
+           this.items[slot] = item;
         } else if (this.count < this.slots) {
             for (let i = 0; i < this.slots; i++) {
-                if (this.items[i] === undefined) {
-                    item.slot = i;
-                    this.items[i] = item;
-                    break;
-                }
+              if (this.items[i] === undefined) {
+                item.slot = i;
+                this.items[i] = item;
+                break;
+              }
             }
         }
-
-        if (item.slot === undefined) return false;
+        
+        if (item.slot === undefined) return false; 
 
         if (item.map) item.map.unlink(item.id);
         this.count++;
 
         switch (item.type) {
             case "gun": {
-                if (!this.weapons[item.name]) this.weapons[item.name] = {
-                    ammo: 0,
-                    count: 0
-                };
-                this.weapons[item.name].ammo += item.bullets;
-                this.weapons[item.name].count++;
+               if (!this.weapons[item.name]) this.weapons[item.name] = {
+                  ammo: 0,
+                  count: 0
+               };
+               this.weapons[item.name].ammo += item.bullets;
+               this.weapons[item.name].count++;
             };
             break;
         }

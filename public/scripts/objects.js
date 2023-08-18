@@ -394,10 +394,10 @@ export class _InstancedCluster_ {
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.offsets), gl.DYNAMIC_DRAW);
         gl.vertexAttribPointer(locations.offset, 3, gl.FLOAT, false, 12, 0);
         instExt.vertexAttribDivisorANGLE(locations.offset, 1);
-        gl.enableVertexAttribArray(locations.offset);
+        gl.enableVertexAttribArray(locations.offset); 
         gl.disableVertexAttribArray(locations.textrUnit);
     }
-
+   
     delete() {
         this.map.unlink(this.id);
     }
@@ -823,7 +823,7 @@ export class DownwardLight extends _Object_ {
             this.buffer = gl.createBuffer();
             gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);
-
+ 
             gl.vertexAttribPointer(locations.coords, 3, gl.FLOAT, false, 20, 0);
             gl.vertexAttribPointer(locations.tcoords, 2, gl.FLOAT, false, 20, 12);
             gl.enableVertexAttribArray(locations.coords);
@@ -1067,7 +1067,7 @@ export class RoadRailVertical extends _StaticClusterClient_ {
 
 export class StreetLight extends _StaticClusterClient_ {
 
-    static _defaultVertices = [-15.5, 18.2, 1, 0, 0, 15.5, 18.2, 1, 0.60546875, 0, -15.5, -18.2, 1, 0, 0.7109375, 15.5, 18.2, 1, 0.60546875, 0, -15.5, -18.2, 1, 0, 0.7109375, 15.5, -18.2, 1, 0.60546875, 0.7109375];
+    static _defaultVertices = [-15.5,18.2,1,0,0,15.5,18.2,1,0.60546875,0,-15.5,-18.2,1,0,0.7109375,15.5,18.2,1,0.60546875,0,-15.5,-18.2,1,0,0.7109375,15.5,-18.2,1,0.60546875,0.7109375];
 
     width = 31;
     height = 36.4;
@@ -1076,7 +1076,7 @@ export class StreetLight extends _StaticClusterClient_ {
     texture = textures.objects.streetlight;
     obstacle = true;
     segments = [
-        [-0.3, -17.8, 1.2, 1.2]
+        [-0.3,-17.8,1.2,1.2]
     ];
     topLayer = true;
     on = false;
@@ -1590,7 +1590,7 @@ export class _Building_ extends _StaticClusterClient_ {
 
         this.setup = setup;
         this.doors = [];
-        this.type = "building";
+        this.type = "building";  
         this.bottomLayer = true;
         this.subLayer = 1;
         this.rooms = rooms || [new _Map_(150, 80, false).init([
@@ -1688,10 +1688,10 @@ export class House1 extends _Building_ {
             [23, -57, 1],
             [-30, -65, 0]
         ], [new _Map_(150, 100, false).init(), new _Map_(150, 80, false).init(), new _Map_(150, 80, false).init()], undefined);
-
-        let floor = new Floor(0, 0, 150, 100, 0);
-        floor.exclude = true;
-        this.rooms[0].link(floor);
+ 
+      let floor = new Floor(0,0,150,100,0);
+      floor.exclude = true;
+      this.rooms[0].link(floor);
     }
 }
 
@@ -1741,7 +1741,7 @@ export class _Gun_ extends _Pickup_ {
         super(initialX, initialY, initialRotation);
     }
 
-    reloadProgress = 0;
+    reloadProgress = 0; 
     loaded = true;
     type = "gun";
 }
@@ -1810,7 +1810,7 @@ export class GLOCK_20 extends _Gun_ {
         nozzelLength: 13,
         capacity: 30,
         reloadTime: 3,
-        useTextures: [4, 5]
+        useTextures: [4,5]
     }
 
     static _defaultVertices = [-4.390000000000001, 3.0900000000000003, 1, 0, 0, 4.390000000000001, 3.0900000000000003, 1, 0.6859375000000001, 0, -4.390000000000001, -3.0900000000000003, 1, 0, 0.965625, 4.390000000000001, 3.0900000000000003, 1, 0.6859375000000001, 0, -4.390000000000001, -3.0900000000000003, 1, 0, 0.965625, 4.390000000000001, -3.0900000000000003, 1, 0.6859375000000001, 0.965625];
@@ -1829,7 +1829,7 @@ export class GLOCK_20 extends _Gun_ {
 
 export class GP_K100 extends _Gun_ {
 
-    static _properties = {
+      static _properties = {
         fireRate: 3,
         bulletSpeed: 8,
         damage: 7,
@@ -1837,8 +1837,8 @@ export class GP_K100 extends _Gun_ {
         nozzelLength: 21,
         capacity: 12,
         reloadTime: 3,
-        useTextures: [6, 7]
-    }
+        useTextures: [6,7]
+      }
 
     static _defaultVertices = [-7.4, 3.0900000000000003, 1, 0, 0, 7.4, 3.0900000000000003, 1, 0.578125, 0, -7.4, -3.0900000000000003, 1, 0, 0.965625, 7.4, 3.0900000000000003, 1, 0.578125, 0, -7.4, -3.0900000000000003, 1, 0, 0.965625, 7.4, -3.0900000000000003, 1, 0.578125, 0.965625];
 
@@ -1941,8 +1941,8 @@ export class Avatar {
         ext.bindVertexArrayOES(this.vao);
 
         this.vertices = {
-            body: [-7.0200000000000005, 21.4, 1, 0, 0, 0, 7.0200000000000005, 21.4, 1, 0.5484375, 0, 0, -7.0200000000000005, -21.4, 1, 0, 0.8359375, 0, 7.0200000000000005, 21.4, 1, 0.5484375, 0, 0, -7.0200000000000005, -21.4, 1, 0, 0.8359375, 0, 7.0200000000000005, -21.4, 1, 0.5484375, 0.8359375, 0],
-            eyes: [-2.7, 3.379999999999999, 1, 0.16875, 0.351953125, 1, 2.7, 3.379999999999999, 1, 0.3796875, 0.351953125, 1, -2.7, 1.4800000000000004, 1, 0.16875, 0.3890625, 1, 2.7, 3.379999999999999, 1, 0.3796875, 0.351953125, 1, -2.7, 1.4800000000000004, 1, 0.16875, 0.3890625, 1, 2.7, 1.4800000000000004, 1, 0.3796875, 0.3890625, 1]
+          body: [-7.0200000000000005,21.4,1,0,0,0,7.0200000000000005,21.4,1,0.5484375,0,0,-7.0200000000000005,-21.4,1,0,0.8359375,0,7.0200000000000005,21.4,1,0.5484375,0,0,-7.0200000000000005,-21.4,1,0,0.8359375,0,7.0200000000000005,-21.4,1,0.5484375,0.8359375,0],
+          eyes: [-2.7,3.379999999999999,1,0.16875,0.351953125,1,2.7,3.379999999999999,1,0.3796875,0.351953125,1,-2.7,1.4800000000000004,1,0.16875,0.3890625,1,2.7,3.379999999999999,1,0.3796875,0.351953125,1,-2.7,1.4800000000000004,1,0.16875,0.3890625,1,2.7,1.4800000000000004,1,0.3796875,0.3890625,1]
         }
 
         this.trans = {
@@ -2041,8 +2041,8 @@ export class Avatar {
                 forget: false,
                 invertTargets: false,
                 reactionTime: {
-                    targetUpdateRate: 1,
-                    shotCheckRate: 1
+                 targetUpdateRate: 1,
+                 shotCheckRate: 1
                 }
             },
             recording: {
@@ -2062,15 +2062,14 @@ export class Avatar {
             rotationSpeed: 0.1,
             rotationTarget: undefined,
             rotationAnimation: new LoopAnimation(function() {
-                let rotation = this.trans.rotation * 180 / Math.PI;
+                let rotation = this.trans.rotation*180/Math.PI;
 
                 if (rotation !== this.state.rotationTarget && this !== $AVATAR) {
+   
+                  let difference = (Math.max(this.state.rotationTarget,rotation) - Math.min(this.state.rotationTarget,rotation)), rotationFactor = Math.min(difference,360 - difference)*this.state.rotationSpeed;     
 
-                    let difference = (Math.max(this.state.rotationTarget, rotation) - Math.min(this.state.rotationTarget, rotation)),
-                        rotationFactor = Math.min(difference, 360 - difference) * this.state.rotationSpeed;
-
-                    this.rotate(normalizeRotation(rotation + (((difference < 180 && this.state.rotationTarget > rotation) || (difference > 180 && rotation > this.state.rotationTarget)) ? rotationFactor : -rotationFactor)));
-                }
+               this.rotate(normalizeRotation(rotation + (((difference < 180 && this.state.rotationTarget > rotation) || (difference > 180 && rotation > this.state.rotationTarget)) ? rotationFactor:-rotationFactor))); 
+               }
             }, this, 0.01),
             shotCheckAnimation: new LoopAnimation(function() {
                 this.state.target.shot = true;
@@ -2101,7 +2100,7 @@ export class Avatar {
                 }
             }, this, 1),
             reloadTimeout: new MultiFrameLinearAnimation([function() {
-                this.state.equippedItems.mainTool.reloadProgress = 0;
+                this.state.equippedItems.mainTool.reloadProgress = 0; 
                 this.state.equippedItems.mainTool.loaded = true;
             }], this, [0]),
             pathRequestRateLimit: new MultiFrameLinearAnimation([function() {
@@ -2281,7 +2280,7 @@ export class Avatar {
             map.link(new BulletShell(this.trans.offsetX + shellInitialX, this.trans.offsetY + shellInitialY, randomShellDirectionX, randomShellDirectionY));
 
             this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo--;
-            this.state.equippedItems.mainTool.reloadProgress++;
+            this.state.equippedItems.mainTool.reloadProgress++; 
 
             if (this.state.equippedItems.mainTool.reloadProgress === this.state.equippedItems.mainTool.constructor._properties.capacity) this.state.equippedItems.mainTool.loaded = false;
 
@@ -2341,19 +2340,19 @@ export class Avatar {
     }
 
     addItem(item, slot) {
-        if (this.inventory.addItem(item, slot) && this === $AVATAR) {
-            updateInventoryItem(item.slot, item.name);
-        }
+      if (this.inventory.addItem(item, slot) && this === $AVATAR) {
+        updateInventoryItem(item.slot,item.name);
+      }
     }
 
     dropItem(slot) {
-        if (!this.inventory.items[slot]) return false;
+     if (!this.inventory.items[slot]) return false;      
 
-        if (this === $AVATAR) updateInventoryItem(this.inventory.items[slot].slot, this.inventory.items[slot].name, true);
+        if (this === $AVATAR) updateInventoryItem(this.inventory.items[slot].slot,this.inventory.items[slot].name,true);
         this.unequipItem(slot);
-
+ 
         let item = this.inventory.ejectItem(slot);
-
+         
         item.ring.trans.offsetX = item.trans.offsetX = this.trans.offsetX + random(10, true);
         item.ring.trans.offsetY = item.trans.offsetY = this.trans.offsetY + random(10, true);
         item.trans.rotation = random(360);
@@ -2371,13 +2370,13 @@ export class Avatar {
 
     equipItem(slot) {
         let item = this.inventory.items[slot];
-
+       
         if (item) {
             switch (item.type) {
                 case "gun": {
                     this.state.armed = true;
                     this.state.equippedItems.mainTool = item;
-                    this.state.equippedItems.mainTool.reloadProgress = item.reloadProgress;
+                    this.state.equippedItems.mainTool.reloadProgress = item.reloadProgress; 
                     this.state.equippedItems.mainTool.loaded = item.loaded;
                     this.state.reloadTimeout.timingConfig[0] = this.state.equippedItems.mainTool.constructor._properties.reloadTime;
                     this.state.fireAnimation.rate = 0.5 / this.state.equippedItems.mainTool.constructor._properties.fireRate;
@@ -2387,15 +2386,15 @@ export class Avatar {
 
             return true;
         }
-
+      
         return false;
     }
 
     unequipItem(slot) {
-        if (!this.inventory.items[slot]) return false;
+      if (!this.inventory.items[slot]) return false;      
 
         let item = this.inventory.items[slot];
-
+        
         switch (item.type) {
             case "gun": {
                 if (this.state.equippedItems.mainTool && item.slot === this.state.equippedItems.mainTool.slot) {
@@ -2407,7 +2406,7 @@ export class Avatar {
             break;
         }
 
-        return true;
+     return true;
     }
 
     preRender() {
@@ -2458,8 +2457,8 @@ export class Avatar {
                 this.map.GRAPH.reserved.push(next);
 
                 this.goto(x + 5, y - 5);
-
-                this.state.rotationTarget = normalizeRotation((Math.atan2(this.state.goto.y - this.trans.offsetY, this.state.goto.x - this.trans.offsetX) * 180 / Math.PI) - 90);
+                 
+                this.state.rotationTarget = normalizeRotation((Math.atan2(this.state.goto.y - this.trans.offsetY, this.state.goto.x - this.trans.offsetX)*180/Math.PI) - 90);
             } else {
                 this.disengagePath();
                 this.requestPath(this.state.path.end.x, this.state.path.end.y);
@@ -2495,12 +2494,12 @@ export class Avatar {
                         this.disengagePath();
                     }
 
-                    this.state.rotationTarget = normalizeRotation((Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX)) * 180 / Math.PI) - 90);
+                    this.state.rotationTarget = normalizeRotation((Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX))*180/Math.PI) - 90);
                     if (!this.state.draw) this.drawWeapon();
                     if (this.state.target.shot) this.state.fire = true;
 
                 } else if (dist < this.state.attack.slowdownDistance) {
-                    this.state.rotationTarget = normalizeRotation((Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX)) * 180 / Math.PI) - 90);
+                    this.state.rotationTarget = normalizeRotation((Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX))*180/Math.PI) - 90);
 
                     if (!this.state.draw) this.drawWeapon();
                     if (this.state.target.shot) this.state.fire = true;
@@ -2508,7 +2507,7 @@ export class Avatar {
                     if (!this.state.follow.rush || !this.state.follow.target) this.state.speed = this.state.baseSpeed * (this.state.attack.attackSpeed / 3);
                 } else if (dist < this.state.attack.engageDistance) {
                     this.state.speed = this.state.baseSpeed * this.state.attack.attackSpeed;
-                    this.state.rotationTarget = normalizeRotation((Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX)) * 180 / Math.PI) - 90);
+                    this.state.rotationTarget = normalizeRotation((Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX))*180/Math.PI) - 90);
 
                     if (!this.state.draw) this.drawWeapon();
                     if (this.state.target.shot) this.state.fire = true;
@@ -2752,29 +2751,26 @@ export class Avatar {
 
 export class Floor extends _Object_ {
 
-    static _tileTypes = {
-        0: {
-            vertices: [-6.390000000000001, 6.390000000000001, 1, 0, 0, 6.390000000000001, 6.390000000000001, 1, 0.9984375000000001, 0, -6.390000000000001, -6.390000000000001, 1, 0, 0.9984375000000001, 6.390000000000001, 6.390000000000001, 1, 0.9984375000000001, 0, -6.390000000000001, -6.390000000000001, 1, 0, 0.9984375000000001, 6.390000000000001, -6.390000000000001, 1, 0.9984375000000001, 0.9984375000000001],
-            width: 12.780000000000001,
-            height: 12.780000000000001,
-            texture: textures.objects.floortile
-        }
-    }
-
+            static _tileTypes = {
+              0: {
+               vertices: [-6.390000000000001,6.390000000000001,1,0,0,6.390000000000001,6.390000000000001,1,0.9984375000000001,0,-6.390000000000001,-6.390000000000001,1,0,0.9984375000000001,6.390000000000001,6.390000000000001,1,0.9984375000000001,0,-6.390000000000001,-6.390000000000001,1,0,0.9984375000000001,6.390000000000001,-6.390000000000001,1,0.9984375000000001,0.9984375000000001],
+               width: 12.780000000000001, 
+               height: 12.780000000000001, 
+               texture: textures.objects.floortile
+              } 
+            }
+ 
     constructor(initialX, initialY, width, height, tileType = 0) {
         super([], function() {
-
+           
             let tile = Floor._tileTypes[tileType];
 
-            this.vertices = tile.vertices;
+            this.vertices = tile.vertices; 
             this.texture = tile.texture;
-            this.width = width;
-            this.height = height;
+            this.width = width; 
+            this.height = height; 
             this.tileType = tileType;
-            this.renderDimensions = {
-                width: width / tile.width,
-                height: height / tile.height
-            };
+            this.renderDimensions = {width: width/tile.width, height: height/tile.height};
 
             this.buffer = gl.createBuffer();
             gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
@@ -2791,7 +2787,7 @@ export class Floor extends _Object_ {
             ext.bindVertexArrayOES(this.vao);
             gl.uniform2fv(locations.translation, [this.trans.offsetX, this.trans.offsetY]);
             gl.uniform2fv(locations.size, [this.renderDimensions.width, this.renderDimensions.height]);
-            gl.uniform2fv(locations.textureRange, [this.renderDimensions.width, this.renderDimensions.height]);
+            gl.uniform2fv(locations.textureRange, [this.renderDimensions.width,this.renderDimensions.height]);
 
             gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
             gl.activeTexture(gl.TEXTURE0);
@@ -2801,7 +2797,7 @@ export class Floor extends _Object_ {
             gl.drawArrays(gl.TRIANGLES, 0, this.vertices.length / 5);
             gl.uniform2fv(locations.size, [1, 1]);
             gl.uniform2fv(locations.textureRange, [0, 0]);
-        }, width, height, initialX, initialY, 0);
+        }, width, height, initialX, initialY, 0); 
         this.name = "floor";
         this.type = "floor";
         this.bottomLayer = true;
@@ -3090,19 +3086,15 @@ class _Graph_ {
 
         return result;
     }
-
+ 
     getFixedCoordinate(x, y) {
-        let coord = {
-            x: (this.width % 2 === 0) ? (Math.floor(x * 0.1) * 10) : (Math.round(x * 0.1) * 10) - 5,
-            y: (this.height % 2 === 0) ? (Math.ceil(y * 0.1) * 10) : (y % 5 === 0 && y % 2 !== 0) ? (Math.round(y * 0.1) * 10) - 5 : (Math.round(y * 0.1) * 10) + 5
-        };
-
-        return coord;
+       let coord = {x: (this.width % 2 === 0) ? (Math.floor(x * 0.1) * 10) : (Math.round(x * 0.1) * 10) - 5, y: (this.height % 2 === 0) ? (Math.ceil(y * 0.1) * 10) : (y % 5 === 0 && y % 2 !== 0) ? (Math.round(y * 0.1) * 10) - 5 : (Math.round(y * 0.1) * 10) + 5};
+ 
+       return coord;
     }
 
     getPoint(x, y) {
-        let p = this.getFixedCoordinate(x, y),
-            unit = this.find(p.x, p.y);
+        let p = this.getFixedCoordinate(x, y), unit = this.find(p.x, p.y);
 
         return (unit) ? {
             x: p.x,
@@ -3136,8 +3128,8 @@ class _Graph_ {
         const cornerB = this.getFixedCoordinate(xAndWidth, y);
         const cornerC = this.getFixedCoordinate(xAndWidth, yAndHeight);
 
-        let inBounds = (Math.abs(x + width / 2) < (this.map.width / 2) + width / 2) && (Math.abs(y + height / 2) < (this.map.height / 2) + height / 2);
-
+        let inBounds = (Math.abs(x + width/2) < (this.map.width/2) + width/2) && (Math.abs(y + height/2) < (this.map.height/2) + height/2);
+       
         if (inBounds) {
             for (let i = cornerA.x; i <= cornerB.x; i += 10) {
                 for (let j = cornerB.y; j <= cornerC.y; j += 10) {
@@ -3364,8 +3356,8 @@ export class _Map_ {
             if (obj.moveable) this.moveables[obj.id] = obj;
             if (obj.interactable) this.interactables[obj.id] = obj;
             if (obj.type === "avatar") {
-                this.avatars[obj.id] = obj;
-                this.avatarCount++;
+              this.avatars[obj.id] = obj;
+              this.avatarCount++;
             }
             if (obj.subLayer && !obj.hasCluster) this.subLayers[obj.subLayer].push(obj);
 
@@ -3490,7 +3482,7 @@ export class _Map_ {
                     case "street light":
                         frame = frame.concat([ob.trans.offsetX, ob.trans.offsetY, ob.trans.rotation, ob._color]);
                         break;
-                    case "floor":
+                    case "floor": 
                         frame = frame.concat([ob.trans.offsetX, ob.trans.offsetY, ob.width, ob.height, ob.tileType]);
                         break;
                     default:
@@ -3664,7 +3656,7 @@ export class _Map_ {
         [0, 0]
     ], doorOffset = 0, exitPoint, buildingExit, label) {
         // attach $AVATAR to map
-
+  
         this.avatars[$AVATAR.id] = $AVATAR;
 
         // attach any default objects or clusters for all maps, etc.
@@ -3725,7 +3717,7 @@ export class Text extends _Object_ {
             this.buffer = gl.createBuffer();
             gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);
-
+ 
             gl.vertexAttribPointer(locations.coords, 3, gl.FLOAT, false, 20, 0);
             gl.vertexAttribPointer(locations.tcoords, 2, gl.FLOAT, false, 20, 12);
             gl.enableVertexAttribArray(locations.coords);
@@ -3834,13 +3826,13 @@ export class _Joystick_ extends _Object_ {
         x: 0,
         y: 0
     }) {
-        super([-15, 15, 1, 0, 0, 15, 15, 1, 0.5859375, 0, -15, -15, 1, 0, 0.5859375, 15, 15, 1, 0.5859375, 0, -15, -15, 1, 0, 0.5859375, 15, -15, 1, 0.5859375, 0.5859375], function() {
+        super([-15,15,1,0,0,15,15,1,0.5859375,0,-15,-15,1,0,0.5859375,15,15,1,0.5859375,0,-15,-15,1,0,0.5859375,15,-15,1,0.5859375,0.5859375], function() {
 
             this.buffer = gl.createBuffer();
             gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
 
             this.texture = textures.controls.joystick_disc;
-
+            
             gl.vertexAttribPointer(locations.coords, 3, gl.FLOAT, false, 20, 0);
             gl.vertexAttribPointer(locations.tcoords, 2, gl.FLOAT, false, 20, 12);
 
@@ -3898,7 +3890,7 @@ export class _Joystick_ extends _Object_ {
             width: 15 / scale,
             height: 15 / scale
         };
-        this.thumbVertices = new Float32Array([-7.5, 7.5, 1, 0, 0, 7.5, 7.5, 1, 0.5859375, 0, -7.5, -7.5, 1, 0, 0.5859375, 7.5, 7.5, 1, 0.5859375, 0, -7.5, -7.5, 1, 0, 0.5859375, 7.5, -7.5, 1, 0.5859375, 0.5859375]);
+        this.thumbVertices = new Float32Array([-7.5,7.5,1,0,0,7.5,7.5,1,0.5859375,0,-7.5,-7.5,1,0,0.5859375,7.5,7.5,1,0.5859375,0,-7.5,-7.5,1,0,0.5859375,7.5,-7.5,1,0.5859375,0.5859375]);
         this.distance = {
             x: 0,
             y: 0,

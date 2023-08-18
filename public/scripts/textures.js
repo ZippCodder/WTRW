@@ -1,40 +1,34 @@
 // Texture managment
 
 class TextureContainer {
-    constructor(settings = {
-        mipmap: false,
-        repeat: false
-    }) {
+    constructor(settings = {mipmap: false, repeat: false}) {
         this.count = 0;
         this.index = [];
         this.settings = settings;
     }
 
-    addTexture(name, src, settings = {
-        mipmap: undefined,
-        repeat: undefined
-    }) {
+    addTexture(name, src, settings = {mipmap: undefined, repeat: undefined}) {
         let container = this;
 
         return new Promise((res, rej) => {
             let img = new Image();
             img.src = src;
 
-            let textureWrapS = ((settings.repeat || this.settings.repeat) && settings.repeat !== false) ? gl.REPEAT : (settings.textureWrapS || this.settings.textureWrapS || gl.CLAMP_TO_EDGE);
+            let textureWrapS = ((settings.repeat || this.settings.repeat) && settings.repeat !== false) ? gl.REPEAT:(settings.textureWrapS || this.settings.textureWrapS || gl.CLAMP_TO_EDGE);
 
-            let textureWrapT = ((settings.repeat || this.settings.repeat) && settings.repeat !== false) ? gl.REPEAT : (settings.textureWrapT || this.settings.textureWrapT || gl.CLAMP_TO_EDGE);
+            let textureWrapT = ((settings.repeat || this.settings.repeat) && settings.repeat !== false) ? gl.REPEAT:(settings.textureWrapT || this.settings.textureWrapT || gl.CLAMP_TO_EDGE);
 
             let minFilter = settings.minFilter || this.settings.minFilter || gl.LINEAR;
-            minFilter = ((settings.mipmap || this.settings.mipmap) && settings.mipmap !== false) ? settings.minFilter || this.settings.minFilter || gl.LINEAR_MIPMAP_NEAREST : minFilter;
+            minFilter = ((settings.mipmap || this.settings.mipmap) && settings.mipmap !== false) ? settings.minFilter || this.settings.minFilter || gl.LINEAR_MIPMAP_NEAREST:minFilter;
 
-            let magFilter = settings.magFilter || this.settings.magFilter || gl.LINEAR;
+            let magFilter = settings.magFilter || this.settings.magFilter || gl.LINEAR; 
 
             img.onload = function() {
                 container[name] = gl.createTexture();
 
                 gl.bindTexture(gl.TEXTURE_2D, container[name]);
                 gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
-
+          
                 if ((settings.mipmap || container.settings.mipmap) && settings.mipmap !== false) gl.generateMipmap(gl.TEXTURE_2D);
 
                 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, magFilter);
@@ -58,9 +52,7 @@ class TextureContainer {
 
 window.textures = {};
 
-textures.controls = new TextureContainer({
-    mipmap: true
-});
+textures.controls = new TextureContainer({mipmap: true});
 
 await textures.controls.addTexture("joystick_disc", "/public/images/textures/joystick_disc.png");
 await textures.controls.addTexture("actionbutton", "/public/images/textures/ACTION_BUTTON_TEXTURE_1.png");
@@ -118,9 +110,7 @@ await textures.objects.addTexture("urbanfencevertical", "/public/images/textures
 await textures.objects.addTexture("urbanfencehalf", "/public/images/textures/URBAN_FENCE_HALF.png");
 await textures.objects.addTexture("smallplant", "/public/images/textures/SMALL_PLANT.png");
 await textures.objects.addTexture("tile", "/public/images/textures/TILE.png");
-await textures.objects.addTexture("floortile", "/public/images/textures/FLOOR_TILE.png", {
-    repeat: true
-});
+await textures.objects.addTexture("floortile", "/public/images/textures/FLOOR_TILE.png", {repeat: true});
 await textures.objects.addTexture("bench", "/public/images/textures/BENCH.png");
 await textures.objects.addTexture("grass1", "/public/images/textures/GRASS_1.png");
 await textures.objects.addTexture("grass2", "/public/images/textures/GRASS_2.png");
