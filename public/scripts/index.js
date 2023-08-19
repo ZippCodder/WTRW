@@ -1,15 +1,18 @@
 import {
-    LoopAnimation
+    LoopAnimation, 
+    Transition
 } from "/public/scripts/lib.js";
 
 window.onload = async () => {
 
     window.canvas = document.querySelector("canvas");
-    window.gl = canvas.getContext("webgl");
-    gl.viewport(0, 0, window.innerWidth, window.innerHeight);
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
+    window.gl = canvas.getContext("webgl");
+
+    gl.viewport(0, 0, window.innerWidth, window.innerHeight);
+ 
     window.$OBJECTS = [];
     window.$CONTROLS = [];
     window.$JOYSTICK_L = null;
@@ -27,6 +30,7 @@ window.onload = async () => {
     window.bulletResolution = 0.001;
     window.movementMultFactor = 0.05;
     window.globalDarkness = 0;
+    window.fadeTransition = new Transition(globalDarkness, [70,0], 0.05);
     window.useTransition = true;
     window.joystickSizes = {
         left: 1.5,
@@ -385,7 +389,7 @@ window.onload = async () => {
     function renderObjects() {
         $OBJECTS.forEach(v => {
             if (v.preRender) v.preRender();
-            v.render();
+            if (!v.hidden) v.render();
         });
     }
 
@@ -430,6 +434,9 @@ window.onload = async () => {
         gl.clear(gl.COLOR_BUFFER_BIT);
         gl.uniform1f(locations.scale, scale);
         if (transitioning) transitionAnimation.run();
+        if (fadeTransition.transitioning) {
+          globalDarkness = fadeTransition.run();
+        }
         $CURRENT_MAP?.render();
         renderObjects();
         $CURRENT_MAP?.renderTopLayer();

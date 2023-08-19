@@ -392,6 +392,54 @@ export function lineIntersectsBox(p1, p2, p3, p4, bx, by, bw, bh) {
 
 // Animation creation objects
 
+export class Transition {
+ constructor(value, points, speed = 1, callback, reference, property, executionPoint = 1) {
+  this.value = value;
+  this.points = points;
+  this.speed = speed;
+  this.callback = callback?.bind(reference);
+  this.reference = reference;
+  this.executionPoint = executionPoint;
+  this.property = property;
+  this.transitioning = false;
+  this.phase = 0;
+  this.animation = new LoopAnimation(function() {
+    let difference = Math.abs(this.points[this.phase] - this.value);   
+ 
+    this.value += (this.points[this.phase] > this.value) ? (difference/2)*this.speed:-(difference/2)*this.speed;
+    
+    if (this.property) this.reference[property] = value;
+
+    if (difference < 1) this.value = this.points[this.phase]; 
+
+    if (this.value === this.points[this.phase]) {
+      this.phase++;
+      if (this.phase === this.executionPoint) this.callback();
+      if (this.phase === this.points.length) {
+        this.transitioning = false;
+        this.phase = 0;
+      }
+    }
+  }, this, 0.005);
+ }
+
+ run() {
+  if (this.transitioning) this.animation.run();
+  return this.value;
+ }
+
+ requestTransition(value, callback, reference, points, speed, property) {
+   this.value = value ?? this.value;
+   this.points = points ?? this.points;
+   this.speed = speed ?? this.speed;
+   this.callback = callback?.bind(reference) ?? this.callback;
+   this.reference = reference ?? this.reference;
+   this.property = property ?? this.property;
+   this.transitioning = true;
+   this.phase = 0;
+ }
+}
+
 export class LoopAnimation {
     constructor(frame, object, rate, animationMultFactor) {
         this.frame = frame.bind(object, this);

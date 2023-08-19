@@ -102,9 +102,10 @@
   //b.killTarget([$AVATAR.id], true, true);
   b.translate(0, 30);
  */
-  //$MAP.link(new Table(0,0));
-  //$MAP.lighting = true;
-  //$MAP.darkness = 10;
+ // $MAP.link(new Table(0,0));
+ // $MAP.link(new StreetLight(50,0));
+  $MAP.lighting = true;
+  $MAP.darkness = 10;
   /* 
    let c = new Avatar("Beatrice", 5, 5);
    $MAP.link(c);
@@ -184,7 +185,7 @@ const enemySpawnLoop = new LoopAnimation(function() {
   }
 }, window, 5);
 
-// $AVATAR.state.invinsible = true; 
+ //$AVATAR.state.invinsible = true; 
 
  $GAME_LOOP = function() {
   enemySpawnLoop.run(); 

@@ -61,6 +61,7 @@ export class _Object_ {
         this.height = height;
         this.id = genObjectId();
         this.type = type;
+        this.scale = 1;
         this.topLayer = false;
         this.name = name;
         this.textures = [];
@@ -818,7 +819,7 @@ export class DownwardLight extends _Object_ {
     constructor(initialX, initialY, initialRotation, color) {
         super([], function() {
 
-            this.vertices = [-35, 35, 1, 0, 0, 35, 35, 1, 1, 0, -35, -35, 1, 0, 1, 35, 35, 1, 1, 0, -35, -35, 1, 0, 1, 35, -35, 1, 1, 1];
+            this.vertices = [-24,24,1,0,0,24,24,1,0.9375,0,-24,-24,1,0,0.9375,24,24,1,0.9375,0,-24,-24,1,0,0.9375,24,-24,1,0.9375,0.9375];
 
             this.buffer = gl.createBuffer();
             gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
@@ -839,6 +840,7 @@ export class DownwardLight extends _Object_ {
             gl.uniform1f(locations.rotation, this.trans.rotation);
 
             gl.uniform1f(locations.darkness, 1);
+            gl.uniform2fv(locations.size, [this.scale, this.scale]);
             gl.uniform4fv(locations.lightColor, this._color);
             gl.blendFuncSeparate(gl.DST_COLOR, gl.DST_ALPHA, gl.ONE, gl.ONE);
 
@@ -849,10 +851,11 @@ export class DownwardLight extends _Object_ {
 
             gl.drawArrays(gl.TRIANGLES, 0, this.vertices.length / 5);
 
-            gl.uniform1f(locations.darkness, this.map.darkness);
+            gl.uniform1f(locations.darkness, this.map.darkness); 
+            gl.uniform2fv(locations.size, [1, 1]);
             gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
             gl.uniform4fv(locations.lightColor, [0, 0, 0, 0]);
-        }, 70, 70, initialX, initialY, initialRotation);
+        }, 48, 48, initialX, initialY, initialRotation);
         this.texture = textures.objects.downwardlight;
         this.name = "downward light";
         this.topLayer = true;
@@ -1067,16 +1070,16 @@ export class RoadRailVertical extends _StaticClusterClient_ {
 
 export class StreetLight extends _StaticClusterClient_ {
 
- static _defaultVertices = [-15.5, 24.5, 1, 0, 0, 15.5, 24.5, 1, 0.60546875, 0, -15.5, -24.5, 1, 0, 0.95703125, 15.5, 24.5, 1, 0.60546875, 0, -15.5, -24.5, 1, 0, 0.95703125, 15.5, -24.5, 1, 0.60546875, 0.95703125];
+ static _defaultVertices = [-15.8,24.5,1,0,0,15.8,24.5,1,0.6171875,0,-15.8,-24.5,1,0,0.95703125,15.8,24.5,1,0.6171875,0,-15.8,-24.5,1,0,0.95703125,15.8,-24.5,1,0.6171875,0.95703125];
 
-    width = 31;
+    width = 31.6;
     height = 49;
     name = "street light";
     clusterName = "street light";
     texture = textures.objects.streetlight;
     obstacle = true;
     segments = [
-        [-0.3, -24.3, 1.2, 8.6]
+        [-0.6,-24.3,1.2,1.2]
     ];
     topLayer = true;
     on = false;
@@ -1084,7 +1087,7 @@ export class StreetLight extends _StaticClusterClient_ {
     constructor(initialX, initialY, initialRotation, color) {
         super(initialX, initialY, initialRotation);
         this._color = color || undefined;
-        this.lights = [new DownwardLight(this.trans.offsetX - 13, this.trans.offsetY - 11.5, 0, this._color), new DownwardLight(this.trans.offsetX + 13, this.trans.offsetY - 11.5, 0, this._color)];
+        this.lights = [new DownwardLight(this.trans.offsetX - 12.7, this.trans.offsetY - 18, 0, this._color), new DownwardLight(this.trans.offsetX + 12.7, this.trans.offsetY - 18, 0, this._color)];
     }
 
     set color(c) {
@@ -1099,6 +1102,7 @@ export class StreetLight extends _StaticClusterClient_ {
             if (!this.on) i.hidden = true;
             i.managedMovement = true;
             i.exclude = true;
+            i.scale = 1.7;
             this.map.link(i);
         }
     }
@@ -2298,7 +2302,15 @@ export class Avatar {
                 if (attacker) attacker.state.kills += 1;
 
                 this.purgeItems(5);
-                this.delete();
+
+                if (this !== $AVATAR) {
+                 this.delete();
+                } else {
+                 delete $CURRENT_MAP.avatars[this.id];
+                 delete $CURRENT_MAP.obstacles[this.id];
+                 this.hidden = true;
+                }
+
                 return;
             }
         }

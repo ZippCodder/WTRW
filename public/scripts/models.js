@@ -22,7 +22,7 @@ import {
    @AVATARS
    @BUILDINGS 
    @OBJECTS
-   
+/2   
    NOTES:
    
    vertices and texture coords are generated using the draw() function from the editor. Input must be the main outer boxes of the object. Collision bounds will also be output for obstacles.
@@ -181,11 +181,11 @@ export class Sheet {
 
 // @CONTROLS
 
-export let JOYSTICK_DISC_TEXTURE = new TextureData(0, 0, 0.5, "general", {
-    width: 300,
-    height: 300
+export let JOYSTICK_DISC_TEXTURE = new TextureData(0, 0, 1, "general", {
+    width: 980,
+    height: 980
 }, [
-    [0, 0, 300, 300]
+    [0, 0, 980, 980]
 ], 0, undefined, function(ctx) {
     // base body: 600x600, texture: 1024x1024, size: 20
 
@@ -200,7 +200,38 @@ export let JOYSTICK_DISC_TEXTURE = new TextureData(0, 0, 0.5, "general", {
     ctx.arc(150, 150, 150, 0, 2 * Math.PI);
     ctx.fill();
 
+},[], 980, 980);
+
+export let DOWNWARD_LIGHT = new TextureData(0, 0, 0.8, "general", {
+    width: 600,
+    height: 600
+}, [
+    [0, 0, 600, 600]
+], 0, undefined, function(ctx) {
+    // base body: 600x600, texture: 1024x1024, size: 20
+
+    ctx.scale(this.size || 0, this.size || 0);
+    ctx.translate(0,-45);
+    ctx.lineWidth = 2;   
+    ctx.fillStyle = "black";
+
+    let gradient = ctx.createLinearGradient(300,0,300,600); 
+    gradient.addColorStop(0,"white"); 
+    gradient.addColorStop(1,"black");
+
+    ctx.fillStyle = gradient; 
+
+    ctx.moveTo(60,300);
+    ctx.lineTo(280,47);
+    ctx.lineTo(320,47);
+    ctx.lineTo(540,300); 
+    ctx.bezierCurveTo(700,500,470,650,300,643);
+    ctx.moveTo(60,300);
+    ctx.bezierCurveTo(-100,500,130,650,300,643);
+ 
+    ctx.fill();
 });
+
 
 export let PICKUP_RING = new TextureData(0, 0, 0.2, "general", {
     width: 428,
@@ -4741,12 +4772,12 @@ export let LIGHT_SWITCH = new TextureData(2, 2, 0.2, "prop", {
     ctx.restore();
 });
 
-export let STREET_LIGHT = new TextureData(0, 0, 0.2, "prop", {
-    width: 1550,
-    height: 1820
+export let STREET_LIGHT = new TextureData(730, -190, 0.2, "prop", {
+    width: 1580,
+    height: 2450
 }, [
-     [0, 0, 1550, 1820],
-     [760, 1740, 60, 60]
+   //  [0, 0, 1580, 2450],
+     [30, 2570, 60, 60]
 ], 0, undefined, function(ctx) {
     ctx.save();
     ctx.translate(this.offset.vx, this.offset.vy);
@@ -4761,9 +4792,9 @@ export let STREET_LIGHT = new TextureData(0, 0, 0.2, "prop", {
     ctx.moveTo(90, 230);
     ctx.lineTo(550, 230);
     ctx.lineTo(550, 220);
-    ctx.lineTo(810, 220);
-    ctx.lineTo(810, 240);
-    ctx.lineTo(810, 310);
+    ctx.lineTo(840, 220); //840
+    ctx.lineTo(840, 240);
+    ctx.lineTo(840, 310);
     ctx.lineTo(550, 310);
     ctx.lineTo(550, 270);
     ctx.lineTo(90, 270);
@@ -4785,18 +4816,13 @@ export let STREET_LIGHT = new TextureData(0, 0, 0.2, "prop", {
 
     ctx.fillStyle = "#A3A3A3";
 
-    //ctx.fillRect(30, 200, 60, 2430);
-    //ctx.strokeRect(30, 200, 60, 2430);
-    ctx.fillRect(30, 200, 60, 1800);
-    ctx.strokeRect(30, 200, 60, 1800);
-
+    ctx.fillRect(30, 200, 60, 2430);
+    ctx.strokeRect(30, 200, 60, 2430);
 
     ctx.lineWidth = 10;
     ctx.moveTo(20, 260);
     ctx.lineTo(80, 260);
     ctx.stroke();
-
-    //ctx.strokeRect(-700,50,1510,260);
 
     ctx.restore();
 },[], 0, 0, 730, -190);
