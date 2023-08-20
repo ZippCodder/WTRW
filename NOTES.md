@@ -11,7 +11,7 @@
 
 ## TODO
 
-* Fix empty first shot with guns
+* Standardize transitions 
 * Implement health, dying and respawning
 * Implement avatar punching
 * Fix janky avtar follow feature 

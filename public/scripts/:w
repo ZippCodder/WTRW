@@ -4701,11 +4701,11 @@ export let TILE = new TextureData(10, 10, 0.2, "prop", {
     ctx.restore();
 });
 
-export let WOOD_FLOOR_TILE = new TextureData(0, 0, 0.2, "prop", {
-    width: 639,
-    height: 639
+export let WOOD_FLOOR_TILE = new TextureData(0, 0, 1, "prop", {
+    width: 780,
+    height: 750
 }, [
-    [0, 0, 639, 639]
+    [0, 0, 780, 750]
 ], 0, undefined, function(ctx) {
     ctx.save();
     ctx.translate(this.offset.x, this.offset.y);
@@ -4721,10 +4721,10 @@ export let WOOD_FLOOR_TILE = new TextureData(0, 0, 0.2, "prop", {
     ctx.fillRect(0, 0, 800, 750);
     ctx.fillStyle = "#737373";
 
-    ctx.fillRect(0, 280, 800, 50);
+    ctx.fillRect(0, 315, 800, 50);
     ctx.fillRect(0, 690, 800, 50);
-    ctx.strokeRect(0, 0, 800, 640);
-    ctx.strokeRect(0, 0, 800, 340);
+    ctx.strokeRect(0, 0, 800, 750);
+    ctx.strokeRect(0, 0, 800, 375);
 
     ctx.restore();
 });

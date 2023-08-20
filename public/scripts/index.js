@@ -103,20 +103,23 @@ window.onload = async () => {
             callback();
             phase++;
         }
-
+                    
         if (globalDarkness === points[phase] && phase === 1) {
             phase = 0;
             transitioning = false;
             return;
         }
+ 
+        let difference = Math.abs(globalDarkness - points[phase]);
 
-        if (phase === 1) globalDarkness -= (globalDarkness - points[phase]) / transitionSpeed;
+        if (phase === 1) globalDarkness -= (globalDarkness || 1) / transitionSpeed;
         if (phase === 0) globalDarkness += (globalDarkness || 1) / transitionSpeed;
 
         if (Math.abs(globalDarkness - points[phase]) < 0.01 || (globalDarkness > points[phase] && phase === 0)) {
             globalDarkness = points[phase];
         }
     }, undefined, 0.005);
+
     window.requestTransition = function(c, speed = 2) {
         if (!useTransition) {
             c();

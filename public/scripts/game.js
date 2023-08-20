@@ -161,7 +161,7 @@
    let a;
 
 const enemySpawnLoop = new LoopAnimation(function() {
-  if ($MAP.avatarCount < 5) {
+  if ($MAP.avatarCount < 20) {
    let {
           x,
           y
@@ -183,9 +183,9 @@ const enemySpawnLoop = new LoopAnimation(function() {
       //a.follow($AVATAR.id);
       a.killTarget([$AVATAR.id]);
   }
-}, window, 5);
+}, window, 2);
 
- //$AVATAR.state.invinsible = true; 
+ $AVATAR.state.invinsible = true; 
 
  $GAME_LOOP = function() {
   enemySpawnLoop.run(); 

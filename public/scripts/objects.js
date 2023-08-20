@@ -1693,7 +1693,7 @@ export class House1 extends _Building_ {
             [-30, -65, 0]
         ], [new _Map_(150, 100, false).init(), new _Map_(150, 80, false).init(), new _Map_(150, 80, false).init()], undefined);
  
-      let floor = new Floor(0,0,150,100,0);
+      let floor = new Floor(0,0,150,100,1);
       floor.exclude = true;
       this.rooms[0].link(floor);
     }
@@ -1975,7 +1975,7 @@ export class Avatar {
             baseSpeed: 1,
             runningSpeed: 2,
             speed: 1,
-            armor: 0,
+            armour: 0,
             invinsible: false,
             kills: 0,
             passive: false,
@@ -2293,7 +2293,7 @@ export class Avatar {
 
     hit(damage, x, y, owner) {
         if (!this.state.invinsible) {
-            (this.state.armor > 0) ? this.state.armor -= damage: this.state.vitals.health -= damage;
+            (this.state.armour > 0) ? this.state.armour -= damage: this.state.vitals.health -= damage;
 
             if (this === $AVATAR) updateHealthBar();
 
@@ -2309,6 +2309,7 @@ export class Avatar {
                  delete $CURRENT_MAP.avatars[this.id];
                  delete $CURRENT_MAP.obstacles[this.id];
                  this.hidden = true;
+                 $CURRENT_MAP.noclip = true;
                 }
 
                 return;
@@ -2769,7 +2770,13 @@ export class Floor extends _Object_ {
                width: 12.780000000000001, 
                height: 12.780000000000001, 
                texture: textures.objects.floortile
-              } 
+              },
+              1: {
+               vertices: [-6.390000000000001,6.390000000000001,1,0,0,6.390000000000001,6.390000000000001,1,0.9984375000000001,0,-6.390000000000001,-6.390000000000001,1,0,0.9984375000000001,6.390000000000001,6.390000000000001,1,0.9984375000000001,0,-6.390000000000001,-6.390000000000001,1,0,0.9984375000000001,6.390000000000001,-6.390000000000001,1,0.9984375000000001,0.9984375000000001],
+               width: 12.780000000000001, 
+               height: 12.780000000000001, 
+               texture: textures.objects.woodfloortile
+              }
             }
  
     constructor(initialX, initialY, width, height, tileType = 0) {

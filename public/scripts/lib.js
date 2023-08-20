@@ -455,6 +455,7 @@ export class LoopAnimation {
         if (!this.running) {
             this.lastFrameDraw = Date.now();
             this.running = true;
+            this.frame();
         }
 
         this.lapsedTime = (Date.now() - this.lastFrameDraw) / 1000;

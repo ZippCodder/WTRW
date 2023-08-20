@@ -112,7 +112,8 @@
             GEAR_ICON,
             BAG_ICON,
             MAP_ICON,
-            DOWNWARD_LIGHT, 
+            DOWNWARD_LIGHT,
+            WOOD_FLOOR_TILE, 
             Sheet
         } from "/public/scripts/models.js";
 
@@ -160,10 +161,10 @@
         //CAFE(-18, -18, 0.2);
         //MAIN_AVATAR_DEFAULT(-5, -5, 0.2);
        
-        resize(512, 512);
+        resize(128, 128);
         // export function draw(a, w, h, iw, ih, s, lw, attribs=[],canvas) {
         //MAIN_AVATAR_DEFAULT.render(ctx);  
-        let texture = STREET_LIGHT;
+        let texture = WOOD_FLOOR_TILE;
 //new Sheet([ROAD_RAIL,ROAD_SIGN,URBAN_FENCE_HALF,URBAN_FENCE,URBAN_FENCE_VERTICAL], 1024, 1024);
 
         //ACTION_BUTTON_TEXTURE.render(ctx);
@@ -175,6 +176,6 @@
        // log(texture.getData());
           log(texture.getData());
           console.log(texture.textureDimensions);
-        setSource(`STREET_LIGHT.png`); 
+        setSource(`WOOD_FLOOR_TILE.png`); 
     </script>
 </html>
