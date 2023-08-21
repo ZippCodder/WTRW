@@ -114,6 +114,10 @@
             MAP_ICON,
             DOWNWARD_LIGHT,
             WOOD_FLOOR_TILE, 
+            MAIN_AVATAR_LEFT_PUNCH_1,
+            MAIN_AVATAR_LEFT_PUNCH_2,
+            MAIN_AVATAR_RIGHT_PUNCH_1,
+            MAIN_AVATAR_RIGHT_PUNCH_2,
             Sheet
         } from "/public/scripts/models.js";
 
@@ -161,10 +165,10 @@
         //CAFE(-18, -18, 0.2);
         //MAIN_AVATAR_DEFAULT(-5, -5, 0.2);
        
-        resize(128, 128);
+        resize(256, 512);
         // export function draw(a, w, h, iw, ih, s, lw, attribs=[],canvas) {
         //MAIN_AVATAR_DEFAULT.render(ctx);  
-        let texture = WOOD_FLOOR_TILE;
+        let texture = MAIN_AVATAR_LEFT_PUNCH_2;
 //new Sheet([ROAD_RAIL,ROAD_SIGN,URBAN_FENCE_HALF,URBAN_FENCE,URBAN_FENCE_VERTICAL], 1024, 1024);
 
         //ACTION_BUTTON_TEXTURE.render(ctx);
@@ -176,6 +180,6 @@
        // log(texture.getData());
           log(texture.getData());
           console.log(texture.textureDimensions);
-        setSource(`WOOD_FLOOR_TILE.png`); 
+        setSource(`MAIN_AVATAR_LEFT_PUNCH_2.png`); 
     </script>
 </html>

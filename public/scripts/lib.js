@@ -472,6 +472,7 @@ export class MultiFrameLoopAnimation {
         this.object = object;
         this.nextFrame = 0;
         this.running = false;
+        this.active = false;
         this.animationMultFactor = animationMultFactor || 1;
         this.timingConfig = timingConfig;
         this.duration = timingConfig.reduce((p, c) => p + c, 0);
@@ -489,6 +490,8 @@ export class MultiFrameLoopAnimation {
             this.running = true;
             this.lastFrameDraw = Date.now();
         }
+ 
+        this.active = true;
 
         this.lapsedTime = (Date.now() - this.lastFrameDraw) / 1000;
         if (this.lapsedTime >= this.timingConfig[this.nextFrame] * this.animationMultFactor) {
@@ -496,7 +499,10 @@ export class MultiFrameLoopAnimation {
             this.lastFrameDraw = Date.now();
             this.nextFrame++;
         }
-        if (this.nextFrame === this.frames.length) this.nextFrame = 0;
+        if (this.nextFrame === this.frames.length) {
+          this.nextFrame = 0;
+          this.active = false;
+        }
     }
 
     end() {

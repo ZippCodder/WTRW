@@ -1975,26 +1975,41 @@ export class Avatar {
             baseSpeed: 1,
             runningSpeed: 2,
             speed: 1,
+            strength: 10,
             armour: 0,
             invinsible: false,
             kills: 0,
             passive: false,
             aggressive: false,
+            hitboxes: {
+             leftPunch: {
+               x: -5, 
+               y: 10,
+               width: 5, 
+               height: 5
+             },
+             rightPunch: {
+               x: 5, 
+               y: 10,
+               width: 5, 
+               height: 5
+             },
+             pickup: {
+               x: 0,
+               y: 0,
+               width: 5,
+               height: 5
+             }
+            },
             pickup: {
-                hitbox: {
-                    x: 0,
-                    y: 0,
-                    width: 5,
-                    height: 5
-                },
-                offset: {
-                    x: 0,
-                    y: 0,
-                    aRotation: 0,
-                    bRotation: 0,
-                },
-                current: false,
-                reachDistance: 2.5
+              offset: {
+                x: 0,
+                y: 0,
+                aRotation: 0,
+                bRotation: 0,
+              },
+              current: false,
+              reachDistance: 2.5
             },
             vitals: {
                 health: 100,
@@ -2036,6 +2051,7 @@ export class Avatar {
                 disengageDistance: 200
             },
             attack: {
+                punchSpeed: 0.5,
                 engageDistance: 100,
                 slowdownDistance: 50,
                 settleDistance: 30,
@@ -2056,6 +2072,7 @@ export class Avatar {
             },
             baseRotation: 0,
             walking: false,
+            punching: false,
             armed: false,
             draw: false,
             fire: false,
@@ -2074,6 +2091,18 @@ export class Avatar {
 
                this.rotate(normalizeRotation(rotation + (((difference < 180 && this.state.rotationTarget > rotation) || (difference > 180 && rotation > this.state.rotationTarget)) ? rotationFactor:-rotationFactor))); 
                }
+            }, this, 0.01),
+            punchingAnimation: new LoopAnimation(function() {
+              let leftPunch = this.state.leftPunchAnimation, rightPunch = this.state.rightPunchAnimation;
+
+               if (leftPunch.active) {
+                  leftPunch.run();
+               } else if (rightPunch.active) { 
+                  rightPunch.run();
+               }
+
+               if (!leftPunch.active && !rightPunch.active) ((Math.random() < 0.5) ? leftPunch:rightPunch).active = true;
+
             }, this, 0.01),
             shotCheckAnimation: new LoopAnimation(function() {
                 this.state.target.shot = true;
@@ -2210,6 +2239,30 @@ export class Avatar {
             }], this, [0.08, 0.08, 0.08, 0.08], function() {
                 this.state.position.body.texture = 0;
             }, 0.5),
+            leftPunchAnimation: new MultiFrameLoopAnimation([function() {
+                this.state.position.body.texture = 0;
+            }, function() {
+                this.state.position.body.texture = 8;
+            }, function() {
+                this.state.position.body.texture = 9;
+                this.meleeStrike(this.state.hitboxes.leftPunch);
+            }, function() {
+                this.state.position.body.texture = 0;
+            }], this, [0.08, 0.08, 0.08, 0.15], function() {
+                this.state.position.body.texture = 0;
+            }),
+            rightPunchAnimation: new MultiFrameLoopAnimation([function() {
+                this.state.position.body.texture = 0;
+            }, function() {
+                this.state.position.body.texture = 10;
+            }, function() {
+                this.state.position.body.texture = 11;
+                this.meleeStrike(this.state.hitboxes.rightPunch);
+            }, function() {
+                this.state.position.body.texture = 0;
+            }], this, [0.08, 0.08, 0.08, 0.15], function() {
+                this.state.position.body.texture = 0;
+            }),
             blinkingAnimation: new MultiFrameLoopAnimation([function() {
                 this.state.position.eyes.texture = 0;
             }, function() {
@@ -2260,6 +2313,8 @@ export class Avatar {
 
         this.state.targetUpdateAnimation.rate = this.state.attack.reactionTime.targetUpdateRate;
         this.state.shotCheckAnimation.rate = this.state.attack.reactionTime.shotCheckRate;
+        this.state.leftPunchAnimation.animationMultFactor = this.state.attack.punchSpeed;
+        this.state.rightPunchAnimation.animationMultFactor = this.state.attack.punchSpeed;
 
         this.state.fireAnimation = new LoopAnimation(function() {
 
@@ -2428,10 +2483,14 @@ export class Avatar {
         this.state.blinkingAnimation.run();
         if (this.state.rotationTarget) this.state.rotationAnimation.run();
 
-        if (this.state.walking && this.state.draw === false) {
+        if (this.state.walking && !this.state.draw && !this.state.punching) {
             this.state.walkingAnimation.run();
-        } else {
+        } else if (!this.state.punching) {
             this.state.walkingAnimation.end();
+        }
+
+        if (this.state.punching && !this.state.armed) {
+           this.state.punchingAnimation.run();
         }
 
         if (this.state.armed && this.state.draw) {
@@ -2485,7 +2544,7 @@ export class Avatar {
 
         if (this.state.target.id.length > 0) this.state.targetUpdateAnimation.run();
 
-        attack: if (this.state.target.current && this.state.target.engaged && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo > 0) {
+        attack: if (this.state.armed && this.state.target.current && this.state.target.engaged && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo > 0) {
             const m = this.map || $CURRENT_MAP;
             if (this.map.avatars[this.state.target.current.id]) {
                 if (!this.state.equippedItems.mainTool?.loaded && !this.state.reloadTimeout.running) this.reload();
@@ -2672,6 +2731,22 @@ export class Avatar {
         }
     }
 
+    meleeStrike(hitbox) {
+       let [x, y] = rotate(0, hitbox.y, (this.trans.rotation) * 180 / Math.PI);
+        let {
+            width,
+            height
+        } = hitbox;
+
+        for (let i in $CURRENT_MAP.avatars) {
+            let avatar = $CURRENT_MAP.avatars[i];
+
+            if ((Math.abs(x - avatar.trans.offsetX) < (avatar.width / 2 + width / 2)) && (Math.abs(y - avatar.trans.offsetY) < (avatar.height / 2 + height / 2))) {
+               avatar.hit(this.state.strength, 0, 0, this); 
+            }
+        }
+    }
+
     grab() {
         if (this.state.pickup.current) return;
 
@@ -2679,7 +2754,7 @@ export class Avatar {
         let {
             width,
             height
-        } = this.state.pickup.hitbox;
+        } = this.state.hitboxes.pickup;
 
         for (let i in $CURRENT_MAP.moveables) {
             let obj = $CURRENT_MAP.moveables[i];
@@ -3928,6 +4003,7 @@ export class _Joystick_ extends _Object_ {
         // deactivate player firing when the left joystick is lifted 
         if (!this.left && $CURRENT_MAP.move) {
             $AVATAR.state.fire = false;
+            $AVATAR.state.punching = false;
         }
     }
 
@@ -3961,10 +4037,15 @@ export class _Joystick_ extends _Object_ {
 
         // activate player firing state when the left joystick is at the edge, and viceversa
         if (!this.left && $CURRENT_MAP.move) {
-            if (this.distance.absolute === this.base.radius && $AVATAR.state.armed) {
+            if (this.distance.absolute === this.base.radius) {
+             if ($AVATAR.state.armed) {
                 $AVATAR.state.fire = true;
+              } else {
+                $AVATAR.state.punching = true;
+             }
             } else {
                 $AVATAR.state.fire = false;
+                $AVATAR.state.punching = false;
             }
         }
 

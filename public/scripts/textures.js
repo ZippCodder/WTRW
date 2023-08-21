@@ -80,6 +80,10 @@ await textures.skins.addTexture("avatardrawglock20", "/public/images/textures/MA
 await textures.skins.addTexture("avatardrawglock20pullback", "/public/images/textures/MAIN_AVATAR_DRAW_GLOCK20_2.png");
 await textures.skins.addTexture("avatardrawgpk100", "/public/images/textures/MAIN_AVATAR_DRAW_GPK100_1.png");
 await textures.skins.addTexture("avatardrawgpk100pullback", "/public/images/textures/MAIN_AVATAR_DRAW_GPK100_2.png");
+await textures.skins.addTexture("avatarleftpunch1", "/public/images/textures/MAIN_AVATAR_LEFT_PUNCH_1.png");
+await textures.skins.addTexture("avatarleftpunch2", "/public/images/textures/MAIN_AVATAR_LEFT_PUNCH_2.png");
+await textures.skins.addTexture("avatarrightpunch1", "/public/images/textures/MAIN_AVATAR_RIGHT_PUNCH_1.png");
+await textures.skins.addTexture("avatarrightpunch2", "/public/images/textures/MAIN_AVATAR_RIGHT_PUNCH_2.png");
 
 textures.objects = new TextureContainer();
 

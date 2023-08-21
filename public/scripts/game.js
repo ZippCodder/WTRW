@@ -104,8 +104,7 @@
  */
  // $MAP.link(new Table(0,0));
  // $MAP.link(new StreetLight(50,0));
-  $MAP.lighting = true;
-  $MAP.darkness = 10;
+  //$MAP.lighting = true;
   /* 
    let c = new Avatar("Beatrice", 5, 5);
    $MAP.link(c);
@@ -138,7 +137,7 @@
    e.addItem(new GLOCK_20(0, 0, 0, 1000));
    e.state.targetId = b.id;
    e.follow($AVATAR.id);
-   //c.killTarget([id], true); */
+   c.killTarget([id], true); */
 
   //$MAP.link(new VisibleBarrier(0,0,40,40));
   //$MAP.link(new VisibleBarrier(-80,0,40,40));
@@ -147,21 +146,24 @@
   // $MAP.link(new VisibleBarrier(-80,0,40,40));
   //$MAP.link(new Chair(0,0));
   //$MAP.link(new VisibleBarrier(80,0,40,40));
-  /*
-      let c = new Avatar("Trinity", -20, 0);
+  
+      let c = new Avatar("Trinity", -20, 0), b = new Avatar("Neo", -20, 0);
+
       $MAP.link(c);
       c.state.attack.attackSpeed = 2;
-      c.state.armor = 5000;
-      c.state.aggressive = true;
+      c.state.armour = 5000;
+     // c.state.aggressive = true;
       c.addItem(new GLOCK_20(0, 0, 0, 1000));
-      c.state.fireAnimation.rate = 0.5 / 10;
+      c.equipItem(0);
       c.state.targetUpdateAnimation.rate = 1/5; 
       c.state.targetId = c.id;
-      c.killTarget([id],true); */
+      c.follow($AVATAR.id);
+      c.killTarget([$AVATAR.id,b.id],true, true);
+
    let a;
 
 const enemySpawnLoop = new LoopAnimation(function() {
-  if ($MAP.avatarCount < 20) {
+  if ($MAP.avatarCount < 5) {
    let {
           x,
           y
@@ -172,7 +174,7 @@ const enemySpawnLoop = new LoopAnimation(function() {
       a.state.attack.engageDistance = 300;
       a.state.attack.disengageDistance = 500;
       a.state.attack.attackSpeed = 1;
-      a.state.armor = 0;
+      a.state.armour = 0;
       //a.state.aggressive = true;
       a.state.passive = false;
       a.state.openCarry = true;
@@ -181,11 +183,11 @@ const enemySpawnLoop = new LoopAnimation(function() {
       a.equipItem(0);
       a.state.targetId = id;
       //a.follow($AVATAR.id);
-      a.killTarget([$AVATAR.id]);
+      a.killTarget([$AVATAR.id, c.id], true);
   }
 }, window, 2);
 
- $AVATAR.state.invinsible = true; 
+ $AVATAR.state.armour = 25;
 
  $GAME_LOOP = function() {
   enemySpawnLoop.run(); 

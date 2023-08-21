@@ -11,6 +11,7 @@
 
 ## TODO
 
+* Fix item pickp with having to move
 * Standardize transitions 
 * Implement health, dying and respawning
 * Implement avatar punching
