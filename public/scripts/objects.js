@@ -2062,7 +2062,7 @@ export class Avatar {
                 disengageDistance: 200
             },
             attack: {
-                openCarry: false,
+                openCarry: true,
                 meleeAttackSpeed: 0.5,
                 engageDistance: 100,
                 slowdownDistance: 50,
@@ -2588,16 +2588,37 @@ export class Avatar {
 
         if (this.state.target.id.length > 0) this.state.targetUpdateAnimation.run();
 
-        attack: if (this.state.armed && this.state.target.current && this.state.target.engaged && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo > 0) {
-            const m = this.map || $CURRENT_MAP;
-            if (this.map.avatars[this.state.target.current.id]) {
+        attack: if (this !== $AVATAR && (this.state.armed || this.state.melee) && this.map.avatars[this.state.target.current?.id] && this.state.target.engaged) {
+
+            const {
+              offsetX: targetX,
+              offsetY: targetY
+            } = this.state.target.current.trans, dist = distance(this.trans.offsetX, this.trans.offsetY, targetX, targetY), m = this.map;
+
+            stab: if (!this.state.armed && this.state.melee) {
+               if (dist > this.state.attack.disengageDistance && this.state.target.engaged) {
+                    this.disengageTarget();
+               } else if (dist <= this.state.attack.engageDistance) {
+                  if (this.state.attack.openCarry && !this.state.draw) this.drawWeapon();
+                  if (!this.state.path.engaged && !this.state.follow.target) this.requestPath(targetX + m.centerX, targetY + m.centerY);
+               }
+ 
+               if (dist <= 30) {
+                 this.state.stabbing = true;
+                 if (!this.state.draw) this.drawWeapon();
+                 this.state.rotationTarget = normalizeRotation((Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX))*180/Math.PI) - 70);
+               } else {
+                 this.state.stabbing = false;
+                 if (!this.state.attack.openCarry && this.state.draw) this.holsterWeapon();
+               }
+
+               break attack;
+            }
+         
+            shoot: if (this.state.armed && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo > 0) {
                 if (!this.state.equippedItems.mainTool?.loaded && !this.state.reloadTimeout.running) this.reload();
                 this.state.shotCheckAnimation.run();
 
-                const {
-                    offsetX: targetX,
-                    offsetY: targetY
-                } = this.state.target.current.trans, dist = distance(this.trans.offsetX, this.trans.offsetY, targetX, targetY);
                 if (dist > this.state.attack.disengageDistance && this.state.target.engaged) {
                     this.disengageTarget();
                 } else if (dist > this.state.attack.engageDistance) {
@@ -2727,7 +2748,7 @@ export class Avatar {
     }
 
     killTarget(ids, multiple, invert) {
-        if (this.state.armed) {
+        if (this.state.armed || this.state.melee) {
             let map = (this.map || $CURRENT_MAP);
             let target = map.avatars[ids[0]];
 
@@ -2776,14 +2797,18 @@ export class Avatar {
     }
 
     meleeAttack(damage, hitbox) {
-       let [x, y] = rotate(hitbox.x, hitbox.y, (this.trans.rotation) * 180 / Math.PI);
+       let [x, y] = rotate(hitbox.x, hitbox.y, (this.trans.rotation) * 180 / Math.PI), map = (this.map || $CURRENT_MAP);
+
+        x += this.trans.offsetX;
+        y += this.trans.offsetY;
+
         let {
             width,
             height
         } = hitbox;
 
-        for (let i in $CURRENT_MAP.avatars) {
-            let avatar = $CURRENT_MAP.avatars[i];
+        for (let i in map.avatars) {
+            let avatar = map.avatars[i];
 
             if ((Math.abs(x - avatar.trans.offsetX) < (avatar.width / 2 + width / 2)) && (Math.abs(y - avatar.trans.offsetY) < (avatar.height / 2 + height / 2))) {
                avatar.hit(damage, 0, 0, this); 
