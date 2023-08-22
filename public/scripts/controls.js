@@ -230,7 +230,9 @@
   const itemDescriptions = {
     default: "<strong>Pro tip:</strong> Click an item to select it and see a full description of its properties and usage.</br></br>Oh wait, what items? You're a noob lol.", 
    "glock 20": "<h3><u>GLOCK 20</u></h3>A simple, compact and lightweight handgun built for self defense and petty crime. Careful, there's no saftey!</br></br><strong>Damage _____ 18</strong></br><strong>Fire Rate _____ 1</strong></br><strong>Accuracy _____ 5</strong></br><strong>Capacity _____ 8</strong>",
-   "gp k100": "<h3><u>GP K100</u></h3>This quick and reliable handgun features good capacity, and a basic scilencer and is perfect for a good ol' gun-fight.</br></br><strong>Damage _____ 25</strong></br><strong>Fire Rate _____ 3</strong></br><strong>Accuracy _____ 2</strong></br><strong>Capacity _____ 12</strong>"
+   "gp k100": "<h3><u>GP K100</u></h3>This quick and reliable handgun features good capacity, and a basic scilencer and is perfect for a good ol' gun-fight.</br></br><strong>Damage _____ 25</strong></br><strong>Fire Rate _____ 3</strong></br><strong>Accuracy _____ 2</strong></br><strong>Capacity _____ 12</strong>",
+   "kitchen knife": "<h3><u>Kitchen Knife</u></h3>Your run-of-the-mill, single edged cooking knife. Go use this to slice some veggies...or somthing else.</br></br><strong>Damage _____ 25</strong>"
+ 
   }  
 
   let equippedIndex = Infinity, selectedIndex = undefined, switchMode = false;

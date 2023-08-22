@@ -1693,7 +1693,7 @@ export class House1 extends _Building_ {
             [-30, -65, 0]
         ], [new _Map_(150, 100, false).init(), new _Map_(150, 80, false).init(), new _Map_(150, 80, false).init()], undefined);
  
-      let floor = new Floor(0,0,150,100,1);
+      let floor = new Floor(0,0,150,100,0);
       floor.exclude = true;
       this.rooms[0].link(floor);
     }
@@ -1756,10 +1756,15 @@ export class _Blade_ extends _Pickup_ {
         super(initialX, initialY, initialRotation);
     }
 
-    type = "blade";
+    type = "knife";
 }
 
 export class KitchenKnife extends _Blade_ {
+
+  static _properties = {
+        damage: 25,
+        useTextures: [12,13,14,15,16],
+    }
 
     static _defaultVertices = [-1.24, 6.57, 1, 0, 0, 1.24, 6.57, 1, 0.775, 0, -1.24, -6.57, 1, 0, 0.51328125, 1.24, 6.57, 1, 0.775, 0, -1.24, -6.57, 1, 0, 0.51328125, 1.24, -6.57, 1, 0.775, 0.51328125];
 
@@ -1975,7 +1980,7 @@ export class Avatar {
             baseSpeed: 1,
             runningSpeed: 2,
             speed: 1,
-            strength: 10,
+            strength: 5,
             armour: 0,
             invinsible: false,
             kills: 0,
@@ -1983,16 +1988,22 @@ export class Avatar {
             aggressive: false,
             hitboxes: {
              leftPunch: {
-               x: -5, 
-               y: 10,
-               width: 5, 
-               height: 5
+               x: -4, 
+               y: 7,
+               width: 2, 
+               height: 2
              },
              rightPunch: {
-               x: 5, 
-               y: 10,
-               width: 5, 
-               height: 5
+               x: 4, 
+               y: 7,
+               width: 2, 
+               height: 2
+             },
+             knife: {
+               x: 5,
+               y: 12,
+               width: 4, 
+               height: 4
              },
              pickup: {
                x: 0,
@@ -2051,7 +2062,8 @@ export class Avatar {
                 disengageDistance: 200
             },
             attack: {
-                punchSpeed: 0.5,
+                openCarry: false,
+                meleeAttackSpeed: 0.5,
                 engageDistance: 100,
                 slowdownDistance: 50,
                 settleDistance: 30,
@@ -2073,10 +2085,11 @@ export class Avatar {
             baseRotation: 0,
             walking: false,
             punching: false,
+            stabbing: false,
             armed: false,
+            melee: false,
             draw: false,
             fire: false,
-            openCarry: false,
             equippedItems: {
                 mainTool: undefined
             },
@@ -2229,13 +2242,13 @@ export class Avatar {
                 this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
             }, 0.5, true),
             walkingAnimation: new MultiFrameLoopAnimation([function() {
-                this.state.position.body.texture = 2;
+              this.state.position.body.texture = (this.state.draw && this.state.melee) ? this.state.equippedItems.mainTool.constructor._properties.useTextures[4]:2;
             }, function() {
-                this.state.position.body.texture = 0;
+              this.state.position.body.texture = (this.state.draw && this.state.melee) ? this.state.equippedItems.mainTool.constructor._properties.useTextures[0]:0;
             }, function() {
-                this.state.position.body.texture = 3;
+              this.state.position.body.texture = (this.state.draw && this.state.melee) ? this.state.equippedItems.mainTool.constructor._properties.useTextures[3]:3;
             }, function() {
-                this.state.position.body.texture = 0;
+              this.state.position.body.texture = (this.state.draw && this.state.melee) ? this.state.equippedItems.mainTool.constructor._properties.useTextures[0]:0;
             }], this, [0.08, 0.08, 0.08, 0.08], function() {
                 this.state.position.body.texture = 0;
             }, 0.5),
@@ -2245,7 +2258,7 @@ export class Avatar {
                 this.state.position.body.texture = 8;
             }, function() {
                 this.state.position.body.texture = 9;
-                this.meleeStrike(this.state.hitboxes.leftPunch);
+                this.meleeAttack(this.state.strength,this.state.hitboxes.leftPunch);
             }, function() {
                 this.state.position.body.texture = 0;
             }], this, [0.08, 0.08, 0.08, 0.15], function() {
@@ -2257,11 +2270,23 @@ export class Avatar {
                 this.state.position.body.texture = 10;
             }, function() {
                 this.state.position.body.texture = 11;
-                this.meleeStrike(this.state.hitboxes.rightPunch);
+                this.meleeAttack(this.state.strength,this.state.hitboxes.rightPunch);
             }, function() {
                 this.state.position.body.texture = 0;
             }], this, [0.08, 0.08, 0.08, 0.15], function() {
                 this.state.position.body.texture = 0;
+            }),
+            meleeAttackAnimation: new MultiFrameLoopAnimation([function() {
+                this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
+            }, function() {
+                this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[2];
+                this.meleeAttack(this.state.equippedItems.mainTool.constructor._properties.damage+this.state.strength,this.state.hitboxes.knife);
+            }, function() {
+               this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[1];
+            }, function() {
+               this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
+            }], this, [0.08, 0.08, 0.08, 0.15], function() {
+               this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
             }),
             blinkingAnimation: new MultiFrameLoopAnimation([function() {
                 this.state.position.eyes.texture = 0;
@@ -2313,8 +2338,9 @@ export class Avatar {
 
         this.state.targetUpdateAnimation.rate = this.state.attack.reactionTime.targetUpdateRate;
         this.state.shotCheckAnimation.rate = this.state.attack.reactionTime.shotCheckRate;
-        this.state.leftPunchAnimation.animationMultFactor = this.state.attack.punchSpeed;
-        this.state.rightPunchAnimation.animationMultFactor = this.state.attack.punchSpeed;
+        this.state.leftPunchAnimation.animationMultFactor = this.state.attack.meleeAttackSpeed;
+        this.state.rightPunchAnimation.animationMultFactor = this.state.attack.meleeAttackSpeed;
+        this.state.meleeAttackAnimation.animationMultFactor = this.state.attack.meleeAttackSpeed*2;
 
         this.state.fireAnimation = new LoopAnimation(function() {
 
@@ -2381,14 +2407,14 @@ export class Avatar {
     }
 
     drawWeapon() {
-        if (this.state.armed) {
+        if (!this.state.stabbing && (this.state.armed || this.state.melee)) {
             this.state.draw = true;
-            this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
+         if (!(this.state.walking && this.state.melee)) this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
         }
     }
 
     holsterWeapon() {
-        if (this.state.armed) {
+        if (this.state.armed || this.state.melee) {
             this.state.draw = false;
             this.state.position.body.texture = 0;
         }
@@ -2443,11 +2469,18 @@ export class Avatar {
             switch (item.type) {
                 case "gun": {
                     this.state.armed = true;
+                    this.state.melee = false;
                     this.state.equippedItems.mainTool = item;
                     this.state.equippedItems.mainTool.reloadProgress = item.reloadProgress; 
                     this.state.equippedItems.mainTool.loaded = item.loaded;
                     this.state.reloadTimeout.timingConfig[0] = this.state.equippedItems.mainTool.constructor._properties.reloadTime;
                     this.state.fireAnimation.rate = 0.5 / this.state.equippedItems.mainTool.constructor._properties.fireRate;
+                }
+                break;
+                case "knife": {
+                    this.state.armed = false;
+                    this.state.melee = true;
+                    this.state.equippedItems.mainTool = item;
                 }
                 break;
             }
@@ -2472,6 +2505,13 @@ export class Avatar {
                 }
             };
             break;
+            case "knife": {
+                    this.state.melee = false;
+                    this.state.draw = false;
+                    this.state.stabbing = false;
+                    this.state.equippedItems.mainTool = undefined;
+            };
+            break;
         }
 
      return true;
@@ -2483,20 +2523,24 @@ export class Avatar {
         this.state.blinkingAnimation.run();
         if (this.state.rotationTarget) this.state.rotationAnimation.run();
 
-        if (this.state.walking && !this.state.draw && !this.state.punching) {
+        if (this.state.walking && !(this.state.armed && this.state.draw) && !this.state.punching && !this.state.stabbing) {
             this.state.walkingAnimation.run();
-        } else if (!this.state.punching) {
+        } else if (!this.state.punching && !this.state.stabbing) {
             this.state.walkingAnimation.end();
         }
 
-        if (this.state.punching && !this.state.armed) {
+        if (this.state.punching && !this.state.armed && !this.state.melee) {
            this.state.punchingAnimation.run();
-        }
-
-        if (this.state.armed && this.state.draw) {
+        } 
+ 
+        if ((this.state.armed || (this.state.melee && !this.state.walking)) && this.state.draw && !this.state.stabbing) {
             this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
         }
 
+        if (this.state.stabbing && !this.state.armed) {
+          this.state.meleeAttackAnimation.run();
+        }
+ 
         if (this.state.fire && this.state.armed && this.state.target.shot && this.state.equippedItems.mainTool?.loaded && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo) {
             this.state.fireAnimation.run();
         }
@@ -2559,7 +2603,7 @@ export class Avatar {
                 } else if (dist > this.state.attack.engageDistance) {
                     this.state.speed = this.state.baseSpeed * this.state.attack.attackSpeed;
                     this.state.fire = false;
-                    if (!this.state.openCarry && this.state.draw) this.holsterWeapon();
+                    if (!this.state.attack.openCarry && this.state.draw) this.holsterWeapon();
                     if (!this.state.path.engaged && !this.state.follow.target) this.requestPath(targetX + m.centerX, targetY + m.centerY);
                 } else if (dist < this.state.attack.settleDistance) {
                     if (this.state.target.shot && this.state.path.engaged && !this.state.follow.target) {
@@ -2621,7 +2665,7 @@ export class Avatar {
                 }
             }
         }
-        this.movePickup();
+        this.movePickup(); 
     }
 
     render() {
@@ -2712,7 +2756,7 @@ export class Avatar {
         this.state.fire = false;
         if (this.state.path.engaged && !this.state.follow.target) this.disengagePath();
 
-        if (this.state.openCarry) {
+        if (this.state.attack.openCarry) {
             this.drawWeapon();
         } else {
             this.holsterWeapon();
@@ -2731,8 +2775,8 @@ export class Avatar {
         }
     }
 
-    meleeStrike(hitbox) {
-       let [x, y] = rotate(0, hitbox.y, (this.trans.rotation) * 180 / Math.PI);
+    meleeAttack(damage, hitbox) {
+       let [x, y] = rotate(hitbox.x, hitbox.y, (this.trans.rotation) * 180 / Math.PI);
         let {
             width,
             height
@@ -2742,7 +2786,7 @@ export class Avatar {
             let avatar = $CURRENT_MAP.avatars[i];
 
             if ((Math.abs(x - avatar.trans.offsetX) < (avatar.width / 2 + width / 2)) && (Math.abs(y - avatar.trans.offsetY) < (avatar.height / 2 + height / 2))) {
-               avatar.hit(this.state.strength, 0, 0, this); 
+               avatar.hit(damage, 0, 0, this); 
             }
         }
     }
@@ -4004,6 +4048,7 @@ export class _Joystick_ extends _Object_ {
         if (!this.left && $CURRENT_MAP.move) {
             $AVATAR.state.fire = false;
             $AVATAR.state.punching = false;
+            $AVATAR.state.stabbing = false;
         }
     }
 
@@ -4038,14 +4083,18 @@ export class _Joystick_ extends _Object_ {
         // activate player firing state when the left joystick is at the edge, and viceversa
         if (!this.left && $CURRENT_MAP.move) {
             if (this.distance.absolute === this.base.radius) {
+   
              if ($AVATAR.state.armed) {
                 $AVATAR.state.fire = true;
+              } else if ($AVATAR.state.melee) { 
+                $AVATAR.state.stabbing = true;
               } else {
                 $AVATAR.state.punching = true;
-             }
-            } else {
+              }
+             } else {
                 $AVATAR.state.fire = false;
                 $AVATAR.state.punching = false;
+                $AVATAR.state.stabbing = false; 
             }
         }
 

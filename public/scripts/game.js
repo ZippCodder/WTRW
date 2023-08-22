@@ -53,6 +53,7 @@
       Rocks2,
       BulletShell,
       Plus100,
+      KitchenKnife,
       Floor
   } from "/public/scripts/objects.js";
 
@@ -148,7 +149,7 @@
   //$MAP.link(new VisibleBarrier(80,0,40,40));
   
       let c = new Avatar("Trinity", -20, 0), b = new Avatar("Neo", -20, 0);
-
+    /*
       $MAP.link(c);
       c.state.attack.attackSpeed = 2;
       c.state.armour = 5000;
@@ -159,8 +160,10 @@
       c.state.targetId = c.id;
       c.follow($AVATAR.id);
       c.killTarget([$AVATAR.id,b.id],true, true);
-
+    */
    let a;
+
+movementMultFactor = 0.05;
 
 const enemySpawnLoop = new LoopAnimation(function() {
   if ($MAP.avatarCount < 5) {
@@ -186,6 +189,12 @@ const enemySpawnLoop = new LoopAnimation(function() {
       a.killTarget([$AVATAR.id, c.id], true);
   }
 }, window, 2);
+
+$MAP.SUB_MAPS[0].link(new KitchenKnife(40,0));
+$MAP.SUB_MAPS[0].link(new KitchenKnife(40,0));
+$MAP.SUB_MAPS[0].link(new KitchenKnife(40,0));
+$MAP.SUB_MAPS[0].link(new KitchenKnife(40,0));
+$MAP.SUB_MAPS[0].link(new KitchenKnife(40,0));
 
  $AVATAR.state.armour = 25;
 

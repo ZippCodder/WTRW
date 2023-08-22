@@ -3122,7 +3122,7 @@ export let OFF_ROADER = new TextureData(0, 0, 0.25, "avatar", {
 
 // @AVATARS
 
-export let MAIN_AVATAR_DEFAULT = new TextureData(0, 0, 1, "avatar", {
+export let MAIN_AVATAR_DEFAULT = new TextureData(0, 0, 0.2, "avatar", {
     width: 702,
     height: 2140
 }, [
@@ -3169,7 +3169,7 @@ export let MAIN_AVATAR_DEFAULT = new TextureData(0, 0, 1, "avatar", {
     ctx.restore();
 }, [0], 0, 0, -5, 851);
 
-export let MAIN_AVATAR_LEFT_PUNCH_1 = new TextureData(0, 0, 0.2, "avatar", {
+export let MAIN_AVATAR_LEFT_PUNCH_1 = new TextureData(0, 0, 1, "avatar", {
     width: 702,
     height: 2140
 }, [
@@ -3285,7 +3285,7 @@ export let MAIN_AVATAR_LEFT_PUNCH_2 = new TextureData(0, 0, 0.2, "avatar", {
     ctx.restore();
 },[], 0, 0, -5, -1);
 
-export let MAIN_AVATAR_RIGHT_PUNCH_1 = new TextureData(0, 0, 0.2, "avatar", {
+export let MAIN_AVATAR_RIGHT_PUNCH_1 = new TextureData(0, 0, 1, "avatar", {
     width: 702,
     height: 2140
 }, [
@@ -3400,6 +3400,240 @@ export let MAIN_AVATAR_RIGHT_PUNCH_2 = new TextureData(0, 0, 0.2, "avatar", {
 
     ctx.restore();
 },[], 0, 0, -5, -1);
+
+export let MAIN_AVATAR_DRAW_MELEE_WALKING_1 = new TextureData(0, 0, 0.2, "avatar", {
+    width: 702,
+    height: 2140
+}, [
+    [0, 0, 702, 2140]
+], 0, undefined, function(ctx) {
+    // body: 702x740, texture: 1024,512, size: 0.15, boxes: [[152, 15, 408, 408],[561, 145, 136, 136],[15, 145, 136, 136]]
+    // -1, -1
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.scale(this.size, this.size);
+
+    ctx.strokeStyle = "#1A1A1A";
+    ctx.lineWidth = 20;
+    ctx.fillStyle = "white";
+
+    let h1 = {
+        x: 0,
+        y: 930
+    }; // -272, -110
+    let h2 = {
+        x: 0,
+        y: 794
+    }; // 150, -125
+    let b = {
+        x: 0,
+        y: 856
+    }; // 0, 156
+
+    // filler
+    ctx.fillRect(152 + b.x, 15 + b.y, 408, 408);
+    ctx.fillRect(552 + h1.x, 145 + h1.y, 136, 136);
+    ctx.fillStyle = "black";
+
+    // shadows
+    ctx.fillStyle = "#F3F3F3";
+    ctx.fillRect(160 + b.x, 221 + b.y, 392, 193);
+    ctx.fillRect(570 + h1.x, 205 + h1.y, 119, 67);
+
+    // eyes
+    ctx.fillStyle = "#1A1A1A";
+    ctx.fillRect(231 + b.x, 60 + b.y, 90, 75);
+    ctx.fillRect(391 + b.x, 60 + b.y, 90, 75);
+
+    // main body
+    ctx.strokeRect(152 + b.x, 15 + b.y, 408, 408);
+    // right hand
+    ctx.strokeRect(561 + h1.x, 145 + h1.y, 136, 136);
+    // left hand
+    ctx.fillStyle = "white";
+    ctx.fillRect(12 + h2.x, 145 + h2.y, 136, 136);
+    ctx.fillStyle = "#F3F3F3";
+    ctx.fillRect(24 + h2.x, 205 + h2.y, 119, 67);
+    ctx.strokeRect(15 + h2.x, 145 + h2.y, 136, 136);
+
+    ctx.restore();
+},[], 0, 0, -5, -1);
+
+export let MAIN_AVATAR_DRAW_MELEE_WALKING_2 = new TextureData(0, 0, 0.2, "avatar", {
+    width: 702,
+    height: 2140
+}, [
+    [0, 0, 702, 2140]
+], 0, undefined, function(ctx) {
+    // body: 702x740, texture: 1024,512, size: 0.15, boxes: [[152, 15, 408, 408],[561, 145, 136, 136],[15, 145, 136, 136]]
+    // -1, -1
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.scale(this.size, this.size);
+
+    ctx.strokeStyle = "#1A1A1A";
+    ctx.lineWidth = 20;
+    ctx.fillStyle = "white";
+
+    let h1 = {
+        x: 0,
+        y: 794
+    }; // -272, -110
+    let h2 = {
+        x: 0,
+        y: 930
+    }; // 150, -125
+    let b = {
+        x: 0,
+        y: 856
+    }; // 0, 156
+
+    // filler
+    ctx.fillRect(152 + b.x, 15 + b.y, 408, 408);
+    ctx.fillRect(552 + h1.x, 145 + h1.y, 136, 136);
+    ctx.fillStyle = "black";
+
+    // shadows
+    ctx.fillStyle = "#F3F3F3";
+    ctx.fillRect(160 + b.x, 221 + b.y, 392, 193);
+    ctx.fillRect(570 + h1.x, 205 + h1.y, 119, 67);
+
+    // eyes
+    ctx.fillStyle = "#1A1A1A";
+    ctx.fillRect(231 + b.x, 60 + b.y, 90, 75);
+    ctx.fillRect(391 + b.x, 60 + b.y, 90, 75);
+
+    // main body
+    ctx.strokeRect(152 + b.x, 15 + b.y, 408, 408);
+    // right hand
+    ctx.strokeRect(561 + h1.x, 145 + h1.y, 136, 136);
+    // left hand
+    ctx.fillStyle = "white";
+    ctx.fillRect(12 + h2.x, 145 + h2.y, 136, 136);
+    ctx.fillStyle = "#F3F3F3";
+    ctx.fillRect(24 + h2.x, 205 + h2.y, 119, 67);
+    ctx.strokeRect(15 + h2.x, 145 + h2.y, 136, 136);
+
+    ctx.restore();
+},[], 0, 0, -5, -1);
+
+export let MAIN_AVATAR_DRAW_MELEE = new TextureData(0, 0, 0.2, "avatar", {
+    width: 702,
+    height: 2140
+}, [
+    [0, 0, 702, 2140]
+], 0, undefined, function(ctx) {
+    // body: 702x740, texture: 1024,512, size: 0.15, boxes: [[152, 15, 408, 408],[561, 145, 136, 136],[15, 145, 136, 136]]
+    // -1, -1
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.scale(this.size, this.size);
+
+    ctx.strokeStyle = "#1A1A1A";
+    ctx.lineWidth = 20;
+    ctx.fillStyle = "white";
+
+    let h1 = {
+        x: 0,
+        y: 828
+    }; // -272, -110
+    let h2 = {
+        x: 0,
+        y: 862
+    }; // 150, -125
+    let b = {
+        x: 0,
+        y: 856
+    }; // 0, 156
+
+    // filler
+    ctx.fillRect(152 + b.x, 15 + b.y, 408, 408);
+    ctx.fillRect(552 + h1.x, 145 + h1.y, 136, 136);
+    ctx.fillStyle = "black";
+
+    // shadows
+    ctx.fillStyle = "#F3F3F3";
+    ctx.fillRect(160 + b.x, 221 + b.y, 392, 193);
+    ctx.fillRect(570 + h1.x, 205 + h1.y, 119, 67);
+
+    // eyes
+    ctx.fillStyle = "#1A1A1A";
+    ctx.fillRect(231 + b.x, 60 + b.y, 90, 75);
+    ctx.fillRect(391 + b.x, 60 + b.y, 90, 75);
+
+    // main body
+    ctx.strokeRect(152 + b.x, 15 + b.y, 408, 408);
+    // right hand
+    ctx.strokeRect(561 + h1.x, 145 + h1.y, 136, 136);
+    // left hand
+    ctx.fillStyle = "white";
+    ctx.fillRect(12 + h2.x, 145 + h2.y, 136, 136);
+    ctx.fillStyle = "#F3F3F3";
+    ctx.fillRect(24 + h2.x, 205 + h2.y, 119, 67);
+    ctx.strokeRect(15 + h2.x, 145 + h2.y, 136, 136);
+
+    ctx.restore();
+},[], 0, 0, -5, -1);
+
+export let MAIN_AVATAR_DRAW_MELEE_STRIKE = new TextureData(0, 0, 0.2, "avatar", {
+    width: 702,
+    height: 2140
+}, [
+    [0, 0, 702, 2140]
+], 0, undefined, function(ctx) {
+    // body: 702x740, texture: 1024,512, size: 0.15, boxes: [[152, 15, 408, 408],[561, 145, 136, 136],[15, 145, 136, 136]]
+    // -1, -1
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.scale(this.size, this.size);
+
+    ctx.strokeStyle = "#1A1A1A";
+    ctx.lineWidth = 20;
+    ctx.fillStyle = "white";
+
+    let h1 = {
+        x: 0,
+        y: 726
+    }; // -272, -110
+    let h2 = {
+        x: 0,
+        y: 862
+    }; // 150, -125
+    let b = {
+        x: 0,
+        y: 856
+    }; // 0, 156
+
+    // filler
+    ctx.fillRect(152 + b.x, 15 + b.y, 408, 408);
+    ctx.fillRect(552 + h1.x, 145 + h1.y, 136, 136);
+    ctx.fillStyle = "black";
+
+    // shadows
+    ctx.fillStyle = "#F3F3F3";
+    ctx.fillRect(160 + b.x, 221 + b.y, 392, 193);
+    ctx.fillRect(570 + h1.x, 205 + h1.y, 119, 67);
+
+    // eyes
+    ctx.fillStyle = "#1A1A1A";
+    ctx.fillRect(231 + b.x, 60 + b.y, 90, 75);
+    ctx.fillRect(391 + b.x, 60 + b.y, 90, 75);
+
+    // main body
+    ctx.strokeRect(152 + b.x, 15 + b.y, 408, 408);
+    // right hand
+    ctx.strokeRect(561 + h1.x, 145 + h1.y, 136, 136);
+    // left hand
+    ctx.fillStyle = "white";
+    ctx.fillRect(12 + h2.x, 145 + h2.y, 136, 136);
+    ctx.fillStyle = "#F3F3F3";
+    ctx.fillRect(24 + h2.x, 205 + h2.y, 119, 67);
+    ctx.strokeRect(15 + h2.x, 145 + h2.y, 136, 136);
+
+    ctx.restore();
+},[], 0, 0, -5, -1);
+
+
 
 export let MAIN_AVATAR_DRAW_WEAPON = new TextureData(0, 0, 0.2, "avatar", {
     width: 702,
@@ -3999,7 +4233,7 @@ export let BOOK_2 = new TextureData(3, 2, 0.2, "pickup", {
     ctx.restore();
 });
 
-export let KITCHEN_KNIFE = new TextureData(4, 2, 0.2, "pickup", {
+export let KITCHEN_KNIFE = new TextureData(4, 2, 0.22, "pickup", {
     width: 124,
     height: 657
 }, [
@@ -4007,7 +4241,7 @@ export let KITCHEN_KNIFE = new TextureData(4, 2, 0.2, "pickup", {
 ], 0, undefined, function(ctx) {
     // 4 2 
     ctx.save();
-    ctx.translate(this.offset.x, this.offset.y);
+    ctx.translate(this.offset.vx, this.offset.vy);
     ctx.scale(this.size, this.size);
 
     ctx.beginPath();
@@ -4058,7 +4292,7 @@ export let KITCHEN_KNIFE = new TextureData(4, 2, 0.2, "pickup", {
     ctx.stroke();
 
     ctx.restore();
-});
+},[], 0, 0, 390, 130);
 
 export let ASSASSINS_KNIFE = new TextureData(8, 4, 0.2, "pickup", {
     width: 173,

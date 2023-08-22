@@ -118,6 +118,10 @@
             MAIN_AVATAR_LEFT_PUNCH_2,
             MAIN_AVATAR_RIGHT_PUNCH_1,
             MAIN_AVATAR_RIGHT_PUNCH_2,
+            MAIN_AVATAR_DRAW_MELEE,
+            MAIN_AVATAR_DRAW_MELEE_STRIKE,
+            MAIN_AVATAR_DRAW_MELEE_WALKING_1,
+            MAIN_AVATAR_DRAW_MELEE_WALKING_2,
             Sheet
         } from "/public/scripts/models.js";
 
@@ -165,10 +169,11 @@
         //CAFE(-18, -18, 0.2);
         //MAIN_AVATAR_DEFAULT(-5, -5, 0.2);
        
-        resize(256, 512);
+        resize(200, 200);
         // export function draw(a, w, h, iw, ih, s, lw, attribs=[],canvas) {
         //MAIN_AVATAR_DEFAULT.render(ctx);  
-        let texture = MAIN_AVATAR_LEFT_PUNCH_2;
+        let texture = KITCHEN_KNIFE;
+       
 //new Sheet([ROAD_RAIL,ROAD_SIGN,URBAN_FENCE_HALF,URBAN_FENCE,URBAN_FENCE_VERTICAL], 1024, 1024);
 
         //ACTION_BUTTON_TEXTURE.render(ctx);
@@ -180,6 +185,6 @@
        // log(texture.getData());
           log(texture.getData());
           console.log(texture.textureDimensions);
-        setSource(`MAIN_AVATAR_LEFT_PUNCH_2.png`); 
+        setSource(`kitchen_knife_icon.png`); 
     </script>
 </html>
