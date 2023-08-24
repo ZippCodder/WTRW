@@ -2530,7 +2530,7 @@ export class Avatar {
 
         if (this.state.walking && !(this.state.armed && this.state.draw) && !this.state.punching && !this.state.stabbing) {
             this.state.walkingAnimation.run();
-        } else if (!this.state.punching && !this.state.stabbing) {
+        } else if (!this.state.punching && !(this.state.stabbing || this.state.meleeAttackAnimation.active)) {
             this.state.walkingAnimation.end();
         }
 
@@ -2538,13 +2538,13 @@ export class Avatar {
            this.state.punchingAnimation.run();
         } 
  
-        if ((this.state.armed || (this.state.melee && !this.state.walking)) && this.state.draw && !this.state.stabbing) {
+        if ((this.state.armed || (this.state.melee && !this.state.walking)) && this.state.draw && !(this.state.stabbing || this.state.meleeAttackAnimation.active)) {
             this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
         }
 
-        if (this.state.stabbing && !this.state.armed) {
+        if ((this.state.stabbing || this.state.meleeAttackAnimation.active) && !this.state.armed && this.state.melee) {
           this.state.meleeAttackAnimation.run();
-        }
+        }     
  
         if (this.state.fire && this.state.armed && this.state.target.shot && this.state.equippedItems.mainTool?.loaded && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo) {
             this.state.fireAnimation.run();
@@ -2597,6 +2597,8 @@ export class Avatar {
 
             if (this.state.target.current && !this.map.avatars[this.state.target.current.id]) {
                this.disengageTarget();
+               if (this.state.melee) this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[2];
+
                break attack;
             } 
 

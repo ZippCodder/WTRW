@@ -207,7 +207,7 @@ $MAP.SUB_MAPS[0].link(new KitchenKnife(40,0));
  $AVATAR.state.armour = 10;
 
  $GAME_LOOP = function() {
-  //enemySpawnLoop.run(); 
+ // enemySpawnLoop.run(); 
  }; 
 
   // Developer console
