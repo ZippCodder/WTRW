@@ -1781,12 +1781,17 @@ export class KitchenKnife extends _Blade_ {
 
 export class AssassinsKnife extends _Blade_ {
 
+    static _properties = {
+        damage: 100,
+        useTextures: [17,18,19,20,21],
+    }
+
     static _defaultVertices = [-1.73, 6.7700000000000005, 1, 0, 0, 1.73, 6.7700000000000005, 1, 0.540625, 0, -1.73, -6.7700000000000005, 1, 0, 0.52890625, 1.73, 6.7700000000000005, 1, 0.540625, 0, -1.73, -6.7700000000000005, 1, 0, 0.52890625, 1.73, -6.7700000000000005, 1, 0.540625, 0.52890625];
 
     width = 3.46;
     height = 13.540000000000001;
-    name = "assassin's knife";
-    clusterName = "assassin's knife";
+    name = "assassins knife";
+    clusterName = "assassins knife";
     texture = textures.objects.assassinsknife;
 
     constructor(initialX, initialY, initialRotation) {
@@ -2407,7 +2412,7 @@ export class Avatar {
     }
 
     drawWeapon() {
-        if (!this.state.stabbing && (this.state.armed || this.state.melee)) {
+        if (this.state.equippedItems.mainTool && !this.state.stabbing && (this.state.armed || this.state.melee)) {
             this.state.draw = true;
          if (!(this.state.walking && this.state.melee)) this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
         }
@@ -2588,7 +2593,12 @@ export class Avatar {
 
         if (this.state.target.id.length > 0) this.state.targetUpdateAnimation.run();
 
-        attack: if (this !== $AVATAR && (this.state.armed || this.state.melee) && this.map.avatars[this.state.target.current?.id] && this.state.target.engaged) {
+        attack: if (this !== $AVATAR && (this.state.armed || this.state.melee) && this.state.target.current && this.state.target.engaged) {
+
+            if (this.state.target.current && !this.map.avatars[this.state.target.current.id]) {
+               this.disengageTarget();
+               break attack;
+            } 
 
             const {
               offsetX: targetX,
@@ -2775,14 +2785,13 @@ export class Avatar {
         this.state.target.current = undefined;
         this.state.speed = this.state.baseSpeed;
         this.state.fire = false;
-        if (this.state.path.engaged && !this.state.follow.target) this.disengagePath();
+        this.state.stabbing = false;
 
         if (this.state.attack.openCarry) {
             this.drawWeapon();
         } else {
             this.holsterWeapon();
         }
-
     }
 
     run() {

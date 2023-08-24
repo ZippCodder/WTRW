@@ -89,6 +89,11 @@ await textures.skins.addTexture("avatarkitchenknife2", "/public/images/textures/
 await textures.skins.addTexture("avatarkitchenknife3", "/public/images/textures/MAIN_AVATAR_MELEE_KITCHEN_KNIFE_3.png");
 await textures.skins.addTexture("avatarkitchenknifewalking1", "/public/images/textures/MAIN_AVATAR_MELEE_KITCHEN_KNIFE_WALKING_1.png");
 await textures.skins.addTexture("avatarkitchenknifewalking2", "/public/images/textures/MAIN_AVATAR_MELEE_KITCHEN_KNIFE_WALKING_2.png");
+await textures.skins.addTexture("avatarassassinsknife1", "/public/images/textures/MAIN_AVATAR_MELEE_ASSASSINS_KNIFE_1.png");
+await textures.skins.addTexture("avatarassassinsknife2", "/public/images/textures/MAIN_AVATAR_MELEE_ASSASSINS_KNIFE_2.png");
+await textures.skins.addTexture("avatarassassinsknife3", "/public/images/textures/MAIN_AVATAR_MELEE_ASSASSINS_KNIFE_3.png");
+await textures.skins.addTexture("avatarassassinsknifewalking1", "/public/images/textures/MAIN_AVATAR_MELEE_ASSASSINS_KNIFE_WALKING_1.png");
+await textures.skins.addTexture("avatarassassinsknifewalking2", "/public/images/textures/MAIN_AVATAR_MELEE_ASSASSINS_KNIFE_WALKING_2.png");
 
 textures.objects = new TextureContainer();
 

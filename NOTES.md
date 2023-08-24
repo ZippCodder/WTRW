@@ -11,7 +11,10 @@
 
 ## TODO
 
-* Fix item pickp with having to move
+* Refine melee attack logic
+* Fix weird freezing issue with avatars durring attack
+* Fix weird healthbar issues
+* Fix item pickup with having to move
 * Standardize transitions 
 * Implement health, dying and respawning
 * Implement avatar punching

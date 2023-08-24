@@ -3343,7 +3343,7 @@ export let MAIN_AVATAR_RIGHT_PUNCH_1 = new TextureData(0, 0, 1, "avatar", {
     ctx.restore();
 },[], 0, 0, -5, -1);
 
-export let MAIN_AVATAR_RIGHT_PUNCH_2 = new TextureData(0, 0, 0.2, "avatar", {
+export let MAIN_AVATAR_RIGHT_PUNCH_2 = new TextureData(0, 0, 1, "avatar", {
     width: 702,
     height: 2140
 }, [
@@ -3401,7 +3401,7 @@ export let MAIN_AVATAR_RIGHT_PUNCH_2 = new TextureData(0, 0, 0.2, "avatar", {
     ctx.restore();
 },[], 0, 0, -5, -1);
 
-export let MAIN_AVATAR_DRAW_MELEE_WALKING_1 = new TextureData(0, 0, 0.2, "avatar", {
+export let MAIN_AVATAR_DRAW_MELEE_WALKING_1 = new TextureData(0, 0, 1, "avatar", {
     width: 702,
     height: 2140
 }, [
@@ -3517,7 +3517,7 @@ export let MAIN_AVATAR_DRAW_MELEE_WALKING_2 = new TextureData(0, 0, 0.2, "avatar
     ctx.restore();
 },[], 0, 0, -5, -1);
 
-export let MAIN_AVATAR_DRAW_MELEE = new TextureData(0, 0, 0.2, "avatar", {
+export let MAIN_AVATAR_DRAW_MELEE = new TextureData(0, 0, 1, "avatar", {
     width: 702,
     height: 2140
 }, [
@@ -3575,7 +3575,7 @@ export let MAIN_AVATAR_DRAW_MELEE = new TextureData(0, 0, 0.2, "avatar", {
     ctx.restore();
 },[], 0, 0, -5, -1);
 
-export let MAIN_AVATAR_DRAW_MELEE_STRIKE = new TextureData(0, 0, 0.2, "avatar", {
+export let MAIN_AVATAR_DRAW_MELEE_STRIKE = new TextureData(0, 0, 1, "avatar", {
     width: 702,
     height: 2140
 }, [
@@ -4294,7 +4294,7 @@ export let KITCHEN_KNIFE = new TextureData(4, 2, 0.22, "pickup", {
     ctx.restore();
 },[], 0, 0, 390, 130);
 
-export let ASSASSINS_KNIFE = new TextureData(8, 4, 0.2, "pickup", {
+export let ASSASSINS_KNIFE = new TextureData(8, 4, 0.22, "pickup", {
     width: 173,
     height: 677
 }, [
@@ -4302,7 +4302,7 @@ export let ASSASSINS_KNIFE = new TextureData(8, 4, 0.2, "pickup", {
 ], 0, undefined, function(ctx) {
     // 8 4 
     ctx.save();
-    ctx.translate(this.offset.x, this.offset.y);
+    ctx.translate(this.offset.vx, this.offset.vy);
     ctx.scale(this.size, this.size);
 
     ctx.beginPath();
@@ -4364,7 +4364,7 @@ export let ASSASSINS_KNIFE = new TextureData(8, 4, 0.2, "pickup", {
     ctx.stroke();
 
     ctx.restore();
-});
+},[], 0, 0, 390, 130);
 
 export let COMBAT_KNIFE = new TextureData(27, 27, 0.2, "pickup", {
     width: 349,
