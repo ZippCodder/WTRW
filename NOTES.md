@@ -11,8 +11,8 @@
 
 ## TODO
 
-* Refine melee attack logic
-* Fix weird freezing issue with avatars durring attack
+* Separate logic between avatar and bot classes
+* Fix bugs related to melee attack
 * Fix weird healthbar issues
 * Fix item pickup with having to move
 * Standardize transitions 

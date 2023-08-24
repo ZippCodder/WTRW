@@ -2530,6 +2530,979 @@ export class Avatar {
 
         if (this.state.walking && !(this.state.armed && this.state.draw) && !this.state.punching && !this.state.stabbing) {
             this.state.walkingAnimation.run();
+        } else if (!this.state.punching && !this.state.stabbing) {
+           this.state.walkingAnimation.end();
+        }
+
+        if (this.state.punching && !this.state.armed && !this.state.melee) {
+           this.state.punchingAnimation.run();
+        } 
+ 
+        if ((this.state.armed || (this.state.melee && !this.state.walking)) && this.state.draw && !this.state.stabbing) {
+          this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
+        }
+
+        if (this.state.stabbing && this.state.melee && !this.state.armed) {
+          this.state.meleeAttackAnimation.run();
+        }     
+ 
+        if (this.state.fire && this.state.armed && this.state.target.shot && this.state.equippedItems.mainTool?.loaded && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo) {
+            this.state.fireAnimation.run();
+        }
+
+        if (this.state.armed) this.state.recoilAnimation.run();
+        if (!this.state.equippedItems.mainTool?.loaded) this.state.reloadTimeout.run();
+
+        if (this.state.recording.useRecording) this.state.recordAnimation.run();
+        if (this.state.goto.engaged) this.state.gotoAnimation.run();
+        if (!this.state.path.request) this.state.pathRequestRateLimit.run();
+
+        // walk to destination
+        walk: if (this.state.path.engaged && !this.state.goto.engaged) {
+
+            if (this.state.recording.useRecording) this.pauseRecording();
+
+            if (this.state.path.index === this.state.path.current.length) {
+                this.disengagePath();
+                break walk;
+            }
+
+            let {
+                x,
+                y
+            } = this.state.path.current[this.state.path.index];
+            let next = this.map.GRAPH.find(x, y).id;
+
+            if (!this.map.GRAPH.blocked.includes(next) && !this.map.GRAPH.reserved.includes(next)) {
+                this.state.goto.reserve = next;
+                this.map.GRAPH.reserved.push(next);
+
+                this.goto(x + 5, y - 5);
+                 
+                this.state.rotationTarget = normalizeRotation((Math.atan2(this.state.goto.y - this.trans.offsetY, this.state.goto.x - this.trans.offsetX)*180/Math.PI) - 90);
+            } else {
+                this.disengagePath();
+                this.requestPath(this.state.path.end.x, this.state.path.end.y);
+                break walk;
+            }
+
+            this.state.path.index++;
+        }
+
+        // attack target(s)
+
+        if (this.state.target.id.length > 0) this.state.targetUpdateAnimation.run();
+
+        attack: if (this !== $AVATAR && (this.state.armed || this.state.melee) && this.state.target.current && this.state.target.engaged) {
+
+            if (this.state.target.current && !this.map.avatars[this.state.target.current.id]) {
+               this.disengageTarget();
+               if (this.state.melee) this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[2];
+
+               break attack;
+            } 
+
+            const {
+              offsetX: targetX,
+              offsetY: targetY
+            } = this.state.target.current.trans, dist = distance(this.trans.offsetX, this.trans.offsetY, targetX, targetY), m = this.map;
+
+            stab: if (!this.state.armed && this.state.melee) {
+               if (dist > this.state.attack.disengageDistance && this.state.target.engaged) {
+                    this.disengageTarget();
+               } else if (dist <= this.state.attack.engageDistance) {
+                  if (this.state.attack.openCarry && !this.state.draw) this.drawWeapon();
+                  if (!this.state.path.engaged && !this.state.follow.target) this.requestPath(targetX + m.centerX, targetY + m.centerY);
+               }
+ 
+               if (dist <= 30) {
+                 this.state.stabbing = true;
+                 if (!this.state.draw) this.drawWeapon();
+                 this.state.rotationTarget = normalizeRotation((Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX))*180/Math.PI) - 70);
+               } else {
+                 this.state.stabbing = false;
+                 if (!this.state.attack.openCarry && this.state.draw) this.holsterWeapon();
+               }
+
+               break attack;
+            }
+         
+            shoot: if (this.state.armed && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo > 0) {
+                if (!this.state.equippedItems.mainTool?.loaded && !this.state.reloadTimeout.running) this.reload();
+                this.state.shotCheckAnimation.run();
+
+                if (dist > this.state.attack.disengageDistance && this.state.target.engaged) {
+                    this.disengageTarget();
+                } else if (dist > this.state.attack.engageDistance) {
+                    this.state.speed = this.state.baseSpeed * this.state.attack.attackSpeed;
+                    this.state.fire = false;
+                    if (!this.state.attack.openCarry && this.state.draw) this.holsterWeapon();
+                    if (!this.state.path.engaged && !this.state.follow.target) this.requestPath(targetX + m.centerX, targetY + m.centerY);
+                } else if (dist < this.state.attack.settleDistance) {
+                    if (this.state.target.shot && this.state.path.engaged && !this.state.follow.target) {
+                        this.disengagePath();
+                    }
+
+                    this.state.rotationTarget = normalizeRotation((Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX))*180/Math.PI) - 90);
+                    if (!this.state.draw) this.drawWeapon();
+                    if (this.state.target.shot) this.state.fire = true;
+
+                } else if (dist < this.state.attack.slowdownDistance) {
+                    this.state.rotationTarget = normalizeRotation((Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX))*180/Math.PI) - 90);
+
+                    if (!this.state.draw) this.drawWeapon();
+                    if (this.state.target.shot) this.state.fire = true;
+
+                    if (!this.state.follow.rush || !this.state.follow.target) this.state.speed = this.state.baseSpeed * (this.state.attack.attackSpeed / 3);
+                } else if (dist < this.state.attack.engageDistance) {
+                    this.state.speed = this.state.baseSpeed * this.state.attack.attackSpeed;
+                    this.state.rotationTarget = normalizeRotation((Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX))*180/Math.PI) - 90);
+
+                    if (!this.state.draw) this.drawWeapon();
+                    if (this.state.target.shot) this.state.fire = true;
+
+                    if (!this.state.path.engaged && !this.state.follow.target) {
+                        this.requestPath(targetX + m.centerX, targetY + m.centerY);
+                    }
+                }
+
+                if (!this.state.target.shot && this.state.path.request && !this.state.path.engaged && !this.state.follow.target) this.requestPath(targetX + m.centerX, targetY + m.centerY)
+
+                break attack;
+            }
+
+            this.disengageTarget();
+        }
+
+        // follow target
+
+        follow: if (this.state.follow.target) {
+
+            const {
+                offsetX: targetX,
+                offsetY: targetY
+            } = this.state.follow.target.trans, dist = distance(this.trans.offsetX, this.trans.offsetY, targetX, targetY), speed = (this.state.follow.run) ? this.state.runningSpeed * this.state.baseSpeed : this.state.baseSpeed;
+
+            if (dist > this.state.follow.settleDistance) {
+                this.state.speed = speed;
+                if (!this.state.path.engaged) {
+                    this.requestPath(targetX + this.map.centerX, targetY + this.map.centerY);
+                }
+            }
+
+            if (dist < this.state.follow.slowdownDistance && dist > this.state.settleDistance) {
+                this.state.speed = speed / 3;
+            } else if (dist < this.state.follow.settleDistance) {
+                if (this.state.path.engaged) {
+                    this.disengagePath();
+                }
+            }
+        }
+        this.movePickup(); 
+    }
+
+    render() {
+        gl.uniform2fv(locations.translation, [this.trans.offsetX, this.trans.offsetY]);
+        gl.uniform1f(locations.rotation, this.trans.rotation);
+
+        ext.bindVertexArrayOES(this.vao);
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
+
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, textures.skins.index[this.state.position.body.texture]);
+        gl.activeTexture(gl.TEXTURE1);
+        gl.bindTexture(gl.TEXTURE_2D, textures.skins.index[this.state.position.eyes.texture]);
+        gl.useProgram(program);
+
+        gl.drawArrays(gl.TRIANGLES, 0, 12);
+
+        this.nameObj.render();
+    }
+
+    useRecording(rec) {
+        this.state.recording.data = JSON.parse(rec);
+        this.state.recording.useRecording = true;
+    }
+
+    deleteRecording() {
+        this.state.recording.useRecording = false;
+        this.state.walking = false;
+        this.state.recording.frame = 0;
+        delete this.state.recording.data;
+    }
+
+    resumeRecording() {
+        this.state.walking = true;
+        this.state.recording.useRecording = true;
+    }
+
+    pauseRecording() {
+        this.state.walking = false;
+        this.state.recording.useRecording = false;
+    }
+
+    goto(x, y) {
+        this.state.goto.x = x - this.map.centerX;
+        this.state.goto.y = y - this.map.centerY;
+        this.state.goto.target = {
+            x: x,
+            y: y
+        };
+        this.state.goto.engaged = true;
+        this.state.recording.useRecording = false;
+        this.state.walking = true;
+    }
+
+    disengageGoto() {
+        this.state.goto.engaged = false;
+        this.state.walking = false;
+        if (this.state.goto.reserve) this.map.GRAPH.reserved.splice(this.map.GRAPH.reserved.indexOf(this.state.goto.reserve), 1);
+    }
+
+    killTarget(ids, multiple, invert) {
+        if (this.state.armed || this.state.melee) {
+            let map = (this.map || $CURRENT_MAP);
+            let target = map.avatars[ids[0]];
+
+            this.state.attack.multiple = multiple;
+            this.state.attack.invertTargets = invert;
+
+            if (target && !this.state.attack.multiple) {
+                this.state.target.current = target;
+                this.state.target.id = ids;
+                this.state.target.engaged = true;
+
+                return true;
+            } else if (this.state.attack.multiple) {
+                this.state.target.id = ids;
+                this.state.target.engaged = true;
+            }
+        }
+
+        return false;
+    }
+
+    disengageTarget() {
+        this.state.target.engaged = false;
+        this.state.target.current = undefined;
+        this.state.speed = this.state.baseSpeed;
+        this.state.fire = false;
+        this.state.stabbing = false;
+
+        if (this.state.attack.openCarry) {
+            this.drawWeapon();
+        } else {
+            this.holsterWeapon();
+        }
+    }
+
+    run() {
+        if (!this.state.path.engaged && !this.state.follow.target) {
+            let point = this.map.GRAPH.getRandomPoint();
+
+            if (point) {
+                this.state.speed = this.state.runningSpeed * this.state.baseSpeed;
+                this.requestPath(point.x, point.y);
+            }
+        }
+    }
+
+    meleeAttack(damage, hitbox) {
+       let [x, y] = rotate(hitbox.x, hitbox.y, (this.trans.rotation) * 180 / Math.PI), map = (this.map || $CURRENT_MAP);
+
+        x += this.trans.offsetX;
+        y += this.trans.offsetY;
+
+        let {
+            width,
+            height
+        } = hitbox;
+
+        for (let i in map.avatars) {
+            let avatar = map.avatars[i];
+
+            if ((Math.abs(x - avatar.trans.offsetX) < (avatar.width / 2 + width / 2)) && (Math.abs(y - avatar.trans.offsetY) < (avatar.height / 2 + height / 2))) {
+               avatar.hit(damage, 0, 0, this); 
+            }
+        }
+    }
+
+    grab() {
+        if (this.state.pickup.current) return;
+
+        let [x, y] = rotate(0, this.state.pickup.reachDistance, (this.trans.rotation) * 180 / Math.PI);
+        let {
+            width,
+            height
+        } = this.state.hitboxes.pickup;
+
+        for (let i in $CURRENT_MAP.moveables) {
+            let obj = $CURRENT_MAP.moveables[i];
+
+            if ((Math.abs(x - obj.trans.offsetX) < (obj.width / 2 + width / 2)) && (Math.abs(y - obj.trans.offsetY) < (obj.height / 2 + height / 2))) {
+                obj.moveToTop();
+
+                this.state.pickup.offset.x = obj.trans.offsetX;
+                this.state.pickup.offset.y = obj.trans.offsetY;
+                this.state.pickup.offset.aRotation = (this.trans.rotation * 180 / Math.PI);
+                this.state.pickup.offset.bRotation = obj.trans.rotation;
+                this.state.pickup.current = obj;
+                break;
+            }
+        }
+    }
+
+    movePickup() {
+        if (this.state.pickup.current) {
+            let {
+                offsetX,
+                offsetY
+            } = this.state.pickup.current.trans, pickup = this.state.pickup.current, rotation = (this.trans.rotation * 180 / Math.PI);
+            let [x2, y2] = rotate((this.state.pickup.offset.x), (this.state.pickup.offset.y), rotation - this.state.pickup.offset.aRotation);
+
+            pickup.translate(x2 - offsetX, y2 - offsetY, this.state.pickup.offset.bRotation + (this.state.pickup.offset.aRotation - rotation), true);
+        }
+    }
+
+    drop() {
+        if (this.state.pickup.current) {
+            this.state.pickup.current = undefined;
+        }
+    }
+
+    requestPath(x, y) {
+        if (this.state.path.request) {
+            this.state.path.request = false;
+            this.state.pathRequestRateLimit.start();
+
+            let start = this.map.GRAPH.getPoint(this.trans.offsetX + this.map.centerX, this.trans.offsetY + this.map.centerY),
+                end = this.map.GRAPH.getPoint(x, y);
+
+            if ((x >= -this.map.width / 2 && x < this.map.width / 2) && (y <= this.map.height / 2 && y > -this.map.height / 2) && start && end) {
+                this.state.path.start = start;
+                this.state.path.end = end;
+                pathfinder.requestPath(this, this.state.path.start.unit, this.state.path.end.unit);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    findPathTo(path) {
+        if (path.result && this.state.path.start) {
+            this.state.path.current = path.path;
+            this.state.path.index = 0;
+            this.state.path.engaged = true;
+        }
+        return path;
+    }
+
+    disengagePath() {
+        this.state.path.current = [];
+        this.state.path.index = 0;
+        this.state.path.engaged = false;
+        this.disengageGoto();
+    }
+
+    gotoAvatar() {
+        return this.requestPath(this.map.centerX, this.map.centerY);
+    }
+
+    clean() {
+        if (this.state.goto.reserve) this.map.GRAPH.reserved.splice(this.map.GRAPH.reserved.indexOf(this.state.goto.reserve), 1);
+    }
+
+    delete() {
+        this.map.unlink(this.id);
+    }
+}
+
+export class Bot {
+
+    constructor(name = "Unnamed Human", initialX = 0, initialY = 0, initialRotation = 0) {
+        this.character = name;
+        this.nameObj = new Text(name, 25);
+        this.nameObj.translate(initialX + 0, initialY + 10);
+        this.vao = ext.createVertexArrayOES();
+
+        ext.bindVertexArrayOES(this.vao);
+
+        this.vertices = {
+          body: [-7.0200000000000005,21.4,1,0,0,0,7.0200000000000005,21.4,1,0.5484375,0,0,-7.0200000000000005,-21.4,1,0,0.8359375,0,7.0200000000000005,21.4,1,0.5484375,0,0,-7.0200000000000005,-21.4,1,0,0.8359375,0,7.0200000000000005,-21.4,1,0.5484375,0.8359375,0],
+          eyes: [-2.7,3.379999999999999,1,0.16875,0.351953125,1,2.7,3.379999999999999,1,0.3796875,0.351953125,1,-2.7,1.4800000000000004,1,0.16875,0.3890625,1,2.7,3.379999999999999,1,0.3796875,0.351953125,1,-2.7,1.4800000000000004,1,0.16875,0.3890625,1,2.7,1.4800000000000004,1,0.3796875,0.3890625,1]
+        }
+
+        this.trans = {
+            offsetX: initialX || 0,
+            offsetY: initialY || 0,
+            rotation: (initialRotation * Math.PI / 180) || 0
+        }
+        this.width = 8.56;
+        this.height = 8.56;
+        this.obstacle = true;
+        this.segments = [
+            [-4.08, -4.08, 8.16, 8.16]
+        ];
+        this.bounds = {
+            width: this.height,
+            height: this.height
+        };
+        this.id = genObjectId();
+        this.playerId = genObjectId(20);
+        this.inventory = new Inventory();
+        this.type = "avatar";
+        this.name = "avatar";
+
+        this.state = {
+            hostile: false,
+            baseSpeed: 1,
+            runningSpeed: 2,
+            speed: 1,
+            strength: 5,
+            armour: 0,
+            invinsible: false,
+            kills: 0,
+            passive: false,
+            aggressive: false,
+            hitboxes: {
+             leftPunch: {
+               x: -4, 
+               y: 7,
+               width: 2, 
+               height: 2
+             },
+             rightPunch: {
+               x: 4, 
+               y: 7,
+               width: 2, 
+               height: 2
+             },
+             knife: {
+               x: 5,
+               y: 12,
+               width: 4, 
+               height: 4
+             },
+             pickup: {
+               x: 0,
+               y: 0,
+               width: 5,
+               height: 5
+             }
+            },
+            pickup: {
+              offset: {
+                x: 0,
+                y: 0,
+                aRotation: 0,
+                bRotation: 0,
+              },
+              current: false,
+              reachDistance: 2.5
+            },
+            vitals: {
+                health: 100,
+                hunger: 100,
+                thirst: 100
+            },
+            goto: {
+                x: 0,
+                y: 0,
+                target: {
+                    x: 0,
+                    y: 0
+                },
+                engaged: false,
+                reserve: undefined
+            },
+            path: {
+                current: [],
+                index: 0,
+                engaged: false,
+                start: undefined,
+                end: undefined,
+                request: true
+            },
+            targetId: undefined,
+            target: {
+                current: undefined,
+                id: [],
+                engaged: false,
+                shot: true
+            },
+            follow: {
+                target: undefined,
+                rush: false,
+                run: false,
+                engageDistance: 100,
+                slowdownDistance: 50,
+                settleDistance: 30,
+                disengageDistance: 200
+            },
+            attack: {
+                openCarry: true,
+                meleeAttackSpeed: 0.5,
+                engageDistance: 100,
+                slowdownDistance: 50,
+                settleDistance: 30,
+                disengageDistance: 200,
+                attackSpeed: 1,
+                multiple: false,
+                forget: false,
+                invertTargets: false,
+                reactionTime: {
+                 targetUpdateRate: 1,
+                 shotCheckRate: 1
+                }
+            },
+            recording: {
+                useRecording: false,
+                data: undefined,
+                frame: 0
+            },
+            baseRotation: 0,
+            walking: false,
+            punching: false,
+            stabbing: false,
+            armed: false,
+            melee: false,
+            draw: false,
+            fire: false,
+            equippedItems: {
+                mainTool: undefined
+            },
+            rotationSpeed: 0.1,
+            rotationTarget: undefined,
+            rotationAnimation: new LoopAnimation(function() {
+                let rotation = this.trans.rotation*180/Math.PI;
+
+                if (rotation !== this.state.rotationTarget && this !== $AVATAR) {
+   
+                  let difference = (Math.max(this.state.rotationTarget,rotation) - Math.min(this.state.rotationTarget,rotation)), rotationFactor = Math.min(difference,360 - difference)*this.state.rotationSpeed;     
+
+               this.rotate(normalizeRotation(rotation + (((difference < 180 && this.state.rotationTarget > rotation) || (difference > 180 && rotation > this.state.rotationTarget)) ? rotationFactor:-rotationFactor))); 
+               }
+            }, this, 0.01),
+            punchingAnimation: new LoopAnimation(function() {
+              let leftPunch = this.state.leftPunchAnimation, rightPunch = this.state.rightPunchAnimation;
+
+               if (leftPunch.active) {
+                  leftPunch.run();
+               } else if (rightPunch.active) { 
+                  rightPunch.run();
+               }
+
+               if (!leftPunch.active && !rightPunch.active) ((Math.random() < 0.5) ? leftPunch:rightPunch).active = true;
+
+            }, this, 0.01),
+            shotCheckAnimation: new LoopAnimation(function() {
+                this.state.target.shot = true;
+
+                outer: for (let o in this.map.obstacles) {
+                    let obstacle = this.map.obstacles[o];
+
+                    if (obstacle.id === this.id || obstacle.id === this.state.target.current.id) continue;
+
+                    for (let segment of obstacle.segments) {
+                        let [ox, oy, ow, oh] = segment;
+
+                        ox = ox + obstacle.trans.offsetX;
+                        oy = oy + obstacle.trans.offsetY;
+
+                        let p1 = this.trans.offsetX;
+                        let p2 = this.trans.offsetY;
+                        let p3 = this.state.target.current.trans.offsetX;
+                        let p4 = this.state.target.current.trans.offsetY;
+
+                        let result = lineIntersectsBox(p1, p2, p3, p4, ox, oy, ow, oh);
+
+                        if (result) {
+                            this.state.target.shot = !result;
+                            break outer;
+                        }
+                    }
+                }
+            }, this, 1),
+            reloadTimeout: new MultiFrameLinearAnimation([function() {
+                this.state.equippedItems.mainTool.reloadProgress = 0; 
+                this.state.equippedItems.mainTool.loaded = true;
+            }], this, [0]),
+            pathRequestRateLimit: new MultiFrameLinearAnimation([function() {
+                this.state.path.request = true;
+            }], this, [1]),
+            targetUpdateAnimation: new LoopAnimation(function() {
+                const map = (this.map || $CURRENT_MAP);
+
+                if (this.state.attack.multiple) {
+                    let targetDistance = this.state.attack.engageDistance,
+                        target, remember = [];
+
+                    for (let i in map.avatars) {
+                        if (map.avatars[i].id === this.id) continue;
+
+                        let {
+                            offsetX: targetX,
+                            offsetY: targetY
+                        } = map.avatars[i].trans;
+                        let dist = distance(this.trans.offsetX, this.trans.offsetY, targetX, targetY);
+                        if (((this.state.target.id.includes(map.avatars[i].state.targetId) && !this.state.attack.invertTargets) || (!this.state.target.id.includes(this.map.avatars[i].state.targetId) && this.state.attack.invertTargets))) {
+                            if (dist < targetDistance && map.avatars[i] !== this) {
+                                targetDistance = dist;
+                                target = map.avatars[i];
+                            }
+                            if (dist < this.state.attack.disengageDistance && this.state.attack.forget && !remember.includes(map.avatars[i].state.targetId)) {
+                                remember.push(map.avatars[i].state.targetId);
+                            }
+                        }
+                    }
+
+                    if (this.state.attack.forget) {
+                        this.state.target.id = remember;
+                    }
+
+                    if (target && this.state.target.current !== target) {
+                        this.state.target.current = target;
+                        this.state.target.engaged = true;
+                    }
+
+                } else if (map.avatars[this.state.target.id[0]]) {
+                    let {
+                        offsetX: targetX,
+                        offsetY: targetY
+                    } = map.avatars[this.state.target.id[0]].trans;
+                    let dist = distance(this.trans.offsetX, this.trans.offsetY, targetX, targetY);
+
+                    if (!this.state.target.engaged && dist < this.state.attack.engageDistance && !this.state.attack.forget) this.killTarget([this.state.target.id[0]]);
+                }
+
+            }, this, 1),
+            gotoAnimation: new LoopAnimation(function() {
+                let tx = 0,
+                    ty = 0;
+
+                this.state.goto.x = this.state.goto.target.x - this.map.centerX;
+                this.state.goto.y = this.state.goto.target.y - this.map.centerY;
+
+                if (this.state.goto.x !== this.trans.offsetX) {
+                    tx = (Math.abs(this.state.goto.x - this.trans.offsetX) < this.state.speed) ? (this.state.goto.x - this.trans.offsetX) : (this.trans.offsetX < this.state.goto.x) ? this.state.speed : -this.state.speed;
+                }
+
+                if (this.state.goto.y !== this.trans.offsetY) {
+                    ty = (Math.abs(this.state.goto.y - this.trans.offsetY) < this.state.speed) ? (this.state.goto.y - this.trans.offsetY) : (this.trans.offsetY < this.state.goto.y) ? this.state.speed : -this.state.speed;
+                }
+
+                this.translate(tx, ty);
+
+                if (this.state.goto.x === this.trans.offsetX && this.state.goto.y === this.trans.offsetY) {
+                    this.disengageGoto();
+                }
+            }, this, 0.03),
+            recordAnimation: new LoopAnimation(function() {
+                if (this.state.recording.useRecording) {
+                    let [x, y, r, w] = this.state.recording.data.slice(this.state.recording.frame, this.state.recording.frame + 4);
+                    this.trans.offsetX = this.nameObj.trans.offsetX = x - this.map.centerX;
+                    this.trans.offsetY = this.nameObj.trans.offsetY = y - this.map.centerY;
+                    this.nameObj.trans.offsetY += 10;
+                    this.rotate(r);
+                    this.state.walking = w;
+
+                    this.state.recording.frame += 4;
+
+                    if (this.state.recording.frame === this.state.recording.data.length - 4) this.state.recording.frame = 0;
+                }
+            }, this, 0.01),
+            fireAnimation: undefined,
+            recoilAnimation: new MultiFrameLinearAnimation([function() {
+                this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[1];
+            }, function() {
+                this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
+            }], this, [0.05, 0.05], function() {
+                this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
+            }, 0.5, true),
+            walkingAnimation: new MultiFrameLoopAnimation([function() {
+              this.state.position.body.texture = (this.state.draw && this.state.melee) ? this.state.equippedItems.mainTool.constructor._properties.useTextures[4]:2;
+            }, function() {
+              this.state.position.body.texture = (this.state.draw && this.state.melee) ? this.state.equippedItems.mainTool.constructor._properties.useTextures[0]:0;
+            }, function() {
+              this.state.position.body.texture = (this.state.draw && this.state.melee) ? this.state.equippedItems.mainTool.constructor._properties.useTextures[3]:3;
+            }, function() {
+              this.state.position.body.texture = (this.state.draw && this.state.melee) ? this.state.equippedItems.mainTool.constructor._properties.useTextures[0]:0;
+            }], this, [0.08, 0.08, 0.08, 0.08], function() {
+                this.state.position.body.texture = 0;
+            }, 0.5),
+            leftPunchAnimation: new MultiFrameLoopAnimation([function() {
+                this.state.position.body.texture = 0;
+            }, function() {
+                this.state.position.body.texture = 8;
+            }, function() {
+                this.state.position.body.texture = 9;
+                this.meleeAttack(this.state.strength,this.state.hitboxes.leftPunch);
+            }, function() {
+                this.state.position.body.texture = 0;
+            }], this, [0.08, 0.08, 0.08, 0.15], function() {
+                this.state.position.body.texture = 0;
+            }),
+            rightPunchAnimation: new MultiFrameLoopAnimation([function() {
+                this.state.position.body.texture = 0;
+            }, function() {
+                this.state.position.body.texture = 10;
+            }, function() {
+                this.state.position.body.texture = 11;
+                this.meleeAttack(this.state.strength,this.state.hitboxes.rightPunch);
+            }, function() {
+                this.state.position.body.texture = 0;
+            }], this, [0.08, 0.08, 0.08, 0.15], function() {
+                this.state.position.body.texture = 0;
+            }),
+            meleeAttackAnimation: new MultiFrameLoopAnimation([function() {
+                this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
+            }, function() {
+                this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[2];
+                this.meleeAttack(this.state.equippedItems.mainTool.constructor._properties.damage+this.state.strength,this.state.hitboxes.knife);
+            }, function() {
+               this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[1];
+            }, function() {
+               this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
+            }], this, [0.08, 0.08, 0.08, 0.15], function() {
+               this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
+            }),
+            blinkingAnimation: new MultiFrameLoopAnimation([function() {
+                this.state.position.eyes.texture = 0;
+            }, function() {
+                this.state.position.eyes.texture = 1;
+            }, function() {
+                this.state.position.eyes.texture = 0;
+            }], this, [5 * Math.random(), 1, 1]),
+            position: {
+                body: {
+                    texture: 0
+                },
+                eyes: {
+                    texture: 0
+                }
+            }
+        }
+
+        ext.bindVertexArrayOES(this.vao);
+        this.buffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
+        gl.vertexAttribPointer(locations.coords, 3, gl.FLOAT, false, 24, 0);
+        gl.vertexAttribPointer(locations.tcoords, 2, gl.FLOAT, false, 24, 12);
+        gl.vertexAttribPointer(locations.textrUnit, 1, gl.FLOAT, false, 24, 20);
+        gl.enableVertexAttribArray(locations.coords);
+        gl.enableVertexAttribArray(locations.tcoords);
+        gl.enableVertexAttribArray(locations.textrUnit);
+        gl.disableVertexAttribArray(locations.offset);
+
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([...this.vertices.body, ...this.vertices.eyes]), gl.STATIC_DRAW);
+
+        gl.useProgram(program);
+    }
+
+    translate(x, y) {
+        this.trans.offsetX += x;
+        this.trans.offsetY += y;
+        this.nameObj.translate(x, y);
+        gl.uniform2fv(locations.translation, [this.trans.offsetX, this.trans.offsetY]);
+    }
+
+    rotate(a) {
+        a = a * Math.PI / 180;
+        this.trans.rotation = a;
+        gl.uniform1f(locations.rotation, this.trans.rotation);
+    }
+
+    postLink() {
+
+        this.state.targetUpdateAnimation.rate = this.state.attack.reactionTime.targetUpdateRate;
+        this.state.shotCheckAnimation.rate = this.state.attack.reactionTime.shotCheckRate;
+        this.state.leftPunchAnimation.animationMultFactor = this.state.attack.meleeAttackSpeed;
+        this.state.rightPunchAnimation.animationMultFactor = this.state.attack.meleeAttackSpeed;
+        this.state.meleeAttackAnimation.animationMultFactor = this.state.attack.meleeAttackSpeed*2;
+
+        this.state.fireAnimation = new LoopAnimation(function() {
+
+            this.state.recoilAnimation.start();
+
+            const map = (this.map || $CURRENT_MAP);
+            const [initialTrajectoryX, initialTrajectoryY] = rotate(0, 1, (this.trans.rotation) * 180 / Math.PI);
+
+            let randomBulletRotation = random(this.state.equippedItems.mainTool.constructor._properties.accuracy || 0);
+            randomBulletRotation = (Math.random() < 0.5) ? -randomBulletRotation : randomBulletRotation;
+
+            let [finalTrajectoryX, finalTrajectoryY] = rotate(initialTrajectoryX, initialTrajectoryY, randomBulletRotation);
+            let [initialPointX, initialPointY] = rotate(0, this.state.equippedItems.mainTool.constructor._properties.nozzelLength, (this.trans.rotation) * 180 / Math.PI);
+
+            map.link(new Bullet(initialPointX + this.trans.offsetX, initialPointY + this.trans.offsetY, ((this.trans.rotation) * 180 / Math.PI) + 90, finalTrajectoryX * this.state.equippedItems.mainTool.constructor._properties.bulletSpeed, finalTrajectoryY * this.state.equippedItems.mainTool.constructor._properties.bulletSpeed, this.state.equippedItems.mainTool.constructor._properties.damage, this));
+
+
+            let [shellDirectionX, shellDirectionY] = rotate(20, 0, (this.trans.rotation) * 180 / Math.PI), randomShellRotation = random(10);
+            let [randomShellDirectionX, randomShellDirectionY] = rotate(shellDirectionX, shellDirectionY, (Math.random() < 0.5) ? -randomShellRotation : randomShellRotation);
+            let [shellInitialX, shellInitialY] = rotate(0, 8, (this.trans.rotation) * 180 / Math.PI);
+
+            map.link(new BulletShell(this.trans.offsetX + shellInitialX, this.trans.offsetY + shellInitialY, randomShellDirectionX, randomShellDirectionY));
+
+            this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo--;
+            this.state.equippedItems.mainTool.reloadProgress++; 
+
+            if (this.state.equippedItems.mainTool.reloadProgress === this.state.equippedItems.mainTool.constructor._properties.capacity) this.state.equippedItems.mainTool.loaded = false;
+
+        }, this, 0);
+    }
+
+    hit(damage, x, y, owner) {
+        if (!this.state.invinsible) {
+            (this.state.armour > 0) ? this.state.armour -= damage: this.state.vitals.health -= damage;
+
+            if (this === $AVATAR) updateHealthBar();
+
+            if (this.state.vitals.health <= 0) {
+                let attacker = (this.map ?? $CURRENT_MAP).avatars[owner.id];
+                if (attacker) attacker.state.kills += 1;
+
+                this.purgeItems(5);
+
+                if (this !== $AVATAR) {
+                 this.delete();
+                } else {
+                 delete $CURRENT_MAP.avatars[this.id];
+                 delete $CURRENT_MAP.obstacles[this.id];
+                 this.hidden = true;
+                 $CURRENT_MAP.noclip = true;
+                }
+
+                return;
+            }
+        }
+
+        if ((this.state.passive && !this.state.aggressive) || (this.state.armed && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo <= 0)) {
+            this.run();
+        } else if (!this.state.target.id.includes(owner.state.targetId) && (this.map || $CURRENT_MAP).avatars[owner.id] && this.state.aggressive) {
+            this.state.target.id.push(owner.state.targetId);
+            this.state.target.engaged = true;
+            this.state.attack.multiple = true;
+        }
+    }
+
+    drawWeapon() {
+        if (this.state.equippedItems.mainTool && !this.state.stabbing && (this.state.armed || this.state.melee)) {
+            this.state.draw = true;
+         if (!(this.state.walking && this.state.melee)) this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
+        }
+    }
+
+    holsterWeapon() {
+        if (this.state.armed || this.state.melee) {
+            this.state.draw = false;
+            this.state.position.body.texture = 0;
+        }
+    }
+
+    reload() {
+        this.state.reloadTimeout.start();
+    }
+
+    follow(id) {
+        this.state.speed = (this.state.follow.run) ? this.state.runningSpeed : this.state.baseSpeed;
+        this.state.follow.target = this.map.avatars[id];
+    }
+
+    disengageFollow() {
+        this.state.follow.target = undefined;
+    }
+
+    addItem(item, slot) {
+      if (this.inventory.addItem(item, slot) && this === $AVATAR) {
+        updateInventoryItem(item.slot,item.name);
+      }
+    }
+
+    dropItem(slot) {
+     if (!this.inventory.items[slot]) return false;      
+
+        if (this === $AVATAR) updateInventoryItem(this.inventory.items[slot].slot,this.inventory.items[slot].name,true);
+        this.unequipItem(slot);
+ 
+        let item = this.inventory.ejectItem(slot);
+         
+        item.ring.trans.offsetX = item.trans.offsetX = this.trans.offsetX + random(10, true);
+        item.ring.trans.offsetY = item.trans.offsetY = this.trans.offsetY + random(10, true);
+        item.trans.rotation = random(360);
+
+        (this.map || $CURRENT_MAP).link(item);
+
+        return true;
+    }
+
+    purgeItems(limit) {
+        for (let i = 0; i < limit; i++) {
+            if (this.inventory.items[i]) this.dropItem(i);
+        }
+    }
+
+    equipItem(slot) {
+        let item = this.inventory.items[slot];
+       
+        if (item) {
+            switch (item.type) {
+                case "gun": {
+                    this.state.armed = true;
+                    this.state.melee = false;
+                    this.state.equippedItems.mainTool = item;
+                    this.state.equippedItems.mainTool.reloadProgress = item.reloadProgress; 
+                    this.state.equippedItems.mainTool.loaded = item.loaded;
+                    this.state.reloadTimeout.timingConfig[0] = this.state.equippedItems.mainTool.constructor._properties.reloadTime;
+                    this.state.fireAnimation.rate = 0.5 / this.state.equippedItems.mainTool.constructor._properties.fireRate;
+                }
+                break;
+                case "knife": {
+                    this.state.armed = false;
+                    this.state.melee = true;
+                    this.state.equippedItems.mainTool = item;
+                }
+                break;
+            }
+
+            return true;
+        }
+      
+        return false;
+    }
+
+    unequipItem(slot) {
+      if (!this.inventory.items[slot]) return false;      
+
+        let item = this.inventory.items[slot];
+        
+        switch (item.type) {
+            case "gun": {
+                if (this.state.equippedItems.mainTool && item.slot === this.state.equippedItems.mainTool.slot) {
+                    this.state.armed = false;
+                    this.state.draw = false;
+                    this.state.equippedItems.mainTool = undefined;
+                }
+            };
+            break;
+            case "knife": {
+                    this.state.melee = false;
+                    this.state.draw = false;
+                    this.state.stabbing = false;
+                    this.state.equippedItems.mainTool = undefined;
+            };
+            break;
+        }
+
+     return true;
+    }
+
+    preRender() {
+        // run animations
+
+        this.state.blinkingAnimation.run();
+        if (this.state.rotationTarget) this.state.rotationAnimation.run();
+
+        if (this.state.walking && !(this.state.armed && this.state.draw) && !this.state.punching && !this.state.stabbing) {
+            this.state.walkingAnimation.run();
         } else if (!this.state.punching && !(this.state.stabbing || this.state.meleeAttackAnimation.active)) {
             this.state.walkingAnimation.end();
         }
@@ -3404,7 +4377,7 @@ export class _Map_ {
             let ob = this.objects[i];
             if (ob.preRender && !this.freeze) ob.preRender();
 
-            if (!(ob instanceof Barrier || ob instanceof Trigger || ob instanceof Avatar) && !ob.bottomLayer && !ob.topLayer && !ob.hasCluster && !ob.hidden && !ob.subLayer && this.show) {
+            if (!(ob instanceof Barrier || ob instanceof Trigger || ob instanceof Bot) && !ob.bottomLayer && !ob.topLayer && !ob.hasCluster && !ob.hidden && !ob.subLayer && this.show) {
                 ob.render();
             }
         }
@@ -3425,7 +4398,7 @@ export class _Map_ {
 
                 let ob = this.objects[i];
 
-                if (!(ob instanceof Barrier || ob instanceof Trigger || ob instanceof Avatar) && !ob.bottomLayer && ob.topLayer && !ob.hasCluster && !ob.hidden && !ob.subLayer) {
+                if (!(ob instanceof Barrier || ob instanceof Trigger || ob instanceof Bot) && !ob.bottomLayer && ob.topLayer && !ob.hasCluster && !ob.hidden && !ob.subLayer) {
                     ob.render();
                 }
             }
@@ -3445,7 +4418,7 @@ export class _Map_ {
 
                 let ob = this.objects[i];
 
-                if (!(ob instanceof Barrier || ob instanceof Trigger || ob instanceof Avatar) && !ob.topLayer && ob.bottomLayer && !ob.hasCluster && !ob.hidden && !ob.subLayer) {
+                if (!(ob instanceof Barrier || ob instanceof Trigger || ob instanceof Bot) && !ob.topLayer && ob.bottomLayer && !ob.hasCluster && !ob.hidden && !ob.subLayer) {
                     ob.render();
                 }
             }
@@ -3455,7 +4428,7 @@ export class _Map_ {
     renderSubLayers(layer) {
         for (let l in this.subLayers) {
             for (let ob of this.subLayers[l]) {
-                if (!(ob instanceof Barrier || ob instanceof Trigger || ob instanceof Avatar) && (ob[layer] || (!layer && !ob.bottomLayer && !ob.topLayer)) && !ob.hasCluster && !ob.hidden) {
+                if (!(ob instanceof Barrier || ob instanceof Trigger || ob instanceof Bot) && (ob[layer] || (!layer && !ob.bottomLayer && !ob.topLayer)) && !ob.hasCluster && !ob.hidden) {
                     ob.render();
                 }
             }
