@@ -660,7 +660,7 @@ export let MAP_ICON = new TextureData(0, 0, 1, "control", {
 
 /* icon container */
 
-export let ICONS = new TextureData(0, 0, 1, "control", {
+export let ICONS = new TextureData(0, 0, 8.25, "control", {
     width: 600,
     height: 600
 }, [
@@ -758,6 +758,7 @@ export let ICONS = new TextureData(0, 0, 1, "control", {
       ctx.stroke();
       */
 
+ /* water icon
     ctx.beginPath();
     ctx.moveTo(398, 290);
     ctx.lineTo(423, 265);
@@ -765,7 +766,44 @@ export let ICONS = new TextureData(0, 0, 1, "control", {
     ctx.lineTo(377, 265);
     ctx.lineTo(402, 290);
     ctx.fill();
+    ctx.stroke(); */
+
+/*  sheild icon
+    ctx.lineWidth = 5;
+    ctx.scale(0.76,0.76);
+    ctx.translate(111,62);
+    ctx.moveTo(413.5,320);
+    ctx.lineTo(445,290);
+    ctx.lineTo(450,245);
+    ctx.lineTo(415,235);
+    ctx.lineTo(380,245);
+    ctx.lineTo(385,290);
+    ctx.lineTo(416.5,320);
     ctx.stroke();
+    ctx.fill();
+*/
+
+
+   ctx.lineWidth = 5;
+
+   function bullet(x,y) {
+    ctx.translate(x,y);
+    ctx.moveTo(380,290);
+    ctx.lineTo(386,290);  
+    ctx.lineTo(386,260);
+    ctx.lineTo(384,252);
+    ctx.lineTo(382,252);
+    ctx.lineTo(380,260);
+    ctx.lineTo(380,292.5);
+    ctx.stroke();
+    ctx.fill();
+    ctx.translate(-x,-y);
+   }
+
+   bullet(-2,-13);
+   bullet(17,-13);
+   bullet(36,-13);
+ 
 });
 
 // @BUILDINGS

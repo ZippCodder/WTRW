@@ -1087,7 +1087,7 @@ export class StreetLight extends _StaticClusterClient_ {
     constructor(initialX, initialY, initialRotation, color) {
         super(initialX, initialY, initialRotation);
         this._color = color || undefined;
-        this.lights = [new DownwardLight(this.trans.offsetX - 12.7, this.trans.offsetY - 18, 0, this._color), new DownwardLight(this.trans.offsetX + 12.7, this.trans.offsetY - 18, 0, this._color)];
+        this.lights = [new DownwardLight(this.trans.offsetX - 12.7, this.trans.offsetY - 18.5, 0, this._color), new DownwardLight(this.trans.offsetX + 12.7, this.trans.offsetY - 18.5, 0, this._color)];
     }
 
     set color(c) {

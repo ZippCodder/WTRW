@@ -149,8 +149,7 @@
   //$MAP.link(new VisibleBarrier(80,0,40,40));
   
       let c = new Bot("Trinity", -20, 0), b = new Bot("Neo", 20, -30);
-      c.id = "ABC";
-      $MAP.link(c);
+     // $MAP.link(c);
       c.state.attack.attackSpeed = 1;
       c.state.armour = 50000;
       //c.state.aggressive = true;
@@ -188,11 +187,11 @@ const enemySpawnLoop = new LoopAnimation(function() {
       a.state.passive = false;
       a.state.openCarry = true;
       a.state.targetUpdateAnimation.rate = 1 / 5;
-      a.addItem(new GP_K100(0,0,0,1000));
+      a.addItem((Math.random() < 0.5) ? new GP_K100(0,0,0,1000):new KitchenKnife);
       a.equipItem(0);
       a.state.targetId = id;
       //a.follow($AVATAR.id);
-      a.killTarget([c.id], true);
+      a.killTarget([$AVATAR.id]);
   }
 }, window, 2);
 
@@ -208,7 +207,7 @@ $MAP.SUB_MAPS[0].link(new KitchenKnife(40,0));
  $AVATAR.state.armour = 10;
 
  $GAME_LOOP = function() {
- // enemySpawnLoop.run(); 
+  enemySpawnLoop.run(); 
  }; 
 
   // Developer console

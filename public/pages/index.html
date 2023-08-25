@@ -18,8 +18,6 @@
     
     <!-- onscreen content and controls --> 
            
-          <!--  <canvas class="controls-container__map" id="map"></canvas> -->
-    
             <div class="controls-container__inv">
                 <div class="controls-container__item item-1"></div>
                 <div class="controls-container__item item-2"></div>
@@ -35,10 +33,17 @@
                   <img class="controls-container__button" src="/public/images/icons/MAP_ICON.png" />
                   <img class="controls-container__button" src="/public/images/icons/GEAR_ICON.png" />
                 </div>
+
+             <div class="controls-container__info-boxes">
+             <div class="info-box"><img class="icon" src="/public/images/icons/SHLD_ICON.png" /><p id="armour">100</p></div>
+             <div class="info-box"><img class="icon" src="/public/images/icons/AMMO_ICON.png" /><p id="ammo">0/0</p></div>
+             </div>
                 
                 <div class="controls-container__stats">
                     <img id="skin-icon" src="/public/images/favicon.png" /><div class="controls-container__health"><img src="/public/images/icons/HLT_ICON.png" class="icon" /><div class="controls-container__healthbar"><div id="healthbar"></div></div><img src="/public/images/icons/FOD_ICON.png" class="icon" /><p id="hunger">100</p><img src="/public/images/icons/WTR_ICON.png" class="icon" /><p id="thirst">100</p></div>
                 </div>
+
+   <!-- onscreen content and controls --> 
                 
                 <div id="main-inventory">
                     <h1 class="main-inventory__title">Inventory<button class="main-inventory__close">Close</button><button class="main-inventory__view-stats">View Stats</button></h1>
