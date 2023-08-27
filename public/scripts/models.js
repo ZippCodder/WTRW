@@ -676,6 +676,7 @@ export let ICONS = new TextureData(0, 0, 8.25, "control", {
 
     ctx.translate(-365, -223);
     /* backpack icon
+       70x70
     
       ctx.moveTo(300,300);
       ctx.lineTo(346,300);
@@ -694,7 +695,8 @@ export let ICONS = new TextureData(0, 0, 8.25, "control", {
         */
 
     /* wrench icon 
-    
+      70x70    
+
     ctx.beginPath();
     ctx.lineWidth = 7;
     ctx.moveTo(400,300);
@@ -714,6 +716,7 @@ export let ICONS = new TextureData(0, 0, 8.25, "control", {
     */
 
     /* door icon
+      70x70
     ctx.beginPath();
     ctx.strokeRect(332.5,303.5,45,64);
     ctx.lineWidth = 3;
@@ -721,6 +724,7 @@ export let ICONS = new TextureData(0, 0, 8.25, "control", {
     */
 
     /* heart icon 
+      70x70
     ctx.beginPath();
     ctx.moveTo(306,296);
     ctx.lineTo(274,265);
@@ -734,6 +738,7 @@ export let ICONS = new TextureData(0, 0, 8.25, "control", {
 
     /*   fork icon
       
+      70x70
       ctx.beginPath();
       ctx.moveTo(300,290);
       ctx.lineTo(310,290);
@@ -759,6 +764,7 @@ export let ICONS = new TextureData(0, 0, 8.25, "control", {
       */
 
  /* water icon
+      70x70
     ctx.beginPath();
     ctx.moveTo(398, 290);
     ctx.lineTo(423, 265);
@@ -769,6 +775,7 @@ export let ICONS = new TextureData(0, 0, 8.25, "control", {
     ctx.stroke(); */
 
 /*  sheild icon
+      70x70
     ctx.lineWidth = 5;
     ctx.scale(0.76,0.76);
     ctx.translate(111,62);
@@ -783,7 +790,8 @@ export let ICONS = new TextureData(0, 0, 8.25, "control", {
     ctx.fill();
 */
 
-
+/* ammo icon 
+      70x70
    ctx.lineWidth = 5;
 
    function bullet(x,y) {
@@ -803,7 +811,17 @@ export let ICONS = new TextureData(0, 0, 8.25, "control", {
    bullet(-2,-13);
    bullet(17,-13);
    bullet(36,-13);
- 
+*/
+
+ //  ctx.strokeRect(370,228,90,90);
+   ctx.moveTo(382,273);
+   ctx.lineTo(418,273);
+   ctx.moveTo(382,253);
+   ctx.lineTo(438,253);
+   ctx.moveTo(382,293);
+   ctx.lineTo(448,293);
+   ctx.stroke();
+
 });
 
 // @BUILDINGS

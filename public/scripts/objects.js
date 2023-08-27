@@ -996,7 +996,7 @@ export class Rocks2 extends _InstancedClusterClient_ {
 
 /* Misc props */
 
-export class Book1 extends _InstancedClusterClient_ {
+export class BlackBook extends _InstancedClusterClient_ {
 
     static _defaultVertices = [-3.0100000000000002, 4.16, 1, 0, 0, 3.0100000000000002, 4.16, 1, 0.940625, 0, -3.0100000000000002, -4.16, 1, 0, 0.65, 3.0100000000000002, 4.16, 1, 0.940625, 0, -3.0100000000000002, -4.16, 1, 0, 0.65, 3.0100000000000002, -4.16, 1, 0.940625, 0.65];
 
@@ -1012,7 +1012,7 @@ export class Book1 extends _InstancedClusterClient_ {
     }
 }
 
-export class Book2 extends _InstancedClusterClient_ {
+export class WhiteBook extends _InstancedClusterClient_ {
 
     static _defaultVertices = [-3.0100000000000002, 4.16, 1, 0, 0, 3.0100000000000002, 4.16, 1, 0.940625, 0, -3.0100000000000002, -4.16, 1, 0, 0.65, 3.0100000000000002, 4.16, 1, 0.940625, 0, -3.0100000000000002, -4.16, 1, 0, 0.65, 3.0100000000000002, -4.16, 1, 0.940625, 0.65];
 
@@ -1165,9 +1165,9 @@ export class Bench extends _StaticClusterClient_ {
     }
 
     action() {
-        $CURRENT_MAP.noclip = true;
+        noclip = true;
         $CURRENT_MAP.translate(this.trans.offsetX, this.trans.offsetY);
-        $CURRENT_MAP.noclip = false;
+        noclip = false;
         $AVATAR.trans.rotation = 180 * Math.PI / 180;
     }
 }
@@ -1233,9 +1233,9 @@ export class Chair extends _StaticClusterClient_ {
     ];
 
     action() {
-        $CURRENT_MAP.noclip = true;
+        noclip = true;
         $CURRENT_MAP.translate(this.trans.offsetX, this.trans.offsetY + 1);
-        $CURRENT_MAP.noclip = false;
+        noclip = false;
         $AVATAR.trans.rotation = 180 * Math.PI / 180;
     }
 
@@ -1383,7 +1383,7 @@ export class PicnicTable extends _StaticClusterClient_ {
     }
 
     action() {
-        $CURRENT_MAP.noclip = true;
+        noclip = true;
 
         if (this.trans.offsetX > $AVATAR.trans.offsetX) {
             $CURRENT_MAP.translate(this.trans.offsetX - 11, this.trans.offsetY - 2);
@@ -1393,7 +1393,7 @@ export class PicnicTable extends _StaticClusterClient_ {
             $AVATAR.trans.rotation = 90 * Math.PI / 180;
         }
 
-        $CURRENT_MAP.noclip = false;
+        noclip = false;
     }
 }
 
@@ -1538,13 +1538,13 @@ export class Door extends _StaticClusterClient_ {
                     let [x, y] = this.outPoint;
                     if (this.buildingExit && this.map.building) {
                         let b = this.map.building;
-                        $CURRENT_MAP.noclip = true;
+                        noclip = true;
                         $CURRENT_MAP.translate(-$CURRENT_MAP.centerX + (b.trans.offsetX + $CURRENT_MAP.centerX + x), -$CURRENT_MAP.centerY + (b.trans.offsetY + $CURRENT_MAP.centerY + y));
-                        $CURRENT_MAP.noclip = false;
+                        noclip = false;
                     } else {
-                        $CURRENT_MAP.noclip = true;
+                        noclip = true;
                         $CURRENT_MAP.translate((-$CURRENT_MAP.centerX) + x, (-$CURRENT_MAP.centerY) + y);
-                        $CURRENT_MAP.noclip = false;
+                        noclip = false;
                     }
                 }
             }).bind(this));
@@ -1618,9 +1618,9 @@ export class _Building_ extends _StaticClusterClient_ {
 
                     if (i[3]) {
                         let [x, y] = i[3];
-                        $CURRENT_MAP.noclip = true;
+                        noclip = true;
                         $CURRENT_MAP.translate((-$CURRENT_MAP.centerX) + x, (-$CURRENT_MAP.centerY) + y);
-                        $CURRENT_MAP.noclip = false;
+                        noclip = false;
                     }
                 }).bind(this));
             }).bind(this), true);
@@ -2395,7 +2395,7 @@ export class Avatar {
                  delete $CURRENT_MAP.avatars[this.id];
                  delete $CURRENT_MAP.obstacles[this.id];
                  this.hidden = true;
-                 $CURRENT_MAP.noclip = true;
+                 noclip = true;
                 }
 
                 return;
@@ -3368,7 +3368,7 @@ export class Bot {
                  delete $CURRENT_MAP.avatars[this.id];
                  delete $CURRENT_MAP.obstacles[this.id];
                  this.hidden = true;
-                 $CURRENT_MAP.noclip = true;
+                 noclip = true;
                 }
 
                 return;
@@ -4317,7 +4317,6 @@ export class _Map_ {
         this.show = true;
         this.freeze = false;
         this.move = true;
-        this.noclip = false;
         this.objectSearchStride = (root) ? 4 : 5;
         this.darkness = 1;
         this.units = {
@@ -4553,7 +4552,7 @@ export class _Map_ {
 
         for (let i in this.objects) {
             i = this.objects[i];
-            if (i.name !== name) continue;
+            if (i.constructor.name !== name) continue;
 
             currentDistance = distance(i.trans.offsetX, i.trans.offsetY, 0, 0);
             if (currentDistance < closest) {
@@ -4590,9 +4589,9 @@ export class _Map_ {
 
     printLayoutScript(json = true, resetTranslation, start = 0) {
         if (!resetTranslation) {
-            this.noclip = true;
+            noclip = true;
             this.translate(-this.centerX, -this.centerY);
-            this.noclip = false;
+            noclip = false;
         }
 
         let objs = {
@@ -4678,7 +4677,7 @@ export class _Map_ {
 
     translate(x, y) {
         if (this.move) {
-            if (!this.noclip) {
+            if (!noclip) {
                 for (let i in this.obstacles) {
                     if (this.obstacles[i] === $AVATAR.state.pickup.current || this.obstacles[i] === $AVATAR) continue;
                     for (let segment of this.obstacles[i].segments) {

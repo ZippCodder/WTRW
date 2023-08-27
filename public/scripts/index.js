@@ -30,6 +30,7 @@ window.onload = async () => {
     window.bulletResolution = 0.001;
     window.movementMultFactor = 0.05;
     window.globalDarkness = 0;
+    window.noclip = false;
     window.fadeTransition = new Transition(globalDarkness, [70,0], 0.05);
     window.useTransition = true;
     window.joystickSizes = {

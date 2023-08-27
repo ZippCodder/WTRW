@@ -18,10 +18,42 @@
       rotate
   } from "/public/scripts/lib.js";
 
-  import {
+import {
+      _Map_,
+      Avatar,
+      House1,
+      UrbanFence,
+      UrbanFenceHalf,
+      UrbanFenceVertical,
+      PicnicTable,
+      StreetLight,
+      Chair,
+      Table,
+      GLOCK_20,
+      Text,
+      VisibleBarrier,
+      DownwardLight,
+      Barrier,
+      Laptop,
+      BlackBook,
+      WhiteBook,
+      NXR_44_MAG,
+      GP_K100,
+      KC_357,
+      USP_45,
+      Grass,
+      Grass2,
+      Rocks1,
+      Rocks2,
+      BulletShell,
+      Plus100,
+      KitchenKnife,
+      AssassinsKnife,
+      Bot,
+      Floor,
       _Joystick_,
       _Button_
-  } from "/public/scripts/objects.js"; 
+  } from "/public/scripts/objects.js";
 
  
   $HEALTH_BAR = document.querySelector("#healthbar");
@@ -209,6 +241,10 @@
   const inventoryWindow = document.querySelector("#main-inventory");
   const inventoryItemsContainer = document.querySelector("#main-items-container");
 
+  window.onerror = (message, source, lineNumber, colNumber, error) => {
+    sendSystemMessage(`${message}  (${lineNumber}:${colNumber})`);
+  }
+
   function closeInventory(e) {
     e.preventDefault();
     inventoryWindow.style.display = "none";
@@ -224,6 +260,152 @@
   
   inventoryCloseButton.ontouchstart = closeInventory;
   inventoryButton.ontouchstart = openInventory;
+
+ 
+  const consoleContainer = document.querySelector("#console");
+  const consoleButton = document.querySelector("#console-button");
+  const consoleCloseButton = document.querySelector("#console-close"); 
+  const consoleSendButton = document.querySelector("#console-send");  const consoleInput = document.querySelector("#console-input");
+  const consoleMessages = document.querySelector(".console__messages");
+  const consoleMessageTemplate = document.querySelector("#message-template");
+ 
+  function openConsole(e) {
+    e.preventDefault();
+    consoleContainer.style.display = "grid";
+  }
+
+  function closeConsole(e) {
+    e.preventDefault();
+    consoleContainer.style.display = "none";
+  }
+
+  let holdEnter = false;
+
+  consoleInput.onkeydown = (e) => {
+    if (e.key === "Enter" && !holdEnter) {
+      sendMessage(e);
+    } else if (e.key === "Shift") {
+      holdEnter = true;
+    }
+  }
+
+  consoleInput.onkeyup = (e) => {
+    if (e.key === "Shift") holdEnter = false;
+  } 
+
+  function sendSystemMessage(content) {
+    let msg = consoleMessageTemplate.content.cloneNode(true);
+
+    if (content.length < 1) return;
+    
+    msg.querySelector("div").setAttribute("class","console__message--system");
+    msg.querySelector("strong").innerHTML = "WTRW@System: "; 
+    msg.querySelector("i").innerText = content;
+    consoleMessages.appendChild(msg);
+  }
+
+  function evalCommand(cmd) {
+   let command = cmd.replace("cmd","").trim(), result = "command not found!", prefix = command.split(" ")[0];
+
+   command = command.replace(prefix,"").trim();
+
+   switch (prefix) {
+     case "run": {
+        try {
+         result = eval(command); 
+         } catch (err) {
+         result = "Couldn't run that script!";
+        }
+     };
+     break;
+     case "add": {
+        try {
+         $CURRENT_MAP.link(eval("new "+command.replace("add","").trim()));           result = command + " added."
+         } catch (err) {
+         result = "Object not found!";
+        }
+     };
+     break;
+     case "delete": {
+       try {
+         let obj = $CURRENT_MAP.locateObject(command);
+         obj.delete();           
+         result = `${command} (${obj.id}) deleted.`;
+         } catch (err) {
+         result = "Object not found!";
+        }
+     };
+     break;
+     case "godmode": {
+      $AVATAR.state.invinsible = !$AVATAR.state.invinsible;
+      result = "God mode " + (($AVATAR.state.invinsible) ? "activated.":"deactivated.");
+     };
+     break;
+     case "printlayout": {
+      result = $MAP.printLayoutScript();
+     };
+     break;
+     case "noclip": {
+      noclip = !noclip;
+      result = "No clip " + ((noclip) ? "activated.":"deactivated.");
+     }; 
+     break;
+     case "day": {
+      $MAP.darkness = 1; 
+      $MAP.lighting = false;
+      result = "Daytime active."
+     };
+     break;
+     case "afternoon": {
+      $MAP.darkness = 2;
+      $MAP.lighting = false;
+      result = "Afternoon active."
+     };
+     break;
+     case "night": {
+      $MAP.darkness = 5;
+      $MAP.lighting = true;
+      result = "Nighttime active."
+     }
+   }
+
+   return result;
+  } 
+ 
+  function sendMessage(e) {
+    e.preventDefault();
+
+    let content = consoleInput.value;
+
+     let msg = consoleMessageTemplate.content.cloneNode(true);
+
+     msg.querySelector("div").addEventListener("dblclick",(e) => {
+      consoleInput.value = content;
+     });
+
+     if (content.length < 1) return;
+
+     msg.querySelector("strong").innerHTML = $AVATAR.character+"@User: "; 
+     msg.querySelector("i").innerText = content;
+     consoleMessages.appendChild(msg);
+
+    if (content.trim().startsWith("cmd")) {
+     setTimeout(() => { 
+       sendSystemMessage(evalCommand(content));
+     }, 500);
+    } 
+ 
+    consoleInput.value = "";
+  }
+
+  consoleCloseButton.onmousedown = closeConsole;
+  consoleButton.onmousedown = openConsole;
+  
+  consoleCloseButton.ontouchstart = closeConsole;
+  consoleButton.ontouchstart = openConsole;
+
+  consoleSendButton.ontouchstart = sendMessage;
+  consoleSendButton.onmousedown = sendMessage;
 
   // Inventory data binding...
 

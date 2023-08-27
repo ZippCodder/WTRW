@@ -128,6 +128,7 @@
         // Import texture for editing and downloading...
 
         const canvas = document.querySelector("canvas");
+        canvas.style.background = "gray";
         const ctx = canvas.getContext("2d");
         const link = document.querySelector("a");
         const text = document.querySelector("textarea");
@@ -169,7 +170,7 @@
         //CAFE(-18, -18, 0.2);
         //MAIN_AVATAR_DEFAULT(-5, -5, 0.2);
        
-        resize(70, 70);
+        resize(100, 100);
         // export function draw(a, w, h, iw, ih, s, lw, attribs=[],canvas) {
         //MAIN_AVATAR_DEFAULT.render(ctx);  
         let texture = ICONS;
@@ -185,6 +186,6 @@
        // log(texture.getData());
           log(texture.getData());
           console.log(texture.textureDimensions);
-        setSource(`AMMO_ICON.png`); 
+        setSource(`CHAT_ICON.png`); 
     </script>
 </html>

@@ -13,7 +13,6 @@
     <!-- screen loader -->
     
     <div id="loading-screen"><div class="loader-filter"><img src="/public/images/favicon.png" class="loading-img" /><div id="loader"></div><h1 class="loading-title">Loading...</h1></div></div>
-    <textarea></textarea>
     <canvas></canvas>
     
     <!-- onscreen content and controls --> 
@@ -27,6 +26,8 @@
                 </div>
                 
                 <p id="game-stats">FPS: 0</p>
+                 
+                <button id="console-button"><img src="/public/images/icons/CHAT_ICON.png" /></button>
                  
                 <div class="controls-container__buttons">
                   <img class="controls-container__button" src="/public/images/icons/BAG_ICON.png" />
@@ -43,7 +44,23 @@
                     <img id="skin-icon" src="/public/images/favicon.png" /><div class="controls-container__health"><img src="/public/images/icons/HLT_ICON.png" class="icon" /><div class="controls-container__healthbar"><div id="healthbar"></div></div><img src="/public/images/icons/FOD_ICON.png" class="icon" /><p id="hunger">100</p><img src="/public/images/icons/WTR_ICON.png" class="icon" /><p id="thirst">100</p></div>
                 </div>
 
-   <!-- onscreen content and controls --> 
+   <!-- onscreen content and controls -->
+
+                <div id="console">
+                  <h1 class="console__title">Console<button id="console-close">Close</button></h1>
+                  <div class="console__messages">
+
+                  <template id="message-template">
+                   <div class="console__message--user"><p><strong></strong><i></i></p></div>
+                  </div>
+                  </template>
+
+                   <div class="console__message--system"><p><strong>WTRW@System: </strong><i>Welcome to the local game console. Here you can use special cheats and send messages to other players.</i></p></div>
+                  </div>
+                  <div class="console__compose">
+                    <textarea id="console-input" spellcheck="false"></textarea><button id="console-send" class="styled__btn">Send</button>
+                  </div>
+                </div> 
                 
                 <div id="main-inventory">
                     <h1 class="main-inventory__title">Inventory<button class="main-inventory__close">Close</button><button class="main-inventory__view-stats">View Stats</button></h1>
@@ -94,9 +111,9 @@ Oh wait, what items? You're a noob lol.
                       </div>
                       <div class="main-inventory__controls">
                        <div class="main-inventory__buttons">
-                          <button class="main-inventory__controls-equip inv-controls__btn">Equip</button>
-                          <button class="main-inventory__controls-switch inv-controls__btn">Switch</button>
-                          <button class="main-inventory__controls-drop inv-controls__btn">Drop</button>
+                          <button class="main-inventory__controls-equip styled__btn">Equip</button>
+                          <button class="main-inventory__controls-switch styled__btn">Switch</button>
+                          <button class="main-inventory__controls-drop styled__btn">Drop</button>
                         </div>
                           <button class="main-inventory__controls-help">?</button>
                       </div>
