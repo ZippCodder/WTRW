@@ -187,7 +187,7 @@ const enemySpawnLoop = new LoopAnimation(function() {
       a.state.passive = false;
       a.state.openCarry = true;
       a.state.targetUpdateAnimation.rate = 1 / 5;
-      a.addItem((Math.random() < 0.5) ? new GP_K100(0,0,0,1000):new KitchenKnife);
+      a.addItem((Math.random() < 0.5) ? new GP_K100(0,0,0,1000):(Math.random() < 0.5) ? new KitchenKnife:undefined);
       a.equipItem(0);
       a.state.targetId = id;
       //a.follow($AVATAR.id);

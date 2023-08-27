@@ -241,8 +241,8 @@ import {
   const inventoryWindow = document.querySelector("#main-inventory");
   const inventoryItemsContainer = document.querySelector("#main-items-container");
 
-  window.onerror = (message, source, lineNumber, colNumber, error) => {
-    sendSystemMessage(`${message}  (${lineNumber}:${colNumber})`);
+  window.onerror = (message, source, lineNumber, colNumber) => {
+    sendSystemMessage(`${message} (${source})(${lineNumber}:${colNumber})`);
   }
 
   function closeInventory(e) {
@@ -293,7 +293,7 @@ import {
     if (e.key === "Shift") holdEnter = false;
   } 
 
-  function sendSystemMessage(content) {
+  function sendSystemMessage(content = "Script ran sucessfully.") {
     let msg = consoleMessageTemplate.content.cloneNode(true);
 
     if (content.length < 1) return;

@@ -2967,13 +2967,13 @@ export class Bot {
             hitboxes: {
              leftPunch: {
                x: -4, 
-               y: 7,
+               y: 10,
                width: 2, 
                height: 2
              },
              rightPunch: {
                x: 4, 
-               y: 7,
+               y: 10,
                width: 2, 
                height: 2
              },
@@ -3566,7 +3566,7 @@ export class Bot {
 
         if (this.state.target.id.length > 0) this.state.targetUpdateAnimation.run();
 
-        attack: if (this !== $AVATAR && (this.state.armed || this.state.melee) && this.state.target.current && this.state.target.engaged) {
+        attack: if (this.state.target.current && this.state.target.engaged) {
 
             if (this.state.target.current && !this.map.avatars[this.state.target.current.id]) {
                this.disengageTarget();
@@ -3579,6 +3579,24 @@ export class Bot {
               offsetX: targetX,
               offsetY: targetY
             } = this.state.target.current.trans, dist = distance(this.trans.offsetX, this.trans.offsetY, targetX, targetY), m = this.map;
+
+            punch: if (!this.state.armed && !this.state.melee) {
+               if (dist > this.state.attack.disengageDistance && this.state.target.engaged) {
+                    this.disengageTarget();
+               } else if (dist <= this.state.attack.engageDistance && !this.state.path.engaged && !this.state.follow.target) {
+                  this.requestPath(targetX + m.centerX, targetY + m.centerY);
+               }
+ 
+               if (dist <= 30) {
+                 this.state.punching = true;
+                 this.state.rotationTarget = normalizeRotation((Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX))*180/Math.PI) - 90);
+               } else {
+                 this.state.punching = false;
+               }
+
+               break attack;
+            }
+
 
             stab: if (!this.state.armed && this.state.melee) {
                if (dist > this.state.attack.disengageDistance && this.state.target.engaged) {
@@ -3733,7 +3751,6 @@ export class Bot {
     }
 
     killTarget(ids, multiple, invert) {
-        if (this.state.armed || this.state.melee) {
             let map = (this.map || $CURRENT_MAP);
             let target = map.avatars[ids[0]];
 
@@ -3750,7 +3767,6 @@ export class Bot {
                 this.state.target.id = ids;
                 this.state.target.engaged = true;
             }
-        }
 
         return false;
     }
@@ -3761,6 +3777,7 @@ export class Bot {
         this.state.speed = this.state.baseSpeed;
         this.state.fire = false;
         this.state.stabbing = false;
+        this.state.punching = false;
 
         if (this.state.attack.openCarry) {
             this.drawWeapon();

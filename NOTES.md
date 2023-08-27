@@ -11,6 +11,7 @@
 
 ## TODO
 
+* Implement punch attack for bots
 * Separate logic between avatar and bot classes
 * Fix bugs related to melee attack
 * Fix weird healthbar issues
