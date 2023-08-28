@@ -230,8 +230,8 @@ html,body {
             background: rgba(1,1,1,0.5);
             padding: 0;
             margin: 1em;
-            width: 3em;
-            height: 3em;
+            width: 2.5em;
+            height: 2.5em;
             border: none;
             border-radius: 2px;
             bottom: 0;
@@ -540,6 +540,10 @@ html,body {
               display: flex;
               margin-bottom: 0.3em;
               margin-right: 0;
+            }
+
+            .controls-container__inv {
+              left: 1em;
             }
           }
 

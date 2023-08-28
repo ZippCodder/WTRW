@@ -69,6 +69,7 @@ import {
   $ACTION_BUTTON = new _Button_(textures.controls.actionbutton, textures.controls.actionbuttonactive, (worldWidth / 2) - 20, (-worldHeight / 2) + 39, function(pX, pY) {
       const i = $CURRENT_MAP.interactables[$CURRENT_MAP.currentInteractable.id];
       if (i) i.action();
+      $CURRENT_MAP.updateInteractable();
   }, 18, 1.5, false, [-9,9,1,0,0,9,9,1,0.703125,0,-9,-9,1,0,0.703125,9,9,1,0.703125,0,-9,-9,1,0,0.703125,9,-9,1,0.703125,0.703125]);
  
   $RELOAD_BUTTON = new _Button_(textures.controls.reloadbutton, textures.controls.reloadbuttonactive, (worldWidth / 2) - 38, -(worldHeight / 2) + 20, function(pX, pY) {
@@ -132,6 +133,8 @@ import {
                   break;
               }
           }
+
+          if (!touch) return;
 
           let pageX = touch.clientX;
           let pageY = touch.clientY;
@@ -356,10 +359,10 @@ import {
       result = "Daytime active."
      };
      break;
-     case "afternoon": {
+     case "evening": {
       $MAP.darkness = 2;
       $MAP.lighting = false;
-      result = "Afternoon active."
+      result = "Evening active."
      };
      break;
      case "night": {

@@ -5251,6 +5251,45 @@ export let WOOD_FLOOR_TILE = new TextureData(0, 0, 0.2, "prop", {
     ctx.restore();
 });
 
+export let GRASS_TILE = new TextureData(0, 0, 0.5, "prop", {
+    width: 256,
+    height: 256
+}, [
+    [0, 0, 256, 256]
+], 0, undefined, function(ctx) {
+    ctx.save();
+    ctx.translate(this.offset.x, this.offset.y);
+    ctx.scale(this.size, this.size);
+    ctx.beginPath();
+    ctx.lineWidth = 20;
+
+    function grass1(x,y) {
+     ctx.translate(x,y);
+     GRASS_1.render(ctx);
+     ctx.translate(-x,-y);
+    }
+
+    function grass2(x,y) {
+     ctx.translate(x,y);
+     GRASS_2.render(ctx);
+     ctx.translate(-x,-y);
+    }
+
+    grass1(20,20);
+    grass2(30,150);
+    grass1(210,170);
+    grass1(350,40);
+    grass1(330,380);
+    grass2(390,420);
+    grass2(450,260);
+    grass1(170,430);
+   // grass2(170,80);
+   // grass2(190,50);
+    grass1(100,220);
+ 
+    ctx.restore();
+});
+
 export let FLOOR_TILE = new TextureData(0, 0, 0.2, "prop", {
     width: 639,
     height: 639
@@ -5389,7 +5428,7 @@ export let GRASS_1 = new TextureData(0, 0, 0.2, "prop", {
     ctx.beginPath();
     ctx.lineWidth = 13;
 
-    ctx.strokeStyle = "#3C3C3C";
+    ctx.strokeStyle = "#666666";
     ctx.fillStyle = "white";
 
     ctx.moveTo(15, 80);
@@ -5414,7 +5453,7 @@ export let GRASS_2 = new TextureData(0, 0, 0.2, "prop", {
     ctx.beginPath();
     ctx.lineWidth = 13;
 
-    ctx.strokeStyle = "#3C3C3C";
+    ctx.strokeStyle = "#666666";
     ctx.fillStyle = "white";
 
     ctx.moveTo(15, 80);

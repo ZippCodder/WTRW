@@ -11,18 +11,10 @@
 
 ## TODO
 
-* Implement punch attack for bots
 * Separate logic between avatar and bot classes
-* Fix bugs related to melee attack
 * Fix weird healthbar issues
-* Fix item pickup with having to move
 * Standardize transitions 
 * Implement health, dying and respawning
-* Implement avatar punching
-* Fix janky avtar follow feature 
-* Fix texture aliasing and artifacting 
-* Add changable avatar follow target
-* Implement avatar death and respawn system
 * Fix avatar stacking
 * Fix avatar path request lag and strange behavior on large maps
 * Add avatar settings inupt object

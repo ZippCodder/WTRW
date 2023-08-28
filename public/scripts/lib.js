@@ -580,7 +580,7 @@ export class Inventory {
 
     addItem(item, slot) {
 
-        if (!item.pickup || this.count === this.slots) return false;
+        if (!item || !item.pickup || this.count === this.slots) return false;
 
         if (slot && !this.items[slot] && slot < this.slots-1) {
            item.slot = slot;

@@ -2550,7 +2550,7 @@ export class Avatar {
             this.state.fireAnimation.run();
         }
 
-        if (this.state.armed) this.state.recoilAnimation.run();
+        if (this.state.armed && this.state.equippedItems.mainTool) this.state.recoilAnimation.run();
         if (!this.state.equippedItems.mainTool?.loaded) this.state.reloadTimeout.run();
 
         if (this.state.recording.useRecording) this.state.recordAnimation.run();
@@ -3921,6 +3921,12 @@ export class Floor extends _Object_ {
                width: 12.780000000000001, 
                height: 12.780000000000001, 
                texture: textures.objects.woodfloortile
+              },
+              2: {
+               vertices: [-12.8,12.8,1,0,0,12.8,12.8,1,0.5,0,-12.8,-12.8,1,0,0.5,12.8,12.8,1,0.5,0,-12.8,-12.8,1,0,0.5,12.8,-12.8,1,0.5,0.5],
+               width: 25.6, 
+               height: 25.6, 
+               texture: textures.objects.grasstile
               }
             }
  
@@ -4743,22 +4749,7 @@ export class _Map_ {
             }
 
             this._lineMatrix.translate(-x, -y);
-
-            this.currentInteractable = undefined;
-
-            for (let i in this.interactables) {
-                i = this.interactables[i];
-
-                if (distance($AVATAR.trans.offsetX, $AVATAR.trans.offsetY, i.trans.offsetX, i.trans.offsetY) < i.minDistance) {
-                    this.currentInteractable = i;
-                }
-            }
-
-            if (!this.currentInteractable && $ACTION_BUTTON) {
-                $ACTION_BUTTON.hidden = true;
-            } else if ($ACTION_BUTTON) {
-                $ACTION_BUTTON.hidden = false;
-            }
+            this.updateInteractable();
         }
     }
 
@@ -4795,6 +4786,24 @@ export class _Map_ {
         this.clusters[name] = cluster;
         this.link(cluster);
         cluster.linked = true;
+    }
+
+    updateInteractable() {
+      this.currentInteractable = undefined;
+
+       for (let i in this.interactables) {
+           i = this.interactables[i];
+
+           if (distance($AVATAR.trans.offsetX, $AVATAR.trans.offsetY, i.trans.offsetX, i.trans.offsetY) < i.minDistance) {
+               this.currentInteractable = i;
+           }
+       }
+
+       if (!this.currentInteractable && $ACTION_BUTTON) {
+           $ACTION_BUTTON.hidden = true;
+       } else if ($ACTION_BUTTON) {
+           $ACTION_BUTTON.hidden = false;
+       }
     }
 
     showGeometry() {
