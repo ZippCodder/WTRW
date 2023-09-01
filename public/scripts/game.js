@@ -208,5 +208,7 @@ $MAP.SUB_MAPS[0].link(new KitchenKnife(40,0));
 
  $GAME_LOOP = function() {
   enemySpawnLoop.run(); 
- }; 
+ };
 
+$MAP_DISPLAY.update();
+$MAP_DISPLAY.render();

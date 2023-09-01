@@ -1083,6 +1083,7 @@ export class StreetLight extends _StaticClusterClient_ {
     ];
     topLayer = true;
     on = false;
+    hideFromMap = true;
 
     constructor(initialX, initialY, initialRotation, color) {
         super(initialX, initialY, initialRotation);
@@ -1525,6 +1526,10 @@ export class Door extends _StaticClusterClient_ {
         if (this.room) {
             $CURRENT_MAP.move = false;
             requestTransition((function() {
+               
+                delete $CURRENT_MAP.avatars[$AVATAR.id];
+                delete $CURRENT_MAP.obstacles[$AVATAR.id];
+
                 $CURRENT_MAP = this.room;
                 $AVATAR.rotate(180);
                 this.map.move = true;
@@ -1547,6 +1552,10 @@ export class Door extends _StaticClusterClient_ {
                         noclip = false;
                     }
                 }
+
+                $CURRENT_MAP.avatars[$AVATAR.id] = $AVATAR;
+                $CURRENT_MAP.obstacles[$AVATAR.id] = $AVATAR;
+                $MAP_DISPLAY.update();
             }).bind(this));
         }
     }
@@ -1607,6 +1616,10 @@ export class _Building_ extends _StaticClusterClient_ {
                 $CURRENT_MAP.move = false;
 
                 requestTransition((function() {
+                   
+                    delete $CURRENT_MAP.avatars[$AVATAR.id];
+                    delete $CURRENT_MAP.obstacles[$AVATAR.id];
+
                     $CURRENT_MAP = this.rooms[i[2]];
                     $AVATAR.rotate(180);
                     this.map.move = true;
@@ -1622,6 +1635,10 @@ export class _Building_ extends _StaticClusterClient_ {
                         $CURRENT_MAP.translate((-$CURRENT_MAP.centerX) + x, (-$CURRENT_MAP.centerY) + y);
                         noclip = false;
                     }
+
+                    $CURRENT_MAP.avatars[$AVATAR.id] = $AVATAR;
+                    $CURRENT_MAP.obstacles[$AVATAR.id] = $AVATAR;
+                    $MAP_DISPLAY.update(); 
                 }).bind(this));
             }).bind(this), true);
             t.outPoint = i[3];
@@ -3756,6 +3773,7 @@ export class Bot {
 
             this.state.attack.multiple = multiple;
             this.state.attack.invertTargets = invert;
+            this.state.hostile = true;
 
             if (target && !this.state.attack.multiple) {
                 this.state.target.current = target;
@@ -3778,6 +3796,7 @@ export class Bot {
         this.state.fire = false;
         this.state.stabbing = false;
         this.state.punching = false;
+        this.state.hostile = false;
 
         if (this.state.attack.openCarry) {
             this.drawWeapon();
@@ -3999,6 +4018,7 @@ export class Barrier {
         this.name = "invisible barrier";
         this.type = "barrier";
         this.id = genObjectId();
+        this.hideFromMap = true;
 
         this.translate = function(x, y) {
             this.trans.offsetX += x;
@@ -4520,7 +4540,10 @@ export class _Map_ {
 
             this.objects[obj.id] = obj;
 
-            if (obj.obstacle) this.obstacles[obj.id] = obj;
+            if (obj.obstacle) {
+              this.obstacles[obj.id] = obj;
+              if ($MAP_DISPLAY && !obj.hideFromMap) $MAP_DISPLAY.update();
+            }
             if (obj.pickup) this.pickups[obj.id] = obj;
             if (obj.moveable) this.moveables[obj.id] = obj;
             if (obj.interactable) this.interactables[obj.id] = obj;
@@ -4555,6 +4578,7 @@ export class _Map_ {
                 this.objects[id].cluster = undefined;
             }
             if (!this.objects[id].pickup) this.objects[id].map = undefined;
+            if (this.objects[id].obstacle && !this.objects[id].hideFromMap) $MAP_DISPLAY.update();
             if (this.objects[id].type === "avatar") this.avatarCount--;
 
             delete this.interactables[id];

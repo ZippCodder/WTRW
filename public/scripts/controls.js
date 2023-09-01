@@ -55,12 +55,170 @@ import {
       _Button_
   } from "/public/scripts/objects.js";
 
+
+  const mapDisplay = document.querySelector("#mapDisplay");
+  mapDisplay.width = 1000;
+  mapDisplay.height = 1000;
+
+  const mdgl = mapDisplay.getContext("webgl");
+  const mdglExt = mdgl.getExtension("OES_vertex_array_object");
+
+  mdgl.viewport(0, 0, mapDisplay.width, mapDisplay.height); 
+  
+  const vShaderSrc = `
+        #version 100
+
+        precision highp float;
+
+        attribute vec3 coords;
+        attribute float color;
+
+        varying float colorCode;
+
+        uniform float worldUnitX;
+        uniform float worldUnitY;
+
+        float x;
+        float y;
+
+        uniform vec2 translation;
+        uniform float scale;
+ 
+        void main() {
+
+         x = (coords.x + translation.x)*worldUnitX;
+         y = (coords.y + translation.y)*worldUnitY;
+
+         gl_Position = vec4(x,y,1,scale);
+         colorCode = color;
+        }
+  `;
+
+  const fShaderSrc = `
+        #version 100
+
+        precision highp float;
+
+        varying float colorCode;
+
+        uniform vec4 color1; 
+        uniform vec4 color2;
+        uniform vec4 color3;
+        uniform vec4 color4;
+        uniform vec4 color5;
+        
+        void main() {
+          vec4 color;
+       
+          if (colorCode == 1.0) {
+           color = color1;
+          } else if (colorCode == 2.0) {
+           color = color2;
+          } else if (colorCode == 3.0) {
+           color = color3;
+          } else if (colorCode == 4.0) {
+           color = color4;
+          } else if (colorCode == 5.0) {
+           color = color5;
+          }
+     
+         gl_FragColor = color;
+        }
+        `;
+
+    const mdVShader = mdgl.createShader(mdgl.VERTEX_SHADER);
+    mdgl.shaderSource(mdVShader, vShaderSrc);
+    mdgl.compileShader(mdVShader);
+    let vsLog = mdgl.getShaderInfoLog(mdVShader);
+    if (vsLog.length > 0) console.log(vsLog);
+
+    const mdFShader = mdgl.createShader(mdgl.FRAGMENT_SHADER);
+    mdgl.shaderSource(mdFShader, fShaderSrc);
+    mdgl.compileShader(mdFShader);
+    let fsLog = mdgl.getShaderInfoLog(mdFShader);
+    if (fsLog.length > 0) console.log(fsLog);
+
+    const mdProgram = mdgl.createProgram();
+    mdgl.attachShader(mdProgram, mdVShader);
+    mdgl.attachShader(mdProgram, mdFShader);
+
+    mdgl.linkProgram(mdProgram);
+    mdgl.useProgram(mdProgram);
+
+    let mdLocations = {
+      translation: mdgl.getUniformLocation(mdProgram, "translation"),
+      scale: mdgl.getUniformLocation(mdProgram, "scale"),
+      worldUnitX: mdgl.getUniformLocation(mdProgram, "worldUnitX"),
+      worldUnitY: mdgl.getUniformLocation(mdProgram, "worldUnitY"),
+      color1: mdgl.getUniformLocation(mdProgram, "color1"),
+      color2: mdgl.getUniformLocation(mdProgram, "color2"),
+      color3: mdgl.getUniformLocation(mdProgram, "color3"),
+      color4: mdgl.getUniformLocation(mdProgram, "color4"),
+      color5: mdgl.getUniformLocation(mdProgram, "color5"),
+      coords: mdgl.getAttribLocation(mdProgram, "coords"),
+      color: mdgl.getAttribLocation(mdProgram, "color")
+    }
+
+    mdgl.uniform1f(mdLocations.scale, 1);
+    mdgl.uniform2fv(mdLocations.translation, [0, 0]);
+    mdgl.uniform4fv(mdLocations.color1, [0.8,0.8,0.8,1]);
+    mdgl.uniform4fv(mdLocations.color2, fromRGB([30,144,255,1]));
+    mdgl.uniform4fv(mdLocations.color3, fromRGB([245,62,34,1]));
+    mdgl.uniform1f(mdLocations.worldUnitX, worldUnitX);
+    mdgl.uniform1f(mdLocations.worldUnitY, worldUnitX);
+
+    let vao = mdglExt.createVertexArrayOES(), buffer = mdgl.createBuffer();
+
+    $MAP_DISPLAY = {
+     scale: 2,
+     objectsVertices: [],
+     avatarsVertices: [],
+     update: function(renderAvatars) {
+        if (renderAvatars) { 
+          this.avatarsVertices = [];
+        } else {
+          this.objectsVertices = [];
+        }
+     
+       for (let o in $CURRENT_MAP.obstacles) {
+        let obj = $CURRENT_MAP.obstacles[o];
+
+        if ((obj.type === "avatar" && !renderAvatars) || (obj.type !== "avatar" && renderAvatars) || obj.hideFromMap) continue;
+
+        let {offsetX,offsetY} = obj.trans;
+  
+         if (renderAvatars) {
+          this.avatarsVertices = this.avatarsVertices.concat(cut([[((-obj.width / 2) + offsetX) + $CURRENT_MAP.centerX, ((-obj.height / 2) + offsetY) + $CURRENT_MAP.centerY, obj.width, obj.height]], false, [1,(obj.state.hostile) ? 3:2], true));
+          continue;
+         } 
+
+          this.objectsVertices = this.objectsVertices.concat(cut([[((-obj.width / 2) + offsetX) + $CURRENT_MAP.centerX, ((-obj.height / 2) + offsetY) + $CURRENT_MAP.centerY, obj.width, obj.height]], false, [1,1], true));
+       }
+     },   
+     render: function() {
+       mdgl.clear(gl.COLOR_BUFFER_BIT);
+       mdglExt.bindVertexArrayOES(vao);
+
+       mdgl.uniform1f(mdLocations.scale, this.scale);
+       mdgl.uniform2fv(mdLocations.translation, [-$CURRENT_MAP.centerX, -$CURRENT_MAP.centerY]);
+
+       mdgl.bindBuffer(mdgl.ARRAY_BUFFER, buffer);
+       mdgl.bufferData(mdgl.ARRAY_BUFFER, new Float32Array([...this.objectsVertices,...this.avatarsVertices]), mdgl.DYNAMIC_DRAW);
+       mdgl.vertexAttribPointer(mdLocations.coords, 3, mdgl.FLOAT, false, 16, 0);
+       mdgl.vertexAttribPointer(mdLocations.color, 1, mdgl.FLOAT, false, 16, 12);
+       mdgl.enableVertexAttribArray(0);
+       mdgl.enableVertexAttribArray(1);
+     
+       mdgl.drawArrays(mdgl.TRIANGLES, 0, (this.objectsVertices.length+this.avatarsVertices.length)/4);
+     }
+    } 
  
   $HEALTH_BAR = document.querySelector("#healthbar");
   
   window.updateHealthBar = function() {
     $HEALTH_BAR.style.width = `${aisofb($AVATAR.state.vitals.health,100)}%`;
   }
+
 
   $JOYSTICK_L = new _Joystick_(true, joystickSizes.left, fixedJoysticks, joystickPositions.left);
 

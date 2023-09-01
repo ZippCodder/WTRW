@@ -5,7 +5,7 @@ import {
 
 window.onload = async () => {
 
-    window.canvas = document.querySelector("canvas");
+    window.canvas = document.querySelector("#gameArea");
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
@@ -24,6 +24,7 @@ window.onload = async () => {
     window.$DROP_ITEM_BUTTON = null;
     window.$AVATAR = null;
     window.$MAP = null;
+    window.$MAP_DISPLAY = null;
     window.$HEALTH_BAR = null;
     window.$GAME_LOOP = function(){};
     window.scale = 1.2;
@@ -446,7 +447,10 @@ window.onload = async () => {
         $CURRENT_MAP?.renderTopLayer();
         renderControls();
 
-        $GAME_LOOP();
+        $GAME_LOOP(); 
+ 
+        $MAP_DISPLAY.update(true);
+        $MAP_DISPLAY.render();
 
         T2 = performance.now();
 
