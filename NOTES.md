@@ -11,6 +11,7 @@
 
 ## TODO
 
+* Implement map color codes
 * Separate logic between avatar and bot classes
 * Fix weird healthbar issues
 * Standardize transitions 

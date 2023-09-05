@@ -54,7 +54,7 @@
             GP_K100,
             USP_45,
             JOYSTICK_DISC_TEXTURE,
-            ACTION_BUTTON_TEXTURE,
+            ACTION_BUTTON_ICON,
             GENERIC_APARTMENT,
             SUPERMARKET,
             CAFE,
@@ -129,6 +129,7 @@
         // Import texture for editing and downloading...
 
         const canvas = document.querySelector("canvas");
+        canvas.style.background = "gray";
         const ctx = canvas.getContext("2d");
         const link = document.querySelector("a");
         const text = document.querySelector("textarea");
@@ -170,10 +171,10 @@
         //CAFE(-18, -18, 0.2);
         //MAIN_AVATAR_DEFAULT(-5, -5, 0.2);
        
-        resize(256, 256);
+        resize(90, 90);
         // export function draw(a, w, h, iw, ih, s, lw, attribs=[],canvas) {
         //MAIN_AVATAR_DEFAULT.render(ctx);  
-        let texture = GRASS_TILE;
+        let texture = ACTION_BUTTON_ICON;
          
 //new Sheet([ROAD_RAIL,ROAD_SIGN,URBAN_FENCE_HALF,URBAN_FENCE,URBAN_FENCE_VERTICAL], 1024, 1024);
 
@@ -186,6 +187,6 @@
        // log(texture.getData());
           log(texture.getData());
           console.log(texture.textureDimensions);
-        setSource(`GRASS_TILE.png`); 
+        setSource(`ACTION_ICON.png`); 
     </script>
 </html>

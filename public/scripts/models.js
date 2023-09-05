@@ -255,28 +255,24 @@ export let PICKUP_RING = new TextureData(0, 0, 0.2, "general", {
 
 });
 
-export let ACTION_BUTTON_TEXTURE = new TextureData(0, 0, 0.3, "control", {
+export let ACTION_BUTTON_ICON = new TextureData(0, 0, 0.2, "control", {
     width: 600,
     height: 600
 }, [
     [0, 0, 600, 600]
 ], 0, undefined, function(ctx) {
-    // base body: 600x600, texture: 1024x1024, size: 20
+    // 90x90
     ctx.save();
     ctx.scale(this.size || 0, this.size || 0);
 
     ctx.fillStyle = "black";
-    ctx.globalAlpha = 0.7;
+    ctx.globalAlpha = 1;
     ctx.lineWidth = 20;
     ctx.strokeStyle = "white";
-    ctx.moveTo(300, 300);
-    ctx.arc(300, 300, 300, 0, 2 * Math.PI);
-    ctx.fill();
 
     ctx.beginPath();
-    ctx.translate(20, -200);
-    ctx.translate(-125, 160);
-    ctx.translate(0, -25);
+    ctx.translate(-270, -167);
+    ctx.translate(90,30);
     ctx.moveTo(345, 550);
     ctx.lineTo(460, 550);
     ctx.lineTo(530, 450);

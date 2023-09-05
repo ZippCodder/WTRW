@@ -608,6 +608,10 @@ export class Inventory {
                };
                this.weapons[item.name].ammo += item.bullets;
                this.weapons[item.name].count++;
+
+               if ($AVATAR.state.equippedItems.mainTool?.name === item.name) {
+                 updateAmmoDisplay();
+               }
             };
             break;
         }

@@ -93,6 +93,8 @@ window.onload = async () => {
 
       gl.uniform1f(locations.worldUnitX, worldUnitX);
       gl.uniform1f(locations.worldUnitY, worldUnitY);
+  
+      updateDisplayViewport();
     }
 
     let transitioning = false;

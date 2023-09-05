@@ -1598,12 +1598,13 @@ export class Table extends _StaticClusterClient_ {
 /* Buildings */
 
 export class _Building_ extends _StaticClusterClient_ {
+
     constructor(initialX, initialY, initialRotation, doors = [], rooms, doorOffset = 0, setup) {
         super(initialX, initialY, initialRotation);
 
         this.setup = setup;
         this.doors = [];
-        this.type = "building";  
+        this.type = "building";
         this.bottomLayer = true;
         this.subLayer = 1;
         this.rooms = rooms || [new _Map_(150, 80, false).init([
@@ -1664,6 +1665,10 @@ export class _Building_ extends _StaticClusterClient_ {
         for (let d of this.doors) {
             d.delete();
         }
+
+       for (let r of this.rooms) {
+         this.map.deleteSubMap(r.mapId);
+       } 
     }
 
     translate(x, y, rotation = false, translateVertices) {
@@ -1708,7 +1713,7 @@ export class House1 extends _Building_ {
             [-26.1, -33, 0, [0, 44.38]],
             [23, -57, 1],
             [-30, -65, 0]
-        ], [new _Map_(150, 100, false).init(), new _Map_(150, 80, false).init(), new _Map_(150, 80, false).init()], undefined);
+        ], [new _Map_(150, 100, false, "House 1").init(), new _Map_(150, 80, false, "House 1").init(), new _Map_(150, 80, false, "House 1").init()], undefined);
  
       let floor = new Floor(0,0,150,100,0);
       floor.exclude = true;
@@ -2170,6 +2175,8 @@ export class Avatar {
             reloadTimeout: new MultiFrameLinearAnimation([function() {
                 this.state.equippedItems.mainTool.reloadProgress = 0; 
                 this.state.equippedItems.mainTool.loaded = true;
+
+                updateAmmoDisplay();
             }], this, [0]),
             pathRequestRateLimit: new MultiFrameLinearAnimation([function() {
                 this.state.path.request = true;
@@ -2391,6 +2398,8 @@ export class Avatar {
 
             if (this.state.equippedItems.mainTool.reloadProgress === this.state.equippedItems.mainTool.constructor._properties.capacity) this.state.equippedItems.mainTool.loaded = false;
 
+            updateAmmoDisplay();
+
         }, this, 0);
     }
 
@@ -2488,6 +2497,8 @@ export class Avatar {
         let item = this.inventory.items[slot];
        
         if (item) {
+         hideAmmoDisplay();
+
             switch (item.type) {
                 case "gun": {
                     this.state.armed = true;
@@ -2497,6 +2508,9 @@ export class Avatar {
                     this.state.equippedItems.mainTool.loaded = item.loaded;
                     this.state.reloadTimeout.timingConfig[0] = this.state.equippedItems.mainTool.constructor._properties.reloadTime;
                     this.state.fireAnimation.rate = 0.5 / this.state.equippedItems.mainTool.constructor._properties.fireRate;
+
+                    updateAmmoDisplay();
+                    showAmmoDisplay();
                 }
                 break;
                 case "knife": {
@@ -2523,7 +2537,8 @@ export class Avatar {
                 if (this.state.equippedItems.mainTool && item.slot === this.state.equippedItems.mainTool.slot) {
                     this.state.armed = false;
                     this.state.draw = false;
-                    this.state.equippedItems.mainTool = undefined;
+                    this.state.equippedItems.mainTool = undefined; 
+                    hideAmmoDisplay();
                 }
             };
             break;
@@ -3773,7 +3788,7 @@ export class Bot {
 
             this.state.attack.multiple = multiple;
             this.state.attack.invertTargets = invert;
-            this.state.hostile = true;
+            if (ids.includes($AVATAR.id)) this.state.hostile = true;
 
             if (target && !this.state.attack.multiple) {
                 this.state.target.current = target;
@@ -4035,6 +4050,7 @@ export class Barrier {
 
 // export class for visible barriers
 export class VisibleBarrier extends _Object_ {
+
     constructor(initialX, initialY, width, height, color = [40, 40, 40, 1.0]) {
         super([], function() {
 
@@ -4345,9 +4361,10 @@ export class _Map_ {
 
     static _all = {};
 
-    constructor(width = 100, height = 100, root = true) {
+    constructor(width = 100, height = 100, root = true, name = "Unnamed Area") {
         this.width = width;
         this.height = height;
+        this.name = name;
         this.id = genObjectId();
         this.root = root;
         this.objectCount = 0;
@@ -4542,7 +4559,7 @@ export class _Map_ {
 
             if (obj.obstacle) {
               this.obstacles[obj.id] = obj;
-              if ($MAP_DISPLAY && !obj.hideFromMap) $MAP_DISPLAY.update();
+              if ($MAP_DISPLAY && obj.type !== "avatar" && !obj.hideFromMap && $CURRENT_MAP === this) $MAP_DISPLAY.addObject(obj);
             }
             if (obj.pickup) this.pickups[obj.id] = obj;
             if (obj.moveable) this.moveables[obj.id] = obj;
@@ -4578,14 +4595,19 @@ export class _Map_ {
                 this.objects[id].cluster = undefined;
             }
             if (!this.objects[id].pickup) this.objects[id].map = undefined;
-            if (this.objects[id].obstacle && !this.objects[id].hideFromMap) $MAP_DISPLAY.update();
             if (this.objects[id].type === "avatar") this.avatarCount--;
 
             delete this.interactables[id];
             delete this.objects[id];
-            delete this.obstacles[id];
             delete this.pickups[id];
             delete this.avatars[id];
+            
+            if (this.obstacles[id]) {
+               let obj = this.obstacles[id];
+               delete this.obstacles[id];
+
+               if (!obj.hideFromMap && $CURRENT_MAP === this) $MAP_DISPLAY.update(); 
+            }
 
             this.objectCount--;
         } else {
@@ -4634,12 +4656,7 @@ export class _Map_ {
         return "cluster translated.";
     }
 
-    printLayoutScript(json = true, resetTranslation, start = 0) {
-        if (!resetTranslation) {
-            noclip = true;
-            this.translate(-this.centerX, -this.centerY);
-            noclip = false;
-        }
+    printLayoutScript(json = true, start = 0, resetTranslation = true) {
 
         let objs = {
             layout: [],
@@ -4657,32 +4674,33 @@ export class _Map_ {
             let ob = this.objects[keys[i]];
             if (!(ob instanceof Barrier) && !ob.isCluster && !ob.exclude) {
                 let frame = [ob.constructor.name];
+                let translationX = ob.trans.offsetX + this.centerX, translationY = ob.trans.offsetY + this.centerY;
 
                 // add special attributes for more complex objects...
                 switch (ob.name) {
                     case "avatar":
-                        frame = frame.concat([ob.character, ob.trans.offsetX, ob.trans.offsetY, ob.trans.rotation * (180 / Math.PI)]);
+                        frame = frame.concat([ob.character, translationX, translationY, ob.trans.rotation * (180 / Math.PI)]);
                         break;
                     case "text":
-                        frame = frame.concat([ob.text, ob.size, toRGB(ob._color), ob.trans.offsetX, ob.trans.offsetY, ob.trans.rotation * (180 / Math.PI), false]);
+                        frame = frame.concat([ob.text, ob.size, toRGB(ob._color), translationX, translationY, ob.trans.rotation * (180 / Math.PI), false]);
                         break;
                     case "door":
-                        frame = frame.concat([ob.text, ob.roomIndex, ob.trans.offsetX, ob.trans.offsetY, ob.trans.rotation * (180 / Math.PI), ob.outPoint]);
+                        frame = frame.concat([ob.text, ob.roomIndex, translationX, translationY, ob.trans.rotation * (180 / Math.PI), ob.outPoint]);
                         break;
                     case "visible barrier":
-                        frame = frame.concat([ob.trans.offsetX, ob.trans.offsetY, ob.width, ob.height, ob.color]);
+                        frame = frame.concat([translationX, translationY, ob.width, ob.height, ob.color]);
                         break;
                     case "street light":
-                        frame = frame.concat([ob.trans.offsetX, ob.trans.offsetY, ob.trans.rotation, ob._color]);
+                        frame = frame.concat([translationX, translationY, ob.trans.rotation, ob._color]);
                         break;
                     case "floor": 
-                        frame = frame.concat([ob.trans.offsetX, ob.trans.offsetY, ob.width, ob.height, ob.tileType]);
+                        frame = frame.concat([translationX, translationY, ob.width, ob.height, ob.tileType]);
                         break;
                     default:
-                        frame = frame.concat([ob.trans.offsetX, ob.trans.offsetY, ob.trans.rotation]);
+                        frame = frame.concat([translationX, translationY, ob.trans.rotation]);
                         break;
                 }
-
+                
                 objs.layout.push(frame);
             }
         }
@@ -4690,7 +4708,7 @@ export class _Map_ {
         for (let i in this.SUB_MAPS) {
             objs.children.push(this.SUB_MAPS[i].printLayoutScript(false));
         }
-
+     
         return (json) ? JSON.stringify(objs) : objs;
     }
 
@@ -4845,7 +4863,8 @@ export class _Map_ {
     }
 
     deleteSubMap(id) {
-        delete this.SUB_MAPS[m.mapId];
+        delete this.SUB_MAPS[id];
+        this.SUB_MAP_COUNT--;
     }
 
     init(spawns = [

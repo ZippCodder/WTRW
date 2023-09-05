@@ -55,16 +55,90 @@ import {
       _Button_
   } from "/public/scripts/objects.js";
 
+  const mapContainer = document.querySelector("#map");
+  const closeMapButton = document.querySelector("#map-close");
+  const openMapButton = document.querySelectorAll(".controls-container__button").item(1);
+  const setWaypointButton = document.querySelector("#set-waypoint");
+
+  setWaypointButton.ontouchstart = toggleWaypoint;
+  setWaypointButton.onclick = toggleWaypoint;
+
+  closeMapButton.ontouchstart = hideMap;
+  closeMapButton.onclick = hideMap;
+  
+  openMapButton.ontouchstart = showMap;
+  openMapButton.onclick = showMap;
+
+  function showMap(e) {
+   e.preventDefault();
+   updateMapData();
+
+   $MAP_DISPLAY.useInteractiveDisplay = true;
+   updateCoordinates($CURRENT_MAP.centerX + $MAP_DISPLAY.displayOffset.x, $CURRENT_MAP.centerY - $MAP_DISPLAY.displayOffset.y);
+   mapContainer.style.display = "grid";
+    
+   updateDisplayViewport();
+  }
+
+  function hideMap(e) {
+   e.preventDefault();
+   $MAP_DISPLAY.useInteractiveDisplay = false;
+   $MAP_DISPLAY.displayOffset.x = 0;
+   $MAP_DISPLAY.displayOffset.y = 0;
+   mapContainer.style.display = "none";
+  }
 
   const mapDisplay = document.querySelector("#mapDisplay");
+  const mdContext1 = mapDisplay.getContext("webgl");
+
   mapDisplay.width = 1000;
   mapDisplay.height = 1000;
 
-  const mdgl = mapDisplay.getContext("webgl");
-  const mdglExt = mdgl.getExtension("OES_vertex_array_object");
+  const interactiveMap = document.querySelector("#interactive-map");
+  const mdContext2 = interactiveMap.getContext("webgl");
 
-  mdgl.viewport(0, 0, mapDisplay.width, mapDisplay.height); 
-  
+  interactiveMap.width = 1000;
+  interactiveMap.height = 1000; 
+
+  let offsetAnchor = {x: 0, y: 0}, move = false;
+
+  function startDisplayMovement(e) {
+    e.preventDefault();
+    move = true;
+    offsetAnchor.x = ((e.touches) ? e.touches[0].clientX:e.clientX) + $MAP_DISPLAY.displayOffset.x; 
+    offsetAnchor.y = ((e.touches) ? e.touches[0].clientY:e.clientY) + $MAP_DISPLAY.displayOffset.y; 
+  }
+
+  function moveDisplay(e) {
+   e.preventDefault();
+
+   if (move) {
+    $MAP_DISPLAY.displayOffset.x = offsetAnchor.x - ((e.touches) ? e.touches[0].clientX:e.clientX);
+    $MAP_DISPLAY.displayOffset.y = offsetAnchor.y - ((e.touches) ? e.touches[0].clientY:e.clientY);
+
+    updateCoordinates($CURRENT_MAP.centerX + $MAP_DISPLAY.displayOffset.x, $CURRENT_MAP.centerY - $MAP_DISPLAY.displayOffset.y);
+   }
+  }
+
+  function stopDisplayMovement(e) {
+    e.preventDefault();
+    move = false;
+    offsetAnchor = {x: 0, y: 0};
+  }
+
+  function updateCoordinates(x,y) {
+    document.querySelector(".map__coordinates").innerText = `x:${Math.round(x)}, y:${Math.round(y)}`;
+  }
+
+  interactiveMap.ontouchstart = startDisplayMovement;
+  interactiveMap.ontouchend = stopDisplayMovement;
+  interactiveMap.ontouchmove = moveDisplay;
+
+  interactiveMap.onmousedown = startDisplayMovement;
+  interactiveMap.onmouseup = stopDisplayMovement;
+  interactiveMap.onmousemove = moveDisplay;
+
+
   const vShaderSrc = `
         #version 100
 
@@ -106,6 +180,7 @@ import {
         uniform vec4 color3;
         uniform vec4 color4;
         uniform vec4 color5;
+        uniform vec4 color6;
         
         void main() {
           vec4 color;
@@ -120,11 +195,22 @@ import {
            color = color4;
           } else if (colorCode == 5.0) {
            color = color5;
+          } else if (colorCode == 6.0) {
+           color = color6;
           }
      
          gl_FragColor = color;
         }
         `;
+
+  function setDisplayContext(mdgl) {
+    const mdglExt = mdgl.getExtension("OES_vertex_array_object");
+
+    if (mdgl === mdContext1) {
+     mdgl.viewport(0, 0, mapDisplay.width, mapDisplay.height); 
+    } else {
+     mdgl.viewport(0, 0, interactiveMap.width, interactiveMap.height); 
+    }
 
     const mdVShader = mdgl.createShader(mdgl.VERTEX_SHADER);
     mdgl.shaderSource(mdVShader, vShaderSrc);
@@ -155,24 +241,97 @@ import {
       color3: mdgl.getUniformLocation(mdProgram, "color3"),
       color4: mdgl.getUniformLocation(mdProgram, "color4"),
       color5: mdgl.getUniformLocation(mdProgram, "color5"),
+      color6: mdgl.getUniformLocation(mdProgram, "color6"),
       coords: mdgl.getAttribLocation(mdProgram, "coords"),
       color: mdgl.getAttribLocation(mdProgram, "color")
     }
 
     mdgl.uniform1f(mdLocations.scale, 1);
     mdgl.uniform2fv(mdLocations.translation, [0, 0]);
-    mdgl.uniform4fv(mdLocations.color1, [0.8,0.8,0.8,1]);
-    mdgl.uniform4fv(mdLocations.color2, fromRGB([30,144,255,1]));
-    mdgl.uniform4fv(mdLocations.color3, fromRGB([245,62,34,1]));
-    mdgl.uniform1f(mdLocations.worldUnitX, worldUnitX);
-    mdgl.uniform1f(mdLocations.worldUnitY, worldUnitX);
+    mdgl.uniform4fv(mdLocations.color1, [0.4,0.4,0.4,1]);
+    mdgl.uniform4fv(mdLocations.color2, fromRGB([44, 143, 219, 1]));
+    mdgl.uniform4fv(mdLocations.color3, fromRGB([219, 44, 44, 1]));
+    mdgl.uniform4fv(mdLocations.color4, [0.8,0.8,0.8,1]);
+    mdgl.uniform4fv(mdLocations.color5, [1,1,1,1]);
+    mdgl.uniform4fv(mdLocations.color6, fromRGB([204, 44, 219, 1]));
+    mdgl.uniform1f(mdLocations.worldUnitX, (worldUnitX/4)+(worldUnitY/4));
+    mdgl.uniform1f(mdLocations.worldUnitY, (worldUnitX/4)+(worldUnitY/4));
 
-    let vao = mdglExt.createVertexArrayOES(), buffer = mdgl.createBuffer();
+   return {buffer: mdgl.createBuffer(), vao: mdglExt.createVertexArrayOES(), ext: mdglExt, locations: mdLocations};
+   }
+
+   function renderDisplayContext(ctx, props) {
+       ctx.clear(ctx.COLOR_BUFFER_BIT);
+       props.ext.bindVertexArrayOES(props.vao);
+
+       ctx.uniform1f(props.locations.scale, ($MAP_DISPLAY.useInteractiveDisplay) ? $MAP_DISPLAY.interactiveScale:$MAP_DISPLAY.scale);
+       ctx.uniform2fv(props.locations.translation, [-$CURRENT_MAP.centerX - $MAP_DISPLAY.displayOffset.x, -$CURRENT_MAP.centerY + $MAP_DISPLAY.displayOffset.y]);
+
+       ctx.bindBuffer(ctx.ARRAY_BUFFER, props.buffer);
+       ctx.bufferData(ctx.ARRAY_BUFFER, new Float32Array([...$MAP_DISPLAY.objectsVertices,...$MAP_DISPLAY.avatarsVertices]), ctx.DYNAMIC_DRAW);
+       ctx.vertexAttribPointer(props.locations.coords, 3, ctx.FLOAT, false, 16, 0);
+       ctx.vertexAttribPointer(props.locations.color, 1, ctx.FLOAT, false, 16, 12);
+       ctx.enableVertexAttribArray(0);
+       ctx.enableVertexAttribArray(1);
+     
+       ctx.drawArrays(ctx.TRIANGLES, 0, ($MAP_DISPLAY.objectsVertices.length+$MAP_DISPLAY.avatarsVertices.length)/4);
+      
+       if ($MAP_DISPLAY.waypoint.set && $CURRENT_MAP.id === $MAP_DISPLAY.waypoint.map) {   
+        if (distance($CURRENT_MAP.centerX,$CURRENT_MAP.centerY,$MAP_DISPLAY.waypoint.x,$MAP_DISPLAY.waypoint.y) < 30) {
+          toggleWaypoint();
+          return;
+        }
+        ctx.bindBuffer(ctx.ARRAY_BUFFER, props.buffer);
+        ctx.bufferData(ctx.ARRAY_BUFFER, new Float32Array([...$MAP_DISPLAY.waypointVertices]), ctx.DYNAMIC_DRAW);
+        ctx.vertexAttribPointer(props.locations.coords, 3, ctx.FLOAT, false, 16, 0);
+        ctx.vertexAttribPointer(props.locations.color, 1, ctx.FLOAT, false, 16, 12);
+        ctx.enableVertexAttribArray(0);
+        ctx.enableVertexAttribArray(1);
+
+        ctx.drawArrays(ctx.TRIANGLE_STRIP, 0, ($MAP_DISPLAY.waypointVertices.length)/4);
+       }
+   }
+
+    const mdContextProperties1 = setDisplayContext(mdContext1);
+    const mdContextProperties2 = setDisplayContext(mdContext2);
+  
+  window.updateDisplayViewport = function() {
+   let {width, height} = interactiveMap.getBoundingClientRect();
+   let maxVi = Math.max(width, height), minVi = Math.min(width, height);
+   let viRatio = maxVi / minVi;
+   let viUnitX = (maxVi === width) ? 0.01 + (0.01 / viRatio) : 0.01 + (0.01 * viRatio);
+   let viUnitY = (maxVi === width) ? 0.01 + (0.01 * viRatio) : 0.01 + (0.01 / viRatio);
+   
+    mdContext2.uniform1f(mdContextProperties2.locations.worldUnitX, viUnitX);
+    mdContext2.uniform1f(mdContextProperties2.locations.worldUnitY, viUnitY);
+ 
+   interactiveMap.width = width*4;
+   interactiveMap.height = height*4; 
+   mdContext2.viewport(0, 0, width*4, height*4); 
+  }
 
     $MAP_DISPLAY = {
      scale: 2,
+     interactiveScale: 7,
+     useInteractiveDisplay: false, 
+     displayOffset: {x: 0, y: 0},
      objectsVertices: [],
      avatarsVertices: [],
+     waypointVertices: [],
+     waypoint: {x: 0, y: 0, set: false, map: undefined},
+     colorCodes: {
+      "door": 5,
+      "building": 5,
+      "visible barrier": 4,    
+     },
+     updateWaypoint: function(x1,y1,x2,y2) {
+      $MAP_DISPLAY.waypointVertices = [x1,y1,1,6,x1,y1+5,1,6,x2,y2,1,6,x2,y2+5,1,6,x1+5,y1,1,6,x1,y1,1,6,x2,y2,1,6,x2+5,y2,1,6];
+     },
+     addObject: function(obj) {
+       let {offsetX,offsetY} = obj.trans, color = this.colorCodes[obj.name] || this.colorCodes[obj.type] || 1;  
+
+       this.objectsVertices = this.objectsVertices.concat(cut([[((-obj.width / 2) + offsetX) + $CURRENT_MAP.centerX, ((-obj.height / 2) + offsetY) + $CURRENT_MAP.centerY, obj.width, obj.height]], false, [1, color], true));
+     },
      update: function(renderAvatars) {
         if (renderAvatars) { 
           this.avatarsVertices = [];
@@ -185,39 +344,97 @@ import {
 
         if ((obj.type === "avatar" && !renderAvatars) || (obj.type !== "avatar" && renderAvatars) || obj.hideFromMap) continue;
 
-        let {offsetX,offsetY} = obj.trans;
+        let {offsetX,offsetY} = obj.trans, color = this.colorCodes[obj.name] || this.colorCodes[obj.type] || 1; 
   
          if (renderAvatars) {
           this.avatarsVertices = this.avatarsVertices.concat(cut([[((-obj.width / 2) + offsetX) + $CURRENT_MAP.centerX, ((-obj.height / 2) + offsetY) + $CURRENT_MAP.centerY, obj.width, obj.height]], false, [1,(obj.state.hostile) ? 3:2], true));
           continue;
          } 
 
-          this.objectsVertices = this.objectsVertices.concat(cut([[((-obj.width / 2) + offsetX) + $CURRENT_MAP.centerX, ((-obj.height / 2) + offsetY) + $CURRENT_MAP.centerY, obj.width, obj.height]], false, [1,1], true));
+          this.objectsVertices = this.objectsVertices.concat(cut([[((-obj.width / 2) + offsetX) + $CURRENT_MAP.centerX, ((-obj.height / 2) + offsetY) + $CURRENT_MAP.centerY, obj.width, obj.height]], false, [1,color], true));
        }
+
+      if (this.waypoint.set) this.updateWaypoint($CURRENT_MAP.centerX,$CURRENT_MAP.centerY,this.waypoint.x,this.waypoint.y);
      },   
      render: function() {
-       mdgl.clear(gl.COLOR_BUFFER_BIT);
-       mdglExt.bindVertexArrayOES(vao);
-
-       mdgl.uniform1f(mdLocations.scale, this.scale);
-       mdgl.uniform2fv(mdLocations.translation, [-$CURRENT_MAP.centerX, -$CURRENT_MAP.centerY]);
-
-       mdgl.bindBuffer(mdgl.ARRAY_BUFFER, buffer);
-       mdgl.bufferData(mdgl.ARRAY_BUFFER, new Float32Array([...this.objectsVertices,...this.avatarsVertices]), mdgl.DYNAMIC_DRAW);
-       mdgl.vertexAttribPointer(mdLocations.coords, 3, mdgl.FLOAT, false, 16, 0);
-       mdgl.vertexAttribPointer(mdLocations.color, 1, mdgl.FLOAT, false, 16, 12);
-       mdgl.enableVertexAttribArray(0);
-       mdgl.enableVertexAttribArray(1);
-     
-       mdgl.drawArrays(mdgl.TRIANGLES, 0, (this.objectsVertices.length+this.avatarsVertices.length)/4);
+      if (this.useInteractiveDisplay) {
+        renderDisplayContext(mdContext2, mdContextProperties2); 
+        return;
+      }
+      renderDisplayContext(mdContext1, mdContextProperties1); 
      }
     } 
+
+   function toggleWaypoint(e) {
+    if (e) e.preventDefault();
+    if (!$MAP_DISPLAY.waypoint.set) {
+     $MAP_DISPLAY.waypoint.x = $CURRENT_MAP.centerX + $MAP_DISPLAY.displayOffset.x;     $MAP_DISPLAY.waypoint.y = $CURRENT_MAP.centerY - $MAP_DISPLAY.displayOffset.y;
+     $MAP_DISPLAY.waypoint.map = $CURRENT_MAP.id;
+     $MAP_DISPLAY.waypoint.set = true;
+
+     setWaypointButton.innerText = "Unset Waypoint";
+    } else {
+    $MAP_DISPLAY.waypoint.set = false;
+    $MAP_DISPLAY.waypoint.map = undefined;
+    setWaypointButton.innerText = "Set Waypoint";
+    }
+   }
+
+   function updateMapData() {
+     document.querySelector("#map-name").innerText = $CURRENT_MAP.name;
+     document.querySelector("#map-dimensions").innerText = `${$CURRENT_MAP.width}x${$CURRENT_MAP.height}`; 
+     document.querySelector("#map-population").innerText = $CURRENT_MAP.avatarCount;
+     document.querySelector("#map-rooms").innerText = $CURRENT_MAP.SUB_MAP_COUNT; 
+     document.querySelector("#map-pickups").innerText = Object.keys($CURRENT_MAP.pickups).length;
+     document.querySelector("#map-objects").innerText = $CURRENT_MAP.objectCount;
+   }
+
+   const mapZoomInButton = document.querySelector("#map-zoom-in");
+   const mapZoomOutButton = document.querySelector("#map-zoom-out");
+
+   function mapZoomIn(e) {
+     e.preventDefault();
+     
+     if ($MAP_DISPLAY.interactiveScale - 0.5 > 1) $MAP_DISPLAY.interactiveScale -= 0.5;
+   }
+
+   function mapZoomOut(e) {
+     e.preventDefault();
+     if ($MAP_DISPLAY.interactiveScale + 0.5 < 15) $MAP_DISPLAY.interactiveScale += 0.5;
+   }
+
+   mapZoomInButton.ontouchstart = mapZoomIn;
+   mapZoomInButton.onmousedown = mapZoomIn;
+
+   mapZoomOutButton.ontouchstart = mapZoomOut;
+   mapZoomOutButton.onmousedown = mapZoomOut;
+   
+
+  let ammoDisplay = document.querySelector("#ammo-display");
+
+  window.showAmmoDisplay = function() {
+     ammoDisplay.style.display = "flex";
+  }
+
+  window.hideAmmoDisplay = function() {
+     ammoDisplay.style.display = "none";
+  }
+
+  window.updateAmmoDisplay = function() { 
+   let gun = $AVATAR.state.equippedItems.mainTool;
+
+   ammoDisplay.querySelector("p").style.color = (gun.constructor._properties.capacity === gun.reloadProgress) ? "#e30f00":"white";
+   ammoDisplay.querySelector("p").innerText = `${(gun.constructor._properties.capacity - gun.reloadProgress)}/${$AVATAR.inventory.weapons[gun.name].ammo}`;
+  }
  
+ 
+
   $HEALTH_BAR = document.querySelector("#healthbar");
   
   window.updateHealthBar = function() {
     $HEALTH_BAR.style.width = `${aisofb($AVATAR.state.vitals.health,100)}%`;
   }
+
 
 
   $JOYSTICK_L = new _Joystick_(true, joystickSizes.left, fixedJoysticks, joystickPositions.left);

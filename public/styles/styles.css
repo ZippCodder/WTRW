@@ -8,9 +8,10 @@ html,body {
         
         :root {
             --main-font: 'Geo', sans-serif;
-            --light-green: #baffa1;   
-            --light-red: #ff928a;
-            --main-color: #aaff96;
+            --light-green: #74f274; 
+            --dark-green: #0fa30f;
+            --light-red: #f27474;
+            --dark-red: #a30f0f;
         }
 
         #gameArea {
@@ -30,7 +31,8 @@ html,body {
          top: 3.4em;
          margin: 1em;
          border-radius: 2px;
-         background: rgba(0,0,0,0.5);
+         background: black;
+         opacity: 0.7;
        }
 
         .texture {
@@ -214,13 +216,14 @@ html,body {
               left: calc(30vmax + 1em);
               top: 0;
               margin: 1em;
-              display: none;
+              display: flex;
+              flex-direction: row;
               user-select: none;
           }
 
           .info-box {
               background: rgba(1,1,1,0.5);
-              display: inline-flex;
+              display: none;
               height: 2.4rem;
               margin-right: 0.3em;
               width: min-content;
@@ -238,7 +241,7 @@ html,body {
               float: left;
           }
  
-          #console-button {
+          #console-button, #action-button {
             position: absolute;
             background: rgba(1,1,1,0.5);
             padding: 0;
@@ -250,12 +253,21 @@ html,body {
             bottom: 0;
             right: 0;
           }
+
+          #action-button {
+            bottom: initial;
+            top: 20%;
+            width: 3em; 
+            height: 3em;
+            border-radius: 100%;
+            border: 3px solid rgba(1,1,1,0.6); 
+          }
  
           #console-button:active {
            background: rgba(1,1,1,0.6);  
           } 
 
-          #console-button img {
+          #console-button img, #action-button img {
             opacity: 0.7;
             width: 100%;
             height: 100%;
@@ -288,7 +300,7 @@ html,body {
           .controls-container__healthbar div {
               height: 100%;
               width: 100%;
-              background: var(--main-color);
+              background: #74f274; 
           }
           
           .icon {
@@ -296,27 +308,179 @@ html,body {
               display: inline-block;
               opacity: 0.7;
               transform: scale(0.5);
-          }
-          
-          #map {
-              z-index: 5;
-              border: solid black;
-              width: 25vmin;
-              height: 25vmin;
-              background: white;
-              position: absolute;
-              top: 0vmin;
-              left: 0;
-              margin: 1em;
-          }
+          } 
           
           #hunger, #thirst {
               color: white;
               font-family: var(--main-font);
           }
+
+          #map {
+              user-select: none;
+              width: 80%;
+              height: 90%;
+              position: absolute;
+              background: none;
+              left: 10%;
+              top: 5%;
+              font-family: var(--main-font);
+              color: white;
+              font-size: 1em;
+              grid-template-columns: 50% 50%;
+              grid-template-rows: 2.5em calc(100% - 2.5em);
+              display: none;
+              box-shadow: 0px 0px 10px black;
+          }
+ 
+          .map__key {
+            background: #3C3C3C;
+          }
+
+          .map__keys td {
+            text-align: left !important; 
+          }
+    
+          .map__canvas {
+            box-sizing: border-box;
+            border: 10px solid #222222;
+            border-left: none;
+            width: 100%;
+            height: 100%;
+            grid-area: 2/2/4/3;
+            font-size: 0.8em;
+            display: block;
+            overflow: hidden;
+            text-align: center;
+          }
+
+          .map__canvas::before {
+            content: "";
+            display: block;
+            position: relative;
+            width: 100%;
+            height: 50%;
+            opacity: 0.5;
+            pointer-events: none;
+            border-bottom: 1px solid white;
+            z-index: 1;
+            transform: translateY(-1px);
+          }
+
+          .map__canvas::after {
+            content: "";
+            display: block;
+            position: relative;
+            width: 50%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.5;
+            border-right: 1px solid white;
+            transform: translate(0,calc(-150% - 4px));
+          }
+
+          .map__coordinates {
+            grid-area: 1/2/2/3;
+            position: relative;
+            height: 1em;
+            left: 100%;
+            top: 100%;
+            white-space: nowrap;
+            color: white;
+            font-family: var(--main-font);
+            filter: drop-shadow(0 0 1px black);
+            font-size: 0.8em;
+            z-index: 1;
+            transform: translate(calc(-100% + 0.5em),100%);
+          }
+
+          .map__zoom {
+            grid-area: 2/2/3/3;
+            z-index: 1;
+            width: 100%;
+            height: 1em;
+            position: relative;
+            left: calc(100% - 2em);
+            filter: drop-shadow(0 0 1px black);
+          }
+
+          .map__zoom p {
+            color: white;
+            width: 1em;
+            height: 1em;
+            text-align: center;
+            border: 1px solid white; 
+          }
+
+          .map__key-info {
+            padding: 0.5em !important;
+            padding-top: 0.2em !important;
+            padding-bottom: 0.2em !important;
+          }
+
+          .map__key-info p {
+            display: inline-block;
+          }
+
+          .map__keys tr p::before {
+            content: "";
+            width: 1em;
+            height: 1em;
+            background: white;
+            display: inline-block;
+            margin-right: 0.5em;
+            transform: translate(0,0.15em);
+          }
+ 
+          .map__keys tr:nth-child(2) p::before {
+            background: rgb(44, 143, 219);
+          }
+
+          .map__keys tr:nth-child(3) p::before {
+            background: rgb(219, 44, 44); 
+          }
           
+          .map__keys tr:nth-child(4) p::before {
+            background: rgb(44, 219, 53);   
+          }
+
+          .map__keys tr:nth-child(5) p::before {
+            background: rgb(204, 44, 219);   
+          }
+          
+          .map__keys tr:nth-child(6) p::before {
+            background: rgb(204,204,204);   
+          }
+           
+          .map__keys tr:nth-child(7) p::before {
+            background: white;   
+          }          
+          
+          .map__keys tr:nth-child(8) p::before {
+            background: rgb(102,102,102);   
+          }          
+
+          #set-waypoint {
+            font-family: inherit;
+            font-size: 0.7em;
+            margin-right: 1em;
+            background: none;
+            float: right;
+            color: inherit;
+            border: 1px solid white;
+            border-bottom: 4px solid white;
+          }
+
+          #interactive-map {
+            background: rgba(1,1,1,0.7);
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            transform: translate(0,calc(-50% - 1px)) scale(1.1);
+          } 
+ 
           #main-inventory {
               user-select: none;
+              z-index: 1;
               background: #3C3C3C;
               width: 80%;
               height: 90%;
@@ -332,7 +496,7 @@ html,body {
               box-shadow: 0px 0px 10px black;
           }
 
-          .main-inventory__description, .main-inventory__stats, .main-inventory__help {
+          .main-inventory__description, .main-inventory__stats, .main-inventory__help, .map__key {
               box-sizing: border-box;
               border: 10px solid #222222;
               grid-area: 2/1/4/2;
@@ -388,7 +552,7 @@ html,body {
               display: none;
           }
 
-          .main-inventory__title {
+          .main-inventory__title, .map__title {
               background: #222222;
               width: 100%;
               height: 100%;
@@ -425,6 +589,7 @@ html,body {
 
           #console {
               user-select: none;
+              z-index: 1;
               background: #3C3C3C;
               width: 80%;
               height: 90%;
@@ -483,9 +648,10 @@ html,body {
           }
 
           #console-send {
-              margin-right: 0;
-              background-color: #444444; 
-              border-color: #333333; 
+            margin-right: 0;
+            color: white;
+            background-color: gray; 
+            border-color: #444444; 
           }
     
           #console-input {
@@ -510,10 +676,57 @@ html,body {
             color: lime;
           }
 
+          table {
+           width: 100%;
+          }
+
+          td, th {
+            background: rgba(0,0,0,0.2);
+            padding: 0.4em;
+          }
+
+          th {
+            background: rgba(0,0,0,0.3);
+          } 
+
+          table h3 {
+            margin: 0;
+          }
+
           @media screen and (orientation: portrait) {
             #main-inventory {
               grid-template-columns: 100%;
               grid-template-rows: 2.5em calc(60% - 6em) 40% 3.5em;
+            }
+
+             #map {
+              grid-template-columns: 100%;
+              grid-template-rows: 2.5em calc(50% - 1.25em) calc(50% - 1.25em);
+             } 
+  
+            .map__canvas {
+             grid-area: 3/1/4/2;
+             width: 100%;
+             height: 100%;
+             border-left: 10px solid #222222;
+            }
+
+            .map__key {
+             grid-area: 2/1/3/2;
+             border-bottom: none;
+            }
+
+            .map__coordinates {
+             grid-area: 2/1/3/2;
+             transform: translate(calc(-100% + 1em),100%);
+            }
+
+            .map__zoom {
+             grid-area: 3/1/4/2;
+            }
+
+            .map__title {
+             grid-area: 1/1/2/2;
             }
       
             .main-inventory__description, .main-inventory__stats, .main-inventory__help {
@@ -546,11 +759,11 @@ html,body {
 
             .controls-container__info-boxes {
               left: 0;
-              top: 3.4em;
+              top: calc(25vmin + 4.4em);
+              flex-direction: column;
             }
 
             .info-box {
-              display: flex;
               margin-bottom: 0.3em;
               margin-right: 0;
             }
@@ -587,15 +800,15 @@ html,body {
             border-bottom: 4px solid white;
           }
                     
-          .main-inventory__close, #console-close {
+          .main-inventory__close, #console-close, #map-close {
             font-family: inherit;
             font-size: 0.7em;
             background: var(--light-red);
             float: right;
             color: inherit;
             border: none;
-            border-bottom: 5px solid #c40d00;
-          } 
+            border-bottom: 5px solid var(--dark-red);
+          }
      
          .main-inventory__buttons {
             display: flex;
@@ -617,8 +830,8 @@ html,body {
           }
 
           .main-inventory__controls-equip {
-            background-color: var(--light-green); 
-            border-color: #4c992f; 
+            background-color: #74f274;  
+            border-color: var(--dark-green); 
            }
 
            .main-inventory__controls-switch {
@@ -649,7 +862,7 @@ html,body {
               margin: 5%;
           }
                     
-          .main-inventory__items h2, .main-inventory__description h2, .main-inventory__stats h2, .main-inventory__help h2 {
+          .main-inventory__items h2, .main-inventory__description h2, .main-inventory__stats h2, .main-inventory__help h2, .map__key h2 {
               text-align: center;
               width: auto;
               background: rgba(1,1,1,0.3);

@@ -28,6 +28,7 @@
                 
                 <p id="game-stats">FPS: 0</p>
                  
+               
                 <div id="console-button"><img src="/public/images/icons/CHAT_ICON.png" /></div>
                  
                 <div class="controls-container__buttons">
@@ -37,8 +38,8 @@
                 </div>
 
              <div class="controls-container__info-boxes">
-             <div class="info-box"><img class="icon" src="/public/images/icons/SHLD_ICON.png" /><p id="armour">100</p></div>
-             <div class="info-box"><img class="icon" src="/public/images/icons/AMMO_ICON.png" /><p id="ammo">0/0</p></div>
+             <div class="info-box" id="armour-display"><img class="icon" src="/public/images/icons/SHLD_ICON.png" /><p id="armour">100</p></div>
+             <div class="info-box" id="ammo-display"><img class="icon" src="/public/images/icons/AMMO_ICON.png" /><p id="ammo">0/0</p></div>
              </div>
                 
                 <div class="controls-container__stats">
@@ -46,6 +47,49 @@
                 </div>
 
    <!-- onscreen content and controls -->
+
+                <div id="map">
+                  <small class="map__coordinates">x:0, y:0</small>
+                  <div class="map__zoom"><p id="map-zoom-in">+</p><p id="map-zoom-out">-</p></div> 
+                  <h1 class="map__title">Map<button id="map-close">Close</button><button id="set-waypoint">Set Waypoint</button></h1>
+                  <div class="map__key">
+                    <h2>Details</h2>
+                    <table class="stats__money">
+                     <th colspan="2"><h3 id="map-name">"Downtown SmallVille"</h3></th>
+                     <tr>
+                      <td>Dimensions:</td><td id="map-dimensions">500x500</td>
+                     </tr>
+                     <tr>
+                      <td>Population:</td><td id="map-population">153</td>
+                     </tr>
+                     <tr>
+                      <td>Rooms:</td><td id="map-rooms">34</td>
+                     </tr>
+                     <tr>
+                      <td>Pickups:</td><td id="map-pickups">132</td>
+                     </tr>
+                     <tr>
+                      <td>Objects:</td><td id="map-objects">132</td>
+                     </tr>
+                    </table>
+                    <table class="map__keys">
+                    <th colspan="2"><h3>Key</h3></th>
+                    <tr><td><div class="map__key-info"><p>Player - Non-hostile characters</p></div></td></tr>
+                    <tr><td><div class="map__key-info"><p>Enemy - Hostile characters</p></div></td></tr>
+                    <tr><td><div class="map__key-info"><p>Partner - Cooperative characters</p></div></td></tr>
+                    <tr><td><div class="map__key-info"><p>Waypoint - Direction to set destination</p></div></td></tr>
+                    </br>
+                    <tr><td><div class="map__key-info"><p>Obstacle - Furniture, large miscellaneous objects</p></div></td></tr> 
+                    <tr><td><div class="map__key-info"><p>Building/Door - Enterable structures</p></div></td></tr>
+                    <tr><td><div class="map__key-info"><p>Wall - Large inpenetrable obstacles</p></div></td></tr>
+                    </table>
+                    </br>
+                    <p><strong>Note:</strong> Move the display to view and navigate the full game area. Use <strong>"Set Waypoint"</strong> to set a marker for help navigating to the selected coordinates.</p>
+                  </div>
+                  <div class="map__canvas">
+                    <canvas id="interactive-map"></canvas>
+                  </div>
+                </div>
 
                 <div id="console">
                   <h1 class="console__title">Chat/Console<button id="console-close">Close</button></h1>
@@ -88,7 +132,63 @@ Oh wait, what items? You're a noob lol.
   </div>
 </div>
 
-                    <div class="main-inventory__stats"><h2>Stats</h2><p class="main-inventory__stats-content">Click to select an item and see a full description of its use. Press <strong>Equip</strong> to equip the selected item, and <strong>Drop</strong> to drop it. Press <strong>Switch</strong> and then click another slot to switch the selected item with another.</br></br>Oh wait, what items? You're a noob.</p></div> 
+                    <div class="main-inventory__stats">
+                      <h2>Stats</h2>
+                      <table class="stats__money">
+                       <th colspan="2"><h3>Money</h3></th>
+                       <tr>
+                        <td>Cash:</td><td>$0</td>
+                       </tr>
+                       <tr>
+                        <td>Bank:</td><td>$0</td>
+                       </tr>
+                      </table>
+                      </br>
+                      <table class="stats__vitals">
+                       <th colspan="2"><h3>Vitals</h3></th>
+                       <tr>
+                        <td>Health:</td><td>0</td>
+                       </tr>
+                       <tr>
+                        <td>Armour:</td><td>0</td>
+                       </tr>
+                       <tr>
+                        <td>Water:</td><td>0</td>
+                       </tr>
+                       <tr>
+                        <td>Food:</td><td>0</td>
+                       </tr>
+                      </table>
+                      </br>
+                      <table class="stats__characteristics">
+                       <th colspan="2"><h3>Characteristics</h3></th>
+                       <tr>
+                        <td>Strength:</td><td>0</td>
+                       </tr>
+                       <tr>
+                        <td>Speed:</td><td>0</td>
+                       </tr>
+                      </table>
+                      </br>
+                      <table class="stats__intelligence">
+                       <th colspan="2"><h3>Intelligence</h3></th>
+                       <tr>
+                        <td>English:</td><td>0</td>
+                       </tr>
+                       <tr>
+                        <td>History:</td><td>0</td>
+                       </tr>
+                       <tr>
+                        <td>Science:</td><td>0</td>
+                       </tr>
+                       <tr>
+                        <td>Math:</td><td>0</td>
+                       </tr>
+                       <tr>
+                        <td>Art:</td><td>0</td>
+                       </tr>
+                      </table>
+                    </div> 
 
                     <div class="main-inventory__items">
                         <h2>Items</h2>
