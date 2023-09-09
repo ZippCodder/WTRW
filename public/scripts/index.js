@@ -6,12 +6,14 @@ import {
 window.onload = async () => {
 
     window.canvas = document.querySelector("#gameArea");
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    window.sharpness = 2;
+
+    canvas.width = window.innerWidth*sharpness;
+    canvas.height = window.innerHeight*sharpness;
 
     window.gl = canvas.getContext("webgl");
 
-    gl.viewport(0, 0, window.innerWidth, window.innerHeight);
+    gl.viewport(0, 0, window.innerWidth*sharpness, window.innerHeight*sharpness);
  
     window.$OBJECTS = [];
     window.$CONTROLS = [];
@@ -74,10 +76,10 @@ window.onload = async () => {
     setWorldMeasurements();
 
     window.onresize = function() { 
-      gl.viewport(0, 0, window.innerWidth, window.innerHeight);
+      gl.viewport(0, 0, window.innerWidth*sharpness, window.innerHeight*sharpness);
 
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      canvas.width = window.innerWidth*sharpness;
+      canvas.height = window.innerHeight*sharpness;
 
       setWorldMeasurements();
  

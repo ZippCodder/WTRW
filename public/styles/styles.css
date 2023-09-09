@@ -30,7 +30,6 @@ html,body {
          left: 0;
          top: 3.4em;
          margin: 1em;
-         border-radius: 2px;
          background: black;
          opacity: 0.7;
        }
@@ -48,8 +47,6 @@ html,body {
           transform: scale(1.2);
           top: calc(40%);
           animation: pulse 1s infinite;
-          border-radius: 3px;
-          border: 3px solid white;
         }
         
         .loading-title {
@@ -65,7 +62,8 @@ html,body {
           #loading-screen {
             width: 100%;
             height: 100%;
-            z-index: 3;
+            z-index: 6;
+            position: absolute;
             background: #3C3C3C;
             background-size: cover;
           }
@@ -143,7 +141,7 @@ html,body {
           
           .controls-container__inv {
             position: absolute;
-            top: calc((100% - 7vmax) - 1em);
+            top: calc((100% - 7vmax) - 1em - 2px);
             width: 35vmax;
             height: 7vmax;
             left: calc((50% - 17.5vmax) - 4vmin);
@@ -158,18 +156,20 @@ html,body {
           .controls-container__item {
             width: auto;
             height: auto;
-            background: rgba(1,1,1,0.3);
-            border-bottom: 5px solid rgba(0,0,0,0.5);
+            background: #898989;
+            border-bottom: 6px solid #676767;
+            outline: 2px solid #222222;
             background-repeat: no-repeat;
             background-size: contain;
-            background-position: bottom right; 
+            background-position: bottom right;
           }
           
-          .controls-container__item::after {
+          .controls-container__item::before {
               counter-increment: active-item;
               content: counter(active-item);
-              width: 10px;
-              height: 10px;
+              display: block;
+              width: 100%;
+              height: 100%;
               background: none;
               margin-left: 5px;
           }
@@ -185,10 +185,9 @@ html,body {
           }
 
           .controls-container__button { 
-             width: 2.8em;
-             height: 2.8em;
+             width: 3em;
+             height: 3em;
              display: inline-block;
-             opacity: 0.9;
              padding: 0;
              border: none;
           }
@@ -198,14 +197,13 @@ html,body {
           }
                    
           .controls-container__stats {
-              background: rgba(1,1,1,0.5);
               user-select: none;
               display: block;
               width: 30vmax;
               height: 2.4em;
               white-space: nowrap;
               position: absolute;
-              margin: 1em;
+              margin: calc(1em + 1.5px);
               left: 0;
               top: 0;
           }
@@ -215,24 +213,26 @@ html,body {
               min-width: 30vh;
               left: calc(30vmax + 1em);
               top: 0;
-              margin: 1em;
+              margin: calc(1em + 1.5px);
               display: flex;
               flex-direction: row;
               user-select: none;
           }
 
           .info-box {
-              background: rgba(1,1,1,0.5);
+              background: #3C3C3C;
+              outline: 2px solid #111111;
+              border-bottom: 6px solid #2C2C2C;
               display: none;
-              height: 2.4rem;
               margin-right: 0.3em;
               width: min-content;
               white-space: nowrap;
-              border-radius: 2px;
               padding-right: 0.5em;
               color: white;
               align-items: center;
               font-family: var(--main-font);
+              height: 2.4em;
+              box-sizing: border-box;
           }
 
           .info-box p {
@@ -243,13 +243,13 @@ html,body {
  
           #console-button, #action-button {
             position: absolute;
-            background: rgba(1,1,1,0.5);
+            background: #3C3C3C;
             padding: 0;
-            margin: 1em;
+            margin: calc(1em + 2px);
             width: 2.5em;
             height: 2.5em;
-            border: none;
-            border-radius: 2px;
+            outline: 2px solid #111111;
+            border-bottom: 4px solid #2C2C2C;
             bottom: 0;
             right: 0;
           }
@@ -282,8 +282,10 @@ html,body {
           .controls-container__health {
               display: inline-flex;
               height: 100%;
-              width: calc(100% - 2.4em);
-              border-bottom: 5px solid rgba(1,1,1,0.5);
+              width: 100%;
+              background: #3C3C3C;
+              outline: 2px solid #111111;
+              border-bottom: 6px solid #2C2C2C;
               padding-right: 0.5em;
               align-items: center;
               box-sizing: border-box;
@@ -294,7 +296,7 @@ html,body {
               display: block;
               width: 50%;
               height: 30%;
-              background: rgba(0,0,0,0.5);
+              background: rgba(0,0,0,0.5); 
           }
           
           .controls-container__healthbar div {
@@ -448,7 +450,7 @@ html,body {
           }
           
           .map__keys tr:nth-child(6) p::before {
-            background: rgb(204,204,204);   
+            background: rgb(102,102,102);   
           }
            
           .map__keys tr:nth-child(7) p::before {
@@ -456,7 +458,7 @@ html,body {
           }          
           
           .map__keys tr:nth-child(8) p::before {
-            background: rgb(102,102,102);   
+            background: rgb(204,204,204);   
           }          
 
           #set-waypoint {
@@ -816,7 +818,6 @@ html,body {
             justify-content: right;
             width: 100%;
             height: 100%;
-            opacity: 0.5;
          }
 
           .styled__btn {

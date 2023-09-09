@@ -1871,7 +1871,7 @@ export class GP_K100 extends _Gun_ {
         damage: 7,
         accuracy: 2,
         nozzelLength: 21,
-        capacity: 12,
+        capacity: 1000,
         reloadTime: 3,
         useTextures: [6,7]
       }
@@ -2833,7 +2833,7 @@ export class Avatar {
             let point = this.map.GRAPH.getRandomPoint();
 
             if (point) {
-                this.state.speed = this.state.runningSpeed * this.state.baseSpeed;
+                this.state.speed = 5 * this.state.baseSpeed;
                 this.requestPath(point.x, point.y);
             }
         }
@@ -3062,6 +3062,11 @@ export class Bot {
                 engaged: false,
                 shot: true
             },
+            wander: {
+               active: false,
+               anchor: {x: 0, y: 0},   
+               radius: 10
+            },
             follow: {
                 target: undefined,
                 rush: false,
@@ -3096,6 +3101,7 @@ export class Bot {
             walking: false,
             punching: false,
             stabbing: false,
+            running: false,
             armed: false,
             melee: false,
             draw: false,
@@ -3407,7 +3413,8 @@ export class Bot {
             }
         }
 
-        if ((this.state.passive && !this.state.aggressive) || (this.state.armed && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo <= 0)) {
+        if (this.state.passive) {
+            console.log("a");
             this.run();
         } else if (!this.state.target.id.includes(owner.state.targetId) && (this.map || $CURRENT_MAP).avatars[owner.id] && this.state.aggressive) {
             this.state.target.id.push(owner.state.targetId);
@@ -3432,6 +3439,15 @@ export class Bot {
 
     reload() {
         this.state.reloadTimeout.start();
+    }
+
+    wander(anchorX, anchorY) {
+      this.state.wander.active = true;
+      this.state.wander.anchor = {x: anchorX, y: anchorY};
+    }
+
+    stopWander() {
+      this.state.wander.active = false;
     }
 
     follow(id) {
@@ -3587,7 +3603,7 @@ export class Bot {
                 this.state.rotationTarget = normalizeRotation((Math.atan2(this.state.goto.y - this.trans.offsetY, this.state.goto.x - this.trans.offsetX)*180/Math.PI) - 90);
             } else {
                 this.disengagePath();
-                this.requestPath(this.state.path.end.x, this.state.path.end.y);
+                if (this.state.path.request) this.requestPath(this.state.path.end.x, this.state.path.end.y);
                 break walk;
             }
 
@@ -3615,8 +3631,8 @@ export class Bot {
             punch: if (!this.state.armed && !this.state.melee) {
                if (dist > this.state.attack.disengageDistance && this.state.target.engaged) {
                     this.disengageTarget();
-               } else if (dist <= this.state.attack.engageDistance && !this.state.path.engaged && !this.state.follow.target) {
-                  this.requestPath(targetX + m.centerX, targetY + m.centerY);
+               } else if (dist <= this.state.attack.engageDistance && !this.state.path.engaged && !this.state.follow.target && this.state.path.request) {
+                  this.requestPath(targetX, targetY);
                }
  
                if (dist <= 30) {
@@ -3635,7 +3651,7 @@ export class Bot {
                     this.disengageTarget();
                } else if (dist <= this.state.attack.engageDistance) {
                   if (this.state.attack.openCarry && !this.state.draw) this.drawWeapon();
-                  if (!this.state.path.engaged && !this.state.follow.target) this.requestPath(targetX + m.centerX, targetY + m.centerY);
+                  if (!this.state.path.engaged && !this.state.follow.target && this.state.path.request) this.requestPath(targetX, targetY);
                }
  
                if (dist <= 30) {
@@ -3660,7 +3676,7 @@ export class Bot {
                     this.state.speed = this.state.baseSpeed * this.state.attack.attackSpeed;
                     this.state.fire = false;
                     if (!this.state.attack.openCarry && this.state.draw) this.holsterWeapon();
-                    if (!this.state.path.engaged && !this.state.follow.target) this.requestPath(targetX + m.centerX, targetY + m.centerY);
+                    if (!this.state.path.engaged && !this.state.follow.target && this.state.path.request) this.requestPath(targetX, targetY);
                 } else if (dist < this.state.attack.settleDistance) {
                     if (this.state.target.shot && this.state.path.engaged && !this.state.follow.target) {
                         this.disengagePath();
@@ -3684,12 +3700,12 @@ export class Bot {
                     if (!this.state.draw) this.drawWeapon();
                     if (this.state.target.shot) this.state.fire = true;
 
-                    if (!this.state.path.engaged && !this.state.follow.target) {
-                        this.requestPath(targetX + m.centerX, targetY + m.centerY);
+                    if (!this.state.path.engaged && !this.state.follow.target && this.state.path.request) {
+                        this.requestPath(targetX, targetY);
                     }
                 }
 
-                if (!this.state.target.shot && this.state.path.request && !this.state.path.engaged && !this.state.follow.target) this.requestPath(targetX + m.centerX, targetY + m.centerY)
+                if (!this.state.target.shot && this.state.path.request && !this.state.path.engaged && !this.state.follow.target) this.requestPath(targetX, targetY)
 
                 break attack;
             }
@@ -3709,7 +3725,7 @@ export class Bot {
             if (dist > this.state.follow.settleDistance) {
                 this.state.speed = speed;
                 if (!this.state.path.engaged) {
-                    this.requestPath(targetX + this.map.centerX, targetY + this.map.centerY);
+                    if (this.state.path.request) this.requestPath(targetX, targetY);
                 }
             }
 
@@ -3721,6 +3737,19 @@ export class Bot {
                 }
             }
         }
+
+        wander: if (this.state.wander.active) {
+            if (!this.state.path.engaged) {
+               let offsetX = random(this.state.wander.radius,true), offsetY = random(this.state.wander.radius,true);
+
+               let {x,y} = this.map.GRAPH.getPoint(this.state.wander.anchor.x + offsetX, this.state.wander.anchor.y + offsetY);
+
+               this.state.speed = this.state.baseSpeed;
+ 
+               if (this.state.path.request) this.requestPath(x, y);
+            }
+        }  
+
         this.movePickup(); 
     }
 
@@ -3821,12 +3850,12 @@ export class Bot {
     }
 
     run() {
-        if (!this.state.path.engaged && !this.state.follow.target) {
+        if (!this.state.running && !this.state.follow.target) {
             let point = this.map.GRAPH.getRandomPoint();
-
+            
             if (point) {
-                this.state.speed = this.state.runningSpeed * this.state.baseSpeed;
-                this.requestPath(point.x, point.y);
+              this.state.speed = this.state.runningSpeed * this.state.baseSpeed;
+              if (this.state.path.request && this.requestPath(point.x, point.y)) this.state.running = true;
             }
         }
     }
@@ -3895,20 +3924,23 @@ export class Bot {
     }
 
     requestPath(x, y) {
-        if (this.state.path.request) {
+  
+            x += this.map.centerX;
+            y += this.map.centerY;
+ 
             this.state.path.request = false;
             this.state.pathRequestRateLimit.start();
 
             let start = this.map.GRAPH.getPoint(this.trans.offsetX + this.map.centerX, this.trans.offsetY + this.map.centerY),
                 end = this.map.GRAPH.getPoint(x, y);
 
-            if ((x >= -this.map.width / 2 && x < this.map.width / 2) && (y <= this.map.height / 2 && y > -this.map.height / 2) && start && end) {
-                this.state.path.start = start;
-                this.state.path.end = end;
-                pathfinder.requestPath(this, this.state.path.start.unit, this.state.path.end.unit);
-                return true;
-            }
-        }
+         if ((x >= -this.map.width / 2 && x < this.map.width / 2) && (y <= this.map.height / 2 && y > -this.map.height / 2) && start && end) {
+            this.state.path.start = start;
+            this.state.path.end = end;
+            pathfinder.requestPath(this, this.state.path.start.unit, this.state.path.end.unit);
+            return true;
+          }
+
         return false;
     }
 
@@ -3925,6 +3957,7 @@ export class Bot {
         this.state.path.current = [];
         this.state.path.index = 0;
         this.state.path.engaged = false;
+        this.state.running = false; console.log("B");
         this.disengageGoto();
     }
 

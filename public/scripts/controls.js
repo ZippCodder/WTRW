@@ -25,6 +25,8 @@ import {
       UrbanFence,
       UrbanFenceHalf,
       UrbanFenceVertical,
+      RoadRail, 
+      RoadRailVertical,
       PicnicTable,
       StreetLight,
       Chair,
@@ -305,9 +307,9 @@ import {
     mdContext2.uniform1f(mdContextProperties2.locations.worldUnitX, viUnitX);
     mdContext2.uniform1f(mdContextProperties2.locations.worldUnitY, viUnitY);
  
-   interactiveMap.width = width*4;
-   interactiveMap.height = height*4; 
-   mdContext2.viewport(0, 0, width*4, height*4); 
+   interactiveMap.width = width*2;
+   interactiveMap.height = height*2; 
+   mdContext2.viewport(0, 0, width*2, height*2); 
   }
 
     $MAP_DISPLAY = {
@@ -800,11 +802,17 @@ import {
   function equipSlot(i) {
     if (!$AVATAR.equipItem(i)) return;
   
-    if (equippedIndex < 5) quickAccessItems.item(equippedIndex).style.backgroundColor = "rgba(0,0,0,0.3)";
+    if (equippedIndex < 5) {
+      quickAccessItems.item(equippedIndex).style.backgroundColor = "#898989";
+      quickAccessItems.item(equippedIndex).style.borderBottomColor = "#676767";
+    }
     inventoryItems.item(equippedIndex).style.borderBottom = "none";
 
     if (equippedIndex !== i) {
-     if (i < 5) quickAccessItems.item(i).style.backgroundColor = "rgba(0,0,0,0.5)";
+     if (i < 5) {
+       quickAccessItems.item(i).style.backgroundColor = "#666666";
+       quickAccessItems.item(i).style.borderBottomColor = "#444444";
+     }
      inventoryItems.item(i).style.borderBottom = "3px solid white";
  
      equippedIndex = i;
@@ -883,8 +891,9 @@ import {
    inventoryItems.item(slot).style.backgroundColor = "rgba(0,0,0,0.2)";
 
    if (slot < 5) {
-   quickAccessItems.item(slot).style.backgroundImage = "none";
-   quickAccessItems.item(slot).style.backgroundColor = "rgba(0,0,0,0.3)";
+      quickAccessItems.item(slot).style.backgroundColor = "#898989";
+      quickAccessItems.item(slot).style.borderBottomColor = "#676767";
+      quickAccessItems.item(slot).style.backgroundImage = `none`;
    }
 
    selectedIndex = undefined;
