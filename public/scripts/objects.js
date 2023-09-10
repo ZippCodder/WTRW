@@ -2614,7 +2614,7 @@ export class Avatar {
                 this.state.rotationTarget = normalizeRotation((Math.atan2(this.state.goto.y - this.trans.offsetY, this.state.goto.x - this.trans.offsetX)*180/Math.PI) - 90);
             } else {
                 this.disengagePath();
-                this.requestPath(this.state.path.end.x, this.state.path.end.y);
+                this.requestPath(this.state.path.end.x - this.map.centerX, this.state.path.end.y - this.map.centerY);
                 break walk;
             }
 
@@ -3065,7 +3065,7 @@ export class Bot {
             wander: {
                active: false,
                anchor: {x: 0, y: 0},   
-               radius: 10
+               radius: 50
             },
             follow: {
                 target: undefined,
@@ -3413,8 +3413,7 @@ export class Bot {
             }
         }
 
-        if (this.state.passive) {
-            console.log("a");
+        if (this.state.passive && !this.state.running && !this.state.follow.target) {
             this.run();
         } else if (!this.state.target.id.includes(owner.state.targetId) && (this.map || $CURRENT_MAP).avatars[owner.id] && this.state.aggressive) {
             this.state.target.id.push(owner.state.targetId);
@@ -3603,7 +3602,7 @@ export class Bot {
                 this.state.rotationTarget = normalizeRotation((Math.atan2(this.state.goto.y - this.trans.offsetY, this.state.goto.x - this.trans.offsetX)*180/Math.PI) - 90);
             } else {
                 this.disengagePath();
-                if (this.state.path.request) this.requestPath(this.state.path.end.x, this.state.path.end.y);
+                if (this.state.path.request) this.requestPath(this.state.path.end.x - this.map.centerX, this.state.path.end.y - this.map.centerY);
                 break walk;
             }
 
@@ -3738,15 +3737,13 @@ export class Bot {
             }
         }
 
-        wander: if (this.state.wander.active) {
+        wander: if (this.state.wander.active && !this.state.running) {
             if (!this.state.path.engaged) {
                let offsetX = random(this.state.wander.radius,true), offsetY = random(this.state.wander.radius,true);
 
-               let {x,y} = this.map.GRAPH.getPoint(this.state.wander.anchor.x + offsetX, this.state.wander.anchor.y + offsetY);
-
                this.state.speed = this.state.baseSpeed;
  
-               if (this.state.path.request) this.requestPath(x, y);
+               if (this.state.path.request) this.requestPath((this.state.wander.anchor.x + offsetX) - this.map.centerX, (this.state.wander.anchor.y + offsetY) - this.map.centerY);
             }
         }  
 
@@ -3849,16 +3846,14 @@ export class Bot {
         }
     }
 
-    run() {
-        if (!this.state.running && !this.state.follow.target) {
-            let point = this.map.GRAPH.getRandomPoint();
-            
-            if (point) {
-              this.state.speed = this.state.runningSpeed * this.state.baseSpeed;
-              if (this.state.path.request && this.requestPath(point.x, point.y)) this.state.running = true;
-            }
+     run() {
+       let point = {x: random(this.map.width/2,true), y: random(this.map.height/2,true)};
+        
+       if (point) {
+          this.state.speed = this.state.runningSpeed * this.state.baseSpeed;
+          if (this.state.path.request && this.requestPath(point.x - this.map.centerX, point.y - this.map.centerY)) this.state.running = true;
         }
-    }
+     }
 
     meleeAttack(damage, hitbox) {
        let [x, y] = rotate(hitbox.x, hitbox.y, (this.trans.rotation) * 180 / Math.PI), map = (this.map || $CURRENT_MAP);
@@ -3924,7 +3919,7 @@ export class Bot {
     }
 
     requestPath(x, y) {
-  
+       
             x += this.map.centerX;
             y += this.map.centerY;
  
@@ -3933,7 +3928,7 @@ export class Bot {
 
             let start = this.map.GRAPH.getPoint(this.trans.offsetX + this.map.centerX, this.trans.offsetY + this.map.centerY),
                 end = this.map.GRAPH.getPoint(x, y);
-
+            
          if ((x >= -this.map.width / 2 && x < this.map.width / 2) && (y <= this.map.height / 2 && y > -this.map.height / 2) && start && end) {
             this.state.path.start = start;
             this.state.path.end = end;
@@ -3957,7 +3952,7 @@ export class Bot {
         this.state.path.current = [];
         this.state.path.index = 0;
         this.state.path.engaged = false;
-        this.state.running = false; console.log("B");
+        this.state.running = false; 
         this.disengageGoto();
     }
 
@@ -4350,8 +4345,8 @@ class _Graph_ {
         }
 
         return (p) ? {
-            x: p.position.x - this.map.centerX,
-            y: p.position.y - this.map.centerY
+            x: p.position.x,
+            y: p.position.y
         } : p;
     }
 

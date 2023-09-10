@@ -157,18 +157,18 @@
   //$MAP.link(new Chair(0,0));
   //$MAP.link(new VisibleBarrier(80,0,40,40));
   
-      let c = new Bot("Trinity", -20, 0), b = new Bot("Neo", 20, -30);
+      let c = new Bot("Trinity", -240+5, -240+5), b = new Bot("Neo", 20, -30);
   //    $MAP.link(c);
 
       c.state.armour = 500;
       //c.state.aggressive = true;
- //     c.addItem(new GLOCK_20(0,0,0,1000));
-  //    c.equipItem(0);
+    //  c.addItem(new GLOCK_20(0,0,0,1000));
+    //  c.equipItem(0);
   //    c.state.targetUpdateAnimation.rate = 1/5; 
   //    c.state.targetId = c.id;
-//      c.wander(0,0);
-     // c.follow($AVATAR.id);
-     // c.killTarget([$AVATAR.id], true, true);
+       // c.wander(-240+5,-240+5);
+    //  c.follow($AVATAR.id);
+   //   c.killTarget([$AVATAR.id], true, true);
 
    //   $MAP.link(b);
       b.state.attack.attackSpeed = 1;
@@ -181,14 +181,14 @@
 movementMultFactor = 0.05;
 
 const enemySpawnLoop = new LoopAnimation(function() {
-  if ($MAP.avatarCount < 1) {
+  if ($MAP.avatarCount < 30) {
 
    let {
           x,
           y
       } = $MAP.GRAPH.getRandomPoint();
-
-      a = new Bot(getName(), x + 5, y - 5);
+     
+      a = new Bot(getName(), (x + 5) - $MAP.centerX, (y - 5) - $MAP.centerY);
       $MAP.link(a);
       a.state.attack.engageDistance = 300;
       a.state.attack.disengageDistance = 500;
@@ -198,15 +198,15 @@ const enemySpawnLoop = new LoopAnimation(function() {
       a.state.passive = false;
       a.state.openCarry = true;
       a.state.targetUpdateAnimation.rate = 1 / 5;
-      a.addItem(new KitchenKnife);
+      a.addItem(new GLOCK_20);
       a.equipItem(0);
       a.state.targetId = id;
-      a.state.passive = true;
+      (Math.random() < 0.5) ? a.state.passive = true:a.state.aggressive = true;
       a.state.baseSpeed = 0.5;
       a.state.runningSpeed = 2;
-     // a.wander(x, y);
+      a.wander(x + 5, y + 5);
       //a.follow($AVATAR.id);
-      //a.killTarget([$AVATAR.id, c.id]);
+     // a.killTarget([$AVATAR.id, c.id]);
   }
 }, window, 1);
 
@@ -220,9 +220,15 @@ $MAP.SUB_MAPS[0].link(new KitchenKnife(40,0));
 $MAP.SUB_MAPS[0].link(new KitchenKnife(40,0));
 */
 
-$MAP.link(new Floor(0,0,500,500,0));
+$MAP.link(new VisibleBarrier(50,50,40,40));
+$MAP.link(new VisibleBarrier(30,-70,60,60));
+$MAP.link(new VisibleBarrier(-50,-90,70,70));
+$MAP.link(new VisibleBarrier(-70,50,50,50));
 
- $AVATAR.state.armour = 10;
+//$MAP.link(new Floor(0,0,500,500,0));
+$MAP.showGeometry();
+
+ $AVATAR.state.armour = 1000;
 
  $GAME_LOOP = function() {
   enemySpawnLoop.run(); 
