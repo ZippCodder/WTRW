@@ -198,12 +198,14 @@ const enemySpawnLoop = new LoopAnimation(function() {
       a.state.passive = false;
       a.state.openCarry = true;
       a.state.targetUpdateAnimation.rate = 1 / 5;
-      a.addItem(new GLOCK_20);
+      a.addItem([new GLOCK_20, new GP_K100, new KitchenKnife, undefined][random(4)]);
       a.equipItem(0);
       a.state.targetId = id;
-      (Math.random() < 0.5) ? a.state.passive = true:a.state.aggressive = true;
+   //   (Math.random() < 0.5) ? a.state.passive = true:a.state.aggressive = true;
+      a.state.aggressive = true;
       a.state.baseSpeed = 0.5;
-      a.state.runningSpeed = 2;
+      a.state.attack.attackSpeed = 2;
+      a.state.runningSpeed = 3;
       a.wander(x + 5, y + 5);
       //a.follow($AVATAR.id);
      // a.killTarget([$AVATAR.id, c.id]);
@@ -226,8 +228,9 @@ $MAP.link(new VisibleBarrier(-50,-90,70,70));
 $MAP.link(new VisibleBarrier(-70,50,50,50));
 
 //$MAP.link(new Floor(0,0,500,500,0));
-$MAP.showGeometry();
+//$MAP.showGeometry();
 
+ $AVATAR.state.invinsible = true;
  $AVATAR.state.armour = 1000;
 
  $GAME_LOOP = function() {

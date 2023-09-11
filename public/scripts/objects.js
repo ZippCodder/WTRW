@@ -3413,7 +3413,7 @@ export class Bot {
             }
         }
 
-        if (this.state.passive && !this.state.running && !this.state.follow.target) {
+        if ((this.state.passive || (this.state.armed && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo <= 0)) && !this.state.running && !this.state.follow.target) {
             this.run();
         } else if (!this.state.target.id.includes(owner.state.targetId) && (this.map || $CURRENT_MAP).avatars[owner.id] && this.state.aggressive) {
             this.state.target.id.push(owner.state.targetId);
@@ -3629,10 +3629,12 @@ export class Bot {
 
             punch: if (!this.state.armed && !this.state.melee) {
                if (dist > this.state.attack.disengageDistance && this.state.target.engaged) {
-                    this.disengageTarget();
+                  this.disengageTarget();
                } else if (dist <= this.state.attack.engageDistance && !this.state.path.engaged && !this.state.follow.target && this.state.path.request) {
                   this.requestPath(targetX, targetY);
                }
+   
+               this.state.speed = this.state.baseSpeed * this.state.attack.attackSpeed;
  
                if (dist <= 30) {
                  this.state.punching = true;
@@ -3649,6 +3651,7 @@ export class Bot {
                if (dist > this.state.attack.disengageDistance && this.state.target.engaged) {
                     this.disengageTarget();
                } else if (dist <= this.state.attack.engageDistance) {
+                  this.state.speed = this.state.baseSpeed * this.state.attack.attackSpeed;
                   if (this.state.attack.openCarry && !this.state.draw) this.drawWeapon();
                   if (!this.state.path.engaged && !this.state.follow.target && this.state.path.request) this.requestPath(targetX, targetY);
                }
@@ -3746,8 +3749,6 @@ export class Bot {
                if (this.state.path.request) this.requestPath((this.state.wander.anchor.x + offsetX) - this.map.centerX, (this.state.wander.anchor.y + offsetY) - this.map.centerY);
             }
         }  
-
-        this.movePickup(); 
     }
 
     render() {
@@ -3833,7 +3834,6 @@ export class Bot {
     disengageTarget() {
         this.state.target.engaged = false;
         this.state.target.current = undefined;
-        this.state.speed = this.state.baseSpeed;
         this.state.fire = false;
         this.state.stabbing = false;
         this.state.punching = false;
