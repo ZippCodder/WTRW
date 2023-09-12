@@ -1841,7 +1841,7 @@ export class GLOCK_20 extends _Gun_ {
     static _properties = {
         fireRate: 1,
         bulletSpeed: 5,
-        damage: 100,
+        damage: 20,
         accuracy: 5,
         nozzelLength: 13,
         capacity: 30,
@@ -2999,19 +2999,19 @@ export class Bot {
             hitboxes: {
              leftPunch: {
                x: -4, 
-               y: 10,
+               y: 12,
                width: 2, 
                height: 2
              },
              rightPunch: {
                x: 4, 
-               y: 10,
+               y: 12,
                width: 2, 
                height: 2
              },
              knife: {
                x: 5,
-               y: 12,
+               y: 14,
                width: 4, 
                height: 4
              },
@@ -3680,7 +3680,7 @@ export class Bot {
                     if (!this.state.attack.openCarry && this.state.draw) this.holsterWeapon();
                     if (!this.state.path.engaged && !this.state.follow.target && this.state.path.request) this.requestPath(targetX, targetY);
                 } else if (dist < this.state.attack.settleDistance) {
-                    if (this.state.target.shot && this.state.path.engaged && !this.state.follow.target) {
+                    if (this.state.target.shot && this.state.path.engaged && !this.state.follow.target && dist >= 30) {
                         this.disengagePath();
                     }
 
@@ -3707,7 +3707,13 @@ export class Bot {
                     }
                 }
 
-                if (!this.state.target.shot && this.state.path.request && !this.state.path.engaged && !this.state.follow.target) this.requestPath(targetX, targetY)
+                if (!this.state.target.shot && this.state.path.request && !this.state.path.engaged && !this.state.follow.target) this.requestPath(targetX, targetY);
+
+                if (dist < 30 && this.state.path.request && !this.state.path.engaged && !this.state.follow.target) {
+                    let [x,y] = rotate(targetX, targetY, random(360)); 
+                    this.state.speed = this.state.baseSpeed * this.state.attack.attackSpeed;
+                    this.requestPath(x, y);
+                }
 
                 break attack;
             }

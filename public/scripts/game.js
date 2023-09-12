@@ -157,25 +157,32 @@
   //$MAP.link(new Chair(0,0));
   //$MAP.link(new VisibleBarrier(80,0,40,40));
   
-      let c = new Bot("Trinity", -240+5, -240+5), b = new Bot("Neo", 20, -30);
-  //    $MAP.link(c);
+      let c = new Bot("Trinity", -20, 0), b = new Bot("Neo", -10, 0);
+      $MAP.link(c);
 
-      c.state.armour = 500;
-      //c.state.aggressive = true;
-    //  c.addItem(new GLOCK_20(0,0,0,1000));
-    //  c.equipItem(0);
-  //    c.state.targetUpdateAnimation.rate = 1/5; 
-  //    c.state.targetId = c.id;
-       // c.wander(-240+5,-240+5);
-    //  c.follow($AVATAR.id);
-   //   c.killTarget([$AVATAR.id], true, true);
+      c.state.armour = 0;
+      c.state.aggressive = true;
+      c.addItem(new GLOCK_20);
+      c.equipItem(0);
+      c.state.targetUpdateAnimation.rate = 1/5; 
+      c.state.targetId = c.id;
+ //     c.wander(-240+5,-240+5);
+//      c.follow($AVATAR.id);
+      c.killTarget([$AVATAR.id], true, true);
 
-   //   $MAP.link(b);
-      b.state.attack.attackSpeed = 1;
+
+      $MAP.link(b);
+
       b.state.armour = 0;
-      //c.state.aggressive = true;
+      b.state.aggressive = true;
+     // b.addItem(new GP_K100(0,0,);
+      b.equipItem(0);
+      b.state.targetUpdateAnimation.rate = 1/5; 
       b.state.targetId = b.id;
-    
+ //     c.wander(-240+5,-240+5);
+//      c.follow($AVATAR.id);
+      b.killTarget([$AVATAR.id], true, true);
+
    let a;
 
 movementMultFactor = 0.05;
@@ -196,7 +203,7 @@ const enemySpawnLoop = new LoopAnimation(function() {
       a.state.armour = 0;
       //a.state.aggressive = true;
       a.state.passive = false;
-      a.state.openCarry = true;
+      a.state.openCarry = false;
       a.state.targetUpdateAnimation.rate = 1 / 5;
       a.addItem([new GLOCK_20, new GP_K100, new KitchenKnife, undefined][random(4)]);
       a.equipItem(0);
@@ -230,9 +237,8 @@ $MAP.link(new VisibleBarrier(-70,50,50,50));
 //$MAP.link(new Floor(0,0,500,500,0));
 //$MAP.showGeometry();
 
- $AVATAR.state.invinsible = true;
- $AVATAR.state.armour = 1000;
+ //$AVATAR.state.armour = 1000;
 
  $GAME_LOOP = function() {
-  enemySpawnLoop.run(); 
+  //enemySpawnLoop.run(); 
  };
