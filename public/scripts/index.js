@@ -1,5 +1,5 @@
 import {
-    LoopAnimation, 
+    LoopAnimation,
     Transition
 } from "/public/scripts/lib.js";
 
@@ -8,13 +8,13 @@ window.onload = async () => {
     window.canvas = document.querySelector("#gameArea");
     window.sharpness = 2;
 
-    canvas.width = window.innerWidth*sharpness;
-    canvas.height = window.innerHeight*sharpness;
+    canvas.width = window.innerWidth * sharpness;
+    canvas.height = window.innerHeight * sharpness;
 
     window.gl = canvas.getContext("webgl");
 
-    gl.viewport(0, 0, window.innerWidth*sharpness, window.innerHeight*sharpness);
- 
+    gl.viewport(0, 0, window.innerWidth * sharpness, window.innerHeight * sharpness);
+
     window.$OBJECTS = [];
     window.$CONTROLS = [];
     window.$JOYSTICK_L = null;
@@ -28,13 +28,13 @@ window.onload = async () => {
     window.$MAP = null;
     window.$MAP_DISPLAY = null;
     window.$HEALTH_BAR = null;
-    window.$GAME_LOOP = function(){};
+    window.$GAME_LOOP = function() {};
     window.scale = 1.2;
     window.bulletResolution = 0.001;
     window.movementMultFactor = 0.05;
     window.globalDarkness = 0;
     window.noclip = false;
-    window.fadeTransition = new Transition(globalDarkness, [70,0], 0.05);
+    window.fadeTransition = new Transition(globalDarkness, [70, 0], 0.05);
     window.useTransition = true;
     window.joystickSizes = {
         left: 1.5,
@@ -46,57 +46,57 @@ window.onload = async () => {
     window.instExt = gl.getExtension("ANGLE_instanced_arrays");
 
     function setWorldMeasurements() {
-      window.viewportWidth = window.innerWidth;
-      window.viewportHeight = window.innerHeight;
-      window.maxViewport = Math.max(viewportWidth, viewportHeight);
-      window.minViewport = Math.min(viewportWidth, viewportHeight);
+        window.viewportWidth = window.innerWidth;
+        window.viewportHeight = window.innerHeight;
+        window.maxViewport = Math.max(viewportWidth, viewportHeight);
+        window.minViewport = Math.min(viewportWidth, viewportHeight);
 
-      window.viewportRatio = maxViewport / minViewport;
-      window.worldUnitX = (maxViewport === viewportWidth) ? 0.01 + (0.01 / viewportRatio) : 0.01 + (0.01 * viewportRatio);
-      window.worldUnitY = (maxViewport === viewportWidth) ? 0.01 + (0.01 * viewportRatio) : 0.01 + (0.01 / viewportRatio);
-      window.worldWidth = 2 / worldUnitX;
-      window.worldHeight = 2 / worldUnitY;
-      window.joystickPositions = {
-       left: {
-        x: (-worldWidth / 2) + 20,
-        y: (-worldHeight / 2) + 20
-       },
-       right: {
-        x: (worldWidth / 2) - 20,
-        y: (-worldHeight / 2) + 20
-       }
-      };
+        window.viewportRatio = maxViewport / minViewport;
+        window.worldUnitX = (maxViewport === viewportWidth) ? 0.01 + (0.01 / viewportRatio) : 0.01 + (0.01 * viewportRatio);
+        window.worldUnitY = (maxViewport === viewportWidth) ? 0.01 + (0.01 * viewportRatio) : 0.01 + (0.01 / viewportRatio);
+        window.worldWidth = 2 / worldUnitX;
+        window.worldHeight = 2 / worldUnitY;
+        window.joystickPositions = {
+            left: {
+                x: (-worldWidth / 2) + 20,
+                y: (-worldHeight / 2) + 20
+            },
+            right: {
+                x: (worldWidth / 2) - 20,
+                y: (-worldHeight / 2) + 20
+            }
+        };
 
-      if (maxViewport === viewportHeight) {
-        joystickPositions.left.y += 10;
-        joystickPositions.right.y += 10;
-      }
+        if (maxViewport === viewportHeight) {
+            joystickPositions.left.y += 10;
+            joystickPositions.right.y += 10;
+        }
     }
 
     setWorldMeasurements();
 
-    window.onresize = function() { 
-      gl.viewport(0, 0, window.innerWidth*sharpness, window.innerHeight*sharpness);
+    window.onresize = function() {
+        gl.viewport(0, 0, window.innerWidth * sharpness, window.innerHeight * sharpness);
 
-      canvas.width = window.innerWidth*sharpness;
-      canvas.height = window.innerHeight*sharpness;
+        canvas.width = window.innerWidth * sharpness;
+        canvas.height = window.innerHeight * sharpness;
 
-      setWorldMeasurements();
- 
-      if ($JOYSTICK_L && $JOYSTICK_R) {
-       $JOYSTICK_L.position = Object.create(joystickPositions.left);
-       $JOYSTICK_R.position = Object.create(joystickPositions.right);
-      }
+        setWorldMeasurements();
 
-      if (fixedJoysticks) {
-       $JOYSTICK_L.fix();
-       $JOYSTICK_R.fix();
-      }
+        if ($JOYSTICK_L && $JOYSTICK_R) {
+            $JOYSTICK_L.position = Object.create(joystickPositions.left);
+            $JOYSTICK_R.position = Object.create(joystickPositions.right);
+        }
 
-      gl.uniform1f(locations.worldUnitX, worldUnitX);
-      gl.uniform1f(locations.worldUnitY, worldUnitY);
-  
-      updateDisplayViewport();
+        if (fixedJoysticks) {
+            $JOYSTICK_L.fix();
+            $JOYSTICK_R.fix();
+        }
+
+        gl.uniform1f(locations.worldUnitX, worldUnitX);
+        gl.uniform1f(locations.worldUnitY, worldUnitY);
+
+        updateDisplayViewport();
     }
 
     let transitioning = false;
@@ -109,13 +109,13 @@ window.onload = async () => {
             callback();
             phase++;
         }
-                    
+
         if (globalDarkness === points[phase] && phase === 1) {
             phase = 0;
             transitioning = false;
             return;
         }
- 
+
         let difference = Math.abs(globalDarkness - points[phase]);
 
         if (phase === 1) globalDarkness -= (globalDarkness || 1) / transitionSpeed;
@@ -444,15 +444,15 @@ window.onload = async () => {
         gl.uniform1f(locations.scale, scale);
         if (transitioning) transitionAnimation.run();
         if (fadeTransition.transitioning) {
-          globalDarkness = fadeTransition.run();
+            globalDarkness = fadeTransition.run();
         }
         $CURRENT_MAP?.render();
         renderObjects();
         $CURRENT_MAP?.renderTopLayer();
         renderControls();
 
-        $GAME_LOOP(); 
- 
+        $GAME_LOOP();
+
         $MAP_DISPLAY.update(true);
         $MAP_DISPLAY.render();
 

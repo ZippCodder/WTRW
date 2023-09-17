@@ -395,10 +395,10 @@ export class _InstancedCluster_ {
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.offsets), gl.DYNAMIC_DRAW);
         gl.vertexAttribPointer(locations.offset, 3, gl.FLOAT, false, 12, 0);
         instExt.vertexAttribDivisorANGLE(locations.offset, 1);
-        gl.enableVertexAttribArray(locations.offset); 
+        gl.enableVertexAttribArray(locations.offset);
         gl.disableVertexAttribArray(locations.textrUnit);
     }
-   
+
     delete() {
         this.map.unlink(this.id);
     }
@@ -819,12 +819,12 @@ export class DownwardLight extends _Object_ {
     constructor(initialX, initialY, initialRotation, color) {
         super([], function() {
 
-            this.vertices = [-24,24,1,0,0,24,24,1,0.9375,0,-24,-24,1,0,0.9375,24,24,1,0.9375,0,-24,-24,1,0,0.9375,24,-24,1,0.9375,0.9375];
+            this.vertices = [-24, 24, 1, 0, 0, 24, 24, 1, 0.9375, 0, -24, -24, 1, 0, 0.9375, 24, 24, 1, 0.9375, 0, -24, -24, 1, 0, 0.9375, 24, -24, 1, 0.9375, 0.9375];
 
             this.buffer = gl.createBuffer();
             gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);
- 
+
             gl.vertexAttribPointer(locations.coords, 3, gl.FLOAT, false, 20, 0);
             gl.vertexAttribPointer(locations.tcoords, 2, gl.FLOAT, false, 20, 12);
             gl.enableVertexAttribArray(locations.coords);
@@ -851,7 +851,7 @@ export class DownwardLight extends _Object_ {
 
             gl.drawArrays(gl.TRIANGLES, 0, this.vertices.length / 5);
 
-            gl.uniform1f(locations.darkness, this.map.darkness); 
+            gl.uniform1f(locations.darkness, this.map.darkness);
             gl.uniform2fv(locations.size, [1, 1]);
             gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
             gl.uniform4fv(locations.lightColor, [0, 0, 0, 0]);
@@ -1070,7 +1070,7 @@ export class RoadRailVertical extends _StaticClusterClient_ {
 
 export class StreetLight extends _StaticClusterClient_ {
 
- static _defaultVertices = [-15.8,24.5,1,0,0,15.8,24.5,1,0.6171875,0,-15.8,-24.5,1,0,0.95703125,15.8,24.5,1,0.6171875,0,-15.8,-24.5,1,0,0.95703125,15.8,-24.5,1,0.6171875,0.95703125];
+    static _defaultVertices = [-15.8, 24.5, 1, 0, 0, 15.8, 24.5, 1, 0.6171875, 0, -15.8, -24.5, 1, 0, 0.95703125, 15.8, 24.5, 1, 0.6171875, 0, -15.8, -24.5, 1, 0, 0.95703125, 15.8, -24.5, 1, 0.6171875, 0.95703125];
 
     width = 31.6;
     height = 49;
@@ -1079,7 +1079,7 @@ export class StreetLight extends _StaticClusterClient_ {
     texture = textures.objects.streetlight;
     obstacle = true;
     segments = [
-        [-0.6,-24.3,1.2,1.2]
+        [-0.6, -24.3, 1.2, 1.2]
     ];
     topLayer = true;
     on = false;
@@ -1526,7 +1526,7 @@ export class Door extends _StaticClusterClient_ {
         if (this.room) {
             $CURRENT_MAP.move = false;
             requestTransition((function() {
-               
+
                 delete $CURRENT_MAP.avatars[$AVATAR.id];
                 delete $CURRENT_MAP.obstacles[$AVATAR.id];
 
@@ -1617,7 +1617,7 @@ export class _Building_ extends _StaticClusterClient_ {
                 $CURRENT_MAP.move = false;
 
                 requestTransition((function() {
-                   
+
                     delete $CURRENT_MAP.avatars[$AVATAR.id];
                     delete $CURRENT_MAP.obstacles[$AVATAR.id];
 
@@ -1639,7 +1639,7 @@ export class _Building_ extends _StaticClusterClient_ {
 
                     $CURRENT_MAP.avatars[$AVATAR.id] = $AVATAR;
                     $CURRENT_MAP.obstacles[$AVATAR.id] = $AVATAR;
-                    $MAP_DISPLAY.update(); 
+                    $MAP_DISPLAY.update();
                 }).bind(this));
             }).bind(this), true);
             t.outPoint = i[3];
@@ -1666,9 +1666,9 @@ export class _Building_ extends _StaticClusterClient_ {
             d.delete();
         }
 
-       for (let r of this.rooms) {
-         this.map.deleteSubMap(r.mapId);
-       } 
+        for (let r of this.rooms) {
+            this.map.deleteSubMap(r.mapId);
+        }
     }
 
     translate(x, y, rotation = false, translateVertices) {
@@ -1714,10 +1714,10 @@ export class House1 extends _Building_ {
             [23, -57, 1],
             [-30, -65, 0]
         ], [new _Map_(150, 100, false, "House 1").init(), new _Map_(150, 80, false, "House 1").init(), new _Map_(150, 80, false, "House 1").init()], undefined);
- 
-      let floor = new Floor(0,0,150,100,0);
-      floor.exclude = true;
-      this.rooms[0].link(floor);
+
+        let floor = new Floor(0, 0, 150, 100, 0);
+        floor.exclude = true;
+        this.rooms[0].link(floor);
     }
 }
 
@@ -1767,7 +1767,7 @@ export class _Gun_ extends _Pickup_ {
         super(initialX, initialY, initialRotation);
     }
 
-    reloadProgress = 0; 
+    reloadProgress = 0;
     loaded = true;
     type = "gun";
 }
@@ -1783,9 +1783,9 @@ export class _Blade_ extends _Pickup_ {
 
 export class KitchenKnife extends _Blade_ {
 
-  static _properties = {
+    static _properties = {
         damage: 25,
-        useTextures: [12,13,14,15,16],
+        useTextures: [12, 13, 14, 15, 16],
     }
 
     static _defaultVertices = [-1.24, 6.57, 1, 0, 0, 1.24, 6.57, 1, 0.775, 0, -1.24, -6.57, 1, 0, 0.51328125, 1.24, 6.57, 1, 0.775, 0, -1.24, -6.57, 1, 0, 0.51328125, 1.24, -6.57, 1, 0.775, 0.51328125];
@@ -1805,7 +1805,7 @@ export class AssassinsKnife extends _Blade_ {
 
     static _properties = {
         damage: 100,
-        useTextures: [17,18,19,20,21],
+        useTextures: [17, 18, 19, 20, 21],
     }
 
     static _defaultVertices = [-1.73, 6.7700000000000005, 1, 0, 0, 1.73, 6.7700000000000005, 1, 0.540625, 0, -1.73, -6.7700000000000005, 1, 0, 0.52890625, 1.73, 6.7700000000000005, 1, 0.540625, 0, -1.73, -6.7700000000000005, 1, 0, 0.52890625, 1.73, -6.7700000000000005, 1, 0.540625, 0.52890625];
@@ -1846,7 +1846,7 @@ export class GLOCK_20 extends _Gun_ {
         nozzelLength: 13,
         capacity: 30,
         reloadTime: 3,
-        useTextures: [4,5]
+        useTextures: [4, 5]
     }
 
     static _defaultVertices = [-4.390000000000001, 3.0900000000000003, 1, 0, 0, 4.390000000000001, 3.0900000000000003, 1, 0.6859375000000001, 0, -4.390000000000001, -3.0900000000000003, 1, 0, 0.965625, 4.390000000000001, 3.0900000000000003, 1, 0.6859375000000001, 0, -4.390000000000001, -3.0900000000000003, 1, 0, 0.965625, 4.390000000000001, -3.0900000000000003, 1, 0.6859375000000001, 0.965625];
@@ -1865,7 +1865,7 @@ export class GLOCK_20 extends _Gun_ {
 
 export class GP_K100 extends _Gun_ {
 
-      static _properties = {
+    static _properties = {
         fireRate: 3,
         bulletSpeed: 8,
         damage: 7,
@@ -1873,8 +1873,8 @@ export class GP_K100 extends _Gun_ {
         nozzelLength: 21,
         capacity: 1000,
         reloadTime: 3,
-        useTextures: [6,7]
-      }
+        useTextures: [6, 7]
+    }
 
     static _defaultVertices = [-7.4, 3.0900000000000003, 1, 0, 0, 7.4, 3.0900000000000003, 1, 0.578125, 0, -7.4, -3.0900000000000003, 1, 0, 0.965625, 7.4, 3.0900000000000003, 1, 0.578125, 0, -7.4, -3.0900000000000003, 1, 0, 0.965625, 7.4, -3.0900000000000003, 1, 0.578125, 0.965625];
 
@@ -1977,8 +1977,8 @@ export class Avatar {
         ext.bindVertexArrayOES(this.vao);
 
         this.vertices = {
-          body: [-7.0200000000000005,21.4,1,0,0,0,7.0200000000000005,21.4,1,0.5484375,0,0,-7.0200000000000005,-21.4,1,0,0.8359375,0,7.0200000000000005,21.4,1,0.5484375,0,0,-7.0200000000000005,-21.4,1,0,0.8359375,0,7.0200000000000005,-21.4,1,0.5484375,0.8359375,0],
-          eyes: [-2.7,3.379999999999999,1,0.16875,0.351953125,1,2.7,3.379999999999999,1,0.3796875,0.351953125,1,-2.7,1.4800000000000004,1,0.16875,0.3890625,1,2.7,3.379999999999999,1,0.3796875,0.351953125,1,-2.7,1.4800000000000004,1,0.16875,0.3890625,1,2.7,1.4800000000000004,1,0.3796875,0.3890625,1]
+            body: [-7.0200000000000005, 21.4, 1, 0, 0, 0, 7.0200000000000005, 21.4, 1, 0.5484375, 0, 0, -7.0200000000000005, -21.4, 1, 0, 0.8359375, 0, 7.0200000000000005, 21.4, 1, 0.5484375, 0, 0, -7.0200000000000005, -21.4, 1, 0, 0.8359375, 0, 7.0200000000000005, -21.4, 1, 0.5484375, 0.8359375, 0],
+            eyes: [-2.7, 3.379999999999999, 1, 0.16875, 0.351953125, 1, 2.7, 3.379999999999999, 1, 0.3796875, 0.351953125, 1, -2.7, 1.4800000000000004, 1, 0.16875, 0.3890625, 1, 2.7, 3.379999999999999, 1, 0.3796875, 0.351953125, 1, -2.7, 1.4800000000000004, 1, 0.16875, 0.3890625, 1, 2.7, 1.4800000000000004, 1, 0.3796875, 0.3890625, 1]
         }
 
         this.trans = {
@@ -2014,40 +2014,40 @@ export class Avatar {
             passive: false,
             aggressive: false,
             hitboxes: {
-             leftPunch: {
-               x: -4, 
-               y: 7,
-               width: 2, 
-               height: 2
-             },
-             rightPunch: {
-               x: 4, 
-               y: 7,
-               width: 2, 
-               height: 2
-             },
-             knife: {
-               x: 5,
-               y: 12,
-               width: 4, 
-               height: 4
-             },
-             pickup: {
-               x: 0,
-               y: 0,
-               width: 5,
-               height: 5
-             }
+                leftPunch: {
+                    x: -4,
+                    y: 7,
+                    width: 2,
+                    height: 2
+                },
+                rightPunch: {
+                    x: 4,
+                    y: 7,
+                    width: 2,
+                    height: 2
+                },
+                knife: {
+                    x: 5,
+                    y: 12,
+                    width: 4,
+                    height: 4
+                },
+                pickup: {
+                    x: 0,
+                    y: 0,
+                    width: 5,
+                    height: 5
+                }
             },
             pickup: {
-              offset: {
-                x: 0,
-                y: 0,
-                aRotation: 0,
-                bRotation: 0,
-              },
-              current: false,
-              reachDistance: 2.5
+                offset: {
+                    x: 0,
+                    y: 0,
+                    aRotation: 0,
+                    bRotation: 0,
+                },
+                current: false,
+                reachDistance: 2.5
             },
             vitals: {
                 health: 100,
@@ -2100,8 +2100,8 @@ export class Avatar {
                 forget: false,
                 invertTargets: false,
                 reactionTime: {
-                 targetUpdateRate: 1,
-                 shotCheckRate: 1
+                    targetUpdateRate: 1,
+                    shotCheckRate: 1
                 }
             },
             recording: {
@@ -2123,25 +2123,27 @@ export class Avatar {
             rotationSpeed: 0.1,
             rotationTarget: undefined,
             rotationAnimation: new LoopAnimation(function() {
-                let rotation = this.trans.rotation*180/Math.PI;
+                let rotation = this.trans.rotation * 180 / Math.PI;
 
                 if (rotation !== this.state.rotationTarget && this !== $AVATAR) {
-   
-                  let difference = (Math.max(this.state.rotationTarget,rotation) - Math.min(this.state.rotationTarget,rotation)), rotationFactor = Math.min(difference,360 - difference)*this.state.rotationSpeed;     
 
-               this.rotate(normalizeRotation(rotation + (((difference < 180 && this.state.rotationTarget > rotation) || (difference > 180 && rotation > this.state.rotationTarget)) ? rotationFactor:-rotationFactor))); 
-               }
+                    let difference = (Math.max(this.state.rotationTarget, rotation) - Math.min(this.state.rotationTarget, rotation)),
+                        rotationFactor = Math.min(difference, 360 - difference) * this.state.rotationSpeed;
+
+                    this.rotate(normalizeRotation(rotation + (((difference < 180 && this.state.rotationTarget > rotation) || (difference > 180 && rotation > this.state.rotationTarget)) ? rotationFactor : -rotationFactor)));
+                }
             }, this, 0.01),
             punchingAnimation: new LoopAnimation(function() {
-              let leftPunch = this.state.leftPunchAnimation, rightPunch = this.state.rightPunchAnimation;
+                let leftPunch = this.state.leftPunchAnimation,
+                    rightPunch = this.state.rightPunchAnimation;
 
-               if (leftPunch.active) {
-                  leftPunch.run();
-               } else if (rightPunch.active) { 
-                  rightPunch.run();
-               }
+                if (leftPunch.active) {
+                    leftPunch.run();
+                } else if (rightPunch.active) {
+                    rightPunch.run();
+                }
 
-               if (!leftPunch.active && !rightPunch.active) ((Math.random() < 0.5) ? leftPunch:rightPunch).active = true;
+                if (!leftPunch.active && !rightPunch.active)((Math.random() < 0.5) ? leftPunch : rightPunch).active = true;
 
             }, this, 0.01),
             shotCheckAnimation: new LoopAnimation(function() {
@@ -2173,7 +2175,7 @@ export class Avatar {
                 }
             }, this, 1),
             reloadTimeout: new MultiFrameLinearAnimation([function() {
-                this.state.equippedItems.mainTool.reloadProgress = 0; 
+                this.state.equippedItems.mainTool.reloadProgress = 0;
                 this.state.equippedItems.mainTool.loaded = true;
 
                 updateAmmoDisplay();
@@ -2271,13 +2273,13 @@ export class Avatar {
                 this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
             }, 0.5, true),
             walkingAnimation: new MultiFrameLoopAnimation([function() {
-              this.state.position.body.texture = (this.state.draw && this.state.melee) ? this.state.equippedItems.mainTool.constructor._properties.useTextures[4]:2;
+                this.state.position.body.texture = (this.state.draw && this.state.melee) ? this.state.equippedItems.mainTool.constructor._properties.useTextures[4] : 2;
             }, function() {
-              this.state.position.body.texture = (this.state.draw && this.state.melee) ? this.state.equippedItems.mainTool.constructor._properties.useTextures[0]:0;
+                this.state.position.body.texture = (this.state.draw && this.state.melee) ? this.state.equippedItems.mainTool.constructor._properties.useTextures[0] : 0;
             }, function() {
-              this.state.position.body.texture = (this.state.draw && this.state.melee) ? this.state.equippedItems.mainTool.constructor._properties.useTextures[3]:3;
+                this.state.position.body.texture = (this.state.draw && this.state.melee) ? this.state.equippedItems.mainTool.constructor._properties.useTextures[3] : 3;
             }, function() {
-              this.state.position.body.texture = (this.state.draw && this.state.melee) ? this.state.equippedItems.mainTool.constructor._properties.useTextures[0]:0;
+                this.state.position.body.texture = (this.state.draw && this.state.melee) ? this.state.equippedItems.mainTool.constructor._properties.useTextures[0] : 0;
             }], this, [0.08, 0.08, 0.08, 0.08], function() {
                 this.state.position.body.texture = 0;
             }, 0.5),
@@ -2287,7 +2289,7 @@ export class Avatar {
                 this.state.position.body.texture = 8;
             }, function() {
                 this.state.position.body.texture = 9;
-                this.meleeAttack(this.state.strength,this.state.hitboxes.leftPunch);
+                this.meleeAttack(this.state.strength, this.state.hitboxes.leftPunch);
             }, function() {
                 this.state.position.body.texture = 0;
             }], this, [0.08, 0.08, 0.08, 0.15], function() {
@@ -2299,7 +2301,7 @@ export class Avatar {
                 this.state.position.body.texture = 10;
             }, function() {
                 this.state.position.body.texture = 11;
-                this.meleeAttack(this.state.strength,this.state.hitboxes.rightPunch);
+                this.meleeAttack(this.state.strength, this.state.hitboxes.rightPunch);
             }, function() {
                 this.state.position.body.texture = 0;
             }], this, [0.08, 0.08, 0.08, 0.15], function() {
@@ -2309,13 +2311,13 @@ export class Avatar {
                 this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
             }, function() {
                 this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[2];
-                this.meleeAttack(this.state.equippedItems.mainTool.constructor._properties.damage+this.state.strength,this.state.hitboxes.knife);
+                this.meleeAttack(this.state.equippedItems.mainTool.constructor._properties.damage + this.state.strength, this.state.hitboxes.knife);
             }, function() {
-               this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[1];
+                this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[1];
             }, function() {
-               this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
+                this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
             }], this, [0.08, 0.08, 0.08, 0.15], function() {
-               this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
+                this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
             }),
             blinkingAnimation: new MultiFrameLoopAnimation([function() {
                 this.state.position.eyes.texture = 0;
@@ -2369,7 +2371,7 @@ export class Avatar {
         this.state.shotCheckAnimation.rate = this.state.attack.reactionTime.shotCheckRate;
         this.state.leftPunchAnimation.animationMultFactor = this.state.attack.meleeAttackSpeed;
         this.state.rightPunchAnimation.animationMultFactor = this.state.attack.meleeAttackSpeed;
-        this.state.meleeAttackAnimation.animationMultFactor = this.state.attack.meleeAttackSpeed*2;
+        this.state.meleeAttackAnimation.animationMultFactor = this.state.attack.meleeAttackSpeed * 2;
 
         this.state.fireAnimation = new LoopAnimation(function() {
 
@@ -2394,7 +2396,7 @@ export class Avatar {
             map.link(new BulletShell(this.trans.offsetX + shellInitialX, this.trans.offsetY + shellInitialY, randomShellDirectionX, randomShellDirectionY));
 
             this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo--;
-            this.state.equippedItems.mainTool.reloadProgress++; 
+            this.state.equippedItems.mainTool.reloadProgress++;
 
             if (this.state.equippedItems.mainTool.reloadProgress === this.state.equippedItems.mainTool.constructor._properties.capacity) this.state.equippedItems.mainTool.loaded = false;
 
@@ -2416,12 +2418,12 @@ export class Avatar {
                 this.purgeItems(5);
 
                 if (this !== $AVATAR) {
-                 this.delete();
+                    this.delete();
                 } else {
-                 delete $CURRENT_MAP.avatars[this.id];
-                 delete $CURRENT_MAP.obstacles[this.id];
-                 this.hidden = true;
-                 noclip = true;
+                    delete $CURRENT_MAP.avatars[this.id];
+                    delete $CURRENT_MAP.obstacles[this.id];
+                    this.hidden = true;
+                    noclip = true;
                 }
 
                 return;
@@ -2440,7 +2442,7 @@ export class Avatar {
     drawWeapon() {
         if (this.state.equippedItems.mainTool && !this.state.stabbing && (this.state.armed || this.state.melee)) {
             this.state.draw = true;
-         if (!(this.state.walking && this.state.melee)) this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
+            if (!(this.state.walking && this.state.melee)) this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
         }
     }
 
@@ -2465,19 +2467,19 @@ export class Avatar {
     }
 
     addItem(item, slot) {
-      if (this.inventory.addItem(item, slot) && this === $AVATAR) {
-        updateInventoryItem(item.slot,item.name);
-      }
+        if (this.inventory.addItem(item, slot) && this === $AVATAR) {
+            updateInventoryItem(item.slot, item.name);
+        }
     }
 
     dropItem(slot) {
-     if (!this.inventory.items[slot]) return false;      
+        if (!this.inventory.items[slot]) return false;
 
-        if (this === $AVATAR) updateInventoryItem(this.inventory.items[slot].slot,this.inventory.items[slot].name,true);
+        if (this === $AVATAR) updateInventoryItem(this.inventory.items[slot].slot, this.inventory.items[slot].name, true);
         this.unequipItem(slot);
- 
+
         let item = this.inventory.ejectItem(slot);
-         
+
         item.ring.trans.offsetX = item.trans.offsetX = this.trans.offsetX + random(10, true);
         item.ring.trans.offsetY = item.trans.offsetY = this.trans.offsetY + random(10, true);
         item.trans.rotation = random(360);
@@ -2495,16 +2497,16 @@ export class Avatar {
 
     equipItem(slot) {
         let item = this.inventory.items[slot];
-       
+
         if (item) {
-         hideAmmoDisplay();
+            hideAmmoDisplay();
 
             switch (item.type) {
                 case "gun": {
                     this.state.armed = true;
                     this.state.melee = false;
                     this.state.equippedItems.mainTool = item;
-                    this.state.equippedItems.mainTool.reloadProgress = item.reloadProgress; 
+                    this.state.equippedItems.mainTool.reloadProgress = item.reloadProgress;
                     this.state.equippedItems.mainTool.loaded = item.loaded;
                     this.state.reloadTimeout.timingConfig[0] = this.state.equippedItems.mainTool.constructor._properties.reloadTime;
                     this.state.fireAnimation.rate = 0.5 / this.state.equippedItems.mainTool.constructor._properties.fireRate;
@@ -2523,35 +2525,35 @@ export class Avatar {
 
             return true;
         }
-      
+
         return false;
     }
 
     unequipItem(slot) {
-      if (!this.inventory.items[slot]) return false;      
+        if (!this.inventory.items[slot]) return false;
 
         let item = this.inventory.items[slot];
-        
+
         switch (item.type) {
             case "gun": {
                 if (this.state.equippedItems.mainTool && item.slot === this.state.equippedItems.mainTool.slot) {
                     this.state.armed = false;
                     this.state.draw = false;
-                    this.state.equippedItems.mainTool = undefined; 
+                    this.state.equippedItems.mainTool = undefined;
                     hideAmmoDisplay();
                 }
             };
             break;
             case "knife": {
-                    this.state.melee = false;
-                    this.state.draw = false;
-                    this.state.stabbing = false;
-                    this.state.equippedItems.mainTool = undefined;
+                this.state.melee = false;
+                this.state.draw = false;
+                this.state.stabbing = false;
+                this.state.equippedItems.mainTool = undefined;
             };
             break;
         }
 
-     return true;
+        return true;
     }
 
     preRender() {
@@ -2563,21 +2565,21 @@ export class Avatar {
         if (this.state.walking && !(this.state.armed && this.state.draw) && !this.state.punching && !this.state.stabbing) {
             this.state.walkingAnimation.run();
         } else if (!this.state.punching && !this.state.stabbing) {
-           this.state.walkingAnimation.end();
+            this.state.walkingAnimation.end();
         }
 
         if (this.state.punching && !this.state.armed && !this.state.melee) {
-           this.state.punchingAnimation.run();
-        } 
- 
+            this.state.punchingAnimation.run();
+        }
+
         if ((this.state.armed || (this.state.melee && !this.state.walking)) && this.state.draw && !this.state.stabbing) {
-          this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
+            this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
         }
 
         if (this.state.stabbing && this.state.melee && !this.state.armed) {
-          this.state.meleeAttackAnimation.run();
-        }     
- 
+            this.state.meleeAttackAnimation.run();
+        }
+
         if (this.state.fire && this.state.armed && this.state.target.shot && this.state.equippedItems.mainTool?.loaded && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo) {
             this.state.fireAnimation.run();
         }
@@ -2610,8 +2612,8 @@ export class Avatar {
                 this.map.GRAPH.reserved.push(next);
 
                 this.goto(x + 5, y - 5);
-                 
-                this.state.rotationTarget = normalizeRotation((Math.atan2(this.state.goto.y - this.trans.offsetY, this.state.goto.x - this.trans.offsetX)*180/Math.PI) - 90);
+
+                this.state.rotationTarget = normalizeRotation((Math.atan2(this.state.goto.y - this.trans.offsetY, this.state.goto.x - this.trans.offsetX) * 180 / Math.PI) - 90);
             } else {
                 this.disengagePath();
                 this.requestPath(this.state.path.end.x - this.map.centerX, this.state.path.end.y - this.map.centerY);
@@ -2628,37 +2630,37 @@ export class Avatar {
         attack: if (this !== $AVATAR && (this.state.armed || this.state.melee) && this.state.target.current && this.state.target.engaged) {
 
             if (this.state.target.current && !this.map.avatars[this.state.target.current.id]) {
-               this.disengageTarget();
-               if (this.state.melee) this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[2];
+                this.disengageTarget();
+                if (this.state.melee) this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[2];
 
-               break attack;
-            } 
+                break attack;
+            }
 
             const {
-              offsetX: targetX,
-              offsetY: targetY
+                offsetX: targetX,
+                offsetY: targetY
             } = this.state.target.current.trans, dist = distance(this.trans.offsetX, this.trans.offsetY, targetX, targetY), m = this.map;
 
             stab: if (!this.state.armed && this.state.melee) {
-               if (dist > this.state.attack.disengageDistance && this.state.target.engaged) {
+                if (dist > this.state.attack.disengageDistance && this.state.target.engaged) {
                     this.disengageTarget();
-               } else if (dist <= this.state.attack.engageDistance) {
-                  if (this.state.attack.openCarry && !this.state.draw) this.drawWeapon();
-                  if (!this.state.path.engaged && !this.state.follow.target) this.requestPath(targetX + m.centerX, targetY + m.centerY);
-               }
- 
-               if (dist <= 30) {
-                 this.state.stabbing = true;
-                 if (!this.state.draw) this.drawWeapon();
-                 this.state.rotationTarget = normalizeRotation((Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX))*180/Math.PI) - 70);
-               } else {
-                 this.state.stabbing = false;
-                 if (!this.state.attack.openCarry && this.state.draw) this.holsterWeapon();
-               }
+                } else if (dist <= this.state.attack.engageDistance) {
+                    if (this.state.attack.openCarry && !this.state.draw) this.drawWeapon();
+                    if (!this.state.path.engaged && !this.state.follow.target) this.requestPath(targetX + m.centerX, targetY + m.centerY);
+                }
 
-               break attack;
+                if (dist <= 30) {
+                    this.state.stabbing = true;
+                    if (!this.state.draw) this.drawWeapon();
+                    this.state.rotationTarget = normalizeRotation((Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX)) * 180 / Math.PI) - 70);
+                } else {
+                    this.state.stabbing = false;
+                    if (!this.state.attack.openCarry && this.state.draw) this.holsterWeapon();
+                }
+
+                break attack;
             }
-         
+
             shoot: if (this.state.armed && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo > 0) {
                 if (!this.state.equippedItems.mainTool?.loaded && !this.state.reloadTimeout.running) this.reload();
                 this.state.shotCheckAnimation.run();
@@ -2675,12 +2677,12 @@ export class Avatar {
                         this.disengagePath();
                     }
 
-                    this.state.rotationTarget = normalizeRotation((Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX))*180/Math.PI) - 90);
+                    this.state.rotationTarget = normalizeRotation((Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX)) * 180 / Math.PI) - 90);
                     if (!this.state.draw) this.drawWeapon();
                     if (this.state.target.shot) this.state.fire = true;
 
                 } else if (dist < this.state.attack.slowdownDistance) {
-                    this.state.rotationTarget = normalizeRotation((Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX))*180/Math.PI) - 90);
+                    this.state.rotationTarget = normalizeRotation((Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX)) * 180 / Math.PI) - 90);
 
                     if (!this.state.draw) this.drawWeapon();
                     if (this.state.target.shot) this.state.fire = true;
@@ -2688,7 +2690,7 @@ export class Avatar {
                     if (!this.state.follow.rush || !this.state.follow.target) this.state.speed = this.state.baseSpeed * (this.state.attack.attackSpeed / 3);
                 } else if (dist < this.state.attack.engageDistance) {
                     this.state.speed = this.state.baseSpeed * this.state.attack.attackSpeed;
-                    this.state.rotationTarget = normalizeRotation((Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX))*180/Math.PI) - 90);
+                    this.state.rotationTarget = normalizeRotation((Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX)) * 180 / Math.PI) - 90);
 
                     if (!this.state.draw) this.drawWeapon();
                     if (this.state.target.shot) this.state.fire = true;
@@ -2730,7 +2732,7 @@ export class Avatar {
                 }
             }
         }
-        this.movePickup(); 
+        this.movePickup();
     }
 
     render() {
@@ -2840,7 +2842,7 @@ export class Avatar {
     }
 
     meleeAttack(damage, hitbox) {
-       let [x, y] = rotate(hitbox.x, hitbox.y, (this.trans.rotation) * 180 / Math.PI), map = (this.map || $CURRENT_MAP);
+        let [x, y] = rotate(hitbox.x, hitbox.y, (this.trans.rotation) * 180 / Math.PI), map = (this.map || $CURRENT_MAP);
 
         x += this.trans.offsetX;
         y += this.trans.offsetY;
@@ -2854,7 +2856,7 @@ export class Avatar {
             let avatar = map.avatars[i];
 
             if ((Math.abs(x - avatar.trans.offsetX) < (avatar.width / 2 + width / 2)) && (Math.abs(y - avatar.trans.offsetY) < (avatar.height / 2 + height / 2))) {
-               avatar.hit(damage, 0, 0, this); 
+                avatar.hit(damage, 0, 0, this);
             }
         }
     }
@@ -2960,8 +2962,8 @@ export class Bot {
         ext.bindVertexArrayOES(this.vao);
 
         this.vertices = {
-          body: [-7.0200000000000005,21.4,1,0,0,0,7.0200000000000005,21.4,1,0.5484375,0,0,-7.0200000000000005,-21.4,1,0,0.8359375,0,7.0200000000000005,21.4,1,0.5484375,0,0,-7.0200000000000005,-21.4,1,0,0.8359375,0,7.0200000000000005,-21.4,1,0.5484375,0.8359375,0],
-          eyes: [-2.7,3.379999999999999,1,0.16875,0.351953125,1,2.7,3.379999999999999,1,0.3796875,0.351953125,1,-2.7,1.4800000000000004,1,0.16875,0.3890625,1,2.7,3.379999999999999,1,0.3796875,0.351953125,1,-2.7,1.4800000000000004,1,0.16875,0.3890625,1,2.7,1.4800000000000004,1,0.3796875,0.3890625,1]
+            body: [-7.0200000000000005, 21.4, 1, 0, 0, 0, 7.0200000000000005, 21.4, 1, 0.5484375, 0, 0, -7.0200000000000005, -21.4, 1, 0, 0.8359375, 0, 7.0200000000000005, 21.4, 1, 0.5484375, 0, 0, -7.0200000000000005, -21.4, 1, 0, 0.8359375, 0, 7.0200000000000005, -21.4, 1, 0.5484375, 0.8359375, 0],
+            eyes: [-2.7, 3.379999999999999, 1, 0.16875, 0.351953125, 1, 2.7, 3.379999999999999, 1, 0.3796875, 0.351953125, 1, -2.7, 1.4800000000000004, 1, 0.16875, 0.3890625, 1, 2.7, 3.379999999999999, 1, 0.3796875, 0.351953125, 1, -2.7, 1.4800000000000004, 1, 0.16875, 0.3890625, 1, 2.7, 1.4800000000000004, 1, 0.3796875, 0.3890625, 1]
         }
 
         this.trans = {
@@ -2997,40 +2999,40 @@ export class Bot {
             passive: false,
             aggressive: false,
             hitboxes: {
-             leftPunch: {
-               x: -4, 
-               y: 12,
-               width: 2, 
-               height: 2
-             },
-             rightPunch: {
-               x: 4, 
-               y: 12,
-               width: 2, 
-               height: 2
-             },
-             knife: {
-               x: 5,
-               y: 14,
-               width: 4, 
-               height: 4
-             },
-             pickup: {
-               x: 0,
-               y: 0,
-               width: 5,
-               height: 5
-             }
+                leftPunch: {
+                    x: -4,
+                    y: 12,
+                    width: 2,
+                    height: 2
+                },
+                rightPunch: {
+                    x: 4,
+                    y: 12,
+                    width: 2,
+                    height: 2
+                },
+                knife: {
+                    x: 5,
+                    y: 14,
+                    width: 4,
+                    height: 4
+                },
+                pickup: {
+                    x: 0,
+                    y: 0,
+                    width: 5,
+                    height: 5
+                }
             },
             pickup: {
-              offset: {
-                x: 0,
-                y: 0,
-                aRotation: 0,
-                bRotation: 0,
-              },
-              current: false,
-              reachDistance: 2.5
+                offset: {
+                    x: 0,
+                    y: 0,
+                    aRotation: 0,
+                    bRotation: 0,
+                },
+                current: false,
+                reachDistance: 2.5
             },
             vitals: {
                 health: 100,
@@ -3063,9 +3065,12 @@ export class Bot {
                 shot: true
             },
             wander: {
-               active: false,
-               anchor: {x: 0, y: 0},   
-               radius: 50
+                active: false,
+                anchor: {
+                    x: 0,
+                    y: 0
+                },
+                radius: 50
             },
             follow: {
                 target: undefined,
@@ -3088,8 +3093,8 @@ export class Bot {
                 forget: false,
                 invertTargets: false,
                 reactionTime: {
-                 targetUpdateRate: 1,
-                 shotCheckRate: 1
+                    targetUpdateRate: 1,
+                    shotCheckRate: 1
                 }
             },
             recording: {
@@ -3112,25 +3117,32 @@ export class Bot {
             rotationSpeed: 0.1,
             rotationTarget: undefined,
             rotationAnimation: new LoopAnimation(function() {
-                let rotation = this.trans.rotation*180/Math.PI;
+                let rotation = this.trans.rotation * 180 / Math.PI;
 
-                if (rotation !== this.state.rotationTarget && this !== $AVATAR) {
-   
-                  let difference = (Math.max(this.state.rotationTarget,rotation) - Math.min(this.state.rotationTarget,rotation)), rotationFactor = Math.min(difference,360 - difference)*this.state.rotationSpeed;     
+                if (Math.abs(rotation - this.state.rotationTarget) <= 0.1) {
+                    this.rotate(this.state.rotationTarget);
+                    this.state.rotationTarget = undefined;
+                    return;
+                }
 
-               this.rotate(normalizeRotation(rotation + (((difference < 180 && this.state.rotationTarget > rotation) || (difference > 180 && rotation > this.state.rotationTarget)) ? rotationFactor:-rotationFactor))); 
-               }
+                if (rotation !== this.state.rotationTarget) {
+                    let difference = (Math.max(this.state.rotationTarget, rotation) - Math.min(this.state.rotationTarget, rotation)),
+                        rotationFactor = Math.min(difference, 360 - difference) * this.state.rotationSpeed;
+
+                    this.rotate(normalizeRotation(rotation + (((difference < 180 && this.state.rotationTarget > rotation) || (difference > 180 && rotation > this.state.rotationTarget)) ? rotationFactor : -rotationFactor)));
+                }
             }, this, 0.01),
             punchingAnimation: new LoopAnimation(function() {
-              let leftPunch = this.state.leftPunchAnimation, rightPunch = this.state.rightPunchAnimation;
+                let leftPunch = this.state.leftPunchAnimation,
+                    rightPunch = this.state.rightPunchAnimation;
 
-               if (leftPunch.active) {
-                  leftPunch.run();
-               } else if (rightPunch.active) { 
-                  rightPunch.run();
-               }
+                if (leftPunch.active) {
+                    leftPunch.run();
+                } else if (rightPunch.active) {
+                    rightPunch.run();
+                }
 
-               if (!leftPunch.active && !rightPunch.active) ((Math.random() < 0.5) ? leftPunch:rightPunch).active = true;
+                if (!leftPunch.active && !rightPunch.active)((Math.random() < 0.5) ? leftPunch : rightPunch).active = true;
 
             }, this, 0.01),
             shotCheckAnimation: new LoopAnimation(function() {
@@ -3162,7 +3174,7 @@ export class Bot {
                 }
             }, this, 1),
             reloadTimeout: new MultiFrameLinearAnimation([function() {
-                this.state.equippedItems.mainTool.reloadProgress = 0; 
+                this.state.equippedItems.mainTool.reloadProgress = 0;
                 this.state.equippedItems.mainTool.loaded = true;
             }], this, [0]),
             pathRequestRateLimit: new MultiFrameLinearAnimation([function() {
@@ -3258,13 +3270,13 @@ export class Bot {
                 this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
             }, 0.5, true),
             walkingAnimation: new MultiFrameLoopAnimation([function() {
-              this.state.position.body.texture = (this.state.draw && this.state.melee) ? this.state.equippedItems.mainTool.constructor._properties.useTextures[4]:2;
+                this.state.position.body.texture = (this.state.draw && this.state.melee) ? this.state.equippedItems.mainTool.constructor._properties.useTextures[4] : 2;
             }, function() {
-              this.state.position.body.texture = (this.state.draw && this.state.melee) ? this.state.equippedItems.mainTool.constructor._properties.useTextures[0]:0;
+                this.state.position.body.texture = (this.state.draw && this.state.melee) ? this.state.equippedItems.mainTool.constructor._properties.useTextures[0] : 0;
             }, function() {
-              this.state.position.body.texture = (this.state.draw && this.state.melee) ? this.state.equippedItems.mainTool.constructor._properties.useTextures[3]:3;
+                this.state.position.body.texture = (this.state.draw && this.state.melee) ? this.state.equippedItems.mainTool.constructor._properties.useTextures[3] : 3;
             }, function() {
-              this.state.position.body.texture = (this.state.draw && this.state.melee) ? this.state.equippedItems.mainTool.constructor._properties.useTextures[0]:0;
+                this.state.position.body.texture = (this.state.draw && this.state.melee) ? this.state.equippedItems.mainTool.constructor._properties.useTextures[0] : 0;
             }], this, [0.08, 0.08, 0.08, 0.08], function() {
                 this.state.position.body.texture = 0;
             }, 0.5),
@@ -3274,7 +3286,7 @@ export class Bot {
                 this.state.position.body.texture = 8;
             }, function() {
                 this.state.position.body.texture = 9;
-                this.meleeAttack(this.state.strength,this.state.hitboxes.leftPunch);
+                this.meleeAttack(this.state.strength, this.state.hitboxes.leftPunch);
             }, function() {
                 this.state.position.body.texture = 0;
             }], this, [0.08, 0.08, 0.08, 0.15], function() {
@@ -3286,7 +3298,7 @@ export class Bot {
                 this.state.position.body.texture = 10;
             }, function() {
                 this.state.position.body.texture = 11;
-                this.meleeAttack(this.state.strength,this.state.hitboxes.rightPunch);
+                this.meleeAttack(this.state.strength, this.state.hitboxes.rightPunch);
             }, function() {
                 this.state.position.body.texture = 0;
             }], this, [0.08, 0.08, 0.08, 0.15], function() {
@@ -3296,13 +3308,13 @@ export class Bot {
                 this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
             }, function() {
                 this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[2];
-                this.meleeAttack(this.state.equippedItems.mainTool.constructor._properties.damage+this.state.strength,this.state.hitboxes.knife);
+                this.meleeAttack(this.state.equippedItems.mainTool.constructor._properties.damage + this.state.strength, this.state.hitboxes.knife);
             }, function() {
-               this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[1];
+                this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[1];
             }, function() {
-               this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
+                this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
             }], this, [0.08, 0.08, 0.08, 0.15], function() {
-               this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
+                this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
             }),
             blinkingAnimation: new MultiFrameLoopAnimation([function() {
                 this.state.position.eyes.texture = 0;
@@ -3356,7 +3368,7 @@ export class Bot {
         this.state.shotCheckAnimation.rate = this.state.attack.reactionTime.shotCheckRate;
         this.state.leftPunchAnimation.animationMultFactor = this.state.attack.meleeAttackSpeed;
         this.state.rightPunchAnimation.animationMultFactor = this.state.attack.meleeAttackSpeed;
-        this.state.meleeAttackAnimation.animationMultFactor = this.state.attack.meleeAttackSpeed*2;
+        this.state.meleeAttackAnimation.animationMultFactor = this.state.attack.meleeAttackSpeed * 2;
 
         this.state.fireAnimation = new LoopAnimation(function() {
 
@@ -3381,7 +3393,7 @@ export class Bot {
             map.link(new BulletShell(this.trans.offsetX + shellInitialX, this.trans.offsetY + shellInitialY, randomShellDirectionX, randomShellDirectionY));
 
             this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo--;
-            this.state.equippedItems.mainTool.reloadProgress++; 
+            this.state.equippedItems.mainTool.reloadProgress++;
 
             if (this.state.equippedItems.mainTool.reloadProgress === this.state.equippedItems.mainTool.constructor._properties.capacity) this.state.equippedItems.mainTool.loaded = false;
 
@@ -3401,12 +3413,12 @@ export class Bot {
                 this.purgeItems(5);
 
                 if (this !== $AVATAR) {
-                 this.delete();
+                    this.delete();
                 } else {
-                 delete $CURRENT_MAP.avatars[this.id];
-                 delete $CURRENT_MAP.obstacles[this.id];
-                 this.hidden = true;
-                 noclip = true;
+                    delete $CURRENT_MAP.avatars[this.id];
+                    delete $CURRENT_MAP.obstacles[this.id];
+                    this.hidden = true;
+                    noclip = true;
                 }
 
                 return;
@@ -3425,7 +3437,7 @@ export class Bot {
     drawWeapon() {
         if (this.state.equippedItems.mainTool && !this.state.stabbing && (this.state.armed || this.state.melee)) {
             this.state.draw = true;
-         if (!(this.state.walking && this.state.melee)) this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
+            if (!(this.state.walking && this.state.melee)) this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
         }
     }
 
@@ -3441,12 +3453,15 @@ export class Bot {
     }
 
     wander(anchorX, anchorY) {
-      this.state.wander.active = true;
-      this.state.wander.anchor = {x: anchorX, y: anchorY};
+        this.state.wander.active = true;
+        this.state.wander.anchor = {
+            x: anchorX,
+            y: anchorY
+        };
     }
 
     stopWander() {
-      this.state.wander.active = false;
+        this.state.wander.active = false;
     }
 
     follow(id) {
@@ -3459,19 +3474,19 @@ export class Bot {
     }
 
     addItem(item, slot) {
-      if (this.inventory.addItem(item, slot) && this === $AVATAR) {
-        updateInventoryItem(item.slot,item.name);
-      }
+        if (this.inventory.addItem(item, slot) && this === $AVATAR) {
+            updateInventoryItem(item.slot, item.name);
+        }
     }
 
     dropItem(slot) {
-     if (!this.inventory.items[slot]) return false;      
+        if (!this.inventory.items[slot]) return false;
 
-        if (this === $AVATAR) updateInventoryItem(this.inventory.items[slot].slot,this.inventory.items[slot].name,true);
+        if (this === $AVATAR) updateInventoryItem(this.inventory.items[slot].slot, this.inventory.items[slot].name, true);
         this.unequipItem(slot);
- 
+
         let item = this.inventory.ejectItem(slot);
-         
+
         item.ring.trans.offsetX = item.trans.offsetX = this.trans.offsetX + random(10, true);
         item.ring.trans.offsetY = item.trans.offsetY = this.trans.offsetY + random(10, true);
         item.trans.rotation = random(360);
@@ -3489,14 +3504,14 @@ export class Bot {
 
     equipItem(slot) {
         let item = this.inventory.items[slot];
-       
+
         if (item) {
             switch (item.type) {
                 case "gun": {
                     this.state.armed = true;
                     this.state.melee = false;
                     this.state.equippedItems.mainTool = item;
-                    this.state.equippedItems.mainTool.reloadProgress = item.reloadProgress; 
+                    this.state.equippedItems.mainTool.reloadProgress = item.reloadProgress;
                     this.state.equippedItems.mainTool.loaded = item.loaded;
                     this.state.reloadTimeout.timingConfig[0] = this.state.equippedItems.mainTool.constructor._properties.reloadTime;
                     this.state.fireAnimation.rate = 0.5 / this.state.equippedItems.mainTool.constructor._properties.fireRate;
@@ -3512,15 +3527,15 @@ export class Bot {
 
             return true;
         }
-      
+
         return false;
     }
 
     unequipItem(slot) {
-      if (!this.inventory.items[slot]) return false;      
+        if (!this.inventory.items[slot]) return false;
 
         let item = this.inventory.items[slot];
-        
+
         switch (item.type) {
             case "gun": {
                 if (this.state.equippedItems.mainTool && item.slot === this.state.equippedItems.mainTool.slot) {
@@ -3531,22 +3546,22 @@ export class Bot {
             };
             break;
             case "knife": {
-                    this.state.melee = false;
-                    this.state.draw = false;
-                    this.state.stabbing = false;
-                    this.state.equippedItems.mainTool = undefined;
+                this.state.melee = false;
+                this.state.draw = false;
+                this.state.stabbing = false;
+                this.state.equippedItems.mainTool = undefined;
             };
             break;
         }
 
-     return true;
+        return true;
     }
 
     preRender() {
         // run animations
 
         this.state.blinkingAnimation.run();
-        if (this.state.rotationTarget) this.state.rotationAnimation.run();
+        if (typeof this.state.rotationTarget === "number") this.state.rotationAnimation.run();
 
         if (this.state.walking && !(this.state.armed && this.state.draw) && !this.state.punching && !this.state.stabbing) {
             this.state.walkingAnimation.run();
@@ -3555,17 +3570,17 @@ export class Bot {
         }
 
         if (this.state.punching && !this.state.armed && !this.state.melee) {
-           this.state.punchingAnimation.run();
-        } 
- 
+            this.state.punchingAnimation.run();
+        }
+
         if ((this.state.armed || (this.state.melee && !this.state.walking)) && this.state.draw && !(this.state.stabbing || this.state.meleeAttackAnimation.active)) {
             this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[0];
         }
 
         if ((this.state.stabbing || this.state.meleeAttackAnimation.active) && !this.state.armed && this.state.melee) {
-          this.state.meleeAttackAnimation.run();
-        }     
- 
+            this.state.meleeAttackAnimation.run();
+        }
+
         if (this.state.fire && this.state.armed && this.state.target.shot && this.state.equippedItems.mainTool?.loaded && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo) {
             this.state.fireAnimation.run();
         }
@@ -3598,8 +3613,10 @@ export class Bot {
                 this.map.GRAPH.reserved.push(next);
 
                 this.goto(x + 5, y - 5);
-                 
-                this.state.rotationTarget = normalizeRotation((Math.atan2(this.state.goto.y - this.trans.offsetY, this.state.goto.x - this.trans.offsetX)*180/Math.PI) - 90);
+
+                let rotation = Math.round((Math.atan2(this.state.goto.y - this.trans.offsetY, this.state.goto.x - this.trans.offsetX) * 180 / Math.PI) / 45) * 45;
+
+                this.state.rotationTarget = normalizeRotation(rotation - 90);
             } else {
                 this.disengagePath();
                 if (this.state.path.request) this.requestPath(this.state.path.end.x - this.map.centerX, this.state.path.end.y - this.map.centerY);
@@ -3616,58 +3633,58 @@ export class Bot {
         attack: if (this.state.target.current && this.state.target.engaged) {
 
             if (this.state.target.current && !this.map.avatars[this.state.target.current.id]) {
-               this.disengageTarget();
-               if (this.state.melee) this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[2];
+                this.disengageTarget();
+                if (this.state.melee) this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[2];
 
-               break attack;
-            } 
+                break attack;
+            }
 
             const {
-              offsetX: targetX,
-              offsetY: targetY
+                offsetX: targetX,
+                offsetY: targetY
             } = this.state.target.current.trans, dist = distance(this.trans.offsetX, this.trans.offsetY, targetX, targetY), m = this.map;
 
             punch: if (!this.state.armed && !this.state.melee) {
-               if (dist > this.state.attack.disengageDistance && this.state.target.engaged) {
-                  this.disengageTarget();
-               } else if (dist <= this.state.attack.engageDistance && !this.state.path.engaged && !this.state.follow.target && this.state.path.request) {
-                  this.requestPath(targetX, targetY);
-               }
-   
-               this.state.speed = this.state.baseSpeed * this.state.attack.attackSpeed;
- 
-               if (dist <= 30) {
-                 this.state.punching = true;
-                 this.state.rotationTarget = normalizeRotation((Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX))*180/Math.PI) - 90);
-               } else {
-                 this.state.punching = false;
-               }
+                if (dist > this.state.attack.disengageDistance && this.state.target.engaged) {
+                    this.disengageTarget();
+                } else if (dist <= this.state.attack.engageDistance && !this.state.path.engaged && !this.state.follow.target && this.state.path.request) {
+                    this.requestPath(targetX, targetY);
+                }
 
-               break attack;
+                this.state.speed = this.state.baseSpeed * this.state.attack.attackSpeed;
+
+                if (dist <= 30) {
+                    this.state.punching = true;
+                    this.state.rotationTarget = normalizeRotation((Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX)) * 180 / Math.PI) - 90);
+                } else {
+                    this.state.punching = false;
+                }
+
+                break attack;
             }
 
 
             stab: if (!this.state.armed && this.state.melee) {
-               if (dist > this.state.attack.disengageDistance && this.state.target.engaged) {
+                if (dist > this.state.attack.disengageDistance && this.state.target.engaged) {
                     this.disengageTarget();
-               } else if (dist <= this.state.attack.engageDistance) {
-                  this.state.speed = this.state.baseSpeed * this.state.attack.attackSpeed;
-                  if (this.state.attack.openCarry && !this.state.draw) this.drawWeapon();
-                  if (!this.state.path.engaged && !this.state.follow.target && this.state.path.request) this.requestPath(targetX, targetY);
-               }
- 
-               if (dist <= 30) {
-                 this.state.stabbing = true;
-                 if (!this.state.draw) this.drawWeapon();
-                 this.state.rotationTarget = normalizeRotation((Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX))*180/Math.PI) - 70);
-               } else {
-                 this.state.stabbing = false;
-                 if (!this.state.attack.openCarry && this.state.draw) this.holsterWeapon();
-               }
+                } else if (dist <= this.state.attack.engageDistance) {
+                    this.state.speed = this.state.baseSpeed * this.state.attack.attackSpeed;
+                    if (this.state.attack.openCarry && !this.state.draw) this.drawWeapon();
+                    if (!this.state.path.engaged && !this.state.follow.target && this.state.path.request) this.requestPath(targetX, targetY);
+                }
 
-               break attack;
+                if (dist <= 30) {
+                    this.state.stabbing = true;
+                    if (!this.state.draw) this.drawWeapon();
+                    this.state.rotationTarget = normalizeRotation((Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX)) * 180 / Math.PI) - 70);
+                } else {
+                    this.state.stabbing = false;
+                    if (!this.state.attack.openCarry && this.state.draw) this.holsterWeapon();
+                }
+
+                break attack;
             }
-         
+
             shoot: if (this.state.armed && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo > 0) {
                 if (!this.state.equippedItems.mainTool?.loaded && !this.state.reloadTimeout.running) this.reload();
                 this.state.shotCheckAnimation.run();
@@ -3684,12 +3701,12 @@ export class Bot {
                         this.disengagePath();
                     }
 
-                    this.state.rotationTarget = normalizeRotation((Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX))*180/Math.PI) - 90);
+                    this.state.rotationTarget = normalizeRotation((Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX)) * 180 / Math.PI) - 90);
                     if (!this.state.draw) this.drawWeapon();
                     if (this.state.target.shot) this.state.fire = true;
 
                 } else if (dist < this.state.attack.slowdownDistance) {
-                    this.state.rotationTarget = normalizeRotation((Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX))*180/Math.PI) - 90);
+                    this.state.rotationTarget = normalizeRotation((Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX)) * 180 / Math.PI) - 90);
 
                     if (!this.state.draw) this.drawWeapon();
                     if (this.state.target.shot) this.state.fire = true;
@@ -3697,7 +3714,7 @@ export class Bot {
                     if (!this.state.follow.rush || !this.state.follow.target) this.state.speed = this.state.baseSpeed * (this.state.attack.attackSpeed / 3);
                 } else if (dist < this.state.attack.engageDistance) {
                     this.state.speed = this.state.baseSpeed * this.state.attack.attackSpeed;
-                    this.state.rotationTarget = normalizeRotation((Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX))*180/Math.PI) - 90);
+                    this.state.rotationTarget = normalizeRotation((Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX)) * 180 / Math.PI) - 90);
 
                     if (!this.state.draw) this.drawWeapon();
                     if (this.state.target.shot) this.state.fire = true;
@@ -3709,10 +3726,13 @@ export class Bot {
 
                 if (!this.state.target.shot && this.state.path.request && !this.state.path.engaged && !this.state.follow.target) this.requestPath(targetX, targetY);
 
-                if (dist < 30 && this.state.path.request && !this.state.path.engaged && !this.state.follow.target) {
-                    let [x,y] = rotate(targetX, targetY, random(360)); 
+                if (dist < 30 && !this.state.follow.target) {
                     this.state.speed = this.state.baseSpeed * this.state.attack.attackSpeed;
-                    this.requestPath(x, y);
+
+                    if (this.state.path.request && !this.state.path.engaged) {
+                        let [x, y] = rotate(targetX, targetY + 30, random(360));
+                        this.requestPath(x, y);
+                    }
                 }
 
                 break attack;
@@ -3748,13 +3768,14 @@ export class Bot {
 
         wander: if (this.state.wander.active && !this.state.running) {
             if (!this.state.path.engaged) {
-               let offsetX = random(this.state.wander.radius,true), offsetY = random(this.state.wander.radius,true);
+                let offsetX = random(this.state.wander.radius, true),
+                    offsetY = random(this.state.wander.radius, true);
 
-               this.state.speed = this.state.baseSpeed;
- 
-               if (this.state.path.request) this.requestPath((this.state.wander.anchor.x + offsetX) - this.map.centerX, (this.state.wander.anchor.y + offsetY) - this.map.centerY);
+                this.state.speed = this.state.baseSpeed;
+
+                if (this.state.path.request) this.requestPath((this.state.wander.anchor.x + offsetX) - this.map.centerX, (this.state.wander.anchor.y + offsetY) - this.map.centerY);
             }
-        }  
+        }
     }
 
     render() {
@@ -3816,23 +3837,23 @@ export class Bot {
     }
 
     killTarget(ids, multiple, invert) {
-            let map = (this.map || $CURRENT_MAP);
-            let target = map.avatars[ids[0]];
+        let map = (this.map || $CURRENT_MAP);
+        let target = map.avatars[ids[0]];
 
-            this.state.attack.multiple = multiple;
-            this.state.attack.invertTargets = invert;
-            if (ids.includes($AVATAR.id)) this.state.hostile = true;
+        this.state.attack.multiple = multiple;
+        this.state.attack.invertTargets = invert;
+        if (ids.includes($AVATAR.id)) this.state.hostile = true;
 
-            if (target && !this.state.attack.multiple) {
-                this.state.target.current = target;
-                this.state.target.id = ids;
-                this.state.target.engaged = true;
+        if (target && !this.state.attack.multiple) {
+            this.state.target.current = target;
+            this.state.target.id = ids;
+            this.state.target.engaged = true;
 
-                return true;
-            } else if (this.state.attack.multiple) {
-                this.state.target.id = ids;
-                this.state.target.engaged = true;
-            }
+            return true;
+        } else if (this.state.attack.multiple) {
+            this.state.target.id = ids;
+            this.state.target.engaged = true;
+        }
 
         return false;
     }
@@ -3852,17 +3873,20 @@ export class Bot {
         }
     }
 
-     run() {
-       let point = {x: random(this.map.width/2,true), y: random(this.map.height/2,true)};
-        
-       if (point) {
-          this.state.speed = this.state.runningSpeed * this.state.baseSpeed;
-          if (this.state.path.request && this.requestPath(point.x - this.map.centerX, point.y - this.map.centerY)) this.state.running = true;
+    run() {
+        let point = {
+            x: random(this.map.width / 2, true),
+            y: random(this.map.height / 2, true)
+        };
+
+        if (point) {
+            this.state.speed = this.state.runningSpeed * this.state.baseSpeed;
+            if (this.state.path.request && this.requestPath(point.x - this.map.centerX, point.y - this.map.centerY)) this.state.running = true;
         }
-     }
+    }
 
     meleeAttack(damage, hitbox) {
-       let [x, y] = rotate(hitbox.x, hitbox.y, (this.trans.rotation) * 180 / Math.PI), map = (this.map || $CURRENT_MAP);
+        let [x, y] = rotate(hitbox.x, hitbox.y, (this.trans.rotation) * 180 / Math.PI), map = (this.map || $CURRENT_MAP);
 
         x += this.trans.offsetX;
         y += this.trans.offsetY;
@@ -3876,7 +3900,7 @@ export class Bot {
             let avatar = map.avatars[i];
 
             if ((Math.abs(x - avatar.trans.offsetX) < (avatar.width / 2 + width / 2)) && (Math.abs(y - avatar.trans.offsetY) < (avatar.height / 2 + height / 2))) {
-               avatar.hit(damage, 0, 0, this); 
+                avatar.hit(damage, 0, 0, this);
             }
         }
     }
@@ -3925,22 +3949,22 @@ export class Bot {
     }
 
     requestPath(x, y) {
-       
-            x += this.map.centerX;
-            y += this.map.centerY;
- 
-            this.state.path.request = false;
-            this.state.pathRequestRateLimit.start();
 
-            let start = this.map.GRAPH.getPoint(this.trans.offsetX + this.map.centerX, this.trans.offsetY + this.map.centerY),
-                end = this.map.GRAPH.getPoint(x, y);
-            
-         if ((x >= -this.map.width / 2 && x < this.map.width / 2) && (y <= this.map.height / 2 && y > -this.map.height / 2) && start && end) {
+        x += this.map.centerX;
+        y += this.map.centerY;
+
+        this.state.path.request = false;
+        this.state.pathRequestRateLimit.start();
+
+        let start = this.map.GRAPH.getPoint(this.trans.offsetX + this.map.centerX, this.trans.offsetY + this.map.centerY),
+            end = this.map.GRAPH.getPoint(x, y);
+
+        if ((x >= -this.map.width / 2 && x < this.map.width / 2) && (y <= this.map.height / 2 && y > -this.map.height / 2) && start && end) {
             this.state.path.start = start;
             this.state.path.end = end;
             pathfinder.requestPath(this, this.state.path.start.unit, this.state.path.end.unit);
             return true;
-          }
+        }
 
         return false;
     }
@@ -3958,7 +3982,7 @@ export class Bot {
         this.state.path.current = [];
         this.state.path.index = 0;
         this.state.path.engaged = false;
-        this.state.running = false; 
+        this.state.running = false;
         this.disengageGoto();
     }
 
@@ -3977,38 +4001,41 @@ export class Bot {
 
 export class Floor extends _Object_ {
 
-            static _tileTypes = {
-              0: {
-               vertices: [-6.390000000000001,6.390000000000001,1,0,0,6.390000000000001,6.390000000000001,1,0.9984375000000001,0,-6.390000000000001,-6.390000000000001,1,0,0.9984375000000001,6.390000000000001,6.390000000000001,1,0.9984375000000001,0,-6.390000000000001,-6.390000000000001,1,0,0.9984375000000001,6.390000000000001,-6.390000000000001,1,0.9984375000000001,0.9984375000000001],
-               width: 12.780000000000001, 
-               height: 12.780000000000001, 
-               texture: textures.objects.floortile
-              },
-              1: {
-               vertices: [-6.390000000000001,6.390000000000001,1,0,0,6.390000000000001,6.390000000000001,1,0.9984375000000001,0,-6.390000000000001,-6.390000000000001,1,0,0.9984375000000001,6.390000000000001,6.390000000000001,1,0.9984375000000001,0,-6.390000000000001,-6.390000000000001,1,0,0.9984375000000001,6.390000000000001,-6.390000000000001,1,0.9984375000000001,0.9984375000000001],
-               width: 12.780000000000001, 
-               height: 12.780000000000001, 
-               texture: textures.objects.woodfloortile
-              },
-              2: {
-               vertices: [-12.8,12.8,1,0,0,12.8,12.8,1,0.5,0,-12.8,-12.8,1,0,0.5,12.8,12.8,1,0.5,0,-12.8,-12.8,1,0,0.5,12.8,-12.8,1,0.5,0.5],
-               width: 25.6, 
-               height: 25.6, 
-               texture: textures.objects.grasstile
-              }
-            }
- 
+    static _tileTypes = {
+        0: {
+            vertices: [-6.390000000000001, 6.390000000000001, 1, 0, 0, 6.390000000000001, 6.390000000000001, 1, 0.9984375000000001, 0, -6.390000000000001, -6.390000000000001, 1, 0, 0.9984375000000001, 6.390000000000001, 6.390000000000001, 1, 0.9984375000000001, 0, -6.390000000000001, -6.390000000000001, 1, 0, 0.9984375000000001, 6.390000000000001, -6.390000000000001, 1, 0.9984375000000001, 0.9984375000000001],
+            width: 12.780000000000001,
+            height: 12.780000000000001,
+            texture: textures.objects.floortile
+        },
+        1: {
+            vertices: [-6.390000000000001, 6.390000000000001, 1, 0, 0, 6.390000000000001, 6.390000000000001, 1, 0.9984375000000001, 0, -6.390000000000001, -6.390000000000001, 1, 0, 0.9984375000000001, 6.390000000000001, 6.390000000000001, 1, 0.9984375000000001, 0, -6.390000000000001, -6.390000000000001, 1, 0, 0.9984375000000001, 6.390000000000001, -6.390000000000001, 1, 0.9984375000000001, 0.9984375000000001],
+            width: 12.780000000000001,
+            height: 12.780000000000001,
+            texture: textures.objects.woodfloortile
+        },
+        2: {
+            vertices: [-12.8, 12.8, 1, 0, 0, 12.8, 12.8, 1, 0.5, 0, -12.8, -12.8, 1, 0, 0.5, 12.8, 12.8, 1, 0.5, 0, -12.8, -12.8, 1, 0, 0.5, 12.8, -12.8, 1, 0.5, 0.5],
+            width: 25.6,
+            height: 25.6,
+            texture: textures.objects.grasstile
+        }
+    }
+
     constructor(initialX, initialY, width, height, tileType = 0) {
         super([], function() {
-           
+
             let tile = Floor._tileTypes[tileType];
 
-            this.vertices = tile.vertices; 
+            this.vertices = tile.vertices;
             this.texture = tile.texture;
-            this.width = width; 
-            this.height = height; 
+            this.width = width;
+            this.height = height;
             this.tileType = tileType;
-            this.renderDimensions = {width: width/tile.width, height: height/tile.height};
+            this.renderDimensions = {
+                width: width / tile.width,
+                height: height / tile.height
+            };
 
             this.buffer = gl.createBuffer();
             gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
@@ -4025,7 +4052,7 @@ export class Floor extends _Object_ {
             ext.bindVertexArrayOES(this.vao);
             gl.uniform2fv(locations.translation, [this.trans.offsetX, this.trans.offsetY]);
             gl.uniform2fv(locations.size, [this.renderDimensions.width, this.renderDimensions.height]);
-            gl.uniform2fv(locations.textureRange, [this.renderDimensions.width,this.renderDimensions.height]);
+            gl.uniform2fv(locations.textureRange, [this.renderDimensions.width, this.renderDimensions.height]);
 
             gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
             gl.activeTexture(gl.TEXTURE0);
@@ -4035,7 +4062,7 @@ export class Floor extends _Object_ {
             gl.drawArrays(gl.TRIANGLES, 0, this.vertices.length / 5);
             gl.uniform2fv(locations.size, [1, 1]);
             gl.uniform2fv(locations.textureRange, [0, 0]);
-        }, width, height, initialX, initialY, 0); 
+        }, width, height, initialX, initialY, 0);
         this.name = "floor";
         this.type = "floor";
         this.bottomLayer = true;
@@ -4326,15 +4353,19 @@ class _Graph_ {
 
         return result;
     }
- 
+
     getFixedCoordinate(x, y) {
-       let coord = {x: (this.width % 2 === 0) ? (Math.floor(x * 0.1) * 10) : (Math.round(x * 0.1) * 10) - 5, y: (this.height % 2 === 0) ? (Math.ceil(y * 0.1) * 10) : (y % 5 === 0 && y % 2 !== 0) ? (Math.round(y * 0.1) * 10) - 5 : (Math.round(y * 0.1) * 10) + 5};
- 
-       return coord;
+        let coord = {
+            x: (this.width % 2 === 0) ? (Math.floor(x * 0.1) * 10) : (Math.round(x * 0.1) * 10) - 5,
+            y: (this.height % 2 === 0) ? (Math.ceil(y * 0.1) * 10) : (y % 5 === 0 && y % 2 !== 0) ? (Math.round(y * 0.1) * 10) - 5 : (Math.round(y * 0.1) * 10) + 5
+        };
+
+        return coord;
     }
 
     getPoint(x, y) {
-        let p = this.getFixedCoordinate(x, y), unit = this.find(p.x, p.y);
+        let p = this.getFixedCoordinate(x, y),
+            unit = this.find(p.x, p.y);
 
         return (unit) ? {
             x: p.x,
@@ -4368,8 +4399,8 @@ class _Graph_ {
         const cornerB = this.getFixedCoordinate(xAndWidth, y);
         const cornerC = this.getFixedCoordinate(xAndWidth, yAndHeight);
 
-        let inBounds = (Math.abs(x + width/2) < (this.map.width/2) + width/2) && (Math.abs(y + height/2) < (this.map.height/2) + height/2);
-       
+        let inBounds = (Math.abs(x + width / 2) < (this.map.width / 2) + width / 2) && (Math.abs(y + height / 2) < (this.map.height / 2) + height / 2);
+
         if (inBounds) {
             for (let i = cornerA.x; i <= cornerB.x; i += 10) {
                 for (let j = cornerB.y; j <= cornerC.y; j += 10) {
@@ -4592,15 +4623,15 @@ export class _Map_ {
             this.objects[obj.id] = obj;
 
             if (obj.obstacle) {
-              this.obstacles[obj.id] = obj;
-              if ($MAP_DISPLAY && obj.type !== "avatar" && !obj.hideFromMap && $CURRENT_MAP === this) $MAP_DISPLAY.addObject(obj);
+                this.obstacles[obj.id] = obj;
+                if ($MAP_DISPLAY && obj.type !== "avatar" && !obj.hideFromMap && $CURRENT_MAP === this) $MAP_DISPLAY.addObject(obj);
             }
             if (obj.pickup) this.pickups[obj.id] = obj;
             if (obj.moveable) this.moveables[obj.id] = obj;
             if (obj.interactable) this.interactables[obj.id] = obj;
             if (obj.type === "avatar") {
-              this.avatars[obj.id] = obj;
-              this.avatarCount++;
+                this.avatars[obj.id] = obj;
+                this.avatarCount++;
             }
             if (obj.subLayer && !obj.hasCluster) this.subLayers[obj.subLayer].push(obj);
 
@@ -4635,12 +4666,12 @@ export class _Map_ {
             delete this.objects[id];
             delete this.pickups[id];
             delete this.avatars[id];
-            
-            if (this.obstacles[id]) {
-               let obj = this.obstacles[id];
-               delete this.obstacles[id];
 
-               if (!obj.hideFromMap && $CURRENT_MAP === this) $MAP_DISPLAY.update(); 
+            if (this.obstacles[id]) {
+                let obj = this.obstacles[id];
+                delete this.obstacles[id];
+
+                if (!obj.hideFromMap && $CURRENT_MAP === this) $MAP_DISPLAY.update();
             }
 
             this.objectCount--;
@@ -4708,7 +4739,8 @@ export class _Map_ {
             let ob = this.objects[keys[i]];
             if (!(ob instanceof Barrier) && !ob.isCluster && !ob.exclude) {
                 let frame = [ob.constructor.name];
-                let translationX = ob.trans.offsetX + this.centerX, translationY = ob.trans.offsetY + this.centerY;
+                let translationX = ob.trans.offsetX + this.centerX,
+                    translationY = ob.trans.offsetY + this.centerY;
 
                 // add special attributes for more complex objects...
                 switch (ob.name) {
@@ -4727,14 +4759,14 @@ export class _Map_ {
                     case "street light":
                         frame = frame.concat([translationX, translationY, ob.trans.rotation, ob._color]);
                         break;
-                    case "floor": 
+                    case "floor":
                         frame = frame.concat([translationX, translationY, ob.width, ob.height, ob.tileType]);
                         break;
                     default:
                         frame = frame.concat([translationX, translationY, ob.trans.rotation]);
                         break;
                 }
-                
+
                 objs.layout.push(frame);
             }
         }
@@ -4742,7 +4774,7 @@ export class _Map_ {
         for (let i in this.SUB_MAPS) {
             objs.children.push(this.SUB_MAPS[i].printLayoutScript(false));
         }
-     
+
         return (json) ? JSON.stringify(objs) : objs;
     }
 
@@ -4865,21 +4897,21 @@ export class _Map_ {
     }
 
     updateInteractable() {
-      this.currentInteractable = undefined;
+        this.currentInteractable = undefined;
 
-       for (let i in this.interactables) {
-           i = this.interactables[i];
+        for (let i in this.interactables) {
+            i = this.interactables[i];
 
-           if (distance($AVATAR.trans.offsetX, $AVATAR.trans.offsetY, i.trans.offsetX, i.trans.offsetY) < i.minDistance) {
-               this.currentInteractable = i;
-           }
-       }
+            if (distance($AVATAR.trans.offsetX, $AVATAR.trans.offsetY, i.trans.offsetX, i.trans.offsetY) < i.minDistance) {
+                this.currentInteractable = i;
+            }
+        }
 
-       if (!this.currentInteractable && $ACTION_BUTTON) {
-           $ACTION_BUTTON.hidden = true;
-       } else if ($ACTION_BUTTON) {
-           $ACTION_BUTTON.hidden = false;
-       }
+        if (!this.currentInteractable && $ACTION_BUTTON) {
+            $ACTION_BUTTON.hidden = true;
+        } else if ($ACTION_BUTTON) {
+            $ACTION_BUTTON.hidden = false;
+        }
     }
 
     showGeometry() {
@@ -4905,7 +4937,7 @@ export class _Map_ {
         [0, 0]
     ], doorOffset = 0, exitPoint, buildingExit, label) {
         // attach $AVATAR to map
-  
+
         this.avatars[$AVATAR.id] = $AVATAR;
 
         // attach any default objects or clusters for all maps, etc.
@@ -4966,7 +4998,7 @@ export class Text extends _Object_ {
             this.buffer = gl.createBuffer();
             gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);
- 
+
             gl.vertexAttribPointer(locations.coords, 3, gl.FLOAT, false, 20, 0);
             gl.vertexAttribPointer(locations.tcoords, 2, gl.FLOAT, false, 20, 12);
             gl.enableVertexAttribArray(locations.coords);
@@ -5075,13 +5107,13 @@ export class _Joystick_ extends _Object_ {
         x: 0,
         y: 0
     }) {
-        super([-15,15,1,0,0,15,15,1,0.5859375,0,-15,-15,1,0,0.5859375,15,15,1,0.5859375,0,-15,-15,1,0,0.5859375,15,-15,1,0.5859375,0.5859375], function() {
+        super([-15, 15, 1, 0, 0, 15, 15, 1, 0.5859375, 0, -15, -15, 1, 0, 0.5859375, 15, 15, 1, 0.5859375, 0, -15, -15, 1, 0, 0.5859375, 15, -15, 1, 0.5859375, 0.5859375], function() {
 
             this.buffer = gl.createBuffer();
             gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
 
             this.texture = textures.controls.joystick_disc;
-            
+
             gl.vertexAttribPointer(locations.coords, 3, gl.FLOAT, false, 20, 0);
             gl.vertexAttribPointer(locations.tcoords, 2, gl.FLOAT, false, 20, 12);
 
@@ -5139,7 +5171,7 @@ export class _Joystick_ extends _Object_ {
             width: 15 / scale,
             height: 15 / scale
         };
-        this.thumbVertices = new Float32Array([-7.5,7.5,1,0,0,7.5,7.5,1,0.5859375,0,-7.5,-7.5,1,0,0.5859375,7.5,7.5,1,0.5859375,0,-7.5,-7.5,1,0,0.5859375,7.5,-7.5,1,0.5859375,0.5859375]);
+        this.thumbVertices = new Float32Array([-7.5, 7.5, 1, 0, 0, 7.5, 7.5, 1, 0.5859375, 0, -7.5, -7.5, 1, 0, 0.5859375, 7.5, 7.5, 1, 0.5859375, 0, -7.5, -7.5, 1, 0, 0.5859375, 7.5, -7.5, 1, 0.5859375, 0.5859375]);
         this.distance = {
             x: 0,
             y: 0,
@@ -5194,18 +5226,18 @@ export class _Joystick_ extends _Object_ {
         // activate player firing state when the left joystick is at the edge, and viceversa
         if (!this.left && $CURRENT_MAP.move) {
             if (this.distance.absolute === this.base.radius) {
-   
-             if ($AVATAR.state.armed) {
-                $AVATAR.state.fire = true;
-              } else if ($AVATAR.state.melee) { 
-                $AVATAR.state.stabbing = true;
-              } else {
-                $AVATAR.state.punching = true;
-              }
-             } else {
+
+                if ($AVATAR.state.armed) {
+                    $AVATAR.state.fire = true;
+                } else if ($AVATAR.state.melee) {
+                    $AVATAR.state.stabbing = true;
+                } else {
+                    $AVATAR.state.punching = true;
+                }
+            } else {
                 $AVATAR.state.fire = false;
                 $AVATAR.state.punching = false;
-                $AVATAR.state.stabbing = false; 
+                $AVATAR.state.stabbing = false;
             }
         }
 
