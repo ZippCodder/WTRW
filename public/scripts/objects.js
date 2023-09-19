@@ -886,9 +886,15 @@ export class Grass extends _InstancedClusterClient_ {
     name = "grass";
     clusterName = "grass";
     texture = textures.objects.grass1;
+    preserveCluster = true;
+    bottomLayer = true;
 
     constructor(initialX, initialY, initialRotation) {
         super(initialX, initialY, initialRotation);
+    }
+
+    postLink() {
+      this.delete();
     }
 }
 
@@ -958,9 +964,15 @@ export class Grass2 extends _InstancedClusterClient_ {
     name = "grass2";
     clusterName = "grass2";
     texture = textures.objects.grass2;
+    preserveCluster = true;
+    bottomLayer = true;
 
     constructor(initialX, initialY, initialRotation) {
         super(initialX, initialY, initialRotation);
+    }
+ 
+    postLink() {
+      this.delete();
     }
 }
 
@@ -973,9 +985,15 @@ export class Rocks1 extends _InstancedClusterClient_ {
     clusterName = "three rocks";
     texture = textures.objects.rocks1;
     name = "three rocks";
+    preserveCluster = true;
+    bottomLayer = true;
 
     constructor(initialX, initialY, initialRotation) {
         super(initialX, initialY, initialRotation || random(360));
+    }
+
+    postLink() {
+      this.delete();
     }
 }
 
@@ -988,9 +1006,15 @@ export class Rocks2 extends _InstancedClusterClient_ {
     clusterName = "two rocks";
     texture = textures.objects.rocks2;
     name = "two rocks";
+    preserveCluster = true;
+    bottomLayer = true;
 
     constructor(initialX, initialY, initialRotation) {
         super(initialX, initialY, initialRotation || random(360));
+    }
+
+    postLink() {
+      this.delete();
     }
 }
 
@@ -1524,7 +1548,6 @@ export class Door extends _StaticClusterClient_ {
         if (typeof this.room === "number") this.room = (this.room < 0) ? this.map.PARENT_MAP : this.map.SUB_MAPS[this.room];
 
         if (this.room) {
-            $CURRENT_MAP.move = false;
             requestTransition((function() {
 
                 delete $CURRENT_MAP.avatars[$AVATAR.id];
@@ -1605,16 +1628,12 @@ export class _Building_ extends _StaticClusterClient_ {
         this.setup = setup;
         this.doors = [];
         this.type = "building";
-        this.bottomLayer = true;
-        this.subLayer = 1;
         this.rooms = rooms || [new _Map_(150, 80, false).init([
             [0 + doorOffset, 35]
         ], doorOffset)];
 
         for (let i of doors) {
             let t = new Trigger(this.trans.offsetX + i[0], this.trans.offsetY + i[1], (function() {
-
-                $CURRENT_MAP.move = false;
 
                 requestTransition((function() {
 
@@ -1711,13 +1730,18 @@ export class House1 extends _Building_ {
     constructor(initialX, initialY, initialRotation) {
         super(initialX, initialY, initialRotation, [
             [-26.1, -33, 0, [0, 44.38]],
+            [23, 25, 0, [-50, 44.38]],
             [23, -57, 1],
             [-30, -65, 0]
-        ], [new _Map_(150, 100, false, "House 1").init(), new _Map_(150, 80, false, "House 1").init(), new _Map_(150, 80, false, "House 1").init()], undefined);
+        ], [new _Map_(150, 100, false, "House 1").init(undefined,undefined,[-26,-41],true), new _Map_(150, 80, false, "House 1").init(), new _Map_(150, 80, false, "House 1").init()], undefined);
 
-        let floor = new Floor(0, 0, 150, 100, 0);
+        let balconyDoor = new Door("Balcony", -1, -50, (this.rooms[0].height / 2) + 9.2, -1, [23,15], true);
+
+        let floor = new Floor(0, 0, 150, 100, 1);
         floor.exclude = true;
+
         this.rooms[0].link(floor);
+        this.rooms[0].link(balconyDoor);
     }
 }
 
@@ -4438,7 +4462,7 @@ export class _Map_ {
         this.spawnPoints = [];
         this.centerX = 0;
         this.centerY = 0;
-        this.groundColor = (root) ? [255, 255, 255, 1] : [255, 255, 255, 1];
+        this.groundColor = (root) ? [210, 210, 210, 1] : [255, 255, 255, 1];
         this.show = true;
         this.freeze = false;
         this.move = true;

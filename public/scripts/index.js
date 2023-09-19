@@ -127,6 +127,9 @@ window.onload = async () => {
     }, undefined, 0.005);
 
     window.requestTransition = function(c, speed = 2) {
+      if (!transitioning) {
+        $CURRENT_MAP.move = false;
+
         if (!useTransition) {
             c();
             return;
@@ -135,6 +138,7 @@ window.onload = async () => {
         callback = c;
         transitionSpeed = speed;
         transitioning = true;
+      }
     };
 
     gl.enable(gl.BLEND);

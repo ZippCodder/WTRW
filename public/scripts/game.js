@@ -64,6 +64,7 @@
   $AVATAR = new Avatar("R O B I N H O O D");
   $AVATAR.postLink();
 
+
   const firstNames = ["Dave", "Richee", "Brenda", "Stacy", "Skylar", "Malcom", "Steven", "Brandon", "Halee", "Kaylee", "Peter", "Kate", "Hannah", "Joy", "Lenny", "Leon", "Teddy", "Amanda", "Pablo"];
   const lastNames = ["Davidson", "Jackson", "Olvedo", "Cabello", "Kabrick", "Rich", "Dotson", "Latins", "Emmit", "James", "Havana", "York", "Ross", "Jean", "Masons", "Umada", "Gerannd"];
 
@@ -74,6 +75,13 @@
   // Game setup and initialization
 
   $MAP = new _Map_(500, 500, true, "Downtown SmallVille").init();
+
+  for (let i = 0; i < $MAP.units.total; i++) {
+    let x = random($MAP.width,true), y = random($MAP.height, true);    
+
+    $MAP.link(((Math.random() < 0.5) ? new Rocks1(x,y):new Rocks2(x,y)));
+  }
+
   //$MAP.parseLayoutScript(Map1);
 
   $CURRENT_MAP = $MAP;
@@ -221,8 +229,35 @@
       }
   }, window, 1);
 
+  const timeDisplay = document.querySelector("#mapTime p");
+  const meridiemDisplay = document.querySelector("#mapTime small");
+
+  window.globalTime = 360;
+
+  $MAP.darkness = (globalTime < 1080) ? Math.max(20 - ((globalTime*5)*0.012),1):Math.min(((globalTime-1080)*5)*0.012,20);
+   
+  const dayCycleLoop = new LoopAnimation(function() {
+    if (globalTime < 1080) {
+      $MAP.darkness = ($MAP.darkness > 1) ? $MAP.darkness-0.012:1;
+    } else if (globalTime > 1080) {
+      $MAP.darkness = ($MAP.darkness < 20) ? $MAP.darkness+0.012:20;
+    }
+  }, window, 0.5);
+
+
+  const timeUpdateLoop = new LoopAnimation(function() {
+   globalTime++;
+
+   let hour = Math.floor(globalTime/60), minute = globalTime - (Math.floor(globalTime/60)*60);
+
+   if (hour > 23) globalTime = 0;
+
+   timeDisplay.innerText = `${(hour || 12) - ((hour > 12) ? 12:0)}:${((minute <= 9) ? "0":"") + minute}`;
+   meridiemDisplay.innerText = `${(globalTime <= 1440 && globalTime >= 720) ? "pm":"am"}`;
+
+  }, window, 2.5);
+
   $MAP.lighting = false;
-  $MAP.darkness = 1;
   /*
   $MAP.SUB_MAPS[0].link(new KitchenKnife(40,0));
   $MAP.SUB_MAPS[0].link(new KitchenKnife(40,0));
@@ -231,16 +266,20 @@
   $MAP.SUB_MAPS[0].link(new KitchenKnife(40,0));
   */
 
-  $MAP.link(new VisibleBarrier(50, 50, 40, 40));
-  $MAP.link(new VisibleBarrier(30, -70, 60, 60));
-  $MAP.link(new VisibleBarrier(-50, -90, 70, 70));
-  $MAP.link(new VisibleBarrier(-70, 50, 50, 50));
+  //$MAP.link(new VisibleBarrier(50, 50, 40, 40));
+  //$MAP.link(new VisibleBarrier(30, -70, 60, 60));
+  //$MAP.link(new VisibleBarrier(-50, -90, 70, 70));
+  //$MAP.link(new VisibleBarrier(-70, 50, 50, 50));
 
   //$MAP.link(new Floor(0,0,500,500,0));
   //$MAP.showGeometry();
 
   //$AVATAR.state.armour = 1000;
 
+  $MAP.link(new House1);
+
   $GAME_LOOP = function() {
       enemySpawnLoop.run();
+      timeUpdateLoop.run();
+      dayCycleLoop.run();
   };
