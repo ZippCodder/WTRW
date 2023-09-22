@@ -4169,6 +4169,35 @@ export let TABLE = new TextureData(10, 10, 0.2, "avatar", {
     ctx.restore();
 });
 
+export let TREE = new TextureData(10, 10, 0.2, "avatar", {
+    width: 1400,
+    height: 910
+}, [
+    [0, 0, 1400, 800],
+   // [40, 800, 100, 110, 0],
+  //  [1260, 800, 100, 110, 0]
+], 20, undefined, function(ctx) {
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.scale(this.size, this.size);
+
+    ctx.beginPath();
+    ctx.lineWidth = 20;
+
+    ctx.strokeStyle = "#1A1A1A";
+    ctx.fillStyle = "white";
+
+    ctx.moveTo(100,100);
+    ctx.lineTo(250,150);
+    ctx.lineTo(300,110);
+    ctx.lineTo(340,100);
+    ctx.lineTo(340,-10);
+    ctx.lineTo(320,-300);
+    ctx.stroke();
+
+    ctx.restore();
+},[],0,0,800,1100);
+
 export let BOOK_1 = new TextureData(3, 2, 0.2, "pickup", {
     width: 301,
     height: 416

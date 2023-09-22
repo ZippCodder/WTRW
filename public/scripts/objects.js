@@ -3090,6 +3090,8 @@ export class Bot {
             },
             wander: {
                 active: false,
+                waiting: false,
+                rate: 0,
                 anchor: {
                     x: 0,
                     y: 0
@@ -3140,6 +3142,15 @@ export class Bot {
             },
             rotationSpeed: 0.1,
             rotationTarget: undefined,
+            wanderRateTimeout: new MultiFrameLinearAnimation([function() {
+              this.state.wander.waiting = false;
+	      this.state.speed = this.state.baseSpeed;
+              
+              let offsetX = random(this.state.wander.radius, true),
+                  offsetY = random(this.state.wander.radius, true);
+
+                this.requestPath((this.state.wander.anchor.x + offsetX) - this.map.centerX, (this.state.wander.anchor.y + offsetY) - this.map.centerY);
+            }], this, [0]),
             rotationAnimation: new LoopAnimation(function() {
                 let rotation = this.trans.rotation * 180 / Math.PI;
 
@@ -3387,6 +3398,8 @@ export class Bot {
     }
 
     postLink() {
+
+        this.state.wanderRateTimeout.timingConfig[0] = this.state.wander.rate;
 
         this.state.targetUpdateAnimation.rate = this.state.attack.reactionTime.targetUpdateRate;
         this.state.shotCheckAnimation.rate = this.state.attack.reactionTime.shotCheckRate;
@@ -3791,13 +3804,11 @@ export class Bot {
         }
 
         wander: if (this.state.wander.active && !this.state.running) {
-            if (!this.state.path.engaged) {
-                let offsetX = random(this.state.wander.radius, true),
-                    offsetY = random(this.state.wander.radius, true);
+            if (!this.state.target.engaged) this.state.wanderRateTimeout.run();
 
-                this.state.speed = this.state.baseSpeed;
-
-                if (this.state.path.request) this.requestPath((this.state.wander.anchor.x + offsetX) - this.map.centerX, (this.state.wander.anchor.y + offsetY) - this.map.centerY);
+            if (!this.state.path.engaged && this.state.path.request && !this.state.wander.waiting) {
+               this.state.wander.waiting = true;
+               this.state.wanderRateTimeout.start();
             }
         }
     }
@@ -4462,7 +4473,7 @@ export class _Map_ {
         this.spawnPoints = [];
         this.centerX = 0;
         this.centerY = 0;
-        this.groundColor = (root) ? [210, 210, 210, 1] : [255, 255, 255, 1];
+        this.groundColor = (root) ? [240, 240, 240, 1] : [255, 255, 255, 1];
         this.show = true;
         this.freeze = false;
         this.move = true;

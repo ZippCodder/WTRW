@@ -237,6 +237,13 @@
   $MAP.darkness = (globalTime < 1080) ? Math.max(20 - ((globalTime*5)*0.012),1):Math.min(((globalTime-1080)*5)*0.012,20);
    
   const dayCycleLoop = new LoopAnimation(function() {
+
+    if (globalTime > 1130) {
+      $MAP.lighting = true;
+    } else if (globalTime > 180 && globalTime < 1130) {
+      $MAP.lighting = false;
+    }
+
     if (globalTime < 1080) {
       $MAP.darkness = ($MAP.darkness > 1) ? $MAP.darkness-0.012:1;
     } else if (globalTime > 1080) {
