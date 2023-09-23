@@ -2027,16 +2027,11 @@ export class Avatar {
         this.name = "avatar";
 
         this.state = {
-            hostile: false,
-            baseSpeed: 1,
-            runningSpeed: 2,
-            speed: 1,
             strength: 5,
+            agility: 0.5,
             armour: 0,
             invinsible: false,
             kills: 0,
-            passive: false,
-            aggressive: false,
             hitboxes: {
                 leftPunch: {
                     x: -4,
@@ -2077,63 +2072,8 @@ export class Avatar {
                 health: 100,
                 hunger: 100,
                 thirst: 100
-            },
-            goto: {
-                x: 0,
-                y: 0,
-                target: {
-                    x: 0,
-                    y: 0
-                },
-                engaged: false,
-                reserve: undefined
-            },
-            path: {
-                current: [],
-                index: 0,
-                engaged: false,
-                start: undefined,
-                end: undefined,
-                request: true
-            },
+            }, 
             targetId: undefined,
-            target: {
-                current: undefined,
-                id: [],
-                engaged: false,
-                shot: true
-            },
-            follow: {
-                target: undefined,
-                rush: false,
-                run: false,
-                engageDistance: 100,
-                slowdownDistance: 50,
-                settleDistance: 30,
-                disengageDistance: 200
-            },
-            attack: {
-                openCarry: true,
-                meleeAttackSpeed: 0.5,
-                engageDistance: 100,
-                slowdownDistance: 50,
-                settleDistance: 30,
-                disengageDistance: 200,
-                attackSpeed: 1,
-                multiple: false,
-                forget: false,
-                invertTargets: false,
-                reactionTime: {
-                    targetUpdateRate: 1,
-                    shotCheckRate: 1
-                }
-            },
-            recording: {
-                useRecording: false,
-                data: undefined,
-                frame: 0
-            },
-            baseRotation: 0,
             walking: false,
             punching: false,
             stabbing: false,
@@ -2144,19 +2084,6 @@ export class Avatar {
             equippedItems: {
                 mainTool: undefined
             },
-            rotationSpeed: 0.1,
-            rotationTarget: undefined,
-            rotationAnimation: new LoopAnimation(function() {
-                let rotation = this.trans.rotation * 180 / Math.PI;
-
-                if (rotation !== this.state.rotationTarget && this !== $AVATAR) {
-
-                    let difference = (Math.max(this.state.rotationTarget, rotation) - Math.min(this.state.rotationTarget, rotation)),
-                        rotationFactor = Math.min(difference, 360 - difference) * this.state.rotationSpeed;
-
-                    this.rotate(normalizeRotation(rotation + (((difference < 180 && this.state.rotationTarget > rotation) || (difference > 180 && rotation > this.state.rotationTarget)) ? rotationFactor : -rotationFactor)));
-                }
-            }, this, 0.01),
             punchingAnimation: new LoopAnimation(function() {
                 let leftPunch = this.state.leftPunchAnimation,
                     rightPunch = this.state.rightPunchAnimation;
@@ -2170,124 +2097,12 @@ export class Avatar {
                 if (!leftPunch.active && !rightPunch.active)((Math.random() < 0.5) ? leftPunch : rightPunch).active = true;
 
             }, this, 0.01),
-            shotCheckAnimation: new LoopAnimation(function() {
-                this.state.target.shot = true;
-
-                outer: for (let o in this.map.obstacles) {
-                    let obstacle = this.map.obstacles[o];
-
-                    if (obstacle.id === this.id || obstacle.id === this.state.target.current.id) continue;
-
-                    for (let segment of obstacle.segments) {
-                        let [ox, oy, ow, oh] = segment;
-
-                        ox = ox + obstacle.trans.offsetX;
-                        oy = oy + obstacle.trans.offsetY;
-
-                        let p1 = this.trans.offsetX;
-                        let p2 = this.trans.offsetY;
-                        let p3 = this.state.target.current.trans.offsetX;
-                        let p4 = this.state.target.current.trans.offsetY;
-
-                        let result = lineIntersectsBox(p1, p2, p3, p4, ox, oy, ow, oh);
-
-                        if (result) {
-                            this.state.target.shot = !result;
-                            break outer;
-                        }
-                    }
-                }
-            }, this, 1),
             reloadTimeout: new MultiFrameLinearAnimation([function() {
                 this.state.equippedItems.mainTool.reloadProgress = 0;
                 this.state.equippedItems.mainTool.loaded = true;
 
                 updateAmmoDisplay();
             }], this, [0]),
-            pathRequestRateLimit: new MultiFrameLinearAnimation([function() {
-                this.state.path.request = true;
-            }], this, [1]),
-            targetUpdateAnimation: new LoopAnimation(function() {
-                const map = (this.map || $CURRENT_MAP);
-
-                if (this.state.attack.multiple) {
-                    let targetDistance = this.state.attack.engageDistance,
-                        target, remember = [];
-
-                    for (let i in map.avatars) {
-                        if (map.avatars[i].id === this.id) continue;
-
-                        let {
-                            offsetX: targetX,
-                            offsetY: targetY
-                        } = map.avatars[i].trans;
-                        let dist = distance(this.trans.offsetX, this.trans.offsetY, targetX, targetY);
-                        if (((this.state.target.id.includes(map.avatars[i].state.targetId) && !this.state.attack.invertTargets) || (!this.state.target.id.includes(this.map.avatars[i].state.targetId) && this.state.attack.invertTargets))) {
-                            if (dist < targetDistance && map.avatars[i] !== this) {
-                                targetDistance = dist;
-                                target = map.avatars[i];
-                            }
-                            if (dist < this.state.attack.disengageDistance && this.state.attack.forget && !remember.includes(map.avatars[i].state.targetId)) {
-                                remember.push(map.avatars[i].state.targetId);
-                            }
-                        }
-                    }
-
-                    if (this.state.attack.forget) {
-                        this.state.target.id = remember;
-                    }
-
-                    if (target && this.state.target.current !== target) {
-                        this.state.target.current = target;
-                        this.state.target.engaged = true;
-                    }
-
-                } else if (map.avatars[this.state.target.id[0]]) {
-                    let {
-                        offsetX: targetX,
-                        offsetY: targetY
-                    } = map.avatars[this.state.target.id[0]].trans;
-                    let dist = distance(this.trans.offsetX, this.trans.offsetY, targetX, targetY);
-
-                    if (!this.state.target.engaged && dist < this.state.attack.engageDistance && !this.state.attack.forget) this.killTarget([this.state.target.id[0]]);
-                }
-
-            }, this, 1),
-            gotoAnimation: new LoopAnimation(function() {
-                let tx = 0,
-                    ty = 0;
-
-                this.state.goto.x = this.state.goto.target.x - this.map.centerX;
-                this.state.goto.y = this.state.goto.target.y - this.map.centerY;
-
-                if (this.state.goto.x !== this.trans.offsetX) {
-                    tx = (Math.abs(this.state.goto.x - this.trans.offsetX) < this.state.speed) ? (this.state.goto.x - this.trans.offsetX) : (this.trans.offsetX < this.state.goto.x) ? this.state.speed : -this.state.speed;
-                }
-
-                if (this.state.goto.y !== this.trans.offsetY) {
-                    ty = (Math.abs(this.state.goto.y - this.trans.offsetY) < this.state.speed) ? (this.state.goto.y - this.trans.offsetY) : (this.trans.offsetY < this.state.goto.y) ? this.state.speed : -this.state.speed;
-                }
-
-                this.translate(tx, ty);
-
-                if (this.state.goto.x === this.trans.offsetX && this.state.goto.y === this.trans.offsetY) {
-                    this.disengageGoto();
-                }
-            }, this, 0.03),
-            recordAnimation: new LoopAnimation(function() {
-                if (this.state.recording.useRecording) {
-                    let [x, y, r, w] = this.state.recording.data.slice(this.state.recording.frame, this.state.recording.frame + 4);
-                    this.trans.offsetX = this.nameObj.trans.offsetX = x - this.map.centerX;
-                    this.trans.offsetY = this.nameObj.trans.offsetY = y - this.map.centerY;
-                    this.nameObj.trans.offsetY += 10;
-                    this.rotate(r);
-                    this.state.walking = w;
-
-                    this.state.recording.frame += 4;
-
-                    if (this.state.recording.frame === this.state.recording.data.length - 4) this.state.recording.frame = 0;
-                }
-            }, this, 0.01),
             fireAnimation: undefined,
             recoilAnimation: new MultiFrameLinearAnimation([function() {
                 this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[1];
@@ -2391,11 +2206,9 @@ export class Avatar {
 
     postLink() {
 
-        this.state.targetUpdateAnimation.rate = this.state.attack.reactionTime.targetUpdateRate;
-        this.state.shotCheckAnimation.rate = this.state.attack.reactionTime.shotCheckRate;
-        this.state.leftPunchAnimation.animationMultFactor = this.state.attack.meleeAttackSpeed;
-        this.state.rightPunchAnimation.animationMultFactor = this.state.attack.meleeAttackSpeed;
-        this.state.meleeAttackAnimation.animationMultFactor = this.state.attack.meleeAttackSpeed * 2;
+        this.state.leftPunchAnimation.animationMultFactor = this.state.agility;
+        this.state.rightPunchAnimation.animationMultFactor = this.state.agility;
+        this.state.meleeAttackAnimation.animationMultFactor = this.state.agility * 2;
 
         this.state.fireAnimation = new LoopAnimation(function() {
 
@@ -2441,25 +2254,13 @@ export class Avatar {
 
                 this.purgeItems(5);
 
-                if (this !== $AVATAR) {
-                    this.delete();
-                } else {
                     delete $CURRENT_MAP.avatars[this.id];
                     delete $CURRENT_MAP.obstacles[this.id];
                     this.hidden = true;
                     noclip = true;
-                }
 
                 return;
             }
-        }
-
-        if ((this.state.passive && !this.state.aggressive) || (this.state.armed && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo <= 0)) {
-            this.run();
-        } else if (!this.state.target.id.includes(owner.state.targetId) && (this.map || $CURRENT_MAP).avatars[owner.id] && this.state.aggressive) {
-            this.state.target.id.push(owner.state.targetId);
-            this.state.target.engaged = true;
-            this.state.attack.multiple = true;
         }
     }
 
@@ -2491,7 +2292,7 @@ export class Avatar {
     }
 
     addItem(item, slot) {
-        if (this.inventory.addItem(item, slot) && this === $AVATAR) {
+        if (this.inventory.addItem(item, slot)) {
             updateInventoryItem(item.slot, item.name);
         }
     }
@@ -2499,7 +2300,7 @@ export class Avatar {
     dropItem(slot) {
         if (!this.inventory.items[slot]) return false;
 
-        if (this === $AVATAR) updateInventoryItem(this.inventory.items[slot].slot, this.inventory.items[slot].name, true);
+        updateInventoryItem(this.inventory.items[slot].slot, this.inventory.items[slot].name, true);
         this.unequipItem(slot);
 
         let item = this.inventory.ejectItem(slot);
@@ -2508,7 +2309,7 @@ export class Avatar {
         item.ring.trans.offsetY = item.trans.offsetY = this.trans.offsetY + random(10, true);
         item.trans.rotation = random(360);
 
-        (this.map || $CURRENT_MAP).link(item);
+        $CURRENT_MAP.link(item);
 
         return true;
     }
@@ -2584,7 +2385,6 @@ export class Avatar {
         // run animations
 
         this.state.blinkingAnimation.run();
-        if (this.state.rotationTarget) this.state.rotationAnimation.run();
 
         if (this.state.walking && !(this.state.armed && this.state.draw) && !this.state.punching && !this.state.stabbing) {
             this.state.walkingAnimation.run();
@@ -2604,158 +2404,13 @@ export class Avatar {
             this.state.meleeAttackAnimation.run();
         }
 
-        if (this.state.fire && this.state.armed && this.state.target.shot && this.state.equippedItems.mainTool?.loaded && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo) {
+        if (this.state.fire && this.state.armed && this.state.equippedItems.mainTool?.loaded && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo) {
             this.state.fireAnimation.run();
         }
 
         if (this.state.armed && this.state.equippedItems.mainTool) this.state.recoilAnimation.run();
         if (!this.state.equippedItems.mainTool?.loaded) this.state.reloadTimeout.run();
 
-        if (this.state.recording.useRecording) this.state.recordAnimation.run();
-        if (this.state.goto.engaged) this.state.gotoAnimation.run();
-        if (!this.state.path.request) this.state.pathRequestRateLimit.run();
-
-        // walk to destination
-        walk: if (this.state.path.engaged && !this.state.goto.engaged) {
-
-            if (this.state.recording.useRecording) this.pauseRecording();
-
-            if (this.state.path.index === this.state.path.current.length) {
-                this.disengagePath();
-                break walk;
-            }
-
-            let {
-                x,
-                y
-            } = this.state.path.current[this.state.path.index];
-            let next = this.map.GRAPH.find(x, y).id;
-
-            if (!this.map.GRAPH.blocked.includes(next) && !this.map.GRAPH.reserved.includes(next)) {
-                this.state.goto.reserve = next;
-                this.map.GRAPH.reserved.push(next);
-
-                this.goto(x + 5, y - 5);
-
-                this.state.rotationTarget = normalizeRotation((Math.atan2(this.state.goto.y - this.trans.offsetY, this.state.goto.x - this.trans.offsetX) * 180 / Math.PI) - 90);
-            } else {
-                this.disengagePath();
-                this.requestPath(this.state.path.end.x - this.map.centerX, this.state.path.end.y - this.map.centerY);
-                break walk;
-            }
-
-            this.state.path.index++;
-        }
-
-        // attack target(s)
-
-        if (this.state.target.id.length > 0) this.state.targetUpdateAnimation.run();
-
-        attack: if (this !== $AVATAR && (this.state.armed || this.state.melee) && this.state.target.current && this.state.target.engaged) {
-
-            if (this.state.target.current && !this.map.avatars[this.state.target.current.id]) {
-                this.disengageTarget();
-                if (this.state.melee) this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[2];
-
-                break attack;
-            }
-
-            const {
-                offsetX: targetX,
-                offsetY: targetY
-            } = this.state.target.current.trans, dist = distance(this.trans.offsetX, this.trans.offsetY, targetX, targetY), m = this.map;
-
-            stab: if (!this.state.armed && this.state.melee) {
-                if (dist > this.state.attack.disengageDistance && this.state.target.engaged) {
-                    this.disengageTarget();
-                } else if (dist <= this.state.attack.engageDistance) {
-                    if (this.state.attack.openCarry && !this.state.draw) this.drawWeapon();
-                    if (!this.state.path.engaged && !this.state.follow.target) this.requestPath(targetX + m.centerX, targetY + m.centerY);
-                }
-
-                if (dist <= 30) {
-                    this.state.stabbing = true;
-                    if (!this.state.draw) this.drawWeapon();
-                    this.state.rotationTarget = normalizeRotation((Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX)) * 180 / Math.PI) - 70);
-                } else {
-                    this.state.stabbing = false;
-                    if (!this.state.attack.openCarry && this.state.draw) this.holsterWeapon();
-                }
-
-                break attack;
-            }
-
-            shoot: if (this.state.armed && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo > 0) {
-                if (!this.state.equippedItems.mainTool?.loaded && !this.state.reloadTimeout.running) this.reload();
-                this.state.shotCheckAnimation.run();
-
-                if (dist > this.state.attack.disengageDistance && this.state.target.engaged) {
-                    this.disengageTarget();
-                } else if (dist > this.state.attack.engageDistance) {
-                    this.state.speed = this.state.baseSpeed * this.state.attack.attackSpeed;
-                    this.state.fire = false;
-                    if (!this.state.attack.openCarry && this.state.draw) this.holsterWeapon();
-                    if (!this.state.path.engaged && !this.state.follow.target) this.requestPath(targetX + m.centerX, targetY + m.centerY);
-                } else if (dist < this.state.attack.settleDistance) {
-                    if (this.state.target.shot && this.state.path.engaged && !this.state.follow.target) {
-                        this.disengagePath();
-                    }
-
-                    this.state.rotationTarget = normalizeRotation((Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX)) * 180 / Math.PI) - 90);
-                    if (!this.state.draw) this.drawWeapon();
-                    if (this.state.target.shot) this.state.fire = true;
-
-                } else if (dist < this.state.attack.slowdownDistance) {
-                    this.state.rotationTarget = normalizeRotation((Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX)) * 180 / Math.PI) - 90);
-
-                    if (!this.state.draw) this.drawWeapon();
-                    if (this.state.target.shot) this.state.fire = true;
-
-                    if (!this.state.follow.rush || !this.state.follow.target) this.state.speed = this.state.baseSpeed * (this.state.attack.attackSpeed / 3);
-                } else if (dist < this.state.attack.engageDistance) {
-                    this.state.speed = this.state.baseSpeed * this.state.attack.attackSpeed;
-                    this.state.rotationTarget = normalizeRotation((Math.atan2((targetY - m.centerY) - (this.trans.offsetY - m.centerY), (targetX - m.centerX) - (this.trans.offsetX - m.centerX)) * 180 / Math.PI) - 90);
-
-                    if (!this.state.draw) this.drawWeapon();
-                    if (this.state.target.shot) this.state.fire = true;
-
-                    if (!this.state.path.engaged && !this.state.follow.target) {
-                        this.requestPath(targetX + m.centerX, targetY + m.centerY);
-                    }
-                }
-
-                if (!this.state.target.shot && this.state.path.request && !this.state.path.engaged && !this.state.follow.target) this.requestPath(targetX + m.centerX, targetY + m.centerY)
-
-                break attack;
-            }
-
-            this.disengageTarget();
-        }
-
-        // follow target
-
-        follow: if (this.state.follow.target) {
-
-            const {
-                offsetX: targetX,
-                offsetY: targetY
-            } = this.state.follow.target.trans, dist = distance(this.trans.offsetX, this.trans.offsetY, targetX, targetY), speed = (this.state.follow.run) ? this.state.runningSpeed * this.state.baseSpeed : this.state.baseSpeed;
-
-            if (dist > this.state.follow.settleDistance) {
-                this.state.speed = speed;
-                if (!this.state.path.engaged) {
-                    this.requestPath(targetX + this.map.centerX, targetY + this.map.centerY);
-                }
-            }
-
-            if (dist < this.state.follow.slowdownDistance && dist > this.state.settleDistance) {
-                this.state.speed = speed / 3;
-            } else if (dist < this.state.follow.settleDistance) {
-                if (this.state.path.engaged) {
-                    this.disengagePath();
-                }
-            }
-        }
         this.movePickup();
     }
 
@@ -2776,95 +2431,7 @@ export class Avatar {
 
         this.nameObj.render();
     }
-
-    useRecording(rec) {
-        this.state.recording.data = JSON.parse(rec);
-        this.state.recording.useRecording = true;
-    }
-
-    deleteRecording() {
-        this.state.recording.useRecording = false;
-        this.state.walking = false;
-        this.state.recording.frame = 0;
-        delete this.state.recording.data;
-    }
-
-    resumeRecording() {
-        this.state.walking = true;
-        this.state.recording.useRecording = true;
-    }
-
-    pauseRecording() {
-        this.state.walking = false;
-        this.state.recording.useRecording = false;
-    }
-
-    goto(x, y) {
-        this.state.goto.x = x - this.map.centerX;
-        this.state.goto.y = y - this.map.centerY;
-        this.state.goto.target = {
-            x: x,
-            y: y
-        };
-        this.state.goto.engaged = true;
-        this.state.recording.useRecording = false;
-        this.state.walking = true;
-    }
-
-    disengageGoto() {
-        this.state.goto.engaged = false;
-        this.state.walking = false;
-        if (this.state.goto.reserve) this.map.GRAPH.reserved.splice(this.map.GRAPH.reserved.indexOf(this.state.goto.reserve), 1);
-    }
-
-    killTarget(ids, multiple, invert) {
-        if (this.state.armed || this.state.melee) {
-            let map = (this.map || $CURRENT_MAP);
-            let target = map.avatars[ids[0]];
-
-            this.state.attack.multiple = multiple;
-            this.state.attack.invertTargets = invert;
-
-            if (target && !this.state.attack.multiple) {
-                this.state.target.current = target;
-                this.state.target.id = ids;
-                this.state.target.engaged = true;
-
-                return true;
-            } else if (this.state.attack.multiple) {
-                this.state.target.id = ids;
-                this.state.target.engaged = true;
-            }
-        }
-
-        return false;
-    }
-
-    disengageTarget() {
-        this.state.target.engaged = false;
-        this.state.target.current = undefined;
-        this.state.speed = this.state.baseSpeed;
-        this.state.fire = false;
-        this.state.stabbing = false;
-
-        if (this.state.attack.openCarry) {
-            this.drawWeapon();
-        } else {
-            this.holsterWeapon();
-        }
-    }
-
-    run() {
-        if (!this.state.path.engaged && !this.state.follow.target) {
-            let point = this.map.GRAPH.getRandomPoint();
-
-            if (point) {
-                this.state.speed = 5 * this.state.baseSpeed;
-                this.requestPath(point.x, point.y);
-            }
-        }
-    }
-
+    
     meleeAttack(damage, hitbox) {
         let [x, y] = rotate(hitbox.x, hitbox.y, (this.trans.rotation) * 180 / Math.PI), map = (this.map || $CURRENT_MAP);
 
@@ -2926,44 +2493,6 @@ export class Avatar {
         if (this.state.pickup.current) {
             this.state.pickup.current = undefined;
         }
-    }
-
-    requestPath(x, y) {
-        if (this.state.path.request) {
-            this.state.path.request = false;
-            this.state.pathRequestRateLimit.start();
-
-            let start = this.map.GRAPH.getPoint(this.trans.offsetX + this.map.centerX, this.trans.offsetY + this.map.centerY),
-                end = this.map.GRAPH.getPoint(x, y);
-
-            if ((x >= -this.map.width / 2 && x < this.map.width / 2) && (y <= this.map.height / 2 && y > -this.map.height / 2) && start && end) {
-                this.state.path.start = start;
-                this.state.path.end = end;
-                pathfinder.requestPath(this, this.state.path.start.unit, this.state.path.end.unit);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    findPathTo(path) {
-        if (path.result && this.state.path.start) {
-            this.state.path.current = path.path;
-            this.state.path.index = 0;
-            this.state.path.engaged = true;
-        }
-        return path;
-    }
-
-    disengagePath() {
-        this.state.path.current = [];
-        this.state.path.index = 0;
-        this.state.path.engaged = false;
-        this.disengageGoto();
-    }
-
-    gotoAvatar() {
-        return this.requestPath(this.map.centerX, this.map.centerY);
     }
 
     clean() {
