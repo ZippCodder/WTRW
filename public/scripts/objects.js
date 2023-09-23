@@ -2214,7 +2214,7 @@ export class Avatar {
 
             this.state.recoilAnimation.start();
 
-            const map = (this.map || $CURRENT_MAP);
+            const map = $CURRENT_MAP;
             const [initialTrajectoryX, initialTrajectoryY] = rotate(0, 1, (this.trans.rotation) * 180 / Math.PI);
 
             let randomBulletRotation = random(this.state.equippedItems.mainTool.constructor._properties.accuracy || 0);
@@ -2246,10 +2246,10 @@ export class Avatar {
         if (!this.state.invinsible) {
             (this.state.armour > 0) ? this.state.armour -= damage: this.state.vitals.health -= damage;
 
-            if (this === $AVATAR) updateHealthBar();
+            updateHealthBar();
 
             if (this.state.vitals.health <= 0) {
-                let attacker = (this.map ?? $CURRENT_MAP).avatars[owner.id];
+                let attacker = $CURRENT_MAP.avatars[owner.id];
                 if (attacker) attacker.state.kills += 1;
 
                 this.purgeItems(5);
@@ -2433,7 +2433,7 @@ export class Avatar {
     }
     
     meleeAttack(damage, hitbox) {
-        let [x, y] = rotate(hitbox.x, hitbox.y, (this.trans.rotation) * 180 / Math.PI), map = (this.map || $CURRENT_MAP);
+        let [x, y] = rotate(hitbox.x, hitbox.y, (this.trans.rotation) * 180 / Math.PI), map = $CURRENT_MAP;
 
         x += this.trans.offsetX;
         y += this.trans.offsetY;
@@ -2569,28 +2569,10 @@ export class Bot {
                     y: 14,
                     width: 4,
                     height: 4
-                },
-                pickup: {
-                    x: 0,
-                    y: 0,
-                    width: 5,
-                    height: 5
                 }
-            },
-            pickup: {
-                offset: {
-                    x: 0,
-                    y: 0,
-                    aRotation: 0,
-                    bRotation: 0,
-                },
-                current: false,
-                reachDistance: 2.5
             },
             vitals: {
                 health: 100,
-                hunger: 100,
-                thirst: 100
             },
             goto: {
                 x: 0,
@@ -2651,11 +2633,6 @@ export class Bot {
                     targetUpdateRate: 1,
                     shotCheckRate: 1
                 }
-            },
-            recording: {
-                useRecording: false,
-                data: undefined,
-                frame: 0
             },
             baseRotation: 0,
             walking: false,
@@ -2745,7 +2722,7 @@ export class Bot {
                 this.state.path.request = true;
             }], this, [1]),
             targetUpdateAnimation: new LoopAnimation(function() {
-                const map = (this.map || $CURRENT_MAP);
+                const map = this.map;
 
                 if (this.state.attack.multiple) {
                     let targetDistance = this.state.attack.engageDistance,
@@ -2811,20 +2788,6 @@ export class Bot {
                     this.disengageGoto();
                 }
             }, this, 0.03),
-            recordAnimation: new LoopAnimation(function() {
-                if (this.state.recording.useRecording) {
-                    let [x, y, r, w] = this.state.recording.data.slice(this.state.recording.frame, this.state.recording.frame + 4);
-                    this.trans.offsetX = this.nameObj.trans.offsetX = x - this.map.centerX;
-                    this.trans.offsetY = this.nameObj.trans.offsetY = y - this.map.centerY;
-                    this.nameObj.trans.offsetY += 10;
-                    this.rotate(r);
-                    this.state.walking = w;
-
-                    this.state.recording.frame += 4;
-
-                    if (this.state.recording.frame === this.state.recording.data.length - 4) this.state.recording.frame = 0;
-                }
-            }, this, 0.01),
             fireAnimation: undefined,
             recoilAnimation: new MultiFrameLinearAnimation([function() {
                 this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[1];
@@ -2940,7 +2903,7 @@ export class Bot {
 
             this.state.recoilAnimation.start();
 
-            const map = (this.map || $CURRENT_MAP);
+            const map = this.map;
             const [initialTrajectoryX, initialTrajectoryY] = rotate(0, 1, (this.trans.rotation) * 180 / Math.PI);
 
             let randomBulletRotation = random(this.state.equippedItems.mainTool.constructor._properties.accuracy || 0);
@@ -2970,22 +2933,12 @@ export class Bot {
         if (!this.state.invinsible) {
             (this.state.armour > 0) ? this.state.armour -= damage: this.state.vitals.health -= damage;
 
-            if (this === $AVATAR) updateHealthBar();
-
             if (this.state.vitals.health <= 0) {
-                let attacker = (this.map ?? $CURRENT_MAP).avatars[owner.id];
+                let attacker = this.map.avatars[owner.id];
                 if (attacker) attacker.state.kills += 1;
 
                 this.purgeItems(5);
-
-                if (this !== $AVATAR) {
-                    this.delete();
-                } else {
-                    delete $CURRENT_MAP.avatars[this.id];
-                    delete $CURRENT_MAP.obstacles[this.id];
-                    this.hidden = true;
-                    noclip = true;
-                }
+                this.delete();
 
                 return;
             }
@@ -2993,7 +2946,7 @@ export class Bot {
 
         if ((this.state.passive || (this.state.armed && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo <= 0)) && !this.state.running && !this.state.follow.target) {
             this.run();
-        } else if (!this.state.target.id.includes(owner.state.targetId) && (this.map || $CURRENT_MAP).avatars[owner.id] && this.state.aggressive) {
+        } else if (!this.state.target.id.includes(owner.state.targetId) && this.map.avatars[owner.id] && this.state.aggressive) {
             this.state.target.id.push(owner.state.targetId);
             this.state.target.engaged = true;
             this.state.attack.multiple = true;
@@ -3040,15 +2993,12 @@ export class Bot {
     }
 
     addItem(item, slot) {
-        if (this.inventory.addItem(item, slot) && this === $AVATAR) {
-            updateInventoryItem(item.slot, item.name);
-        }
+        return this.inventory.addItem(item, slot);
     }
 
     dropItem(slot) {
         if (!this.inventory.items[slot]) return false;
 
-        if (this === $AVATAR) updateInventoryItem(this.inventory.items[slot].slot, this.inventory.items[slot].name, true);
         this.unequipItem(slot);
 
         let item = this.inventory.ejectItem(slot);
@@ -3057,7 +3007,7 @@ export class Bot {
         item.ring.trans.offsetY = item.trans.offsetY = this.trans.offsetY + random(10, true);
         item.trans.rotation = random(360);
 
-        (this.map || $CURRENT_MAP).link(item);
+        this.map.link(item);
 
         return true;
     }
@@ -3154,14 +3104,11 @@ export class Bot {
         if (this.state.armed) this.state.recoilAnimation.run();
         if (!this.state.equippedItems.mainTool?.loaded) this.state.reloadTimeout.run();
 
-        if (this.state.recording.useRecording) this.state.recordAnimation.run();
         if (this.state.goto.engaged) this.state.gotoAnimation.run();
         if (!this.state.path.request) this.state.pathRequestRateLimit.run();
 
         // walk to destination
         walk: if (this.state.path.engaged && !this.state.goto.engaged) {
-
-            if (this.state.recording.useRecording) this.pauseRecording();
 
             if (this.state.path.index === this.state.path.current.length) {
                 this.disengagePath();
@@ -3360,28 +3307,6 @@ export class Bot {
         this.nameObj.render();
     }
 
-    useRecording(rec) {
-        this.state.recording.data = JSON.parse(rec);
-        this.state.recording.useRecording = true;
-    }
-
-    deleteRecording() {
-        this.state.recording.useRecording = false;
-        this.state.walking = false;
-        this.state.recording.frame = 0;
-        delete this.state.recording.data;
-    }
-
-    resumeRecording() {
-        this.state.walking = true;
-        this.state.recording.useRecording = true;
-    }
-
-    pauseRecording() {
-        this.state.walking = false;
-        this.state.recording.useRecording = false;
-    }
-
     goto(x, y) {
         this.state.goto.x = x - this.map.centerX;
         this.state.goto.y = y - this.map.centerY;
@@ -3390,7 +3315,6 @@ export class Bot {
             y: y
         };
         this.state.goto.engaged = true;
-        this.state.recording.useRecording = false;
         this.state.walking = true;
     }
 
@@ -3401,7 +3325,7 @@ export class Bot {
     }
 
     killTarget(ids, multiple, invert) {
-        let map = (this.map || $CURRENT_MAP);
+        let map = this.map;
         let target = map.avatars[ids[0]];
 
         this.state.attack.multiple = multiple;
@@ -3450,7 +3374,7 @@ export class Bot {
     }
 
     meleeAttack(damage, hitbox) {
-        let [x, y] = rotate(hitbox.x, hitbox.y, (this.trans.rotation) * 180 / Math.PI), map = (this.map || $CURRENT_MAP);
+        let [x, y] = rotate(hitbox.x, hitbox.y, (this.trans.rotation) * 180 / Math.PI), map = this.map;
 
         x += this.trans.offsetX;
         y += this.trans.offsetY;
@@ -3466,49 +3390,6 @@ export class Bot {
             if ((Math.abs(x - avatar.trans.offsetX) < (avatar.width / 2 + width / 2)) && (Math.abs(y - avatar.trans.offsetY) < (avatar.height / 2 + height / 2))) {
                 avatar.hit(damage, 0, 0, this);
             }
-        }
-    }
-
-    grab() {
-        if (this.state.pickup.current) return;
-
-        let [x, y] = rotate(0, this.state.pickup.reachDistance, (this.trans.rotation) * 180 / Math.PI);
-        let {
-            width,
-            height
-        } = this.state.hitboxes.pickup;
-
-        for (let i in $CURRENT_MAP.moveables) {
-            let obj = $CURRENT_MAP.moveables[i];
-
-            if ((Math.abs(x - obj.trans.offsetX) < (obj.width / 2 + width / 2)) && (Math.abs(y - obj.trans.offsetY) < (obj.height / 2 + height / 2))) {
-                obj.moveToTop();
-
-                this.state.pickup.offset.x = obj.trans.offsetX;
-                this.state.pickup.offset.y = obj.trans.offsetY;
-                this.state.pickup.offset.aRotation = (this.trans.rotation * 180 / Math.PI);
-                this.state.pickup.offset.bRotation = obj.trans.rotation;
-                this.state.pickup.current = obj;
-                break;
-            }
-        }
-    }
-
-    movePickup() {
-        if (this.state.pickup.current) {
-            let {
-                offsetX,
-                offsetY
-            } = this.state.pickup.current.trans, pickup = this.state.pickup.current, rotation = (this.trans.rotation * 180 / Math.PI);
-            let [x2, y2] = rotate((this.state.pickup.offset.x), (this.state.pickup.offset.y), rotation - this.state.pickup.offset.aRotation);
-
-            pickup.translate(x2 - offsetX, y2 - offsetY, this.state.pickup.offset.bRotation + (this.state.pickup.offset.aRotation - rotation), true);
-        }
-    }
-
-    drop() {
-        if (this.state.pickup.current) {
-            this.state.pickup.current = undefined;
         }
     }
 
@@ -3548,10 +3429,6 @@ export class Bot {
         this.state.path.engaged = false;
         this.state.running = false;
         this.disengageGoto();
-    }
-
-    gotoAvatar() {
-        return this.requestPath(this.map.centerX, this.map.centerY);
     }
 
     clean() {
