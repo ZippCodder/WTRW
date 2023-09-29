@@ -108,8 +108,12 @@ await textures.objects.addTexture("combatknife", "/public/images/textures/COMBAT
 await textures.objects.addTexture("laptop", "/public/images/textures/LAPTOP.png");
 await textures.objects.addTexture("book1", "/public/images/textures/BOOK_1.png");
 await textures.objects.addTexture("book2", "/public/images/textures/BOOK_2.png");
-await textures.objects.addTexture("house1", "/public/images/textures/house1.png");
+await textures.objects.addTexture("house1", "/public/images/textures/HOUSE_1.png");
+await textures.objects.addTexture("conveniencestore", "/public/images/textures/CONVENIENCE_STORE.png");
 await textures.objects.addTexture("table", "/public/images/textures/TABLE.png");
+await textures.objects.addTexture("bush", "/public/images/textures/BUSH.png");
+await textures.objects.addTexture("lightbush", "/public/images/textures/LIGHT_BUSH.png");
+await textures.objects.addTexture("mixedbush", "/public/images/textures/MIXED_BUSH.png");
 await textures.objects.addTexture("chair", "/public/images/textures/CHAIR.png");
 await textures.objects.addTexture("picnictable", "/public/images/textures/PICNIC_TABLE.png");
 await textures.objects.addTexture("door", "/public/images/textures/DOOR.png");

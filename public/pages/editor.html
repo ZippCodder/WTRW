@@ -124,7 +124,12 @@
             MAIN_AVATAR_DRAW_MELEE_WALKING_2,
             GRASS_TILE, 
             TREE,
-            Sheet
+            CONVENIENCE_STORE,
+            ATM,
+            Sheet,
+            BUSH,
+            LIGHT_BUSH,
+            MIXED_BUSH,
         } from "/public/scripts/models.js";
 
         // Import texture for editing and downloading...
@@ -171,11 +176,10 @@
         //SUPERMARKET(-98, -338, 0.2);
         //CAFE(-18, -18, 0.2);
         //MAIN_AVATAR_DEFAULT(-5, -5, 0.2);
-       
-        resize(500, 500);
+        resize(2048, 2048);
         // export function draw(a, w, h, iw, ih, s, lw, attribs=[],canvas) {
         //MAIN_AVATAR_DEFAULT.render(ctx);  
-        let texture = TREE;
+        let texture = HOUSE_1;
          
 //new Sheet([ROAD_RAIL,ROAD_SIGN,URBAN_FENCE_HALF,URBAN_FENCE,URBAN_FENCE_VERTICAL], 1024, 1024);
 
@@ -183,12 +187,12 @@
         //URBAN_FENCE.render(ctx);
         //PICNIC_TABLE.render(ctx);
          texture.render(ctx);
-         MAIN_AVATAR_DEFAULT.render(ctx);
+        // MAIN_AVATAR_DEFAULT.render(ctx);
          //GP_K100_TOP_2.render(ctx,-90);
         //GLOCK_20_TOP.render(ctx,-90); 
        // log(texture.getData());
           log(texture.getData());
           console.log(texture.textureDimensions);
-        setSource(`ACTION_ICON.png`); 
+        setSource(`HOUSE_1.png`); 
     </script>
 </html>

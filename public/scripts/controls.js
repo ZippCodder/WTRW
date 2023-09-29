@@ -52,6 +52,10 @@
       KitchenKnife,
       AssassinsKnife,
       Bot,
+      Bush, 
+      ConvenienceStore,
+      LightBush,
+      MixedBush,
       Floor,
       _Joystick_,
       _Button_
@@ -452,12 +456,30 @@
 
   let ammoDisplay = document.querySelector("#ammo-display");
 
+  ammoDisplay.onmousedown = function() {
+    $AVATAR.reload();
+  }
+  
+  ammoDisplay.ontouchstart = function() {
+    $AVATAR.reload();
+  }
+
   window.showAmmoDisplay = function() {
       ammoDisplay.style.display = "flex";
   }
 
   window.hideAmmoDisplay = function() {
       ammoDisplay.style.display = "none";
+  }
+
+  window.disableReloadDisplay = function() {
+   document.querySelector("#ammo-display img").style.display = "none";
+   document.querySelector("#ammo-display div").style.display = "flex";
+  }
+  
+  window.enableReloadDisplay = function() {
+   document.querySelector("#ammo-display div").style.display = "none";
+   document.querySelector("#ammo-display img").style.display = "block";
   }
 
   window.updateAmmoDisplay = function() {
@@ -712,6 +734,25 @@
       if (e.key === "Shift") holdEnter = false;
   }
 
+  const itemPlacementQueue = [];
+
+  const placeItemButton = document.querySelector("#place-item");
+
+  placeItemButton.onmousedown = placeItem;
+  placeItemButton.ontouchstart = placeItem;
+  
+  function placeItem(e) {
+   e.preventDefault();
+   if (itemPlacementQueue.length) {
+    let item = itemPlacementQueue.pop();
+    
+    item.translate($MAP_DISPLAY.displayOffset.x, -$MAP_DISPLAY.displayOffset.y);
+    $CURRENT_MAP.link(item);
+  
+    if (!itemPlacementQueue.length) placeItemButton.style.display = "none";
+   }
+  }
+
   function sendSystemMessage(content = "Script ran sucessfully.") {
       let msg = consoleMessageTemplate.content.cloneNode(true);
 
@@ -743,6 +784,16 @@
               try {
                   $CURRENT_MAP.link(eval("new " + command.replace("add", "").trim()));
                   result = command + " added."
+              } catch (err) {
+                  result = "Object not found!";
+              }
+          };
+          break;
+          case "place": {
+              try {
+                  itemPlacementQueue.unshift(eval("new " + command.replace("add", "").trim()));  
+                  placeItemButton.style.display = "inline-block";
+                  result = command + " added to placement queue. Use '+' on the selected map coordinates."
               } catch (err) {
                   result = "Object not found!";
               }

@@ -58,7 +58,9 @@
       KitchenKnife,
       AssassinsKnife,
       Bot,
-      Floor
+      Floor, 
+      ConvenienceStore,
+      Bush
   } from "/public/scripts/objects.js";
 
   $AVATAR = new Avatar("R O B I N H O O D");
@@ -283,7 +285,7 @@
 
   //$AVATAR.state.armour = 1000;
 
-  $MAP.link(new House1);
+  $MAP.link(new ConvenienceStore);
 
   $GAME_LOOP = function() {
       enemySpawnLoop.run();

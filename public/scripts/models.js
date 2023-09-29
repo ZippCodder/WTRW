@@ -1,5 +1,6 @@
 import {
-    draw
+    draw,
+    random
 } from "/public/scripts/lib.js";
 
 // functions for drawing textures for downloading and vertex mapping
@@ -1250,7 +1251,7 @@ export let LUXURY_APARTMENT = new TextureData(2010, 3510, 0.2, "building", {
 
 export let HOUSE_1 = new TextureData(-1190, 3510, 0.2, "building", {
     width: 7370,
-    height: 9320
+    height: 7220
 }, [
     [5500, 2400, 2500, 1200],
     [1300, 1500, 1700, 1700],
@@ -1283,14 +1284,13 @@ export let HOUSE_1 = new TextureData(-1190, 3510, 0.2, "building", {
 
     ctx.save();
     ctx.translate(this.offset.vx, this.offset.vy);
-    console.log(this.size);
     ctx.scale(this.size || 0, this.size || 0);
-    ctx.lineWidth = 20;
-    ctx.strokeStyle = "#1A1A1A";
+    ctx.lineWidth = 15;
+    ctx.strokeStyle = "black";
 
     // garage
     ctx.fillStyle = "#949494";
-    ctx.lineWidth = 20;
+    ctx.lineWidth = 15;
     ctx.moveTo(5000, 2800);
     ctx.lineTo(5000, 3700);
     ctx.lineTo(5500, 3700);
@@ -1308,14 +1308,14 @@ export let HOUSE_1 = new TextureData(-1190, 3510, 0.2, "building", {
     ctx.fillStyle = "#4D4D4D";
     ctx.fillRect(5500, 2400, 2500, 1200);
     ctx.strokeRect(5500, 2400, 2500, 1200);
-    ctx.lineWidth = 15;
-    ctx.strokeRect(5500, 2400, 2500, 1150);
     ctx.lineWidth = 10;
+    ctx.strokeRect(5500, 2400, 2500, 1150);
+    ctx.lineWidth = 5;
     ctx.strokeRect(5500, 2400, 2500, 400);
     ctx.strokeRect(5500, 2400, 2500, 800);
 
     // front porch
-    ctx.lineWidth = 20;
+    ctx.lineWidth = 15;
     ctx.fillStyle = "#949494";
     ctx.fillRect(3000, 1500, 2000, 1400);
     ctx.strokeRect(3000, 1500, 2000, 1400);
@@ -1324,7 +1324,7 @@ export let HOUSE_1 = new TextureData(-1190, 3510, 0.2, "building", {
     ctx.fillStyle = "#8A8A8A";
     ctx.fillRect(3000, 3350, 2000, 50);
     ctx.strokeRect(3000, 2900, 2000, 500);
-    ctx.lineWidth = 10;
+    ctx.lineWidth = 5;
     ctx.strokeRect(3000, 2900, 290, 500);
     ctx.strokeRect(3000, 2900, 580, 500);
     ctx.strokeRect(3000, 2900, 870, 500);
@@ -1332,7 +1332,7 @@ export let HOUSE_1 = new TextureData(-1190, 3510, 0.2, "building", {
     ctx.strokeRect(3000, 2900, 1450, 500);
     ctx.strokeRect(3000, 2900, 1740, 500);
 
-    ctx.lineWidth = 20;
+/*    ctx.lineWidth = 20;
     ctx.fillStyle = "#ABABAB";
     ctx.fillRect(3500, 3700, 1000, 500);
     ctx.fillRect(3500, 4500, 1000, 500);
@@ -1343,10 +1343,10 @@ export let HOUSE_1 = new TextureData(-1190, 3510, 0.2, "building", {
     ctx.fillRect(3500, 5300, 1000, 420);
     ctx.strokeRect(3500, 3700, 1000, 500);
     ctx.strokeRect(3500, 4500, 1000, 500);
-    ctx.strokeRect(3500, 5300, 1000, 500);
+    ctx.strokeRect(3500, 5300, 1000, 500); */
 
     // - door
-    ctx.lineWidth = 20;
+    ctx.lineWidth = 15;
     ctx.fillStyle = "#757575";
     ctx.fillRect(3200, 1800, 700, 1100);
     ctx.strokeRect(3200, 1800, 700, 1100);
@@ -1366,7 +1366,7 @@ export let HOUSE_1 = new TextureData(-1190, 3510, 0.2, "building", {
     ctx.strokeRect(3750, 2400, 50, 150);
 
     // - window
-    ctx.lineWidth = 20;
+    ctx.lineWidth = 15;
     ctx.fillStyle = "#4D4D4D";
     ctx.fillRect(4000, 1800, 800, 800);
     ctx.fillStyle = "#404040";
@@ -1391,7 +1391,7 @@ export let HOUSE_1 = new TextureData(-1190, 3510, 0.2, "building", {
     ctx.strokeRect(4050, 2316, 700, 50);
 
     // small left section
-    ctx.lineWidth = 20;
+    ctx.lineWidth = 15;
     ctx.fillStyle = "#949494";
     ctx.fillRect(1300, 1500, 1700, 1700);
     ctx.strokeRect(1300, 1500, 1700, 1700);
@@ -1422,11 +1422,11 @@ export let HOUSE_1 = new TextureData(-1190, 3510, 0.2, "building", {
     ctx.strokeRect(2050, 2313, 450, 50);
     ctx.strokeRect(2050, 2726, 450, 50);
 
-    ctx.lineWidth = 20;
+    ctx.lineWidth = 15;
     ctx.strokeRect(2000, 1850, 1000, 1380);
 
     // roofs
-    ctx.lineWidth = 20;
+    ctx.lineWidth = 15;
     ctx.fillStyle = "#4D4D4D";
     ctx.fillRect(1200, -3500, 5550, 3500);
     ctx.fillStyle = "#404040";
@@ -1434,7 +1434,7 @@ export let HOUSE_1 = new TextureData(-1190, 3510, 0.2, "building", {
     ctx.strokeRect(1200, -3500, 5550, 3500);
 
     // top right section 
-    ctx.lineWidth = 20;
+    ctx.lineWidth = 15;
     ctx.fillStyle = "#C7C7C7";
     ctx.fillRect(5000, -700, 3500, 2500);
     ctx.fillStyle = "#E0E0E0";
@@ -1448,7 +1448,7 @@ export let HOUSE_1 = new TextureData(-1190, 3510, 0.2, "building", {
     ctx.fillRect(5300, -400, 2900, 500);
     ctx.strokeRect(5300, -400, 2900, 500);
 
-    ctx.lineWidth = 10;
+    ctx.lineWidth = 5;
     ctx.strokeRect(5300, 100, 290, 1400);
     ctx.strokeRect(5300, 100, 580, 1400);
     ctx.strokeRect(5300, 100, 870, 1400);
@@ -1460,21 +1460,21 @@ export let HOUSE_1 = new TextureData(-1190, 3510, 0.2, "building", {
     ctx.strokeRect(5300, 100, 2610, 1400);
 
     // top bar 
-    ctx.lineWidth = 20;
+    ctx.lineWidth = 15;
     ctx.fillStyle = "#636363";
     ctx.fillRect(1250, 1350, 3750, 250);
     ctx.fillStyle = "#424242";
     ctx.fillRect(1250, 1350, 3750, 50);
     ctx.strokeRect(1250, 1350, 3750, 250);
 
-    ctx.lineWidth = 20;
+    ctx.lineWidth = 15;
     ctx.fillStyle = "#636363";
     ctx.fillRect(5000, 1800, 3550, 250);
     ctx.fillStyle = "#424242";
     ctx.fillRect(5000, 1800, 3550, 50);
     ctx.strokeRect(5000, 1800, 3550, 250);
 
-    ctx.lineWidth = 20;
+    ctx.lineWidth = 15;
     ctx.fillStyle = "#636363";
     ctx.fillRect(4950, 1350, 50, 700);
     ctx.fillStyle = "#424242";
@@ -1498,7 +1498,7 @@ export let HOUSE_1 = new TextureData(-1190, 3510, 0.2, "building", {
     ctx.strokeRect(6225, -400, 50, 100);
 
     // - rail
-    ctx.lineWidth = 20;
+    ctx.lineWidth = 15;
     ctx.fillStyle = "#757575";
     ctx.fillRect(5300, 1000, 2900, 100);
     ctx.fillStyle = "#616161";
@@ -1860,6 +1860,408 @@ export let CAFE = new TextureData(-18, -18, 0.2, "building", {
 
     ctx.restore();
 });
+// -90, 2500
+export let CONVENIENCE_STORE = new TextureData(-90, 2500, 0.2, "building", {
+    width: 6220,
+    height: 4610
+}, [
+   [200,200,6000,1800],[100,-2490,6200,2700]
+], 0, undefined, function(ctx, n) {
+    // body: 3200x2280, texture: 1024,512, size: 0.18, boxes: [[500, 1700, 3200, 1500],[600, 3200, 3000, 700],[2750, 3900, 600, 250]]
+
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.scale(this.size || 0, this.size || 0);
+    ctx.lineWidth = 15;
+    ctx.strokeStyle = "black";
+
+    ctx.fillStyle = "#BCBCBC";
+    ctx.fillRect(200,200,6000,1800);
+    ctx.strokeRect(200,200,6000,1800);
+
+    // bottom curb
+    ctx.fillStyle = "#DCDCDC";
+    ctx.fillRect(150,1950,2050,150);
+    ctx.fillStyle = "#EFEFEF";
+    ctx.fillRect(150,1950,2050,80);
+    ctx.strokeRect(150,1950,2050,150);
+
+    ctx.fillStyle = "#DCDCDC";
+    ctx.fillRect(150,400,50,1500);
+    ctx.strokeRect(150,400,50,1500);
+
+    ctx.fillStyle = "#DCDCDC";
+    ctx.fillRect(4200,1950,2050,150);
+    ctx.fillStyle = "#EFEFEF";
+    ctx.fillRect(4200,1950,2050,80);
+    ctx.strokeRect(4200,1950,2050,150);
+
+    ctx.fillStyle = "#DCDCDC";
+    ctx.fillRect(6200,400,50,1500);
+    ctx.strokeRect(6200,400,50,1500);
+
+    // door
+
+    ctx.fillStyle = "#565656";
+    ctx.fillRect(3050,650,300,70);
+    ctx.fillStyle = "#777777";
+    ctx.fillRect(3100,690,200,20);
+    ctx.lineWidth = 5;
+    ctx.strokeRect(3100,690,200,20);
+    ctx.lineWidth = 15;
+    ctx.strokeRect(3050,650,300,70);
+ 
+    ctx.fillStyle = "#DDDDDD";
+    ctx.fillRect(2200,800,2000,1200);
+    ctx.strokeRect(2200,800,2000,1200);
+
+    // door content 
+/*
+    ctx.strokeStyle = "#676767";
+    ctx.fillStyle = "#BDBDBD";
+    ctx.lineWidth = 15;
+    ctx.fillRect(2500,800,1400,200);
+    ctx.strokeRect(2500,800,1400,200);
+*/
+
+    // remining door frame
+    ctx.lineWidth = 15;
+    ctx.strokeStyle = "black";
+    ctx.fillStyle = "#777777";
+
+    ctx.fillRect(2200,800,2000,50);
+    ctx.fillRect(2200,2000,2000,30);
+
+    ctx.strokeRect(2200,800,2000,50);
+    ctx.strokeRect(2200,2000,2000,30);
+    
+    ctx.fillRect(4150,850,50,1200);
+    ctx.strokeRect(4150,850,50,1200);
+    ctx.fillRect(2200,850,50,1200);
+    ctx.strokeRect(2200,850,50,1200);
+    ctx.fillRect(3180,850,40,1200);
+    ctx.strokeRect(3180,850,40,1200);
+
+    ctx.fillRect(3000,1400,110,250);
+    ctx.fillRect(3290,1400,110,250);
+    ctx.fillStyle = "#555555";
+    ctx.fillRect(3000,1400,110,50);
+    ctx.fillRect(3290,1400,110,50);
+    ctx.strokeRect(3000,1400,110,250);
+    ctx.strokeRect(3290,1400,110,250);
+
+    // door posters
+/*
+    ctx.lineWidth = 15;
+    ctx.fillStyle = "#BBBBBB";
+    ctx.fillRect(2400,1000,630,200);
+    ctx.fillStyle = "#9A9A9A";
+    ctx.fillRect(2400,1000,630,30);
+    ctx.font = "100px Arial";
+    ctx.strokeStyle = "#444444";
+    ctx.strokeText("打開 - 𝟮𝟰/𝟳",2470,1140); 
+    ctx.strokeStyle = "#1A1A1A";
+    ctx.strokeRect(2400,1000,630,200);
+
+    ctx.fillStyle = "#EAEAEA";
+    ctx.fillRect(3500,950,550,800);
+    ctx.fillStyle = "#BDBDBD";
+    ctx.fillRect(3500,950,550,30);
+    ctx.fillStyle = "#898989";
+    ctx.fillRect(3500,1050,550,80);
+    ctx.fillRect(3500,1600,550,80);
+    ctx.textAlign = "center";
+    ctx.font = "400px Arial";
+    ctx.strokeText("➋",3775,1450); 
+    ctx.font = "90px Arial";
+    ctx.strokeText("𝘍𝘖𝘙 𝘖𝘕𝘌",3775,1550); 
+    ctx.strokeRect(3500,950,550,800);
+*/
+
+    // window 
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 15;
+    ctx.fillStyle = "#777777";
+    ctx.fillRect(400,500,1600,1300);
+    ctx.fillStyle = "#565656";
+    ctx.fillRect(400,500,1600,50);
+ 
+    ctx.fillRect(450,600,1500,1150);
+    ctx.strokeRect(400,500,1600,1300);
+    ctx.strokeRect(450,600,1500,1150);
+
+    ctx.fillStyle = "#DDDDDD";
+    ctx.fillRect(450,600,1500,1100);
+
+    // window content 
+    ctx.strokeStyle = "#676767";
+    ctx.fillStyle = "#BDBDBD";
+    ctx.fillRect(450,750,1500,950);
+    ctx.fillStyle = "#AAAAAA";
+    ctx.fillRect(450,750,1500,50);
+    ctx.fillRect(450,1100,1500,200);
+    ctx.fillRect(450,1600,1500,100);
+    ctx.strokeRect(450,750,1500,950);
+    ctx.strokeRect(450,1300,1500,50);
+
+    // - cereal boxes 
+    function cerealBox(x, y, width = 0) {
+     ctx.translate(x,y);
+     ctx.fillStyle = "#ABABAB";
+     ctx.fillRect(450,950,200 + width,300);
+     ctx.fillStyle = "#9A9A9A";
+     ctx.fillRect(450,950,200 + width,100);
+     ctx.fillStyle = "#DCDCDC";
+     ctx.fillRect(450,1100,200 + width,50);
+     ctx.strokeRect(450,950,200 + width,300);
+     ctx.strokeRect(450,950,200 + width,50);
+     ctx.translate(-x,-y);
+    }
+
+    cerealBox(0,0);
+    cerealBox(300,0,50);
+    cerealBox(650,0,50);
+    cerealBox(1000,0,50);
+    cerealBox(1350,0,-50);
+
+    // soda bottles
+
+    function sodaBottle(x=0,y=0) {
+     ctx.translate(x,y);
+     ctx.fillStyle = "#777777";
+     ctx.fillRect(1345,1450,60,30);
+     ctx.strokeRect(1345,1450,60,30);
+
+      
+     ctx.fillStyle = "#999999";
+     ctx.beginPath();
+     ctx.moveTo(1300,1700);
+     ctx.lineTo(1300,1550);
+     ctx.lineTo(1350,1500);
+     ctx.lineTo(1350,1480);
+     ctx.lineTo(1400,1480);
+     ctx.lineTo(1400,1500);
+     ctx.lineTo(1450,1550);
+     ctx.lineTo(1450,1700);
+     ctx.fill();
+     ctx.fillStyle = "#777777";
+     ctx.fillRect(1300,1550,150,100);
+     ctx.stroke();
+     ctx.translate(-x,-y);
+    }
+  
+    sodaBottle(-800,0); 
+    sodaBottle(-550,0); 
+    sodaBottle(-300,0); 
+    sodaBottle(-50,0); 
+    sodaBottle(200,0); 
+    sodaBottle(450,0); 
+ 
+    // remaining window frame
+    ctx.strokeStyle = "black";
+    ctx.strokeRect(450,600,1500,1100);
+ 
+    ctx.fillStyle = "#777777";
+    ctx.fillRect(450,850,1500,40);
+    ctx.strokeRect(450,850,1500,40);
+    ctx.fillRect(1180,600,40,1115);
+    ctx.strokeRect(1180,600,40,1115);
+
+    // other window 
+    ctx.lineWidth = 15;
+    ctx.fillStyle = "#777777";
+    ctx.fillRect(4400,500,1600,500);
+    ctx.fillStyle = "#565656";
+    ctx.fillRect(4400,500,1600,50);
+    ctx.fillRect(4450,600,1500,350);
+    ctx.strokeRect(4400,500,1600,500);
+    ctx.strokeRect(4450,600,1500,350);
+
+    ctx.fillStyle = "#DDDDDD";
+    ctx.fillRect(4450,600,1500,300);
+    ctx.strokeRect(4450,600,1500,300);
+
+    ctx.fillStyle = "#777777";
+    ctx.fillRect(5180,600,40,315);
+    ctx.strokeRect(5180,600,40,315);
+
+    // roof
+    
+    ctx.beginPath();
+    ctx.lineWidth = 15;
+    ctx.fillStyle = "#454545";
+    ctx.fillRect(100,-2495,6200,2700);
+
+    ctx.fillRect(100,-2495,6200,2700);
+    
+    ctx.fillStyle = "#555555";
+    ctx.fillRect(400,-2495,5600,2200);
+    ctx.fillStyle = "#333333";
+    ctx.moveTo(100,-100);
+    ctx.lineTo(400,-400);
+    ctx.lineTo(6000,-400);
+    ctx.lineTo(6300,-100);
+    ctx.fill();
+
+    ctx.fillStyle = "#2C2C2C";
+    ctx.fillRect(100,-100,6200,310);
+    ctx.strokeRect(100,-2490,6200,2700);
+
+    // main sign 
+    ctx.fillStyle = "#CCCCCC";
+    ctx.fillRect(1200,-450,4000,700);
+    ctx.fillStyle = "#AAAAAA";
+    ctx.fillRect(1200,-450,4000,100);
+    ctx.strokeRect(1200,-450,4000,700);
+    ctx.font = "300px Arial";
+    ctx.textAlign = "center";
+    ctx.fillStyle = "#666666";
+    ctx.fillText("便利◌商店",3200,20);
+    ctx.strokeText("便利◌商店",3200,20);
+    ctx.font = "100px Arial";
+    ctx.strokeText("B i à n l ì  C o n v e n i e n c e",3200,200);
+    ctx.textAlign = "left";
+
+    // atm
+
+    function wallATM(x,y) {
+    ctx.translate(x,y);
+    ctx.beginPath();
+    ctx.lineWidth = 15;
+
+    ctx.strokeStyle = "black";
+    ctx.fillStyle = "white";
+
+    ctx.fillStyle = "#787878";
+    ctx.fillRect(0, 0, 550, 700);
+    ctx.fillStyle = "#666666";
+    ctx.fillRect(0, 0, 550, 80);
+    ctx.fillStyle = "#666666";
+    ctx.fillRect(0, 350, 550, 200);
+    ctx.strokeRect(0, 0, 550, 700);
+
+    ctx.lineWidth = 10; 
+    ctx.fillStyle = "#666666";
+    ctx.fillRect(75, 200, 400, 150);
+    ctx.fillStyle = "#555555";
+    ctx.fillRect(75, 370, 400, 120);
+    ctx.strokeRect(75, 200, 400, 280);
+
+    ctx.lineWidth = 5;
+    ctx.moveTo(0,360);
+    ctx.lineTo(80,360);
+    ctx.moveTo(480,360);
+    ctx.lineTo(560,360);
+    ctx.stroke();
+  
+    ctx.font = "70px Arial";
+    ctx.strokeText("ATM",200,170);
+    ctx.fillStyle = "#787878";
+    ctx.fillRect(25, 80, 500, 35);
+    
+    ctx.lineWidth = 10; 
+    ctx.fillStyle = "#EFEFEF";
+    ctx.fillRect(125, 250, 210, 90);
+    ctx.strokeRect(125, 250, 210, 90);
+
+    ctx.fillStyle = "#919191";
+    ctx.fillRect(375, 250, 50, 30);
+    ctx.fillRect(375, 310, 50, 30);
+    ctx.strokeRect(375, 250, 50, 30);
+    ctx.strokeRect(375, 310, 50, 30);
+
+    ctx.translate(0,20);
+    ctx.fillRect(170, 380, 210, 40);
+    ctx.strokeRect(170, 380, 210, 40);
+    ctx.lineWidth = 10;
+    ctx.strokeRect(170, 380, 210, 20);
+    ctx.strokeRect(170, 380, 42, 40);
+    ctx.strokeRect(170, 380, 84, 20);
+    ctx.strokeRect(170, 380, 126, 20);
+    ctx.strokeRect(170, 380, 168, 40);
+
+    ctx.lineWidth = 10;
+    ctx.strokeRect(175, 600, 200, 20);
+    ctx.translate(-x,-y);
+    }
+
+    wallATM(4530,1150);
+    wallATM(5320,1130);
+
+    ctx.restore();
+},[],0,0,-90,2500);
+
+export let ATM = new TextureData(10, 10, 0.2, "avatar", {
+    width: 1400,
+    height: 910
+}, [
+    [0, 0, 1400, 800],
+   // [40, 800, 100, 110, 0],
+  //  [1260, 800, 100, 110, 0]
+], 20, undefined, function(ctx) {
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.scale(this.size, this.size);
+
+    ctx.beginPath();
+    ctx.lineWidth = 20;
+
+    ctx.strokeStyle = "#1A1A1A";
+    ctx.fillStyle = "white";
+
+    ctx.fillStyle = "#787878";
+    ctx.fillRect(0, 0, 550, 1000);
+    ctx.fillStyle = "#666666";
+    ctx.fillRect(0, 0, 550, 80);
+    ctx.fillStyle = "#666666";
+    ctx.fillRect(0, 350, 550, 200);
+    ctx.strokeRect(0, 0, 550, 1000);
+
+    ctx.lineWidth = 15; 
+    ctx.fillStyle = "#666666";
+    ctx.fillRect(75, 200, 400, 150);
+    ctx.fillStyle = "#555555";
+    ctx.fillRect(75, 370, 400, 120);
+    ctx.strokeRect(75, 200, 400, 280);
+
+    ctx.lineWidth = 10;
+    ctx.moveTo(0,360);
+    ctx.lineTo(80,360);
+    ctx.moveTo(480,360);
+    ctx.lineTo(560,360);
+    ctx.stroke();
+  
+    ctx.font = "70px Arial";
+    ctx.strokeText("ATM",200,170);
+    ctx.fillStyle = "#787878";
+    ctx.fillRect(25, 80, 500, 35);
+    
+    ctx.lineWidth = 15; 
+    ctx.fillStyle = "#EFEFEF";
+    ctx.fillRect(125, 250, 210, 90);
+    ctx.strokeRect(125, 250, 210, 90);
+
+    ctx.fillStyle = "#919191";
+    ctx.fillRect(375, 250, 50, 30);
+    ctx.fillRect(375, 310, 50, 30);
+    ctx.strokeRect(375, 250, 50, 30);
+    ctx.strokeRect(375, 310, 50, 30);
+
+    ctx.translate(0,20);
+    ctx.fillRect(170, 380, 210, 40);
+    ctx.strokeRect(170, 380, 210, 40);
+    ctx.lineWidth = 10;
+    ctx.strokeRect(170, 380, 210, 20);
+    ctx.strokeRect(170, 380, 42, 40);
+    ctx.strokeRect(170, 380, 84, 20);
+    ctx.strokeRect(170, 380, 126, 20);
+    ctx.strokeRect(170, 380, 168, 40);
+
+    ctx.lineWidth = 15;
+    ctx.strokeRect(175, 600, 200, 20);
+
+    ctx.restore();
+},[],0,0,0,0);
 
 // @FIREARMS
 
@@ -3219,7 +3621,7 @@ export let MAIN_AVATAR_DEFAULT = new TextureData(0, 0, 0.2, "avatar", {
    // ctx.strokeRect(221, 50, 270, 95);
 
     ctx.restore();
-}, [0], 0, 0, -5, 851);
+}, [0], 0, 0, 2500, 1951);
 
 export let MAIN_AVATAR_LEFT_PUNCH_1 = new TextureData(0, 0, 1, "avatar", {
     width: 702,
@@ -4168,6 +4570,492 @@ export let TABLE = new TextureData(10, 10, 0.2, "avatar", {
     ctx.strokeRect(1260, 800, 100, 110);
     ctx.restore();
 });
+
+export let MIXED_BUSH = new TextureData(0, 0, 0.2, "avatar", {
+    width: 850,
+    height: 880
+}, [
+    [0, 0, 850, 880],
+   // [40, 800, 100, 110, 0],
+  //  [1260, 800, 100, 110, 0]
+], 20, undefined, function(ctx) {
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.scale(this.size, this.size);
+
+    ctx.beginPath();
+    ctx.lineWidth = 20;
+
+    ctx.strokeStyle = "#1A1A1A";
+    ctx.fillStyle = "white";
+    
+    function leaf(x,y) {
+
+    let r = random(360,true);
+
+    ctx.fillStyle = (Math.random() < 0.5) ? "#E5E5E5":"#ABABAB";
+    ctx.scale(0.4,0.4);
+    ctx.translate(x,y);
+
+    ctx.translate(140,-25);
+    ctx.rotate(r);
+    ctx.translate(-140,25);
+    
+    ctx.lineWidth = 25;
+
+    ctx.beginPath();
+    ctx.moveTo(70,90);
+    ctx.lineTo(90,-60);
+    ctx.lineTo(130,-100);
+    ctx.lineTo(200,-120);
+    ctx.lineTo(220,-50);
+    ctx.lineTo(200,10);
+    ctx.lineTo(65,90);
+    ctx.fill();
+    ctx.stroke();    
+   
+    ctx.lineWidth = 10;
+    ctx.moveTo(200,-120);
+    ctx.lineTo(140,-25);
+    ctx.stroke();
+    
+    ctx.translate(140,-25);
+    ctx.rotate(-r);
+    ctx.translate(-140,25);
+
+    ctx.translate(-x,-y);
+    ctx.scale(2.5,2.5);
+    }
+
+    function darkleaf(x,y) {
+
+    let r = random(360,true);
+
+    ctx.fillStyle = (Math.random() < 0.5) ? "#BBBBBB":"#787878";
+    ctx.scale(0.4,0.4);
+    ctx.translate(x,y);
+
+    ctx.translate(140,-25);
+    ctx.rotate(r);
+    ctx.translate(-140,25);
+    
+    ctx.lineWidth = 25;
+
+    ctx.beginPath();
+    ctx.moveTo(70,90);
+    ctx.lineTo(90,-60);
+    ctx.lineTo(130,-100);
+    ctx.lineTo(200,-120);
+    ctx.lineTo(220,-50);
+    ctx.lineTo(200,10);
+    ctx.lineTo(65,90);
+    ctx.fill();
+    ctx.stroke();    
+   
+    ctx.lineWidth = 10;
+    ctx.moveTo(200,-120);
+    ctx.lineTo(140,-25);
+    ctx.stroke();
+    
+    ctx.translate(140,-25);
+    ctx.rotate(-r);
+    ctx.translate(-140,25);
+
+    ctx.translate(-x,-y);
+    ctx.scale(2.5,2.5);
+    }
+
+    function lightleafRow(y) {
+    ctx.translate(0,y);
+    leaf(0,0);
+    leaf(100,0);
+    leaf(200,0);
+    leaf(300,0);
+    leaf(400,0);
+    leaf(500,0);
+    leaf(600,0);
+    leaf(700,0);
+    leaf(800,0);
+    leaf(900,0);
+    leaf(1000,0);
+    leaf(1100,0);
+    leaf(1200,0);
+    leaf(1300,0);
+    leaf(1400,0);
+    leaf(1500,0);
+    leaf(1600,0);
+    leaf(1700,0);
+    leaf(1800,0);
+    ctx.translate(0,-y);
+    }
+
+    function darkleafRow(y) {
+    ctx.translate(0,y);
+    darkleaf(0,0);
+    darkleaf(100,0);
+    darkleaf(200,0);
+    darkleaf(300,0);
+    darkleaf(400,0);
+    darkleaf(500,0);
+    darkleaf(600,0);
+    darkleaf(700,0);
+    darkleaf(800,0);
+    darkleaf(900,0);
+    darkleaf(1000,0);
+    darkleaf(1100,0);
+    darkleaf(1200,0);
+    darkleaf(1300,0);
+    darkleaf(1400,0);
+    darkleaf(1500,0);
+    darkleaf(1600,0);
+    darkleaf(1700,0);
+    darkleaf(1800,0);
+    ctx.translate(0,-y);
+    }
+
+    lightleafRow(0);
+    lightleafRow(50);
+    lightleafRow(100);
+    lightleafRow(150);
+    lightleafRow(200);
+    lightleafRow(250);
+    lightleafRow(300);
+    lightleafRow(350);
+    lightleafRow(400);
+    lightleafRow(450);
+    darkleafRow(500);
+    darkleafRow(550);
+    darkleafRow(600);
+    darkleafRow(650);
+    darkleafRow(700);
+    darkleafRow(750);
+ 
+    ctx.restore();
+},[],0,0,10,80);
+
+export let LIGHT_BUSH = new TextureData(0, 0, 0.2, "avatar", {
+    width: 850,
+    height: 880
+}, [
+    [0, 0, 850, 880],
+   // [40, 800, 100, 110, 0],
+  //  [1260, 800, 100, 110, 0]
+], 20, undefined, function(ctx) {
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.scale(this.size, this.size);
+
+    ctx.beginPath();
+    ctx.lineWidth = 20;
+
+    ctx.strokeStyle = "#1A1A1A";
+    ctx.fillStyle = "white";
+    
+    function leaf(x,y) {
+
+    let r = random(360,true);
+
+    ctx.fillStyle = "#E5E5E5";
+    ctx.scale(0.4,0.4);
+    ctx.translate(x,y);
+
+    ctx.translate(140,-25);
+    ctx.rotate(r);
+    ctx.translate(-140,25);
+    
+    ctx.lineWidth = 25;
+
+    ctx.beginPath();
+    ctx.moveTo(70,90);
+    ctx.lineTo(90,-60);
+    ctx.lineTo(130,-100);
+    ctx.lineTo(200,-120);
+    ctx.lineTo(220,-50);
+    ctx.lineTo(200,10);
+    ctx.lineTo(65,90);
+    ctx.fill();
+    ctx.stroke();    
+   
+    ctx.lineWidth = 10;
+    ctx.moveTo(200,-120);
+    ctx.lineTo(140,-25);
+    ctx.stroke();
+    
+    ctx.translate(140,-25);
+    ctx.rotate(-r);
+    ctx.translate(-140,25);
+
+    ctx.translate(-x,-y);
+    ctx.scale(2.5,2.5);
+    }
+
+    function darkleaf(x,y) {
+
+    let r = random(360,true);
+
+    ctx.fillStyle = "#BBBBBB";
+    ctx.scale(0.4,0.4);
+    ctx.translate(x,y);
+
+    ctx.translate(140,-25);
+    ctx.rotate(r);
+    ctx.translate(-140,25);
+    
+    ctx.lineWidth = 25;
+
+    ctx.beginPath();
+    ctx.moveTo(70,90);
+    ctx.lineTo(90,-60);
+    ctx.lineTo(130,-100);
+    ctx.lineTo(200,-120);
+    ctx.lineTo(220,-50);
+    ctx.lineTo(200,10);
+    ctx.lineTo(65,90);
+    ctx.fill();
+    ctx.stroke();    
+   
+    ctx.lineWidth = 10;
+    ctx.moveTo(200,-120);
+    ctx.lineTo(140,-25);
+    ctx.stroke();
+    
+    ctx.translate(140,-25);
+    ctx.rotate(-r);
+    ctx.translate(-140,25);
+
+    ctx.translate(-x,-y);
+    ctx.scale(2.5,2.5);
+    }
+
+    function lightleafRow(y) {
+    ctx.translate(0,y);
+    leaf(0,0);
+    leaf(100,0);
+    leaf(200,0);
+    leaf(300,0);
+    leaf(400,0);
+    leaf(500,0);
+    leaf(600,0);
+    leaf(700,0);
+    leaf(800,0);
+    leaf(900,0);
+    leaf(1000,0);
+    leaf(1100,0);
+    leaf(1200,0);
+    leaf(1300,0);
+    leaf(1400,0);
+    leaf(1500,0);
+    leaf(1600,0);
+    leaf(1700,0);
+    leaf(1800,0);
+    ctx.translate(0,-y);
+    }
+
+    function darkleafRow(y) {
+    ctx.translate(0,y);
+    darkleaf(0,0);
+    darkleaf(100,0);
+    darkleaf(200,0);
+    darkleaf(300,0);
+    darkleaf(400,0);
+    darkleaf(500,0);
+    darkleaf(600,0);
+    darkleaf(700,0);
+    darkleaf(800,0);
+    darkleaf(900,0);
+    darkleaf(1000,0);
+    darkleaf(1100,0);
+    darkleaf(1200,0);
+    darkleaf(1300,0);
+    darkleaf(1400,0);
+    darkleaf(1500,0);
+    darkleaf(1600,0);
+    darkleaf(1700,0);
+    darkleaf(1800,0);
+    ctx.translate(0,-y);
+    }
+
+    lightleafRow(0);
+    lightleafRow(50);
+    lightleafRow(100);
+    lightleafRow(150);
+    lightleafRow(200);
+    lightleafRow(250);
+    lightleafRow(300);
+    lightleafRow(350);
+    lightleafRow(400);
+    lightleafRow(450);
+    darkleafRow(500);
+    darkleafRow(550);
+    darkleafRow(600);
+    darkleafRow(650);
+    darkleafRow(700);
+    darkleafRow(750);
+ 
+    ctx.restore();
+},[],0,0,10,80);
+
+export let BUSH = new TextureData(0, 0, 0.2, "avatar", {
+    width: 850,
+    height: 880
+}, [
+    [0, 0, 850, 880],
+   // [40, 800, 100, 110, 0],
+  //  [1260, 800, 100, 110, 0]
+], 20, undefined, function(ctx) {
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.scale(this.size, this.size);
+
+    ctx.beginPath();
+    ctx.lineWidth = 20;
+
+    ctx.strokeStyle = "#1A1A1A";
+    ctx.fillStyle = "white";
+    
+    function leaf(x,y) {
+
+    let r = random(360,true);
+
+    ctx.fillStyle = "#ABABAB";
+    ctx.scale(0.4,0.4);
+    ctx.translate(x,y);
+
+    ctx.translate(140,-25);
+    ctx.rotate(r);
+    ctx.translate(-140,25);
+    
+    ctx.lineWidth = 25;
+
+    ctx.beginPath();
+    ctx.moveTo(70,90);
+    ctx.lineTo(90,-60);
+    ctx.lineTo(130,-100);
+    ctx.lineTo(200,-120);
+    ctx.lineTo(220,-50);
+    ctx.lineTo(200,10);
+    ctx.lineTo(65,90);
+    ctx.fill();
+    ctx.stroke();    
+   
+    ctx.lineWidth = 10;
+    ctx.moveTo(200,-120);
+    ctx.lineTo(140,-25);
+    ctx.stroke();
+    
+    ctx.translate(140,-25);
+    ctx.rotate(-r);
+    ctx.translate(-140,25);
+
+    ctx.translate(-x,-y);
+    ctx.scale(2.5,2.5);
+    }
+
+    function darkleaf(x,y) {
+
+    let r = random(360,true);
+
+    ctx.fillStyle = "#787878";
+    ctx.scale(0.4,0.4);
+    ctx.translate(x,y);
+
+    ctx.translate(140,-25);
+    ctx.rotate(r);
+    ctx.translate(-140,25);
+    
+    ctx.lineWidth = 25;
+
+    ctx.beginPath();
+    ctx.moveTo(70,90);
+    ctx.lineTo(90,-60);
+    ctx.lineTo(130,-100);
+    ctx.lineTo(200,-120);
+    ctx.lineTo(220,-50);
+    ctx.lineTo(200,10);
+    ctx.lineTo(65,90);
+    ctx.fill();
+    ctx.stroke();    
+   
+    ctx.lineWidth = 10;
+    ctx.moveTo(200,-120);
+    ctx.lineTo(140,-25);
+    ctx.stroke();
+    
+    ctx.translate(140,-25);
+    ctx.rotate(-r);
+    ctx.translate(-140,25);
+
+    ctx.translate(-x,-y);
+    ctx.scale(2.5,2.5);
+    }
+
+    function lightleafRow(y) {
+    ctx.translate(0,y);
+    leaf(0,0);
+    leaf(100,0);
+    leaf(200,0);
+    leaf(300,0);
+    leaf(400,0);
+    leaf(500,0);
+    leaf(600,0);
+    leaf(700,0);
+    leaf(800,0);
+    leaf(900,0);
+    leaf(1000,0);
+    leaf(1100,0);
+    leaf(1200,0);
+    leaf(1300,0);
+    leaf(1400,0);
+    leaf(1500,0);
+    leaf(1600,0);
+    leaf(1700,0);
+    leaf(1800,0);
+    ctx.translate(0,-y);
+    }
+
+    function darkleafRow(y) {
+    ctx.translate(0,y);
+    darkleaf(0,0);
+    darkleaf(100,0);
+    darkleaf(200,0);
+    darkleaf(300,0);
+    darkleaf(400,0);
+    darkleaf(500,0);
+    darkleaf(600,0);
+    darkleaf(700,0);
+    darkleaf(800,0);
+    darkleaf(900,0);
+    darkleaf(1000,0);
+    darkleaf(1100,0);
+    darkleaf(1200,0);
+    darkleaf(1300,0);
+    darkleaf(1400,0);
+    darkleaf(1500,0);
+    darkleaf(1600,0);
+    darkleaf(1700,0);
+    darkleaf(1800,0);
+    ctx.translate(0,-y);
+    }
+
+    lightleafRow(0);
+    lightleafRow(50);
+    lightleafRow(100);
+    lightleafRow(150);
+    lightleafRow(200);
+    lightleafRow(250);
+    lightleafRow(300);
+    lightleafRow(350);
+    lightleafRow(400);
+    lightleafRow(450);
+    darkleafRow(500);
+    darkleafRow(550);
+    darkleafRow(600);
+    darkleafRow(650);
+    darkleafRow(700);
+    darkleafRow(750);
+ 
+    ctx.restore();
+},[],0,0,900,80);
 
 export let TREE = new TextureData(10, 10, 0.2, "avatar", {
     width: 1400,

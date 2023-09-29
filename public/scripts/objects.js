@@ -1618,6 +1618,62 @@ export class Table extends _StaticClusterClient_ {
     }
 }
 
+export class Bush extends _StaticClusterClient_ {
+
+    static _defaultVertices = [-8.899999999999999,9.2,1,-0.0078125,-0.0078125,8.5,9.2,1,0.671875,-0.0078125,-8.899999999999999,-8.8,1,-0.0078125,0.6953125,8.5,9.2,1,0.671875,-0.0078125,-8.899999999999999,-8.8,1,-0.0078125,0.6953125,8.5,-8.8,1,0.671875,0.6953125];
+
+    width = 17.4;
+    height = 18;
+    name = "bush";
+    clusterName = "bush";
+    texture = textures.objects.bush;
+    obstacle = true;
+    segments = [
+        [-6.5, -6.5, 13, 13]
+    ];
+
+    constructor(initialX, initialY, initialRotation) {
+        super(initialX, initialY, initialRotation);
+    }
+}
+
+export class MixedBush extends _StaticClusterClient_ {
+
+    static _defaultVertices = [-8.899999999999999,9.2,1,-0.0078125,-0.0078125,8.5,9.2,1,0.671875,-0.0078125,-8.899999999999999,-8.8,1,-0.0078125,0.6953125,8.5,9.2,1,0.671875,-0.0078125,-8.899999999999999,-8.8,1,-0.0078125,0.6953125,8.5,-8.8,1,0.671875,0.6953125];
+
+    width = 17.4;
+    height = 18;
+    name = "mixed bush";
+    clusterName = "mixed bush";
+    texture = textures.objects.mixedbush;
+    obstacle = true;
+    segments = [
+        [-6.5, -6.5, 13, 13]
+    ];
+
+    constructor(initialX, initialY, initialRotation) {
+        super(initialX, initialY, initialRotation);
+    }
+}
+
+export class LightBush extends _StaticClusterClient_ {
+
+    static _defaultVertices = [-8.899999999999999,9.2,1,-0.0078125,-0.0078125,8.5,9.2,1,0.671875,-0.0078125,-8.899999999999999,-8.8,1,-0.0078125,0.6953125,8.5,9.2,1,0.671875,-0.0078125,-8.899999999999999,-8.8,1,-0.0078125,0.6953125,8.5,-8.8,1,0.671875,0.6953125];
+
+    width = 17.4;
+    height = 18;
+    name = "light bush";
+    clusterName = "light bush";
+    texture = textures.objects.lightbush;
+    obstacle = true;
+    segments = [
+        [-6.5, -6.5, 13, 13]
+    ];
+
+    constructor(initialX, initialY, initialRotation) {
+        super(initialX, initialY, initialRotation);
+    }
+}
 /* Buildings */
 
 export class _Building_ extends _StaticClusterClient_ {
@@ -1704,27 +1760,42 @@ export class _Building_ extends _StaticClusterClient_ {
     }
 }
 
+export class ConvenienceStore extends _Building_ {
+
+    static _defaultVertices = [-62.2,46.1,1,0,0,62.2,46.1,1,0.607421875,0,-62.2,-46.1,1,0,0.900390625,62.2,46.1,1,0.607421875,0,-62.2,-46.1,1,0,0.900390625,62.2,-46.1,1,0.607421875,0.900390625];
+
+    width = 124.4;
+    height = 92.2;
+    name = "convenience store";
+    clusterName = "convenience store";
+    texture = textures.objects.conveniencestore;
+    obstacle = true;
+    segments = [
+      [-60,-43.9,120,36],[-62,-8.1,124,54]
+    ];
+
+    constructor(initialX, initialY, initialRotation) {
+        super(initialX, initialY, initialRotation, [
+            [-26.1, -33, 0, [0, 44.38]],
+            [23, 25, 0, [-50, 44.38]],
+            [23, -57, 1],
+            [-30, -65, 0]
+        ], [new _Map_(150, 100, false, "House 1").init(undefined,undefined,[-26,-41],true), new _Map_(150, 80, false, "House 1").init(), new _Map_(150, 80, false, "House 1").init()], undefined);
+    }
+}
+
 export class House1 extends _Building_ {
 
-    static _defaultVertices = [-73.7, 93.2, 1, 0, 0, 73.7, 93.2, 1, 0.7197265625, 0, -73.7, -93.2, 1, 0, 0.91015625, 73.7, 93.2, 1, 0.7197265625, 0, -73.7, -93.2, 1, 0, 0.91015625, 73.7, -93.2, 1, 0.7197265625, 0.91015625];
+    static _defaultVertices = [-73.7,72.2,1,0,0,73.7,72.2,1,0.7197265625,0,-73.7,-72.2,1,0,0.705078125,73.7,72.2,1,0.7197265625,0,-73.7,-72.2,1,0,0.705078125,73.7,-72.2,1,0.7197265625,0.705078125];
 
     width = 147.4;
-    height = 186.4;
+    height = 144.4;
     name = "house 1";
     clusterName = "house 1";
     texture = textures.objects.house1;
     obstacle = true;
     segments = [
-        [12.5, -49, 50, 24],
-        [-71.5, -41, 34, 34],
-        [-73.5, 23, 111, 70],
-        [2.5, -27, 70, 30],
-        [2.5, -51, 10, 30],
-        [62.5, -51, 10, 30],
-        [2.5, 21, 70, 64],
-        [2.5, 1, 6, 64],
-        [66.5, 1, 6, 64],
-        [-71.5, -35, 78, 120]
+        [12.5,-70,50,24],[-71.5,-62,34,34],[-73.5,2,111,70],[2.5,-48,70,30],[2.5,-72,10,30],[62.5,-72,10,30],[2.5,0,70,64],[2.5,-20,6,64],[66.5,-20,6,64],[-71.5,-56,78,120]
     ];
 
     constructor(initialX, initialY, initialRotation) {
@@ -1868,7 +1939,7 @@ export class GLOCK_20 extends _Gun_ {
         damage: 20,
         accuracy: 5,
         nozzelLength: 13,
-        capacity: 30,
+        capacity: 18,
         reloadTime: 3,
         useTextures: [4, 5]
     }
@@ -1895,8 +1966,8 @@ export class GP_K100 extends _Gun_ {
         damage: 7,
         accuracy: 2,
         nozzelLength: 21,
-        capacity: 1000,
-        reloadTime: 3,
+        capacity: 15,
+        reloadTime: 2,
         useTextures: [6, 7]
     }
 
@@ -2098,10 +2169,14 @@ export class Avatar {
 
             }, this, 0.01),
             reloadTimeout: new MultiFrameLinearAnimation([function() {
+             if (this.state.equippedItems.mainTool) {
                 this.state.equippedItems.mainTool.reloadProgress = 0;
                 this.state.equippedItems.mainTool.loaded = true;
-
+                enableReloadDisplay();
                 updateAmmoDisplay();
+             } else {
+                enableReloadDisplay();
+             }
             }], this, [0]),
             fireAnimation: undefined,
             recoilAnimation: new MultiFrameLinearAnimation([function() {
@@ -2278,8 +2353,11 @@ export class Avatar {
         }
     }
 
-    reload() {
+    reload() { 
+      if (this.state.equippedItems.mainTool.reloadProgress) {
         this.state.reloadTimeout.start();
+        disableReloadDisplay();
+      }
     }
 
     follow(id) {
@@ -2404,12 +2482,12 @@ export class Avatar {
             this.state.meleeAttackAnimation.run();
         }
 
-        if (this.state.fire && this.state.armed && this.state.equippedItems.mainTool?.loaded && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo) {
+        if (this.state.fire && this.state.armed && this.state.equippedItems.mainTool?.loaded && !this.state.reloadTimeout.reset && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo) {
             this.state.fireAnimation.run();
         }
 
         if (this.state.armed && this.state.equippedItems.mainTool) this.state.recoilAnimation.run();
-        if (!this.state.equippedItems.mainTool?.loaded) this.state.reloadTimeout.run();
+        if (this.state.reloadTimeout.reset) this.state.reloadTimeout.run();
 
         this.movePickup();
     }
@@ -3879,7 +3957,7 @@ export class _Map_ {
         this.spawnPoints = [];
         this.centerX = 0;
         this.centerY = 0;
-        this.groundColor = (root) ? [240, 240, 240, 1] : [255, 255, 255, 1];
+        this.groundColor = (root) ? [215, 215, 215, 1] : [255, 255, 255, 1];
         this.show = true;
         this.freeze = false;
         this.move = true;

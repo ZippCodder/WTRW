@@ -283,7 +283,7 @@ html,body {
               border-bottom: 6px solid #2C2C2C;
               display: none;
               margin-right: 0.3em;
-              width: min-content;
+              width: max-content;
               white-space: nowrap;
               padding-right: 0.5em;
               color: white;
@@ -369,6 +369,24 @@ html,body {
               opacity: 0.7;
               transform: scale(0.5);
           } 
+
+          #ammo-display div {
+           height: 100%;
+           display: none;
+           aspect-ratio: 1/1;
+          }
+
+          #ammo-display div div {
+           height: 30%;
+           aspect-ratio: 1/1;
+           display: block;
+           margin: auto;
+           border-radius: 50%;
+           border: 3px solid rgba(0,0,0,0.0);
+           border-right: 4px solid white;
+           opacity: 0.7;
+           animation: loader-spin 0.3s linear infinite;
+          }
           
           #hunger, #thirst {
               color: white;
@@ -522,7 +540,7 @@ html,body {
             background: rgb(180,180,180);   
           }          
 
-          #set-waypoint {
+          #set-waypoint, #place-item {
             font-family: inherit;
             font-size: 0.7em;
             margin-right: 1em;
@@ -531,6 +549,10 @@ html,body {
             color: inherit;
             border: 1px solid white;
             border-bottom: 4px solid white;
+          }
+
+          #place-item {
+            display: none;
           }
 
           #interactive-map {
