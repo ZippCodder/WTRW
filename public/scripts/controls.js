@@ -56,6 +56,8 @@
       ConvenienceStore,
       LightBush,
       MixedBush,
+      Stopper,
+      MetalFence,
       Floor,
       _Joystick_,
       _Button_

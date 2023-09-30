@@ -1637,6 +1637,44 @@ export class Bush extends _StaticClusterClient_ {
     }
 }
 
+export class MetalFence extends _StaticClusterClient_ {
+
+    static _defaultVertices = [-14.8,8,1,0,0,14.8,8,1,0.578125,0,-14.8,-8,1,0,0.625,14.8,8,1,0.578125,0,-14.8,-8,1,0,0.625,14.8,-8,1,0.578125,0.625];
+
+    width = 29.6;
+    height = 16;
+    name = "metal fence";
+    clusterName = "metal fence";
+    texture = textures.objects.metalfence;
+    obstacle = true;
+    segments = [
+        [-14.8,-7.6,29.2,14.4]
+    ];
+
+    constructor(initialX, initialY, initialRotation) {
+        super(initialX, initialY, initialRotation);
+    }
+}
+
+export class Stopper extends _StaticClusterClient_ {
+
+    static _defaultVertices = [-4.7,12.2,1,0,0,4.7,12.2,1,0.734375,0,-4.7,-12.2,1,0,0.953125,4.7,12.2,1,0.734375,0,-4.7,-12.2,1,0,0.953125,4.7,-12.2,1,0.734375,0.953125];
+
+    width = 9.4;
+    height = 24.4;
+    name = "stopper";
+    clusterName = "stopper";
+    texture = textures.objects.stopper;
+    obstacle = true;
+    segments = [
+        [-4.7,-11.8,9,23]
+    ];
+
+    constructor(initialX, initialY, initialRotation) {
+        super(initialX, initialY, initialRotation);
+    }
+}
+
 export class MixedBush extends _StaticClusterClient_ {
 
     static _defaultVertices = [-8.899999999999999,9.2,1,-0.0078125,-0.0078125,8.5,9.2,1,0.671875,-0.0078125,-8.899999999999999,-8.8,1,-0.0078125,0.6953125,8.5,9.2,1,0.671875,-0.0078125,-8.899999999999999,-8.8,1,-0.0078125,0.6953125,8.5,-8.8,1,0.671875,0.6953125];

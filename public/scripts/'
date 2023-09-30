@@ -2206,7 +2206,7 @@ export let ATM = new TextureData(10, 10, 0.2, "avatar", {
     ctx.beginPath();
     ctx.lineWidth = 20;
 
-    ctx.strokeStyle = "black";
+    ctx.strokeStyle = "#1A1A1A";
     ctx.fillStyle = "white";
 
     ctx.fillStyle = "#787878";
@@ -4541,130 +4541,27 @@ export let MAIN_AVATAR_WALKING_2 = new TextureData(-5, 851, 0.2, "avatar", {
     ctx.restore();
 }, [0]);
 
-export let METAL_FENCE = new TextureData(0, 0, 0.2, "avatar", {
-    width: 1480,
-    height: 800
+export let RAIN_DROP = new TextureData(700, 700, 0.2, "avatar", {
+    width: 1400,
+    height: 910
 }, [
-    [0,60,1460,720],
-], 0, undefined, function(ctx) {
+    [0, 0, 1400, 800],
+   // [40, 800, 100, 110, 0],
+  //  [1260, 800, 100, 110, 0]
+], 20, undefined, function(ctx) {
     ctx.save();
     ctx.translate(this.offset.vx, this.offset.vy);
     ctx.scale(this.size, this.size);
 
     ctx.beginPath();
-    ctx.lineWidth = 15;
+    ctx.lineWidth = 10;
 
-    ctx.strokeStyle = "black";
-    ctx.fillStyle = "#444444";
-   
-    ctx.fillRect(110,50,40,720);
-    ctx.fillRect(310,50,40,720);
-    ctx.fillRect(510,50,40,720);
-    ctx.fillRect(710,50,40,720);
-    ctx.fillRect(910,50,40,720);
-    ctx.fillRect(1110,50,40,720);
-    ctx.fillRect(1310,50,40,720);
+    ctx.strokeStyle = "#1A1A1A";
+    ctx.fillStyle = "white";
 
-    ctx.fillStyle = "#333333";
-    ctx.fillRect(110,50,40,30);
-    ctx.fillRect(310,50,40,30);
-    ctx.fillRect(510,50,40,30);
-    ctx.fillRect(710,50,40,30);
-    ctx.fillRect(910,50,40,30);
-    ctx.fillRect(1110,50,40,30);
-    ctx.fillRect(1310,50,40,30);
-
-    ctx.strokeRect(110,50,40,720);
-    ctx.strokeRect(310,50,40,720);
-    ctx.strokeRect(510,50,40,720);
-    ctx.strokeRect(710,50,40,720);
-    ctx.strokeRect(910,50,40,720);
-    ctx.strokeRect(1110,50,40,720);
-    ctx.strokeRect(1310,50,40,720);
-
-    ctx.fillStyle = "#444444";
-    ctx.fillRect(5,200,1450,60);
-    ctx.fillRect(5,600,1450,60);
-    ctx.strokeRect(5,200,1450,60);
-    ctx.strokeRect(5,600,1450,60);
- 
-    ctx.fillStyle = "#444444";
-    ctx.fillRect(1400,0,60,780);
-    ctx.fillRect(0,0,60,780); 
-    ctx.fillStyle = "#333333";
-    ctx.fillRect(1400,0,60,40);
-    ctx.fillRect(0,0,60,40); 
-    ctx.strokeRect(1400,0,60,780);
-    ctx.strokeRect(0,0,60,780); 
 
     ctx.restore();
-},[],0,0,10,10);
-
-export let STOPPER = new TextureData(0, 0, 0.2, "avatar", {
-    width: 470,
-    height: 1220
-}, [
-    [0,50,450,1150],
-], 0, undefined, function(ctx) {
-    ctx.save();
-    ctx.translate(this.offset.vx, this.offset.vy);
-    ctx.scale(this.size, this.size);
-
-    ctx.beginPath();
-    ctx.lineWidth = 15;
-
-    ctx.strokeStyle = "black";
-    ctx.fillStyle = "#A9A9A9";
-
-    ctx.moveTo(0,500);
-    ctx.lineTo(0,50);
-    ctx.lineTo(100,0);
-    ctx.lineTo(360,0);
-    ctx.lineTo(450,50);
-    ctx.lineTo(450,500);
-    ctx.fill();
-    
-    ctx.fillStyle = "#878787";
-    ctx.beginPath();
-    ctx.moveTo(0,300);
-    ctx.lineTo(0,50);
-    ctx.lineTo(100,0);
-    ctx.lineTo(360,0);
-    ctx.lineTo(450,50);
-    ctx.lineTo(450,300);
-    ctx.lineTo(350,250);
-    ctx.lineTo(100,250);
-    ctx.fill();
-   
-    ctx.fillStyle = "#999999";
-    ctx.fillRect(100,0,250,250);
-
-    ctx.fillStyle = "#A9A9A9";
-
-    ctx.fillRect(0,500,450,700);
-    ctx.fillStyle = "#787878";
-    ctx.fillRect(0,500,450,100);
-
-    ctx.fillStyle = "#555555";
-    ctx.fillRect(50,500,350,50);
-    ctx.strokeRect(50,500,350,50);  
-    
-    ctx.fillStyle = "#999999";
-    ctx.fillRect(0,600,450,40);
-    
-    ctx.strokeRect(0,500,450,700);
-   
-    ctx.beginPath(); 
-    ctx.moveTo(0,500);
-    ctx.lineTo(0,50);
-    ctx.lineTo(100,0);
-    ctx.lineTo(360,0);
-    ctx.lineTo(450,50);
-    ctx.lineTo(450,500);
-    ctx.stroke(); 
-
-    ctx.restore();
-},[],0,0,10,10);
+});
 
 export let TABLE = new TextureData(10, 10, 0.2, "avatar", {
     width: 1400,
