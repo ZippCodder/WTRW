@@ -58,6 +58,8 @@
       MixedBush,
       Stopper,
       MetalFence,
+      MetalFenceVertical,
+      Atm,
       Floor,
       _Joystick_,
       _Button_
@@ -488,7 +490,7 @@
       let gun = $AVATAR.state.equippedItems.mainTool;
 
       ammoDisplay.querySelector("p").style.color = (gun.constructor._properties.capacity === gun.reloadProgress) ? "#e30f00" : "white";
-      ammoDisplay.querySelector("p").innerText = `${(gun.constructor._properties.capacity - gun.reloadProgress)}/${$AVATAR.inventory.weapons[gun.name].ammo}`;
+      ammoDisplay.querySelector("p").innerText = `${Math.min(gun.constructor._properties.capacity - gun.reloadProgress, $AVATAR.inventory.weapons[gun.name].ammo)}/${$AVATAR.inventory.weapons[gun.name].ammo}`;
   }
 
 
@@ -886,7 +888,8 @@
 
   const itemDescriptions = {
       default: "<strong>Pro tip:</strong> Click an item to select it and see a full description of its properties and usage.</br></br>Oh wait, what items? You're a noob lol.",
-      "glock 20": "<h3><u>GLOCK 20</u></h3>A simple, compact and lightweight handgun built for self defense and petty crime. Careful, there's no saftey!</br></br><strong>Damage _____ 18</strong></br><strong>Fire Rate _____ 1</strong></br><strong>Accuracy _____ 5</strong></br><strong>Capacity _____ 8</strong>",
+      "glock 20": "<h3><u>GLOCK 20</u></h3>A simple, compact and lightweight handgun built for self defense and petty crime. Careful, there's no saftey!</br></br><strong>Damage _____ 16</strong></br><strong>Fire Rate _____ 1.5</strong></br><strong>Accuracy _____ 5</strong></br><strong>Capacity _____ 8</strong>",
+      "nxr 44 mag": "<h3><u>NXR_44_MAG</u></h3>High powered, large revolver. Go play sheriff with this I guess. This town ain't big enough for...nevermind.</br></br><strong>Damage _____ 42</strong></br><strong>Fire Rate _____ 0.8</strong></br><strong>Accuracy _____ 8</strong></br><strong>Capacity _____ 8</strong>",
       "gp k100": "<h3><u>GP K100</u></h3>This quick and reliable handgun features good capacity, and a basic scilencer and is perfect for a good ol' gun-fight.</br></br><strong>Damage _____ 25</strong></br><strong>Fire Rate _____ 3</strong></br><strong>Accuracy _____ 2</strong></br><strong>Capacity _____ 12</strong>",
       "kitchen knife": "<h3><u>Kitchen Knife</u></h3>Your run-of-the-mill, single edged cooking knife. Go use this to slice some veggies...or somthing else.</br></br><strong>Damage _____ 25</strong>",
       "assassins knife": "<h3><u>Assassin's Knife</u></h3>One of the sharpest of blades with a fine edge built for the hand of a professional. This top-of-the-line knife can make quick work of any enemy with minimal armour.</br></br><strong>Damage _____ 100</strong>"

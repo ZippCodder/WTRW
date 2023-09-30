@@ -1656,6 +1656,44 @@ export class MetalFence extends _StaticClusterClient_ {
     }
 }
 
+export class MetalFenceVertical extends _StaticClusterClient_ {
+
+    static _defaultVertices = [-0.85,18,1,0,0,0.85,18,1,0.53125,0,-0.85,-18,1,0,0.703125,0.85,18,1,0.53125,0,-0.85,-18,1,0,0.703125,0.85,-18,1,0.53125,0.703125];
+
+    width = 1.7;
+    height = 36;
+    name = "metal fence vertical";
+    clusterName = "metal fence vertical";
+    texture = textures.objects.metalfencevertical;
+    obstacle = true;
+    segments = [
+        [-0.85,-18,1.7,36]
+    ];
+
+    constructor(initialX, initialY, initialRotation) {
+        super(initialX, initialY, initialRotation);
+    }
+}
+
+export class Atm extends _StaticClusterClient_ {
+
+    static _defaultVertices = [-5.7,10.2,1,0,0,5.7,10.2,1,0.890625,0,-5.7,-10.2,1,0,0.796875,5.7,10.2,1,0.890625,0,-5.7,-10.2,1,0,0.796875,5.7,-10.2,1,0.890625,0.796875];
+
+    width = 11.4;
+    height = 20.4;
+    name = "atm";
+    clusterName = "atm";
+    texture = textures.objects.atm;
+    obstacle = true;
+    segments = [
+        [-5.7,-5.2,11.4,15.4]
+    ];
+
+    constructor(initialX, initialY, initialRotation) {
+        super(initialX, initialY, initialRotation);
+    }
+}
+
 export class Stopper extends _StaticClusterClient_ {
 
     static _defaultVertices = [-4.7,12.2,1,0,0,4.7,12.2,1,0.734375,0,-4.7,-12.2,1,0,0.953125,4.7,12.2,1,0.734375,0,-4.7,-12.2,1,0,0.953125,4.7,-12.2,1,0.734375,0.953125];
@@ -1918,7 +1956,7 @@ export class KitchenKnife extends _Blade_ {
 
     static _properties = {
         damage: 25,
-        useTextures: [12, 13, 14, 15, 16],
+        useTextures: [14, 15, 16, 17, 18],
     }
 
     static _defaultVertices = [-1.24, 6.57, 1, 0, 0, 1.24, 6.57, 1, 0.775, 0, -1.24, -6.57, 1, 0, 0.51328125, 1.24, 6.57, 1, 0.775, 0, -1.24, -6.57, 1, 0, 0.51328125, 1.24, -6.57, 1, 0.775, 0.51328125];
@@ -1938,7 +1976,7 @@ export class AssassinsKnife extends _Blade_ {
 
     static _properties = {
         damage: 100,
-        useTextures: [17, 18, 19, 20, 21],
+        useTextures: [19, 20, 21, 22, 23],
     }
 
     static _defaultVertices = [-1.73, 6.7700000000000005, 1, 0, 0, 1.73, 6.7700000000000005, 1, 0.540625, 0, -1.73, -6.7700000000000005, 1, 0, 0.52890625, 1.73, 6.7700000000000005, 1, 0.540625, 0, -1.73, -6.7700000000000005, 1, 0, 0.52890625, 1.73, -6.7700000000000005, 1, 0.540625, 0.52890625];
@@ -1972,9 +2010,9 @@ export class CombatKnife extends _Blade_ {
 export class GLOCK_20 extends _Gun_ {
 
     static _properties = {
-        fireRate: 1,
+        fireRate: 1.5,
         bulletSpeed: 5,
-        damage: 20,
+        damage: 16,
         accuracy: 5,
         nozzelLength: 13,
         capacity: 18,
@@ -2025,6 +2063,17 @@ export class GP_K100 extends _Gun_ {
 
 export class NXR_44_MAG extends _Gun_ {
 
+    static _properties = {
+        fireRate: 0.8,
+        bulletSpeed: 10,
+        damage: 42,
+        accuracy: 8,
+        nozzelLength: 21,
+        capacity: 6,
+        reloadTime: 5,
+        useTextures: [8, 9]
+    }
+
     static _defaultVertices = [-6.910000000000001, 3.44, 1, 0, 0, 6.910000000000001, 3.44, 1, 0.5398437500000001, 0, -6.910000000000001, -3.44, 1, 0, 0.5375, 6.910000000000001, 3.44, 1, 0.5398437500000001, 0, -6.910000000000001, -3.44, 1, 0, 0.5375, 6.910000000000001, -3.44, 1, 0.5398437500000001, 0.5375];
 
     width = 13.820000000000002;
@@ -2033,8 +2082,9 @@ export class NXR_44_MAG extends _Gun_ {
     texture = textures.objects.nxr44mag;
     name = "nxr 44 mag";
 
-    constructor(initialX, initialY, initialRotation) {
+    constructor(initialX, initialY, initialRotation, bullets) {
         super(initialX, initialY, initialRotation);
+        this.bullets = bullets ?? 36;
     }
 }
 
@@ -2215,7 +2265,7 @@ export class Avatar {
              } else {
                 enableReloadDisplay();
              }
-            }], this, [0]),
+            }], this, [0], function(){enableReloadDisplay()}),
             fireAnimation: undefined,
             recoilAnimation: new MultiFrameLinearAnimation([function() {
                 this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[1];
@@ -2238,9 +2288,9 @@ export class Avatar {
             leftPunchAnimation: new MultiFrameLoopAnimation([function() {
                 this.state.position.body.texture = 0;
             }, function() {
-                this.state.position.body.texture = 8;
+                this.state.position.body.texture = 10;
             }, function() {
-                this.state.position.body.texture = 9;
+                this.state.position.body.texture = 11;
                 this.meleeAttack(this.state.strength, this.state.hitboxes.leftPunch);
             }, function() {
                 this.state.position.body.texture = 0;
@@ -2250,9 +2300,9 @@ export class Avatar {
             rightPunchAnimation: new MultiFrameLoopAnimation([function() {
                 this.state.position.body.texture = 0;
             }, function() {
-                this.state.position.body.texture = 10;
+                this.state.position.body.texture = 12;
             }, function() {
-                this.state.position.body.texture = 11;
+                this.state.position.body.texture = 13;
                 this.meleeAttack(this.state.strength, this.state.hitboxes.rightPunch);
             }, function() {
                 this.state.position.body.texture = 0;
@@ -2451,6 +2501,7 @@ export class Avatar {
                     this.state.equippedItems.mainTool.loaded = item.loaded;
                     this.state.reloadTimeout.timingConfig[0] = this.state.equippedItems.mainTool.constructor._properties.reloadTime;
                     this.state.fireAnimation.rate = 0.5 / this.state.equippedItems.mainTool.constructor._properties.fireRate;
+                    this.state.reloadTimeout.end();
 
                     updateAmmoDisplay();
                     showAmmoDisplay();
@@ -2481,6 +2532,8 @@ export class Avatar {
                     this.state.armed = false;
                     this.state.draw = false;
                     this.state.equippedItems.mainTool = undefined;
+                    this.state.reloadTimeout.end();
+
                     hideAmmoDisplay();
                 }
             };
@@ -2926,9 +2979,9 @@ export class Bot {
             leftPunchAnimation: new MultiFrameLoopAnimation([function() {
                 this.state.position.body.texture = 0;
             }, function() {
-                this.state.position.body.texture = 8;
+                this.state.position.body.texture = 10;
             }, function() {
-                this.state.position.body.texture = 9;
+                this.state.position.body.texture = 11;
                 this.meleeAttack(this.state.strength, this.state.hitboxes.leftPunch);
             }, function() {
                 this.state.position.body.texture = 0;
@@ -2938,9 +2991,9 @@ export class Bot {
             rightPunchAnimation: new MultiFrameLoopAnimation([function() {
                 this.state.position.body.texture = 0;
             }, function() {
-                this.state.position.body.texture = 10;
+                this.state.position.body.texture = 12;
             }, function() {
-                this.state.position.body.texture = 11;
+                this.state.position.body.texture = 13;
                 this.meleeAttack(this.state.strength, this.state.hitboxes.rightPunch);
             }, function() {
                 this.state.position.body.texture = 0;

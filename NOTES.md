@@ -23,3 +23,4 @@
 * Separate Avatar objects in to specialized class types
 * Implement wallpapers
 * Re-add bullet texture
+* Implement character zone restrictions to limit pathfinding 

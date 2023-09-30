@@ -80,6 +80,8 @@ await textures.skins.addTexture("avatardrawglock20", "/public/images/textures/MA
 await textures.skins.addTexture("avatardrawglock20pullback", "/public/images/textures/MAIN_AVATAR_DRAW_GLOCK20_2.png");
 await textures.skins.addTexture("avatardrawgpk100", "/public/images/textures/MAIN_AVATAR_DRAW_GPK100_1.png");
 await textures.skins.addTexture("avatardrawgpk100pullback", "/public/images/textures/MAIN_AVATAR_DRAW_GPK100_2.png");
+await textures.skins.addTexture("avatardrawnxr44mag", "/public/images/textures/MAIN_AVATAR_DRAW_NXR44MAG_1.png");
+await textures.skins.addTexture("avatardrawnxr44magpullback", "/public/images/textures/MAIN_AVATAR_DRAW_NXR44MAG_2.png");
 await textures.skins.addTexture("avatarleftpunch1", "/public/images/textures/MAIN_AVATAR_LEFT_PUNCH_1.png");
 await textures.skins.addTexture("avatarleftpunch2", "/public/images/textures/MAIN_AVATAR_LEFT_PUNCH_2.png");
 await textures.skins.addTexture("avatarrightpunch1", "/public/images/textures/MAIN_AVATAR_RIGHT_PUNCH_1.png");
@@ -113,6 +115,8 @@ await textures.objects.addTexture("conveniencestore", "/public/images/textures/C
 await textures.objects.addTexture("table", "/public/images/textures/TABLE.png");
 await textures.objects.addTexture("bush", "/public/images/textures/BUSH.png");
 await textures.objects.addTexture("metalfence", "/public/images/textures/METAL_FENCE.png");
+await textures.objects.addTexture("metalfencevertical", "/public/images/textures/METAL_FENCE_VERTICAL.png");
+await textures.objects.addTexture("atm", "/public/images/textures/ATM.png");
 await textures.objects.addTexture("stopper", "/public/images/textures/STOPPER.png");
 await textures.objects.addTexture("lightbush", "/public/images/textures/LIGHT_BUSH.png");
 await textures.objects.addTexture("mixedbush", "/public/images/textures/MIXED_BUSH.png");

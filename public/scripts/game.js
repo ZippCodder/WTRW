@@ -217,9 +217,9 @@
           a.state.passive = false;
           a.state.openCarry = false;
           a.state.targetUpdateAnimation.rate = 1 / 5;
-          a.addItem([new GLOCK_20, new GP_K100, new KitchenKnife, undefined][random(4)]);
+          a.addItem([new GLOCK_20, new GP_K100, new KitchenKnife,new NXR_44_MAG, undefined][random(5)]);
           a.equipItem(0);
-          a.state.targetId = id;
+          a.state.targetId = a.id;
           //   (Math.random() < 0.5) ? a.state.passive = true:a.state.aggressive = true;
           a.state.aggressive = true;
           a.state.baseSpeed = 0.5;

@@ -2191,20 +2191,20 @@ export let CONVENIENCE_STORE = new TextureData(-90, 2500, 0.2, "building", {
     ctx.restore();
 },[],0,0,-90,2500);
 
-export let ATM = new TextureData(10, 10, 0.2, "avatar", {
-    width: 1400,
-    height: 910
+export let ATM = new TextureData(0, 0, 0.2, "avatar", {
+    width: 570,
+    height: 1020
 }, [
-    [0, 0, 1400, 800],
+    [0, 0, 570, 1020],
    // [40, 800, 100, 110, 0],
   //  [1260, 800, 100, 110, 0]
-], 20, undefined, function(ctx) {
+],0, undefined, function(ctx) {
     ctx.save();
     ctx.translate(this.offset.vx, this.offset.vy);
     ctx.scale(this.size, this.size);
 
     ctx.beginPath();
-    ctx.lineWidth = 20;
+    ctx.lineWidth = 15;
 
     ctx.strokeStyle = "black";
     ctx.fillStyle = "white";
@@ -2217,14 +2217,14 @@ export let ATM = new TextureData(10, 10, 0.2, "avatar", {
     ctx.fillRect(0, 350, 550, 200);
     ctx.strokeRect(0, 0, 550, 1000);
 
-    ctx.lineWidth = 15; 
+    ctx.lineWidth = 10; 
     ctx.fillStyle = "#666666";
     ctx.fillRect(75, 200, 400, 150);
     ctx.fillStyle = "#555555";
     ctx.fillRect(75, 370, 400, 120);
     ctx.strokeRect(75, 200, 400, 280);
 
-    ctx.lineWidth = 10;
+    ctx.lineWidth = 5;
     ctx.moveTo(0,360);
     ctx.lineTo(80,360);
     ctx.moveTo(480,360);
@@ -2236,7 +2236,7 @@ export let ATM = new TextureData(10, 10, 0.2, "avatar", {
     ctx.fillStyle = "#787878";
     ctx.fillRect(25, 80, 500, 35);
     
-    ctx.lineWidth = 15; 
+    ctx.lineWidth = 10; 
     ctx.fillStyle = "#EFEFEF";
     ctx.fillRect(125, 250, 210, 90);
     ctx.strokeRect(125, 250, 210, 90);
@@ -2257,15 +2257,15 @@ export let ATM = new TextureData(10, 10, 0.2, "avatar", {
     ctx.strokeRect(170, 380, 126, 20);
     ctx.strokeRect(170, 380, 168, 40);
 
-    ctx.lineWidth = 15;
+    ctx.lineWidth = 10;
     ctx.strokeRect(175, 600, 200, 20);
 
     ctx.restore();
-},[],0,0,0,0);
+},[],0,0,10,10);
 
 // @FIREARMS
 
-export let NXR_44_MAG = new TextureData(-2, -7, 0.2, "firearm", {
+export let NXR_44_MAG = new TextureData(-2, -7, 0.22, "firearm", {
     width: 691,
     height: 344
 }, [
@@ -2273,7 +2273,7 @@ export let NXR_44_MAG = new TextureData(-2, -7, 0.2, "firearm", {
 ], 0, undefined, function(ctx) {
     // -2 -7
     ctx.save();
-    ctx.translate(this.offset.x, this.offset.y);
+    ctx.translate(this.offset.vx, this.offset.vy);
     ctx.scale(this.size || 0, this.size || 0);
     ctx.lineWidth = 15;
 
@@ -2321,7 +2321,7 @@ export let NXR_44_MAG = new TextureData(-2, -7, 0.2, "firearm", {
     ctx.fill();
 
     ctx.resetTransform();
-    ctx.translate(this.offset.x, this.offset.y);
+    ctx.translate(this.offset.vx, this.offset.vy);
     ctx.scale(this.size || 0, this.size || 0);
 
     ctx.fillStyle = "#F3F3F3";
@@ -2421,7 +2421,7 @@ export let NXR_44_MAG = new TextureData(-2, -7, 0.2, "firearm", {
 
     ctx.stroke();
     ctx.resetTransform();
-    ctx.translate(this.offset.x, this.offset.y);
+    ctx.translate(this.offset.vx, this.offset.vy);
     ctx.scale(this.size || 0, this.size || 0);
 
     // trigger house
@@ -2533,7 +2533,123 @@ export let NXR_44_MAG = new TextureData(-2, -7, 0.2, "firearm", {
     ctx.stroke();
 
     ctx.restore();
-});
+},[],0,0,90,230);
+
+export let NXR_44_MAG_TOP = new TextureData(54, 182, 0.2, "firearm", {
+    width: 900,
+    height: 200
+}, [
+    [0, 0, 900, 200]
+], 0, undefined, function(ctx, r = 0) {
+    // body: 439x309, texture: 1024,512, size: 0.15
+    // -8 -20
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.rotate(r * Math.PI / 180);
+    ctx.scale(this.size || 0, this.size || 0);
+    ctx.lineWidth = 15;
+
+    ctx.fillStyle = "#787878";
+    ctx.strokeStyle = "#1A1A1A";
+    // handle
+
+    ctx.beginPath();
+    ctx.fillStyle = "#F3F3F3";
+    ctx.fillRect(32, 52, 47, 45);
+    ctx.strokeRect(32, 52, 47, 45);
+
+    ctx.fillStyle = "#787878";
+    ctx.fillRect(290, 52, 330, 45);
+    ctx.fillRect(90, 50, 200, 50);
+    ctx.fillRect(180, 100, 75, 25);
+    ctx.strokeRect(290, 52, 330, 45);
+    ctx.strokeRect(90, 50, 200, 50);
+    ctx.strokeRect(180, 100, 75, 25);
+ 
+    ctx.lineWidth = 10;
+    ctx.fillRect(100, 65, 30, 20);
+    ctx.fillRect(530, 71, 70, 5);
+    ctx.fillRect(90, 50, 50, 50);
+    ctx.fillRect(620, 60, 15, 30);
+
+    ctx.strokeRect(100, 65, 30, 20);
+    ctx.strokeRect(530, 72, 70, 5);
+    ctx.strokeRect(90, 50, 50, 50);
+    ctx.strokeRect(620, 60, 15, 30);
+
+    ctx.restore();
+},[],0,0,270,880);
+
+export let NXR_44_MAG_TOP_2 = new TextureData(54, 182, 0.2, "firearm", {
+    width: 900,
+    height: 200
+}, [
+    [0, 0, 900, 200]
+], 0, undefined, function(ctx, r = 0) {
+    // body: 439x309, texture: 1024,512, size: 0.15
+    // -8 -20
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.rotate(r * Math.PI / 180);
+    ctx.scale(this.size || 0, this.size || 0);
+    ctx.lineWidth = 15;
+
+    ctx.fillStyle = "#787878";
+    ctx.strokeStyle = "#1A1A1A";
+    // handle
+
+    ctx.beginPath();
+    ctx.fillStyle = "#F3F3F3";
+    ctx.fillRect(32, 52, 47, 45);
+    ctx.strokeRect(32, 52, 47, 45);
+
+    ctx.fillStyle = "#787878";
+    ctx.fillRect(290, 52, 330, 45);
+    ctx.fillRect(90, 50, 200, 50);
+    ctx.fillRect(180, 100, 75, 10);
+    ctx.strokeRect(290, 52, 330, 45);
+    ctx.strokeRect(90, 50, 200, 50);
+    ctx.strokeRect(180, 100, 75, 10);
+ 
+    ctx.lineWidth = 10;
+    ctx.fillRect(100, 65, 30, 20);
+    ctx.fillRect(530, 71, 70, 5);
+    ctx.fillRect(90, 50, 50, 50);
+    ctx.fillRect(620, 60, 15, 30);
+
+    ctx.strokeRect(100, 65, 30, 20);
+    ctx.strokeRect(530, 72, 70, 5);
+    ctx.strokeRect(90, 50, 50, 50);
+    ctx.strokeRect(620, 60, 15, 30);
+
+    ctx.restore();
+},[],0,0,270,880);
+
+export let MAIN_AVATAR_DRAW_NXR44MAG_1 = new TextureData(0, 0, 0.2, "avatar", {
+    width: 702,
+    height: 2140
+}, [
+    [0, 0, 702, 2140]
+], 0, undefined, function(ctx) {
+    // body: 702x740, texture: 1024,512, size: 0.15, boxes: [[152, 15, 408, 408],[561, 145, 136, 136],[15, 145, 136, 136]]
+    // -1, -1
+   
+    MAIN_AVATAR_DRAW_WEAPON.render(ctx);
+    NXR_44_MAG_TOP.render(ctx,-90);
+}, [0], 0, 0, -1, -1);
+
+export let MAIN_AVATAR_DRAW_NXR44MAG_2 = new TextureData(0, 0, 0.2, "avatar", {
+    width: 702,
+    height: 2140
+}, [
+    [0, 0, 702, 2140]
+], 0, undefined, function(ctx) {
+    // body: 702x740, texture: 1024,512, size: 0.15, boxes: [[152, 15, 408, 408],[561, 145, 136, 136],[15, 145, 136, 136]]
+    // -1, -1
+   
+    MAIN_AVATAR_DRAW_WEAPON.render(ctx);
+    NXR_44_MAG_TOP_2.render(ctx,-90);
+}, [0], 0, 0, -1, -1);
 
 export let GP_K100 = new TextureData(-8, -20, 0.22, "firearm", {
     width: 740,
@@ -4541,6 +4657,98 @@ export let MAIN_AVATAR_WALKING_2 = new TextureData(-5, 851, 0.2, "avatar", {
     ctx.restore();
 }, [0]);
 
+export let METAL_FENCE_VERTICAL = new TextureData(0, 0, 0.2, "avatar", {
+    width: 85,
+    height: 1800
+}, [
+    [0,0,85,1800],
+], 0, undefined, function(ctx) {
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.scale(this.size, this.size);
+
+    ctx.beginPath();
+    ctx.lineWidth = 15;
+
+    ctx.strokeStyle = "black";
+    ctx.fillStyle = "#444444";
+  /* 
+    ctx.fillRect(110,50,40,720);
+    ctx.fillRect(310,50,40,720);
+    ctx.fillRect(510,50,40,720);
+    ctx.fillRect(710,50,40,720);
+    ctx.fillRect(910,50,40,720);
+    ctx.fillRect(1110,50,40,720);
+    ctx.fillRect(1310,50,40,720);
+
+    ctx.fillStyle = "#333333";
+    ctx.fillRect(110,50,40,30);
+    ctx.fillRect(310,50,40,30);
+    ctx.fillRect(510,50,40,30);
+    ctx.fillRect(710,50,40,30);
+    ctx.fillRect(910,50,40,30);
+    ctx.fillRect(1110,50,40,30);
+    ctx.fillRect(1310,50,40,30); 
+
+    ctx.strokeRect(110,50,40,720);
+    ctx.strokeRect(310,50,40,720);
+    ctx.strokeRect(510,50,40,720);
+    ctx.strokeRect(710,50,40,720);
+    ctx.strokeRect(910,50,40,720);
+    ctx.strokeRect(1110,50,40,720);
+    ctx.strokeRect(1310,50,40,720); */
+ 
+    ctx.fillStyle = "#444444";
+    ctx.fillRect(0,0,60,780); 
+    ctx.fillStyle = "#333333";
+    ctx.fillRect(0,0,60,40); 
+    ctx.strokeRect(0,0,60,780);
+
+    ctx.fillStyle = "#444444";
+    ctx.fillRect(0,200,25,1000);
+    ctx.strokeRect(0,200,25,1000);
+ 
+
+    ctx.fillStyle = "#444444";
+    ctx.fillRect(25,100,40,1000);
+    ctx.fillStyle = "#333333";
+    ctx.fillRect(25,100,40,30);
+    ctx.strokeRect(25,100,40,1000); 
+    
+    ctx.fillStyle = "#444444";
+    ctx.fillRect(25,300,40,1000);
+    ctx.fillStyle = "#333333";
+    ctx.fillRect(25,300,40,30);
+    ctx.strokeRect(25,300,40,1000); 
+
+    ctx.fillStyle = "#444444";
+    ctx.fillRect(25,500,40,1000);
+    ctx.fillStyle = "#333333";
+    ctx.fillRect(25,500,40,30);
+    ctx.strokeRect(25,500,40,1000); 
+
+    ctx.fillStyle = "#444444";
+    ctx.fillRect(25,700,40,1000);
+    ctx.fillStyle = "#333333";
+    ctx.fillRect(25,700,40,30);
+    ctx.strokeRect(25,700,40,1000); 
+
+    ctx.fillStyle = "#444444";
+    ctx.fillRect(25,900,40,650);
+    ctx.fillStyle = "#333333";
+    ctx.fillRect(25,900,40,30);
+    ctx.strokeRect(25,900,40,650); 
+
+
+    ctx.fillStyle = "#444444";
+    ctx.fillRect(0,1000,60,780); 
+    ctx.fillStyle = "#333333";
+    ctx.fillRect(0,1000,60,40); 
+    ctx.strokeRect(0,1000,60,780); 
+
+    ctx.restore();
+},[],0,0,10,10);
+
 export let METAL_FENCE = new TextureData(0, 0, 0.2, "avatar", {
     width: 1480,
     height: 800
@@ -4598,7 +4806,7 @@ export let METAL_FENCE = new TextureData(0, 0, 0.2, "avatar", {
     ctx.strokeRect(0,0,60,780); 
 
     ctx.restore();
-},[],0,0,10,10);
+},[],0,0,100,300);
 
 export let STOPPER = new TextureData(0, 0, 0.2, "avatar", {
     width: 470,
