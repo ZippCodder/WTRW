@@ -4874,12 +4874,14 @@ export let STOPPER = new TextureData(0, 0, 0.2, "avatar", {
     ctx.restore();
 },[],0,0,10,10);
 
-export let GAZEBO = new TextureData(0, 0, 0.2, "avatar", {
+export let GAZEBO = new TextureData(10, 10, 0.2, "avatar", {
     width: 3220,
     height: 3420
 }, [
-    [0, 0, 3220, 3420, 0]
-], 0, undefined, function(ctx) {
+    [0, 0, 3220, 3420],
+   // [40, 800, 100, 110, 0],
+  //  [1260, 800, 100, 110, 0]
+], 20, undefined, function(ctx) {
     ctx.save();
     ctx.translate(this.offset.vx, this.offset.vy);
     ctx.scale(this.size, this.size);

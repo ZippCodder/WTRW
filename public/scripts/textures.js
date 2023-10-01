@@ -113,6 +113,7 @@ await textures.objects.addTexture("book2", "/public/images/textures/BOOK_2.png")
 await textures.objects.addTexture("house1", "/public/images/textures/HOUSE_1.png");
 await textures.objects.addTexture("conveniencestore", "/public/images/textures/CONVENIENCE_STORE.png");
 await textures.objects.addTexture("table", "/public/images/textures/TABLE.png");
+await textures.objects.addTexture("gazebo", "/public/images/textures/GAZEBO.png");
 await textures.objects.addTexture("bush", "/public/images/textures/BUSH.png");
 await textures.objects.addTexture("metalfence", "/public/images/textures/METAL_FENCE.png");
 await textures.objects.addTexture("metalfencevertical", "/public/images/textures/METAL_FENCE_VERTICAL.png");

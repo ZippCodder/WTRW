@@ -1618,6 +1618,26 @@ export class Table extends _StaticClusterClient_ {
     }
 }
 
+export class Gazebo extends _StaticClusterClient_ {
+
+    static _defaultVertices = [-32.2,34.2,1,0,0,32.2,34.2,1,0.62890625,0,-32.2,-34.2,1,0,0.66796875,32.2,34.2,1,0.62890625,0,-32.2,-34.2,1,0,0.66796875,32.2,-34.2,1,0.62890625,0.66796875];
+
+    width = 64.4;
+    height = 68.4;
+    name = "gazebo";
+    clusterName = "gazebo";
+    texture = textures.objects.gazebo;
+    topLayer = true;
+    obstacle = true;
+    segments = [
+       [-28.2,-2,4,4],[23.8,-2,4,4],[-28.2,-34,4,4],[23.8,-34,4,4]
+    ];
+
+    constructor(initialX, initialY, initialRotation) {
+        super(initialX, initialY, initialRotation);
+    }
+}
+
 export class Bush extends _StaticClusterClient_ {
 
     static _defaultVertices = [-8.899999999999999,9.2,1,-0.0078125,-0.0078125,8.5,9.2,1,0.671875,-0.0078125,-8.899999999999999,-8.8,1,-0.0078125,0.6953125,8.5,9.2,1,0.671875,-0.0078125,-8.899999999999999,-8.8,1,-0.0078125,0.6953125,8.5,-8.8,1,0.671875,0.6953125];

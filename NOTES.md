@@ -24,3 +24,11 @@
 * Implement wallpapers
 * Re-add bullet texture
 * Implement character zone restrictions to limit pathfinding 
+
+## Objects to add 
+ 
+* Hot dog stand 
+* Ice Cream Stand
+* China Town Arc
+* Pawn Shop
+* Gun Store

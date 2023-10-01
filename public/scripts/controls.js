@@ -60,6 +60,7 @@
       MetalFence,
       MetalFenceVertical,
       Atm,
+      Gazebo,
       Floor,
       _Joystick_,
       _Button_
