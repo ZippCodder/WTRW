@@ -45,6 +45,7 @@
       USP_45,
       Grass,
       Grass2,
+      Bench,
       Rocks1,
       Rocks2,
       BulletShell,
@@ -62,6 +63,9 @@
       Atm,
       Gazebo,
       Floor,
+      Shed,
+      Tile,
+      Syringe,
       _Joystick_,
       _Button_
   } from "/public/scripts/objects.js";
@@ -893,7 +897,8 @@
       "nxr 44 mag": "<h3><u>NXR_44_MAG</u></h3>High powered, large revolver. Go play sheriff with this I guess. This town ain't big enough for...nevermind.</br></br><strong>Damage _____ 42</strong></br><strong>Fire Rate _____ 0.8</strong></br><strong>Accuracy _____ 8</strong></br><strong>Capacity _____ 8</strong>",
       "gp k100": "<h3><u>GP K100</u></h3>This quick and reliable handgun features good capacity, and a basic scilencer and is perfect for a good ol' gun-fight.</br></br><strong>Damage _____ 25</strong></br><strong>Fire Rate _____ 3</strong></br><strong>Accuracy _____ 2</strong></br><strong>Capacity _____ 12</strong>",
       "kitchen knife": "<h3><u>Kitchen Knife</u></h3>Your run-of-the-mill, single edged cooking knife. Go use this to slice some veggies...or somthing else.</br></br><strong>Damage _____ 25</strong>",
-      "assassins knife": "<h3><u>Assassin's Knife</u></h3>One of the sharpest of blades with a fine edge built for the hand of a professional. This top-of-the-line knife can make quick work of any enemy with minimal armour.</br></br><strong>Damage _____ 100</strong>"
+      "assassins knife": "<h3><u>Assassin's Knife</u></h3>One of the sharpest of blades with a fine edge built for the hand of a professional. This top-of-the-line knife can make quick work of any enemy with minimal armour.</br></br><strong>Damage _____ 100</strong>",
+      "syringe": "<h3><u>Syringe</u></h3>Basic medicine for rapid health regain and quick injection.</br></br><strong>Regain _____ 25</strong></br><strong>[used]</strong>"
   }
 
   let equippedIndex = Infinity,
@@ -929,15 +934,27 @@
   const itemDescription = document.querySelector(".main-inventory__description-content");
   let controlSwitchButton;
 
-  function updateDescription(itemName) {
+  window.updateDescription = function(itemName,item) {
       if (!itemName) return;
-      itemDescription.innerHTML = itemDescriptions[itemName];
+
+      let d = itemDescriptions[itemName];
+
+      if (item) {
+       switch (item.type) {
+        case "medicine": {
+          d = d.replace("[used]",(item.used) ? "<br><i>Used</i>":"<br><i>New</i>");
+        };
+        break;
+       };
+      }
+
+      itemDescription.innerHTML = d;
   }
 
   function selectSlot(i) {
       if (!$AVATAR.inventory.items[i] && !switchMode) return;
 
-      updateDescription($AVATAR.inventory.items[i]?.name);
+      updateDescription($AVATAR.inventory.items[i]?.name, $AVATAR.inventory.items[i]);
 
       controlButtonsContainer.style.opacity = 1;
       inventoryItems.item(selectedIndex).style.backgroundColor = "rgba(0,0,0,0.2)";

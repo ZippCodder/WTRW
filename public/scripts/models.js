@@ -3737,7 +3737,7 @@ export let MAIN_AVATAR_DEFAULT = new TextureData(0, 0, 0.2, "avatar", {
    // ctx.strokeRect(221, 50, 270, 95);
 
     ctx.restore();
-}, [0], 0, 0, 2500, 1951);
+}, [0], 0, 0, -5, -1);
 
 export let MAIN_AVATAR_LEFT_PUNCH_1 = new TextureData(0, 0, 1, "avatar", {
     width: 702,
@@ -5094,7 +5094,113 @@ export let GAZEBO = new TextureData(0, 0, 0.2, "avatar", {
     ctx.strokeRect(2800,3250,200,200); */
      
     ctx.restore();
-},[],0,0,0,-40);
+},[],0,0,10,-40);
+
+export let SHED = new TextureData(10, 10, 0.2, "avatar", {
+    width: 3020,
+    height: 2460
+}, [
+    [0, 0, 3020, 2460,0],
+    [0, 0, 3000, 1400],
+    [100, 1400, 2800, 1000]
+   // [40, 800, 100, 110, 0],
+  //  [1260, 800, 100, 110, 0]
+], 0, undefined, function(ctx) {
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.scale(this.size, this.size);
+
+    ctx.beginPath();
+    ctx.lineWidth = 15;
+
+    ctx.strokeStyle = "black";
+    ctx.fillStyle = "#979797";
+
+    ctx.fillStyle = "#656565";
+    ctx.fillRect(0, 0, 3000, 1400);
+    ctx.fillStyle = "#555555";
+    ctx.fillRect(0, 0, 3000, 500);
+    ctx.fillStyle = "#444444";
+    ctx.fillRect(0, 1300, 3000, 100);
+    ctx.strokeRect(0, 0, 3000, 1400);
+   
+    ctx.fillStyle = "#B2B2B2";
+    //ctx.strokeRect(100, 1400, 2800, 1000);
+    ctx.moveTo(100,1400);
+    ctx.lineTo(2900,1400);
+    ctx.lineTo(2900,2440);
+    ctx.lineTo(2300,2440);
+    ctx.lineTo(2300,2400);
+    ctx.lineTo(700,2400);
+    ctx.lineTo(700,2440);
+    ctx.lineTo(100,2440);
+    ctx.lineTo(100,1400);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.lineWidth = 5;
+    ctx.moveTo(100,1500);
+    ctx.lineTo(2900,1500);
+    ctx.moveTo(100,1600);
+    ctx.lineTo(2900,1600);
+    ctx.moveTo(100,1700);
+    ctx.lineTo(2900,1700);
+    ctx.moveTo(100,1800);
+    ctx.lineTo(2900,1800);
+    ctx.moveTo(100,1900);
+    ctx.lineTo(2900,1900);
+    ctx.moveTo(100,2000);
+    ctx.lineTo(2900,2000);
+    ctx.moveTo(100,2100);
+    ctx.lineTo(2900,2100);
+    ctx.moveTo(100,2200);
+    ctx.lineTo(2900,2200);
+    ctx.moveTo(100,2300);
+    ctx.lineTo(2900,2300);
+    ctx.moveTo(100,2400);
+    ctx.lineTo(2900,2400);
+    ctx.stroke();
+   
+    ctx.lineWidth = 15; 
+
+    ctx.fillStyle = "#616161";
+    ctx.fillRect(700, 1550, 1600, 50);
+    ctx.fillStyle = "#444444";
+    ctx.fillRect(700, 1550, 1600, 25);
+    ctx.strokeRect(700, 1550, 1600, 50);
+
+    ctx.fillStyle = "#616161";
+    ctx.fillRect(700, 1600, 25, 820);
+    ctx.strokeRect(700, 1600, 25, 820);
+
+    ctx.fillRect(2275, 1600, 25, 820);
+    ctx.strokeRect(2275, 1600, 25, 820);
+
+    ctx.fillStyle = "#898989";
+    ctx.fillRect(725, 1600, 1550, 800);
+    ctx.strokeRect(725, 1600, 1550, 800);
+   
+    ctx.beginPath(); 
+    ctx.moveTo(1500,1600);
+    ctx.lineTo(1500,2400);
+    ctx.stroke();
+    
+    ctx.lineWidth = 15;
+    ctx.fillStyle = "#777777";
+    ctx.fillRect(1450,1950,100,200);
+    ctx.fillStyle = "#646464";
+    ctx.fillRect(1450,1950,100,170);
+    ctx.strokeRect(1450,1950,100,200);
+    
+    ctx.beginPath(); 
+    ctx.lineWidth = 5;
+    ctx.moveTo(1500,1900);
+    ctx.lineTo(1500,2300);
+    ctx.stroke();
+
+    ctx.restore();
+},[],0,0,10,10);
 
 export let TABLE = new TextureData(10, 10, 0.2, "avatar", {
     width: 1400,
@@ -5125,6 +5231,79 @@ export let TABLE = new TextureData(10, 10, 0.2, "avatar", {
     ctx.strokeRect(1260, 800, 100, 110);
     ctx.restore();
 });
+
+export let SYRINGE = new TextureData(30, 200, 0.25, "avatar", {
+    width: 125,
+    height: 530
+}, [
+    [0, 0, 125, 530],
+   // [40, 800, 100, 110, 0],
+  //  [1260, 800, 100, 110, 0]
+], 0, undefined, function(ctx) {
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.scale(this.size, this.size);
+
+    ctx.beginPath();
+    ctx.lineWidth = 15;
+
+    ctx.strokeStyle = "#1A1A1A";
+    ctx.fillStyle = "#DDDDDD";
+
+    ctx.fillRect(0,0,70,240);
+    ctx.fillRect(15,-30,40,30);
+    ctx.fillRect(-15,242,100,20);
+    ctx.fillRect(25,262,20,35);
+    ctx.fillRect(0,300,70,20);
+
+    ctx.fillStyle = "#999999";
+    ctx.fillRect(0,70,70,160);
+
+    //ctx.strokeRect(0,0,70,240);
+    ctx.strokeRect(-15,242,100,20);
+    ctx.strokeRect(25,262,20,35);
+    ctx.strokeRect(0,300,70,20);
+
+    //ctx.fillRect(0,0,70,240);
+  
+    ctx.moveTo(12,0);
+    ctx.lineTo(28,-45);
+    ctx.lineTo(42,-45);
+    ctx.lineTo(58,0);
+
+     
+    ctx.moveTo(12,0);
+    ctx.lineTo(0,20);
+    ctx.lineTo(0,240);
+    ctx.lineTo(70,240);
+    ctx.lineTo(70,20);
+    ctx.lineTo(58,0);
+
+    ctx.stroke();
+
+    ctx.lineWidth = 5;
+    ctx.beginPath();
+    ctx.moveTo(58,0);
+    ctx.lineTo(12,0);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.lineWidth = 5;
+    ctx.moveTo(45,90);
+    ctx.lineTo(70,90);
+    ctx.moveTo(45,130);
+    ctx.lineTo(70,130);
+    ctx.moveTo(45,170);
+    ctx.lineTo(70,170);
+    ctx.moveTo(45,210);
+    ctx.lineTo(70,210);
+    ctx.stroke();
+ 
+    ctx.lineWidth = 10;
+    ctx.strokeRect(34,-180,1,140);
+
+    ctx.restore();
+},[],0,0,360,330);
 
 export let MIXED_BUSH = new TextureData(0, 0, 0.2, "avatar", {
     width: 850,
@@ -6381,9 +6560,9 @@ export let PICNIC_TABLE = new TextureData(10, -40, 0.2, "prop", {
     ctx.translate(this.offset.vx, this.offset.vy);
     ctx.scale(this.size, this.size);
     ctx.beginPath();
-    ctx.lineWidth = 20;
+    ctx.lineWidth = 15;
 
-    ctx.strokeStyle = "#1A1A1A";
+    ctx.strokeStyle = "black";
     ctx.fillStyle = "#878787";
 
     ctx.moveTo(400, 1050);
@@ -6411,12 +6590,12 @@ export let PICNIC_TABLE = new TextureData(10, -40, 0.2, "prop", {
     ctx.strokeRect(400, 50, 600, 1000);
     ctx.strokeRect(1050, 170, 350, 900);
 
-    ctx.lineWidth = 10;
+    ctx.lineWidth = 5;
     ctx.strokeRect(116, 170, 118, 900);
     ctx.strokeRect(600, 50, 200, 1000);
     ctx.strokeRect(1166, 170, 118, 900);
 
-    ctx.lineWidth = 20;
+    ctx.lineWidth = 15;
     ctx.fillStyle = "#878787";
     ctx.fillRect(1000, 250, 50, 120);
     ctx.fillRect(350, 250, 50, 120);
@@ -6715,6 +6894,153 @@ export let WOOD_FLOOR_TILE = new TextureData(0, 0, 0.2, "prop", {
     ctx.fillRect(0, 690, 800, 50);
     ctx.strokeRect(0, 0, 800, 640);
     ctx.strokeRect(0, 0, 800, 340);
+
+    ctx.restore();
+});
+
+export let CROSS_TILE = new TextureData(0, 0, 0.2, "prop", {
+    width: 639,
+    height: 639
+}, [
+    [0, 0, 639, 639]
+], 0, undefined, function(ctx) {
+    ctx.save();
+    ctx.translate(this.offset.x, this.offset.y);
+    ctx.scale(this.size, this.size);
+    ctx.beginPath();
+    ctx.lineWidth = 15;
+
+    ctx.strokeStyle = "black";
+    function part1(y = 0) {
+    ctx.translate(0,y);
+    ctx.beginPath();
+    ctx.moveTo(0,160);
+    ctx.lineTo(0,80); 
+    ctx.lineTo(80,0); 
+    ctx.lineTo(240,0); 
+    ctx.lineTo(320,80); 
+    ctx.lineTo(400,0); 
+    ctx.lineTo(560,0); 
+    ctx.lineTo(640,80); 
+    ctx.lineTo(640,160);
+    ctx.lineTo(560,160); 
+    ctx.lineTo(480,80); 
+    ctx.lineTo(400,160); 
+    ctx.lineTo(240,160); 
+    ctx.lineTo(160,80); 
+    ctx.lineTo(80,160); 
+    ctx.lineTo(0,160);
+    ctx.fillStyle = "#959595";
+    ctx.fill(); 
+
+    ctx.beginPath();
+    ctx.moveTo(0,130);
+    ctx.lineTo(0,80); 
+    ctx.lineTo(80,0); 
+    ctx.lineTo(240,0); 
+    ctx.lineTo(320,80); 
+    ctx.lineTo(400,0); 
+    ctx.lineTo(560,0); 
+    ctx.lineTo(640,80); 
+    ctx.lineTo(640,130);
+    ctx.lineTo(560,130); 
+    ctx.lineTo(480,50); 
+    ctx.lineTo(400,130); 
+    ctx.lineTo(240,130); 
+    ctx.lineTo(160,50); 
+    ctx.lineTo(80,130); 
+    ctx.lineTo(0,130);
+    ctx.fillStyle = "#B3B3B3";
+    ctx.fill(); 
+
+    ctx.beginPath();
+    ctx.moveTo(0,160);
+    ctx.lineTo(0,80); 
+    ctx.lineTo(80,0); 
+    ctx.lineTo(240,0); 
+    ctx.lineTo(320,80); 
+    ctx.lineTo(400,0); 
+    ctx.lineTo(560,0); 
+    ctx.lineTo(640,80); 
+    ctx.lineTo(640,160);
+    ctx.lineTo(560,160); 
+    ctx.lineTo(480,80); 
+    ctx.lineTo(400,160); 
+    ctx.lineTo(240,160); 
+    ctx.lineTo(160,80); 
+    ctx.lineTo(80,160); 
+    ctx.lineTo(0,160);
+    ctx.stroke();
+    ctx.translate(0,-y);
+    }
+    
+    function part2(y = 0) {
+    ctx.translate(0,y);
+    ctx.beginPath();
+    ctx.moveTo(0,240);
+    ctx.lineTo(0,160);
+    ctx.lineTo(80,160);
+    ctx.lineTo(160,240);
+    ctx.lineTo(240,160);
+    ctx.lineTo(400,160);
+    ctx.lineTo(480,240);
+    ctx.lineTo(560,160);
+    ctx.lineTo(640,160);
+    ctx.lineTo(640,240);
+    ctx.lineTo(560,320);
+    ctx.lineTo(400,320);
+    ctx.lineTo(320,240);
+    ctx.lineTo(240,320);
+    ctx.lineTo(80,320);
+    ctx.lineTo(0,240);
+    ctx.fillStyle = "#959595";
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(0,240);
+    ctx.lineTo(0,160);
+    ctx.lineTo(80,160);
+    ctx.lineTo(160,240);
+    ctx.lineTo(240,160);
+    ctx.lineTo(400,160);
+    ctx.lineTo(480,240);
+    ctx.lineTo(560,160);
+    ctx.lineTo(640,160);
+    ctx.lineTo(640,210);
+    ctx.lineTo(560,290);
+    ctx.lineTo(400,290);
+    ctx.lineTo(320,210);
+    ctx.lineTo(240,290);
+    ctx.lineTo(80,290);
+    ctx.lineTo(0,210);
+    ctx.fillStyle = "#B3B3B3";
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(0,240);
+    ctx.lineTo(0,160);
+    ctx.lineTo(80,160);
+    ctx.lineTo(160,240);
+    ctx.lineTo(240,160);
+    ctx.lineTo(400,160);
+    ctx.lineTo(480,240);
+    ctx.lineTo(560,160);
+    ctx.lineTo(640,160);
+    ctx.lineTo(640,240);
+    ctx.lineTo(560,320);
+    ctx.lineTo(400,320);
+    ctx.lineTo(320,240);
+    ctx.lineTo(240,320);
+    ctx.lineTo(80,320);
+    ctx.lineTo(0,240);
+    ctx.stroke();
+    ctx.translate(0,-y);
+    }
+ 
+    part1();
+    part2();
+    part1(320);
+    part2(320);
 
     ctx.restore();
 });
@@ -7058,55 +7384,133 @@ export let CHAIR = new TextureData(10, -50, 0.2, "prop", {
     ctx.restore();
 });
 
-export let BENCH = new TextureData(2, -10, 0.2, "prop", {
-    width: 1220,
-    height: 770
+export let BENCH = new TextureData(10, -110, 0.2, "prop", {
+    width: 1540,
+    height: 1020
 }, [
-    [0, 0, 1220, 670]
+    [-10, 110, 1540, 1020, 0],[0,176,1520,736]
 ], 0, undefined, function(ctx) {
     // 2, -10
     ctx.save();
-    ctx.translate(this.offset.x, this.offset.y);
+    ctx.translate(this.offset.vx, this.offset.vy);
     ctx.scale(this.size, this.size);
+    ctx.scale(0.8, 0.8);
     ctx.beginPath();
-    ctx.lineWidth = 20;
+    ctx.lineWidth = 18;
 
-    ctx.strokeStyle = "#1A1A1A";
-    ctx.fillStyle = "white";
+    ctx.strokeStyle = "black";
+    ctx.fillStyle = "#F1F1F1";
 
-    ctx.fillRect(0, 50, 1200, 230);
-    ctx.fillStyle = "#E3E3E3";
-    ctx.fillRect(0, 60, 1200, 50);
-    ctx.strokeRect(0, 60, 1200, 230);
+    ctx.fillRect(0, 650, 1900, 500);
+    ctx.fillStyle = "#CCCCCC";
+    ctx.fillRect(0, 1080, 1900, 60);
+    ctx.strokeRect(0, 650, 1900, 500);
 
-    ctx.fillStyle = "white";
-    ctx.fillRect(0, 360, 1200, 350);
-    ctx.fillStyle = "#E3E3E3";
-    ctx.fillRect(0, 360, 1200, 300);
-    ctx.strokeRect(0, 360, 1200, 350);
+    ctx.fillStyle = "#E5E5E5";
+    ctx.fillRect(100, 560, 1700, 100);
+    ctx.fillStyle = "#CCCCCC";
+    ctx.fillRect(100, 560, 1700, 40);
+    ctx.strokeRect(100, 560, 1700, 100);
 
-    ctx.fillStyle = "#696969";
-    ctx.fillRect(0, 710, 80, 100);
-    ctx.strokeRect(0, 710, 80, 100);
-    ctx.fillRect(1120, 710, 80, 100);
-    ctx.strokeRect(1120, 710, 80, 100);
+    ctx.fillStyle = "#E5E5E5";
+    ctx.fillRect(100, 390, 1700, 100);
+    ctx.fillStyle = "#CCCCCC";
+    ctx.fillRect(100, 390, 1700, 40);
+    ctx.strokeRect(100, 390, 1700, 100);
 
-    ctx.fillRect(250, 290, 60, 70);
-    ctx.strokeRect(250, 290, 60, 70);
+    ctx.fillStyle = "#E5E5E5";
+    ctx.fillRect(100, 220, 1700, 100);
+    ctx.fillStyle = "#CCCCCC";
+    ctx.fillRect(100, 220, 1700, 40);
+    ctx.strokeRect(100, 220, 1700, 100);
+/*
+    ctx.fillStyle = "#E5E5E5";
+    ctx.moveTo(100,280);
+    ctx.lineTo(200,280);
+    ctx.lineTo(280,200);
+    ctx.lineTo(1620,200);
+    ctx.lineTo(1700,280);
+    ctx.lineTo(1800,280);
+    ctx.lineTo(1800,450);
+    ctx.lineTo(100,450);
+    ctx.lineTo(100,200);
+    ctx.fill();
 
-    ctx.fillRect(890, 290, 60, 70);
-    ctx.strokeRect(890, 290, 60, 70);
+    ctx.beginPath();
+    ctx.fillStyle = "#A2A2A2";
+    ctx.moveTo(100,280);
+    ctx.lineTo(200,280);
+    ctx.lineTo(280,200);
+    ctx.lineTo(1620,200);
+    ctx.lineTo(1700,280);
+    ctx.lineTo(1800,280);
+    ctx.lineTo(1800,320);
+    ctx.lineTo(1700,320);
+    ctx.lineTo(1620,240);
+    ctx.lineTo(280,240);
+    ctx.lineTo(200,320);
+    ctx.lineTo(100,320);
+    ctx.lineTo(100,280);
+    ctx.fill();
 
+    ctx.fillStyle = "#CCCCCC";
+    ctx.fillRect(280, 200, 1340, 40);
+    ctx.fillRect(100, 280, 100, 40);
+    ctx.fillRect(1700, 280, 100, 40);
+
+    ctx.beginPath();
+    ctx.strokeStyle = "#999999";
     ctx.lineWidth = 10;
-    ctx.moveTo(0, 170);
-    ctx.lineTo(1200, 170);
-    ctx.moveTo(0, 190);
-    ctx.lineTo(1200, 190);
-
+    ctx.moveTo(100,360);
+    ctx.lineTo(1800,360);
+    ctx.moveTo(100,860);
+    ctx.lineTo(1800,860);
     ctx.stroke();
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 15; 
+
+    ctx.beginPath();
+    ctx.moveTo(100,280);
+    ctx.lineTo(200,280);
+    ctx.lineTo(280,200);
+    ctx.lineTo(1620,200);
+    ctx.lineTo(1700,280);
+    ctx.lineTo(1800,280);
+    ctx.lineTo(1800,450);
+    ctx.lineTo(100,450);
+    ctx.lineTo(100,200);
+    ctx.stroke();
+*/
+
+    ctx.fillStyle = "#E5E5E5";
+    ctx.fillRect(1800, 150, 100, 600);
+    ctx.fillRect(0, 150, 100, 600);
+    ctx.fillStyle = "#CCCCCC";
+    ctx.fillRect(1800, 150, 100, 70);
+    ctx.fillRect(0, 150, 100, 70);
+
+    ctx.strokeRect(1800, 150, 100, 600);
+    ctx.strokeRect(0, 150, 100, 600);
+
+    ctx.fillStyle = "#F1F1F1";
+    ctx.fillRect(0, 550, 100, 400);
+    ctx.fillRect(1800, 550, 100, 400);
+    ctx.fillStyle = "#CCCCCC";
+    ctx.fillRect(0, 800, 100, 140);
+    ctx.fillRect(1800, 800, 100, 140);
+    ctx.strokeRect(0, 550, 100, 400);
+    ctx.strokeRect(1800, 550, 100, 400);
+
+    ctx.fillRect(0, 1150, 100, 250);
+    ctx.fillRect(1800, 1150, 100, 250);
+    ctx.strokeRect(0, 1150, 100, 250);
+    ctx.strokeRect(1800, 1150, 100, 250);
+
+    ctx.strokeStyle = "red";
+    ctx.strokeRect(0,220,1900,920);
 
     ctx.restore();
-});
+},[],0,0,0,0);
 // 1300, 550
 
 export let ROAD_RAIL = new TextureData(-290, -90, 0.2, "prop", {

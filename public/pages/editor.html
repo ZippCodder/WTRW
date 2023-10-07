@@ -137,7 +137,10 @@
             MAIN_AVATAR_DRAW_NXR44MAG_1,
             MAIN_AVATAR_DRAW_NXR44MAG_2,
             NXR_44_MAG_TOP,
-            NXR_44_MAG_TOP_2
+            NXR_44_MAG_TOP_2,
+            CROSS_TILE,
+            SYRINGE,
+            SHED
         } from "/public/scripts/models.js";
 
         // Import texture for editing and downloading...
@@ -184,9 +187,9 @@
         //SUPERMARKET(-98, -338, 0.2);
         //CAFE(-18, -18, 0.2);
         //MAIN_AVATAR_DEFAULT(-5, -5, 0.2);
-        resize(1024, 1024);
+        resize(1540, 1020);
         // export function draw(a, w, h, iw, ih, s, lw, attribs=[],canvas) {
-        let texture = GAZEBO;
+        let texture = BENCH;
          
 //new Sheet([ROAD_RAIL,ROAD_SIGN,URBAN_FENCE_HALF,URBAN_FENCE,URBAN_FENCE_VERTICAL], 1024, 1024);
 
@@ -194,13 +197,15 @@
         //URBAN_FENCE.render(ctx);
         //PICNIC_TABLE.render(ctx);
          texture.render(ctx);
-         MAIN_AVATAR_DEFAULT.render(ctx);  
+        // GAZEBO.render(ctx); 
+        // MAIN_AVATAR_DEFAULT.render(ctx);
+         //GLOCK_20.render(ctx); 
          //NXR_44_MAG.render(ctx);
          //GP_K100_TOP_2.render(ctx,-90);
         //GLOCK_20_TOP.render(ctx,-90); 
        // log(texture.getData());
           log(texture.getData());
           console.log(texture.textureDimensions);
-        setSource(`GAZEBO.png`); 
+        setSource(`BENCH.png`); 
     </script>
 </html>

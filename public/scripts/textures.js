@@ -110,10 +110,12 @@ await textures.objects.addTexture("combatknife", "/public/images/textures/COMBAT
 await textures.objects.addTexture("laptop", "/public/images/textures/LAPTOP.png");
 await textures.objects.addTexture("book1", "/public/images/textures/BOOK_1.png");
 await textures.objects.addTexture("book2", "/public/images/textures/BOOK_2.png");
+await textures.objects.addTexture("syringe", "/public/images/textures/SYRINGE.png");
 await textures.objects.addTexture("house1", "/public/images/textures/HOUSE_1.png");
 await textures.objects.addTexture("conveniencestore", "/public/images/textures/CONVENIENCE_STORE.png");
 await textures.objects.addTexture("table", "/public/images/textures/TABLE.png");
 await textures.objects.addTexture("gazebo", "/public/images/textures/GAZEBO.png");
+await textures.objects.addTexture("shed", "/public/images/textures/SHED.png");
 await textures.objects.addTexture("bush", "/public/images/textures/BUSH.png");
 await textures.objects.addTexture("metalfence", "/public/images/textures/METAL_FENCE.png");
 await textures.objects.addTexture("metalfencevertical", "/public/images/textures/METAL_FENCE_VERTICAL.png");
@@ -137,6 +139,7 @@ await textures.objects.addTexture("smallplant", "/public/images/textures/SMALL_P
 await textures.objects.addTexture("tile", "/public/images/textures/TILE.png");
 await textures.objects.addTexture("floortile", "/public/images/textures/FLOOR_TILE.png", {repeat: true});
 await textures.objects.addTexture("woodfloortile", "/public/images/textures/WOOD_FLOOR_TILE.png", {repeat: true});
+await textures.objects.addTexture("crosstile", "/public/images/textures/CROSS_TILE.png", {repeat: true});
 await textures.objects.addTexture("grasstile", "/public/images/textures/GRASS_TILE.png", {repeat: true, minFilter: gl.NEAREST});
 await textures.objects.addTexture("bench", "/public/images/textures/BENCH.png");
 await textures.objects.addTexture("grass1", "/public/images/textures/GRASS_1.png");

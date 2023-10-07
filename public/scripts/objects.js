@@ -1171,16 +1171,16 @@ export class StreetLight extends _StaticClusterClient_ {
 
 export class Bench extends _StaticClusterClient_ {
 
-    static _defaultVertices = [-12.2, 7.7, 1, 0, 0, 12.2, 7.7, 1, 0.953125, 0, -12.2, -7.7, 1, 0, 0.6015625, 12.2, 7.7, 1, 0.953125, 0, -12.2, -7.7, 1, 0, 0.6015625, 12.2, -7.7, 1, 0.953125, 0.6015625];
+    static _defaultVertices = [-15.4,10.2,1,0,0,15.4,10.2,1,0.6015625,0,-15.4,-10.2,1,0,0.796875,15.4,10.2,1,0.6015625,0,-15.4,-10.2,1,0,0.796875,15.4,-10.2,1,0.6015625,0.796875];
 
-    width = 24.4;
-    height = 15.4;
+    width = 30.8;
+    height = 20.4;
     name = "bench";
     clusterName = "bench";
     texture = textures.objects.bench;
     obstacle = true;
     segments = [
-        [-12.2, -7.7, 24.4, 13.4]
+        [-15.2,-5.840000000000003,30.4,14.720000000000002]
     ];
     interactable = true;
     minDistance = 12;
@@ -1667,8 +1667,9 @@ export class MetalFence extends _StaticClusterClient_ {
     clusterName = "metal fence";
     texture = textures.objects.metalfence;
     obstacle = true;
+    topLayer = true;
     segments = [
-        [-14.8,-7.6,29.2,14.4]
+        [-14.8,-7.6,29.2,2]
     ];
 
     constructor(initialX, initialY, initialRotation) {
@@ -1723,9 +1724,10 @@ export class Stopper extends _StaticClusterClient_ {
     name = "stopper";
     clusterName = "stopper";
     texture = textures.objects.stopper;
+    topLayer = true;
     obstacle = true;
     segments = [
-        [-4.7,-11.8,9,23]
+        [-4.7,-12.0,9,6]
     ];
 
     constructor(initialX, initialY, initialRotation) {
@@ -1880,6 +1882,27 @@ export class ConvenienceStore extends _Building_ {
     }
 }
 
+export class Shed extends _Building_ {
+
+    static _defaultVertices = [-30.2,24.6,1,0,0,30.2,24.6,1,0.58984375,0,-30.2,-24.6,1,0,0.9609375,30.2,24.6,1,0.58984375,0,-30.2,-24.6,1,0,0.9609375,30.2,-24.6,1,0.58984375,0.9609375];
+
+    width = 60.4;
+    height = 49.2;
+    name = "shed";
+    clusterName = "shed";
+    texture = textures.objects.shed;
+    obstacle = true;
+    segments = [
+      [-30,-3.6,60,28],[-28,-23.6,56,20]
+    ];
+
+    constructor(initialX, initialY, initialRotation) {
+        super(initialX, initialY, initialRotation, [
+            [0, -20, 0,[0,20]]
+        ], [new _Map_(90, 50, false, "House 1").init(undefined,undefined,[0,-30],true)], undefined);
+    }
+}
+
 export class House1 extends _Building_ {
 
     static _defaultVertices = [-73.7,72.2,1,0,0,73.7,72.2,1,0.7197265625,0,-73.7,-72.2,1,0,0.705078125,73.7,72.2,1,0.7197265625,0,-73.7,-72.2,1,0,0.705078125,73.7,-72.2,1,0.7197265625,0.705078125];
@@ -1970,6 +1993,35 @@ export class _Blade_ extends _Pickup_ {
     }
 
     type = "knife";
+}
+
+export class _Medicine_ extends _Pickup_ {
+
+    constructor(initialX, initialY, initialRotation) {
+        super(initialX, initialY, initialRotation);
+    }
+
+    type = "medicine";
+    used = false;
+}
+
+export class Syringe extends _Medicine_ {
+
+    static _properties = {
+        regain: 25
+    };
+
+    static _defaultVertices = [-1.25,5.3,1,0,0,1.25,5.3,1,0.78125,0,-1.25,-5.3,1,0,0.828125,1.25,5.3,1,0.78125,0,-1.25,-5.3,1,0,0.828125,1.25,-5.3,1,0.78125,0.828125];
+
+    width = 2.5;
+    height = 10.6;
+    clusterName = "syringe";
+    texture = textures.objects.syringe;
+    name = "syringe";
+
+    constructor(initialX, initialY, initialRotation) {
+        super(initialX, initialY, initialRotation);
+    }
 }
 
 export class KitchenKnife extends _Blade_ {
@@ -2513,6 +2565,27 @@ export class Avatar {
             hideAmmoDisplay();
 
             switch (item.type) {
+                case "medicine": {
+                   this.state.armed = false;
+
+                   switch (item.name) {
+                     case "syringe": {
+                      if (!item.used && this.state.vitals.health < 100) {
+                       this.state.vitals.health += Math.min(25,100-this.state.vitals.health);
+                       item.used = true;
+                       updateDescription();
+                       this.dropItem(slot);
+                       updateHealthBar();
+                      }
+                     };
+                     break;
+                     case "medkit": {
+                       console.log("medkit"); 
+                     };
+                     break;
+                   }  
+                }
+                break;
                 case "gun": {
                     this.state.armed = true;
                     this.state.melee = false;
@@ -3645,10 +3718,10 @@ export class Floor extends _Object_ {
             texture: textures.objects.woodfloortile
         },
         2: {
-            vertices: [-12.8, 12.8, 1, 0, 0, 12.8, 12.8, 1, 0.5, 0, -12.8, -12.8, 1, 0, 0.5, 12.8, 12.8, 1, 0.5, 0, -12.8, -12.8, 1, 0, 0.5, 12.8, -12.8, 1, 0.5, 0.5],
+            vertices: [-6.390000000000001, 6.390000000000001, 1, 0, 0, 6.390000000000001, 6.390000000000001, 1, 0.9984375000000001, 0, -6.390000000000001, -6.390000000000001, 1, 0, 0.9984375000000001, 6.390000000000001, 6.390000000000001, 1, 0.9984375000000001, 0, -6.390000000000001, -6.390000000000001, 1, 0, 0.9984375000000001, 6.390000000000001, -6.390000000000001, 1, 0.9984375000000001, 0.9984375000000001],
             width: 25.6,
             height: 25.6,
-            texture: textures.objects.grasstile
+            texture: textures.objects.crosstile
         }
     }
 
