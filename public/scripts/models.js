@@ -5232,6 +5232,203 @@ export let TABLE = new TextureData(10, 10, 0.2, "avatar", {
     ctx.restore();
 });
 
+export let STORE_SHELF_1 = new TextureData(10, 10, 0.2, "avatar", {
+    width: 2020,
+    height: 1420
+}, [
+    [-10, -10, 2020, 1420],
+], 0, undefined, function(ctx) {
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.scale(this.size, this.size);
+
+    ctx.beginPath();
+    ctx.lineWidth = 15;
+
+    ctx.strokeStyle = "black";
+    ctx.fillStyle = "#D5D5D5";
+
+    ctx.fillRect(0, 0, 2000, 1400);
+    ctx.fillStyle = "#B3B3B3";
+    ctx.fillRect(0, 0, 2000, 1100);
+    ctx.fillStyle = "#999999";
+    ctx.fillRect(0, 0, 2000, 50);
+
+    ctx.strokeRect(0, 0, 2000, 1400);
+    ctx.strokeRect(50, 100, 1900, 950);
+
+    ctx.strokeRect(50, 380, 1900, 40);
+    ctx.strokeRect(50, 700, 1900, 40);
+
+    function chips1(x,y) {
+     ctx.translate(x,y);
+     ctx.fillStyle = "#888888";
+     ctx.beginPath();
+     ctx.moveTo(200,150);
+     ctx.lineTo(460,150);
+     ctx.lineTo(460,170);
+     ctx.lineTo(450,200);
+     ctx.lineTo(450,380);
+     ctx.lineTo(210,380);
+     ctx.lineTo(210,200);
+     ctx.lineTo(200,170);
+     ctx.lineTo(200,142);
+     ctx.fill();
+
+     ctx.fillStyle = "#565656";
+     ctx.fillRect(200,280,260,40);
+     ctx.fillStyle = "#D6D6D6";
+     ctx.fillRect(260,220,140,70);
+     ctx.fillStyle = "black";
+     ctx.font = "50px Arial";
+     ctx.fillText("哈 哈",275,270);
+     ctx.fillText("哈 哈",275,270);
+
+     ctx.beginPath();
+     ctx.lineWidth = 5;
+     ctx.moveTo(200,170);
+     ctx.lineTo(460,170);
+     ctx.stroke();
+
+     ctx.beginPath();
+     ctx.lineWidth = 15;
+     ctx.moveTo(200,150);
+     ctx.lineTo(460,150);
+     ctx.lineTo(460,170);
+     ctx.lineTo(450,200);
+     ctx.lineTo(450,380);
+     ctx.lineTo(210,380);
+     ctx.lineTo(210,200);
+     ctx.lineTo(200,170);
+     ctx.lineTo(200,142);
+     ctx.stroke();
+     ctx.translate(-x,-y);
+    } 
+
+    function chips2(x,y) {
+     ctx.translate(x,y);
+     ctx.fillStyle = "#C3C3C3";
+     ctx.beginPath();
+     ctx.moveTo(200,150);
+     ctx.lineTo(460,150);
+     ctx.lineTo(460,170);
+     ctx.lineTo(450,200);
+     ctx.lineTo(450,380);
+     ctx.lineTo(210,380);
+     ctx.lineTo(210,200);
+     ctx.lineTo(200,170);
+     ctx.lineTo(200,142);
+     ctx.fill();
+
+     //ctx.fillStyle = "#565656";
+     //ctx.fillRect(200,280,260,40);
+     //ctx.fillStyle = "#D6D6D6";
+     //ctx.fillRect(260,220,140,70);
+     ctx.lineWidth = 5;
+     ctx.fillStyle = "black";
+     ctx.font = "130px Arial";
+     ctx.strokeText("屁",265,350);
+
+     ctx.beginPath();
+     ctx.lineWidth = 5;
+     ctx.moveTo(200,190);
+     ctx.lineTo(460,190);
+     ctx.stroke();
+
+     ctx.beginPath();
+     ctx.lineWidth = 15;
+     ctx.moveTo(200,150);
+     ctx.lineTo(460,150);
+     ctx.lineTo(460,170);
+     ctx.lineTo(450,200);
+     ctx.lineTo(450,380);
+     ctx.lineTo(210,380);
+     ctx.lineTo(210,200);
+     ctx.lineTo(200,170);
+     ctx.lineTo(200,142);
+     ctx.stroke();
+     ctx.translate(-x,-y);
+    } 
+
+    function chips3(x,y) {
+     ctx.translate(x,y);
+     ctx.fillStyle = "#A4A4A4";
+     ctx.beginPath();
+     ctx.moveTo(200,150);
+     ctx.lineTo(460,150);
+     ctx.lineTo(460,170);
+     ctx.lineTo(450,200);
+     ctx.lineTo(450,380);
+     ctx.lineTo(210,380);
+     ctx.lineTo(210,200);
+     ctx.lineTo(200,170);
+     ctx.lineTo(200,142);
+     ctx.fill();
+
+     ctx.fillStyle = "#D3D3D3";
+     ctx.fillRect(270,270,120,50);
+     ctx.fillStyle = "#737373";
+     ctx.fillRect(270,300,120,20);
+     ctx.lineWidth = 5;
+     ctx.fillStyle = "black";
+     ctx.font = "130px Arial";
+
+     ctx.beginPath();
+     ctx.lineWidth = 5;
+     ctx.moveTo(200,180);
+     ctx.lineTo(460,180);
+
+     ctx.moveTo(225,150);
+     ctx.lineTo(225,180);
+     ctx.moveTo(255,150);
+     ctx.lineTo(255,180);
+     ctx.moveTo(285,150);
+     ctx.lineTo(285,180);
+     ctx.moveTo(315,150);
+     ctx.lineTo(315,180);
+     ctx.moveTo(345,150);
+     ctx.lineTo(345,180);
+     ctx.moveTo(375,150);
+     ctx.lineTo(375,180);
+     ctx.moveTo(405,150);
+     ctx.lineTo(405,180);
+     ctx.moveTo(435,150);
+     ctx.lineTo(435,180);
+     ctx.stroke();
+
+     ctx.beginPath();
+     ctx.lineWidth = 15;
+     ctx.moveTo(200,150);
+     ctx.lineTo(460,150);
+     ctx.lineTo(460,170);
+     ctx.lineTo(450,200);
+     ctx.lineTo(450,380);
+     ctx.lineTo(210,380);
+     ctx.lineTo(210,200);
+     ctx.lineTo(200,170);
+     ctx.lineTo(200,142);
+     ctx.stroke();
+     ctx.translate(-x,-y);
+    } 
+
+    chips1(70,0);
+    chips1(470,0);
+    chips1(870,0);
+    chips1(1270,0);
+
+    chips2(70,320);
+    chips2(470,320);
+    chips2(870,320);
+    chips2(1270,320);
+    
+    chips3(70,670);
+    chips3(470,670);
+    chips3(870,670);
+    chips3(1270,670);
+    
+    ctx.restore();
+},[],0,0,0,0);
+
 export let SYRINGE = new TextureData(30, 200, 0.25, "avatar", {
     width: 125,
     height: 530

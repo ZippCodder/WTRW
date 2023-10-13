@@ -114,6 +114,7 @@ await textures.objects.addTexture("syringe", "/public/images/textures/SYRINGE.pn
 await textures.objects.addTexture("house1", "/public/images/textures/HOUSE_1.png");
 await textures.objects.addTexture("conveniencestore", "/public/images/textures/CONVENIENCE_STORE.png");
 await textures.objects.addTexture("table", "/public/images/textures/TABLE.png");
+await textures.objects.addTexture("vendor1", "/public/images/textures/VENDOR_1.png");
 await textures.objects.addTexture("gazebo", "/public/images/textures/GAZEBO.png");
 await textures.objects.addTexture("shed", "/public/images/textures/SHED.png");
 await textures.objects.addTexture("bush", "/public/images/textures/BUSH.png");

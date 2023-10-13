@@ -1169,7 +1169,54 @@ export class StreetLight extends _StaticClusterClient_ {
     }
 }
 
-export class Bench extends _StaticClusterClient_ {
+class _Seat_ extends _StaticClusterClient_ {
+  
+  type = "seat";
+  interactable = true;
+  minDistance = 15;
+
+  constructor(initialX, initialY, initialRotation, seats) {
+    super(initialX, initialY, initialRotation);
+
+    this.seats = [];
+
+    for (let i = 0; i < seats.length; i++) {
+      let [x,y,r,exit] = seats[i];
+
+      this.seats[i] = {x: x, y: y, r: r, exit: {x: exit[0], y: exit[1]}, occupied: false, id: i};
+    }
+  }
+
+  getSeat(avatar) {
+    let seat = undefined;    
+
+    for (let i of this.seats) {
+      if ((!seat || (distance(this.trans.offsetX + i.x, this.trans.offsetY + i.y, avatar.trans.offsetX, avatar.trans.offsetY) < distance(this.trans.offsetX + seat.x,this.trans.offsetY + seat.y, avatar.trans.offsetX, avatar.trans.offsetY))) && !i.occupied) {
+         seat = i;
+      }
+    }
+
+   return seat;
+  }
+
+  action() {
+    let seat = this.getSeat($AVATAR); 
+
+    if (!seat) return;
+
+    noclip = true;
+    $CURRENT_MAP.translate(this.trans.offsetX + seat.x, this.trans.offsetY + seat.y);
+    $AVATAR.trans.rotation = seat.r * Math.PI / 180;
+    noclip = false;
+
+    $AVATAR.state.seat.id = seat.id;
+    $AVATAR.state.seat.ref = this;
+
+    this.seats[seat.id].occupied = true;
+  }
+}
+
+export class Bench extends _Seat_ {
 
     static _defaultVertices = [-15.4,10.2,1,0,0,15.4,10.2,1,0.6015625,0,-15.4,-10.2,1,0,0.796875,15.4,10.2,1,0.6015625,0,-15.4,-10.2,1,0,0.796875,15.4,-10.2,1,0.6015625,0.796875];
 
@@ -1182,18 +1229,9 @@ export class Bench extends _StaticClusterClient_ {
     segments = [
         [-15.2,-5.840000000000003,30.4,14.720000000000002]
     ];
-    interactable = true;
-    minDistance = 12;
 
     constructor(initialX, initialY, initialRotation) {
-        super(initialX, initialY, initialRotation);
-    }
-
-    action() {
-        noclip = true;
-        $CURRENT_MAP.translate(this.trans.offsetX, this.trans.offsetY);
-        noclip = false;
-        $AVATAR.trans.rotation = 180 * Math.PI / 180;
+        super(initialX, initialY, initialRotation, [[-8,0,180,[-8,-15]],[8,0,180,[8,-15]]]);
     }
 }
 
@@ -1631,6 +1669,26 @@ export class Gazebo extends _StaticClusterClient_ {
     obstacle = true;
     segments = [
        [-28.2,-2,4,4],[23.8,-2,4,4],[-28.2,-34,4,4],[23.8,-34,4,4]
+    ];
+
+    constructor(initialX, initialY, initialRotation) {
+        super(initialX, initialY, initialRotation);
+    }
+}
+
+export class Vendor1 extends _StaticClusterClient_ {
+
+    static _defaultVertices = [-20.2,14.2,1,0,0,20.2,14.2,1,0.7890625,0,-20.2,-14.2,1,0,0.5546875,20.2,14.2,1,0.7890625,0,-20.2,-14.2,1,0,0.5546875,20.2,-14.2,1,0.7890625,0.5546875];
+
+    width = 40.4;
+    height = 28.4;
+    name = "vendor 1";
+    clusterName = "vendor 1";
+    texture = textures.objects.vendor1;
+    topLayer = true;
+    obstacle = true;
+    segments = [
+       [-28.2,-2,4,4]
     ];
 
     constructor(initialX, initialY, initialRotation) {
@@ -2289,6 +2347,10 @@ export class Avatar {
                     height: 5
                 }
             },
+            seat: {
+             ref: undefined, 
+             id: undefined
+            },
             pickup: {
                 offset: {
                     x: 0,
@@ -2518,15 +2580,6 @@ export class Avatar {
         this.state.reloadTimeout.start();
         disableReloadDisplay();
       }
-    }
-
-    follow(id) {
-        this.state.speed = (this.state.follow.run) ? this.state.runningSpeed : this.state.baseSpeed;
-        this.state.follow.target = this.map.avatars[id];
-    }
-
-    disengageFollow() {
-        this.state.follow.target = undefined;
     }
 
     addItem(item, slot) {
@@ -2854,6 +2907,11 @@ export class Bot {
                 end: undefined,
                 request: true
             },
+            seat: {
+             ref: undefined, 
+             id: undefined,
+             sitting: false,
+            },
             targetId: undefined,
             target: {
                 current: undefined,
@@ -2979,6 +3037,9 @@ export class Bot {
             reloadTimeout: new MultiFrameLinearAnimation([function() {
                 this.state.equippedItems.mainTool.reloadProgress = 0;
                 this.state.equippedItems.mainTool.loaded = true;
+            }], this, [0]),
+            sittingTimeout: new MultiFrameLinearAnimation([function() {
+                this.stopSitting();
             }], this, [0]),
             pathRequestRateLimit: new MultiFrameLinearAnimation([function() {
                 this.state.path.request = true;
@@ -3207,8 +3268,10 @@ export class Bot {
         }
 
         if ((this.state.passive || (this.state.armed && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo <= 0)) && !this.state.running && !this.state.follow.target) {
+            this.stopSitting();
             this.run();
         } else if (!this.state.target.id.includes(owner.state.targetId) && this.map.avatars[owner.id] && this.state.aggressive) {
+            this.stopSitting();
             this.state.target.id.push(owner.state.targetId);
             this.state.target.engaged = true;
             this.state.attack.multiple = true;
@@ -3242,7 +3305,8 @@ export class Bot {
     }
 
     stopWander() {
-        this.state.wander.active = false;
+       this.state.wander.active = false;
+       this.disengagePath();
     }
 
     follow(id) {
@@ -3252,6 +3316,32 @@ export class Bot {
 
     disengageFollow() {
         this.state.follow.target = undefined;
+    }
+
+    sit(s) {
+     if (!this.state.seat.ref && !this.state.target.engaged && !this.state.running && this.state.path.engaged) {
+      let allSeats = Object.values(this.map.seats);
+      let seat = s || allSeats[random(allSeats.length)];
+ 
+      this.state.seat.ref = seat;
+     }
+    }
+
+    stopSitting() { 
+      if (this.state.seat.ref) {
+        if (this.state.seat.sitting) {
+          let seat = this.state.seat.ref.seats[this.state.seat.id];
+          seat.occupied = false;
+          this.state.seat.sitting = false;
+ 
+          let {x,y} = this.map.GRAPH.getPoint((this.state.seat.ref.trans.offsetX + $MAP.centerX) + seat.exit.x,(this.state.seat.ref.trans.offsetY + $MAP.centerY) + seat.exit.y);
+          this.translate((x - (this.trans.offsetX + $MAP.centerX)) + 5,(y - (this.trans.offsetY + $MAP.centerY)) - 5);
+        }
+
+        this.state.sittingTimeout.end();
+        this.state.seat.ref = undefined;
+        this.state.seat.id = undefined; 
+      }
     }
 
     addItem(item, slot) {
@@ -3368,11 +3458,30 @@ export class Bot {
 
         if (this.state.goto.engaged) this.state.gotoAnimation.run();
         if (!this.state.path.request) this.state.pathRequestRateLimit.run();
+        if (this.state.seat.sitting) this.state.sittingTimeout.run();
 
         // walk to destination
         walk: if (this.state.path.engaged && !this.state.goto.engaged) {
 
             if (this.state.path.index === this.state.path.current.length) {
+                if (this.state.seat.ref && this.state.seat.id !== undefined) {
+                  let seat = this.state.seat.ref.seats[this.state.seat.id]; 
+                  
+                  if (seat.occupied) {
+                   this.stopSitting();
+                   break walk;
+                  }
+                  
+                  this.translate((this.state.seat.ref.trans.offsetX + seat.x) - this.trans.offsetX,(this.state.seat.ref.trans.offsetY + seat.y) - this.trans.offsetY);
+                  this.state.rotationTarget = undefined;
+                  this.trans.rotation = (seat.r) * Math.PI / 180;
+
+                  this.state.seat.ref.seats[seat.id].occupied = true
+                  this.state.seat.sitting = true;
+                  this.state.sittingTimeout.timingConfig[0] = random(10);
+                  this.state.sittingTimeout.start();
+                }                  
+
                 this.disengagePath();
                 break walk;
             }
@@ -3518,7 +3627,7 @@ export class Bot {
 
         // follow target
 
-        follow: if (this.state.follow.target) {
+        follow: if (this.state.follow.target && !this.state.seat.ref) {
 
             const {
                 offsetX: targetX,
@@ -3528,20 +3637,18 @@ export class Bot {
             if (dist > this.state.follow.settleDistance) {
                 this.state.speed = speed;
                 if (!this.state.path.engaged) {
-                    if (this.state.path.request) this.requestPath(targetX, targetY);
+                    if (this.state.path.request && !$AVATAR.state.seat.ref) this.requestPath(targetX, targetY);
                 }
             }
 
             if (dist < this.state.follow.slowdownDistance && dist > this.state.settleDistance) {
                 this.state.speed = speed / 3;
             } else if (dist < this.state.follow.settleDistance) {
-                if (this.state.path.engaged) {
-                    this.disengagePath();
-                }
+                if (this.state.path.engaged) this.disengagePath();
             }
         }
 
-        wander: if (this.state.wander.active && !this.state.running) {
+        wander: if (this.state.wander.active && !this.state.running && !this.state.seat.ref) {
             if (!this.state.target.engaged) this.state.wanderRateTimeout.run();
 
             if (!this.state.path.engaged && this.state.path.request && !this.state.wander.waiting) {
@@ -3598,11 +3705,13 @@ export class Bot {
             this.state.target.current = target;
             this.state.target.id = ids;
             this.state.target.engaged = true;
+            this.stopSitting();
 
             return true;
         } else if (this.state.attack.multiple) {
             this.state.target.id = ids;
             this.state.target.engaged = true;
+            this.stopSitting();
         }
 
         return false;
@@ -3691,10 +3800,24 @@ export class Bot {
         this.state.path.engaged = false;
         this.state.running = false;
         this.disengageGoto();
+
+       if (this.state.seat.ref && !this.state.seat.sitting && this.state.seat.id === undefined) {
+        let seat = this.state.seat.ref;
+        let spot = seat.getSeat(this);
+
+         if (!spot) {
+          this.stopSitting();
+          return false;
+         }
+
+         this.state.seat.id = spot.id;          
+         this.requestPath(seat.trans.offsetX + spot.exit.x, seat.trans.offsetY + spot.exit.y);
+       }
     }
 
     clean() {
         if (this.state.goto.reserve) this.map.GRAPH.reserved.splice(this.map.GRAPH.reserved.indexOf(this.state.goto.reserve), 1);
+        if (this.state.seat.ref) this.state.seat.ref.seats[this.state.seat.id].occupied = false;
     }
 
     delete() {
@@ -4158,6 +4281,7 @@ export class _Map_ {
         this.moveables = {};
         this.locations = {};
         this.clusters = {};
+        this.seats = {};
         this.subLayers = {
             1: [],
             2: [],
@@ -4331,6 +4455,7 @@ export class _Map_ {
             }
             if (obj.pickup) this.pickups[obj.id] = obj;
             if (obj.moveable) this.moveables[obj.id] = obj;
+            if (obj.type === "seat") this.seats[obj.id] = obj;
             if (obj.interactable) this.interactables[obj.id] = obj;
             if (obj.type === "avatar") {
                 this.avatars[obj.id] = obj;
@@ -4369,6 +4494,7 @@ export class _Map_ {
             delete this.objects[id];
             delete this.pickups[id];
             delete this.avatars[id];
+            delete this.seats[id];
 
             if (this.obstacles[id]) {
                 let obj = this.obstacles[id];
@@ -4850,7 +4976,14 @@ export class _Joystick_ extends _Object_ {
                 if (left && this.base.anchored) {
                     $CURRENT_MAP.translate((this.distance.x * this.scale) * movementMultFactor, (this.distance.y * this.scale) * movementMultFactor);
 
-                    if ($CURRENT_MAP.move) $AVATAR.state.walking = true;
+                    if ($CURRENT_MAP.move) {
+                      $AVATAR.state.walking = true;
+                      if ($AVATAR.state.seat.ref) { 
+                        $AVATAR.state.seat.ref.seats[$AVATAR.state.seat.id].occupied = false;
+                        $AVATAR.state.seat.ref = undefined
+                        $AVATAR.state.seat.id = undefined;
+                      }
+                    }
                 }
 
                 if (this.base.anchored) $AVATAR.trans.rotation = this.rotation;

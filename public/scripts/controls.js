@@ -66,6 +66,7 @@
       Shed,
       Tile,
       Syringe,
+      Vendor1,
       _Joystick_,
       _Button_
   } from "/public/scripts/objects.js";
@@ -785,7 +786,7 @@
               try {
                   result = eval(command);
               } catch (err) {
-                  result = "Couldn't run that script!";
+                  result = `Couldn't run that script! Error: ${err}`;
               }
           };
           break;

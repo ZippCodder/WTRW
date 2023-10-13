@@ -58,7 +58,8 @@
       KitchenKnife,
       AssassinsKnife,
       Bot,
-      Floor, 
+      Floor,
+      Bench, 
       ConvenienceStore,
       Bush
   } from "/public/scripts/objects.js";
@@ -169,18 +170,18 @@
 
   let c = new Bot("Trinity", -20, 0),
       b = new Bot("Neo", -10, 0);
-  $MAP.link(c);
+//  $MAP.link(c);
 
   c.state.armour = 0;
   c.state.aggressive = true;
-  c.addItem(new GP_K100);
-  c.equipItem(0);
+//  c.addItem(new GP_K100);
+//  c.equipItem(0);
   c.state.targetUpdateAnimation.rate = 1 / 5;
   c.state.targetId = c.id;
   //      c.wander(-240+5,-240+5);
-  c.follow($AVATAR.id);
+//  c.follow($AVATAR.id);
   //  c.killTarget([$AVATAR.id], true, true);
-  c.rotate(180);
+ // c.rotate(180);
 
   /*
         $MAP.link(b);
@@ -200,7 +201,7 @@
   movementMultFactor = 0.05;
 
   const enemySpawnLoop = new LoopAnimation(function() {
-      if ($MAP.avatarCount < 30) {
+      if ($MAP.avatarCount < 1) {
 
           let {
               x,
@@ -266,6 +267,13 @@
 
   }, window, 2.5);
 
+ const sitLoop = new LoopAnimation(function() {
+    let id = Object.keys($CURRENT_MAP.avatars)[1];
+    let avatar = $CURRENT_MAP.avatars[id];   
+
+    if (Math.random() < 0.5 && avatar && avatar !== $AVATAR) avatar.sit();
+ }, window, 5);
+
   $MAP.lighting = false;
   /*
   $MAP.SUB_MAPS[0].link(new KitchenKnife(40,0));
@@ -281,13 +289,15 @@
   //$MAP.link(new VisibleBarrier(-70, 50, 50, 50));
 
   //$MAP.link(new Floor(0,0,500,500,0));
-  //$MAP.showGeometry();
+  $MAP.showGeometry();
 
   //$AVATAR.state.armour = 1000;
 
-  $MAP.link(new ConvenienceStore);
+  $MAP.link(new ConvenienceStore(-50,-100));
+  $MAP.link(new Bench(0,50));
 
   $GAME_LOOP = function() {
+      sitLoop.run();
       enemySpawnLoop.run();
       timeUpdateLoop.run();
       dayCycleLoop.run();
