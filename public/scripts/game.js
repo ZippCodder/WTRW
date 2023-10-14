@@ -201,7 +201,7 @@
   movementMultFactor = 0.05;
 
   const enemySpawnLoop = new LoopAnimation(function() {
-      if ($MAP.avatarCount < 1) {
+      if ($MAP.avatarCount < 15) {
 
           let {
               x,
@@ -268,7 +268,7 @@
   }, window, 2.5);
 
  const sitLoop = new LoopAnimation(function() {
-    let id = Object.keys($CURRENT_MAP.avatars)[1];
+    let id = Object.keys($CURRENT_MAP.avatars)[random($CURRENT_MAP.avatarCount)];
     let avatar = $CURRENT_MAP.avatars[id];   
 
     if (Math.random() < 0.5 && avatar && avatar !== $AVATAR) avatar.sit();
@@ -294,7 +294,8 @@
   //$AVATAR.state.armour = 1000;
 
   $MAP.link(new ConvenienceStore(-50,-100));
-  $MAP.link(new Bench(0,50));
+  $MAP.link(new Bench(0,20));
+  $MAP.link(new Bench(-60,20));
 
   $GAME_LOOP = function() {
       sitLoop.run();

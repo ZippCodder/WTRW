@@ -2909,8 +2909,7 @@ export class Bot {
             },
             seat: {
              ref: undefined, 
-             id: undefined,
-             sitting: false,
+             id: undefined
             },
             targetId: undefined,
             target: {
@@ -2958,7 +2957,8 @@ export class Bot {
             walking: false,
             punching: false,
             stabbing: false,
-            running: false,
+            running: false, 
+            sitting: false,
             armed: false,
             melee: false,
             draw: false,
@@ -3319,20 +3319,22 @@ export class Bot {
     }
 
     sit(s) {
-     if (!this.state.seat.ref && !this.state.target.engaged && !this.state.running && this.state.path.engaged) {
+     if (!this.state.seat.ref && !this.state.target.engaged && !this.state.running) {
       let allSeats = Object.values(this.map.seats);
       let seat = s || allSeats[random(allSeats.length)];
+
+      if (!seat) return false;
  
-      this.state.seat.ref = seat;
+      this.state.seat.ref = seat;  
      }
     }
 
     stopSitting() { 
       if (this.state.seat.ref) {
-        if (this.state.seat.sitting) {
+        if (this.state.sitting) {
           let seat = this.state.seat.ref.seats[this.state.seat.id];
           seat.occupied = false;
-          this.state.seat.sitting = false;
+          this.state.sitting = false;
  
           let {x,y} = this.map.GRAPH.getPoint((this.state.seat.ref.trans.offsetX + $MAP.centerX) + seat.exit.x,(this.state.seat.ref.trans.offsetY + $MAP.centerY) + seat.exit.y);
           this.translate((x - (this.trans.offsetX + $MAP.centerX)) + 5,(y - (this.trans.offsetY + $MAP.centerY)) - 5);
@@ -3458,7 +3460,7 @@ export class Bot {
 
         if (this.state.goto.engaged) this.state.gotoAnimation.run();
         if (!this.state.path.request) this.state.pathRequestRateLimit.run();
-        if (this.state.seat.sitting) this.state.sittingTimeout.run();
+        if (this.state.sitting) this.state.sittingTimeout.run();
 
         // walk to destination
         walk: if (this.state.path.engaged && !this.state.goto.engaged) {
@@ -3477,7 +3479,7 @@ export class Bot {
                   this.trans.rotation = (seat.r) * Math.PI / 180;
 
                   this.state.seat.ref.seats[seat.id].occupied = true
-                  this.state.seat.sitting = true;
+                  this.state.sitting = true;
                   this.state.sittingTimeout.timingConfig[0] = random(10);
                   this.state.sittingTimeout.start();
                 }                  
@@ -3656,6 +3658,27 @@ export class Bot {
                this.state.wanderRateTimeout.start();
             }
         }
+
+        sit: if (this.state.seat.ref && !this.state.sitting && !this.state.path.engaged && this.state.path.request) {
+          let seat, spot;
+         
+          if (this.state.seat.id === undefined) {
+            seat = this.state.seat.ref;
+            spot = seat.getSeat(this);
+
+            if (!spot) {
+             this.stopSitting();
+             break sit;
+            }
+
+            this.state.seat.id = spot.id;
+          }
+
+           seat = this.state.seat.ref;
+           spot = this.state.seat.ref.seats[this.state.seat.id];
+
+           this.requestPath(seat.trans.offsetX + spot.exit.x, seat.trans.offsetY + spot.exit.y);
+        }
     }
 
     render() {
@@ -3790,7 +3813,12 @@ export class Bot {
             this.state.path.current = path.path;
             this.state.path.index = 0;
             this.state.path.engaged = true;
-        }
+        } 
+
+        if (this.state.seat.ref && this.state.seat.id !== undefined && (!path.result || this.map.GRAPH.blocked.includes(this.state.path.end.unit))) {
+            this.stopSitting();
+        } 
+ 
         return path;
     }
 
@@ -3800,19 +3828,6 @@ export class Bot {
         this.state.path.engaged = false;
         this.state.running = false;
         this.disengageGoto();
-
-       if (this.state.seat.ref && !this.state.seat.sitting && this.state.seat.id === undefined) {
-        let seat = this.state.seat.ref;
-        let spot = seat.getSeat(this);
-
-         if (!spot) {
-          this.stopSitting();
-          return false;
-         }
-
-         this.state.seat.id = spot.id;          
-         this.requestPath(seat.trans.offsetX + spot.exit.x, seat.trans.offsetY + spot.exit.y);
-       }
     }
 
     clean() {
