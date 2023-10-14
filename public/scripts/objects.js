@@ -3077,6 +3077,10 @@ export class Bot {
                     if (target && this.state.target.current !== target) {
                         this.state.target.current = target;
                         this.state.target.engaged = true;
+                        this.state.hostile = true;
+                    } else if (!target && !this.state.target.current) {
+                        this.state.target.engaged = false;
+                        this.state.hostile = false;
                     }
 
                 } else if (map.avatars[this.state.target.id[0]]) {
@@ -3735,6 +3739,8 @@ export class Bot {
             this.state.target.id = ids;
             this.state.target.engaged = true;
             this.stopSitting();
+
+            return true;
         }
 
         return false;
@@ -3750,9 +3756,10 @@ export class Bot {
 
         if (this.state.attack.openCarry) {
             this.drawWeapon();
-        } else {
-            this.holsterWeapon();
-        }
+            return;
+        } 
+
+        this.holsterWeapon();
     }
 
     run() {
