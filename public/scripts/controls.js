@@ -12,6 +12,7 @@
       MultiFrameLoopAnimation,
       MultiFrameLinearAnimation,
       offsetVertices,
+      normalizeRotation,
       Inventory,
       fromRGB,
       toRGB,
@@ -53,7 +54,7 @@
       KitchenKnife,
       AssassinsKnife,
       Bot,
-      Bush, 
+      Bush,
       ConvenienceStore,
       LightBush,
       MixedBush,
@@ -71,6 +72,241 @@
       _Button_
   } from "/public/scripts/objects.js";
 
+  import _dialogues from "/public/scripts/dialogue.js";
+
+  /* LOGIC FOR INTERACTION BUTTONS */
+
+  const grabButton = document.querySelector(".grab-button");
+  const actionButton = document.querySelector(".action-button");
+
+  function toggleGrab(e) {
+   e.preventDefault();
+
+   if ($AVATAR.grab()) {
+     grabButton.style.opacity = "0.5";
+   } else {
+     $AVATAR.drop();
+     grabButton.style.opacity = "1";
+   }
+  }  
+
+  function runAction(e) {
+    e.preventDefault();
+
+    const i = $CURRENT_MAP.interactables[$CURRENT_MAP.currentInteractable.id];
+    if (i) i.action();
+    $CURRENT_MAP.updateInteractable();
+  }
+
+  grabButton.ontouchstart = toggleGrab;
+  grabButton.onclick = toggleGrab;
+
+  actionButton.ontouchstart = runAction;
+  actionButton.onclick = runAction;
+
+  /* LOGIC FOR DIALOG CONTROLS AND PROCESS */
+
+  const subtitles = document.querySelector(".subtitles");
+  const optionsContainer = document.querySelector(".bottom-panel__options");
+  const dialogueOption1 = document.querySelector(".option-1");
+  const dialogueOption2 = document.querySelector(".option-2");
+  const optionNavUp = document.querySelector(".nav-up");
+  const optionNavDown = document.querySelector(".nav-down");
+  const speakButton = document.querySelector(".speak-button");
+
+  let selectedModule = 0;
+  let selectedOption = 0;
+  let currentOptions = [0, 1];
+  let optionSelect = true;
+
+  optionNavUp.onmousedown = function() {
+      if (selectedOption > 0 && optionSelect) {
+          selectedOption--;
+          updateNav();
+
+          if (selectedOption < currentOptions[0] && selectedOption < currentOptions[1]) {
+              currentOptions = [selectedOption, selectedOption + 1];
+          }
+
+          dialogueOption1.innerText = _dialogues[selectedModule].options[currentOptions[0]].content;
+          dialogueOption2.innerText = _dialogues[selectedModule].options[currentOptions[1]].content;
+
+          if (selectedOption === currentOptions[0]) {
+              dialogueOption1.style.backgroundColor = "#444444";
+              dialogueOption2.style.backgroundColor = "#222222";
+
+              return;
+          }
+
+          dialogueOption2.style.backgroundColor = "#444444";
+          dialogueOption1.style.backgroundColor = "#222222";
+      }
+  }
+
+  optionNavDown.onmousedown = function() {
+
+      if (selectedOption < _dialogues[selectedModule].options.length - 1 && optionSelect) {
+          selectedOption++;
+          updateNav();
+
+          if (selectedOption > currentOptions[0] && selectedOption > currentOptions[1]) {
+              currentOptions = [selectedOption - 1, selectedOption];
+          }
+
+          dialogueOption1.innerText = _dialogues[selectedModule].options[currentOptions[0]].content;
+          dialogueOption2.innerText = _dialogues[selectedModule].options[currentOptions[1]].content;
+
+          if (selectedOption === currentOptions[0]) {
+              dialogueOption1.style.backgroundColor = "#444444";
+              dialogueOption2.style.backgroundColor = "#222222";
+
+              return;
+          }
+
+          dialogueOption2.style.backgroundColor = "#444444";
+          dialogueOption1.style.backgroundColor = "#222222";
+      }
+  }
+
+  function updateOptions() {
+    if (optionSelect) {
+      dialogueOption1.innerText = _dialogues[selectedModule].options[selectedOption].content;
+      dialogueOption2.innerText = _dialogues[selectedModule].options[selectedOption + 1].content;
+    } else {
+      dialogueOption1.innerText = "...";
+      dialogueOption2.innerText = "...";
+    }
+
+      updateNav();
+
+      if (selectedOption === currentOptions[0]) {
+          dialogueOption1.style.backgroundColor = "#444444";
+          dialogueOption2.style.backgroundColor = "#222222";
+
+          return;
+      }
+
+      dialogueOption2.style.backgroundColor = "#444444";
+      dialogueOption1.style.backgroundColor = "#222222";
+  }
+
+  function updateNav() {
+   document.querySelector(".nav-up div").style.opacity = (selectedOption-1 < 0) ? "0.5":"1";
+   document.querySelector(".nav-down div").style.opacity = (selectedOption+1 > (_dialogues[selectedModule].options.length-1)) ? "0.5":"1";
+  }
+
+  function updateSubtitles(content, callback) {
+    let characterName = (optionSelect) ? $AVATAR.character:$ACTIVE_DIALOGUE_PARTY.character;
+
+    subtitles.innerHTML = `<strong>${characterName}:</strong> ...`;
+
+    setTimeout(function() {
+     let interval, pos = 0, str = content;
+
+     interval = setInterval(function() {
+      subtitles.innerHTML = `<strong>${characterName}:</strong> ` + str.slice(0,pos);
+      pos++;
+ 
+      if (pos > str.length) {
+       clearInterval(interval);
+       if (callback) callback();
+      }
+     },50);
+    },1000);
+  }
+
+  function processResponse() {
+    updateSubtitles(_dialogues[selectedModule].options[selectedOption].getContent(),function() {
+     if (_dialogues[selectedModule].options[selectedOption].action) _dialogues[selectedModule].options[selectedOption].action();
+
+     if (_dialogues[selectedModule].options[selectedOption].getDestination()) {
+      setTimeout(function() {
+       let [mod,op] = _dialogues[selectedModule].options[selectedOption].getDestination();
+       updateSubtitles(_dialogues[mod].responses[op].content,function() {
+        if (_dialogues[mod].responses[op].action) _dialogues[mod].responses[op].action();
+
+        if (_dialogues[mod].responses[op].getDestination()) {
+          selectedModule = _dialogues[mod].responses[op].getDestination()[0];
+          selectedOption = 0;
+          optionSelect = true;
+          updateOptions(); 
+        }
+       });
+      },1000);
+     }
+    });
+
+    optionSelect = false;
+    updateOptions();
+  }
+
+  optionsContainer.onclick = function() {
+   if (optionSelect && $ACTIVE_DIALOGUE_PARTY) {
+    processResponse();
+   }
+  }
+
+  function startDialogue(e) {
+    e.preventDefault();
+
+    let res = undefined, dist = Infinity;
+
+    for (let avatar in $CURRENT_MAP.avatars) {
+      avatar = $CURRENT_MAP.avatars[avatar];
+
+      if (avatar === $AVATAR || avatar.state.target.engaged) continue;
+
+      let d = distance(0,0,avatar.trans.offsetX,avatar.trans.offsetY);
+      if ((d < dist || res === undefined) && d < 30) {
+        res = avatar;
+        dist = d;
+      } 
+    }  
+
+    if (!res) return;
+
+    $ACTIVE_DIALOGUE_PARTY = res;
+    res.stopWander();
+    res.stopSitting();
+    if (res.state.path.engaged) res.disengagePath();
+
+    res.state.rotationTarget = normalizeRotation((Math.atan2((0 - res.map.centerY) - (res.trans.offsetY - res.map.centerY), (0 - res.map.centerX) - (res.trans.offsetX - res.map.centerX)) * 180 / Math.PI) - 90);
+
+   requestTransition(function() {
+    document.querySelector("#mainControls").style.display = "none";
+    document.querySelector("#dialogue").style.display = "block";
+    subtitles.innerHTML = `<strong>${$AVATAR.character}:</strong> ...`;
+
+    selectedModule = 0;
+    selectedOption = 0;
+    optionSelect = true;    
+
+    updateOptions();
+   }, 10);
+  }
+
+  window.endDialogue = function(e) {
+   if ($ACTIVE_DIALOGUE_PARTY) {
+   
+    $ACTIVE_DIALOGUE_PARTY.wander();
+    $ACTIVE_DIALOGUE_PARTY = undefined;
+ 
+   requestTransition(function() {
+     document.querySelector("#mainControls").style.display = "block";
+     document.querySelector("#dialogue").style.display = "none";
+
+     $CURRENT_MAP.move = true;
+    }, 10);
+   }
+  }
+
+  speakButton.ontouchstart = startDialogue;
+  speakButton.onclick = startDialogue;
+
+  updateOptions();
+  
+
+  /* MAP CONTROLS AND MINIMAP RENDERING */
 
   const mapContainer = document.querySelector("#map");
   const closeMapButton = document.querySelector("#map-close");
@@ -464,14 +700,16 @@
   mapZoomOutButton.onmousedown = mapZoomOut;
 
 
+  /* AMMO BUTTON AND RELOAD FUNCTIONALITY */
+
   let ammoDisplay = document.querySelector("#ammo-display");
 
   ammoDisplay.onmousedown = function() {
-    $AVATAR.reload();
+      $AVATAR.reload();
   }
-  
+
   ammoDisplay.ontouchstart = function() {
-    $AVATAR.reload();
+      $AVATAR.reload();
   }
 
   window.showAmmoDisplay = function() {
@@ -483,13 +721,13 @@
   }
 
   window.disableReloadDisplay = function() {
-   document.querySelector("#ammo-display img").style.display = "none";
-   document.querySelector("#ammo-display div").style.display = "flex";
+      document.querySelector("#ammo-display img").style.display = "none";
+      document.querySelector("#ammo-display div").style.display = "flex";
   }
-  
+
   window.enableReloadDisplay = function() {
-   document.querySelector("#ammo-display div").style.display = "none";
-   document.querySelector("#ammo-display img").style.display = "block";
+      document.querySelector("#ammo-display div").style.display = "none";
+      document.querySelector("#ammo-display img").style.display = "block";
   }
 
   window.updateAmmoDisplay = function() {
@@ -500,6 +738,7 @@
   }
 
 
+  /* HEALTH BAR DISPLAY */
 
   $HEALTH_BAR = document.querySelector("#healthbar");
 
@@ -507,17 +746,11 @@
       $HEALTH_BAR.style.width = `${aisofb($AVATAR.state.vitals.health,100)}%`;
   }
 
-
+  /* JOYSTICK AND BUTTON CONTROLS LOGIC */
 
   $JOYSTICK_L = new _Joystick_(true, joystickSizes.left, fixedJoysticks, joystickPositions.left);
 
   $JOYSTICK_R = new _Joystick_(false, joystickSizes.right, fixedJoysticks, joystickPositions.right);
-
-  $ACTION_BUTTON = new _Button_(textures.controls.actionbutton, textures.controls.actionbuttonactive, (worldWidth / 2) - 20, (-worldHeight / 2) + 39, function(pX, pY) {
-      const i = $CURRENT_MAP.interactables[$CURRENT_MAP.currentInteractable.id];
-      if (i) i.action();
-      $CURRENT_MAP.updateInteractable();
-  }, 18, 1.5, false, [-9, 9, 1, 0, 0, 9, 9, 1, 0.703125, 0, -9, -9, 1, 0, 0.703125, 9, 9, 1, 0.703125, 0, -9, -9, 1, 0, 0.703125, 9, -9, 1, 0.703125, 0.703125]);
 
   $RELOAD_BUTTON = new _Button_(textures.controls.reloadbutton, textures.controls.reloadbuttonactive, (worldWidth / 2) - 38, -(worldHeight / 2) + 20, function(pX, pY) {
       if (this.enabled) {
@@ -631,7 +864,7 @@
           }
       }
 
-      if (!buttonPress) moveJoystick(e);
+      if (!buttonPress && !$ACTIVE_DIALOGUE_PARTY) moveJoystick(e);
   });
 
   canvas.addEventListener("touchmove", (e) => {
@@ -685,6 +918,8 @@
   window.addEventListener("contextmenu", function(e) {
       e.preventDefault();
   });
+  
+  /* INVENTORY CONTROLS AND MANAGMENT LOGIC */
 
   const inventoryButton = document.querySelectorAll(".controls-container__button").item(0);
   const inventoryCloseButton = document.querySelector(".main-inventory__close");
@@ -711,6 +946,8 @@
   inventoryCloseButton.ontouchstart = closeInventory;
   inventoryButton.ontouchstart = openInventory;
 
+
+  /* CONSOLE CONTROLS AND COMMAND LOGIC */
 
   const consoleContainer = document.querySelector("#console");
   const consoleButton = document.querySelector("#console-button");
@@ -750,17 +987,17 @@
 
   placeItemButton.onmousedown = placeItem;
   placeItemButton.ontouchstart = placeItem;
-  
+
   function placeItem(e) {
-   e.preventDefault();
-   if (itemPlacementQueue.length) {
-    let item = itemPlacementQueue.pop();
-    
-    item.translate($MAP_DISPLAY.displayOffset.x, -$MAP_DISPLAY.displayOffset.y);
-    $CURRENT_MAP.link(item);
-  
-    if (!itemPlacementQueue.length) placeItemButton.style.display = "none";
-   }
+      e.preventDefault();
+      if (itemPlacementQueue.length) {
+          let item = itemPlacementQueue.pop();
+
+          item.translate($MAP_DISPLAY.displayOffset.x, -$MAP_DISPLAY.displayOffset.y);
+          $CURRENT_MAP.link(item);
+
+          if (!itemPlacementQueue.length) placeItemButton.style.display = "none";
+      }
   }
 
   function sendSystemMessage(content = "Script ran sucessfully.") {
@@ -801,7 +1038,7 @@
           break;
           case "place": {
               try {
-                  itemPlacementQueue.unshift(eval("new " + command.replace("add", "").trim()));  
+                  itemPlacementQueue.unshift(eval("new " + command.replace("add", "").trim()));
                   placeItemButton.style.display = "inline-block";
                   result = command + " added to placement queue. Use '+' on the selected map coordinates."
               } catch (err) {
@@ -890,7 +1127,8 @@
   consoleSendButton.ontouchstart = sendMessage;
   consoleSendButton.onmousedown = sendMessage;
 
-  // Inventory data binding...
+ 
+  /* DATA BINDING FOR INVENTORY */
 
   const itemDescriptions = {
       default: "<strong>Pro tip:</strong> Click an item to select it and see a full description of its properties and usage.</br></br>Oh wait, what items? You're a noob lol.",
@@ -935,18 +1173,18 @@
   const itemDescription = document.querySelector(".main-inventory__description-content");
   let controlSwitchButton;
 
-  window.updateDescription = function(itemName,item) {
+  window.updateDescription = function(itemName, item) {
       if (!itemName) return;
 
       let d = itemDescriptions[itemName];
 
       if (item) {
-       switch (item.type) {
-        case "medicine": {
-          d = d.replace("[used]",(item.used) ? "<br><i>Used</i>":"<br><i>New</i>");
-        };
-        break;
-       };
+          switch (item.type) {
+              case "medicine": {
+                  d = d.replace("[used]", (item.used) ? "<br><i>Used</i>" : "<br><i>New</i>");
+              };
+              break;
+          };
       }
 
       itemDescription.innerHTML = d;

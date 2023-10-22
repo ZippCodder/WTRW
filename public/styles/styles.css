@@ -15,13 +15,223 @@ html,body {
         }
 
         #gameArea {
-            width: 100%;
-            height: 100%;
-            background: white;
-            z-index: 0;
+          width: 100%;
+          height: 100%;
+          background: white;
+          z-index: 0;
+        }
+
+        #mainControls {
+          display: block;
+        }
+
+        .controls-container__interaction-buttons {
+          position: absolute;
+          width: min-content;
+          height: min-content;
+          right: 1px;
+          bottom: max(calc(2.5em + 8px),25vh);
+          margin: 1em;
+        } 
+
+        .interaction-buttons__button {
+          width: 2em;
+          height: 2em;
+          background: #555555;
+          display: inline-block;
+          margin-top: 0.5em;
+          border: none;
+          border-bottom: 4px solid #333333; 
+          color: white;
+          box-sizing: border-box;
+          font-family: var(--main-font);
+          outline: 2px solid #111111;
+          margin-left: 0.5em;
+          float: right;
+          padding: 0;
+        }
+
+        .interaction-buttons__button p {
+          display: block; 
+          width: 100%;
+          height: 100%;
+          line-height: 1.8em;
+          margin: 0;
+          padding: 0;
+        }
+
+        .action-button {
+          margin-bottom: 1em;
+          width: 2.5em;
+          height: 2.5em;
+        }
+
+        .action-button p {
+          line-height: 2.3em;
+        }
+
+        .action-button p::after {
+          content: "";
+          display: block;
+          width: 1em; 
+          height: 1em;
+          background: #888888;
+          margin: auto;
+          transform: translateY(calc(6px + 0.5em));
+          clip-path: polygon(0% 80%, 100% 80%, 50% 0%, 0% 80%);
+        }
+
+        .grab-button {
+          margin-right: 3.5em;
+          margin-bottom: 1em;
         }
  
-       #mapInfo {
+        .speak-button {
+          margin-right: 0.25em;
+        }
+        
+        .speak-button p::after {
+          content: "";
+          display: block;
+          width: 1em; 
+          height: 1em;
+          margin: auto;
+          background: #888888;
+          transform: translateY(-3.5em);
+          clip-path: polygon(0% 20%, 100% 20%, 50% 100%, 0% 20%);
+        }
+
+        .grab-button p::after {
+          content: "";
+          display: block;
+          width: 1em; 
+          height: 1em;
+          background: #888888;
+          transform: translate(calc(2.5em + 2px),calc(-1em - 4px));
+          clip-path: polygon(0% 50%, 80% 0%, 80% 100%, 0% 50%);
+        }
+
+        #dialogue {
+          display: none;
+        }
+
+        .panel {
+          width: 100%;
+          height: 10%;
+          position: absolute;
+          background: #222222;
+          display: block;
+        }
+
+        .top-panel {
+          top: 0;
+          display: flex;
+          align-items: center;
+          flex-wrap: nowrap;
+          padding-left: 0.5em;
+          padding-right: 0.5em;
+          box-sizing: border-box;
+        }
+        
+        .bottom-panel {
+          height: 20%;
+          bottom: 0;
+          padding: 1%;
+          box-sizing: border-box;
+          min-height: min-content;
+        }
+
+        .bottom-panel__dialogue {
+          width: 100%;
+          height: 3em;
+          display: grid;
+          position: relative;
+          grid-template-rows: 100%;
+          grid-template-columns: 2em calc(100% - 2em);
+        }   
+
+        .bottom-panel__nav {
+          width: 100%;
+          height: 100%;
+          box-sizing: border-box;
+          height: 100%;
+          border: 1px solid white;
+          display: block;
+          position: relative;
+        }
+
+        .bottom-panel__options {
+          display: block;
+          width: 100%;
+          height: 100%;
+          color: white;
+          font-family: var(--main-font);
+          position: relative;
+          padding-left: 0.5em;
+          padding-right: 0.5em;
+          box-sizing: border-box;
+          grid-column-start: 2;
+          grid-column-end: 3;
+        }
+
+        .option {
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          width: 100%;
+        }
+
+        .nav-up, .nav-down {
+          width: 100%; 
+          height: 50%;
+          border: none;
+          background: none;
+        }
+        
+        .nav-up div {
+          width: 100%; 
+          height: 100%;
+          background: white;
+          transform: scale(0.6);
+          clip-path: polygon(0% 100%, 100% 100%, 50% 0%, 0% 100%);
+         }
+ 
+         .nav-down div {
+          width: 100%; 
+          height: 100%;
+          background: white;
+          transform: scale(0.6);
+          clip-path: polygon(0% 0%, 100% 0%, 50% 100%, 0% 0%);
+         }
+
+        .option {
+          height: 50%;
+          display: block;
+          margin: 0;
+          padding: 0;
+          padding-left: 0.5em;
+        }
+
+        .option-1 {
+          background: #444444;
+        }
+
+        .subtitles {
+          color: white;
+          text-align: center; 
+          display: block;
+          width: 100%;
+          bottom: 25%;
+          pointer-events: none;
+          font-weight: 500;
+          font-size: 80%;
+          display: inline-block;
+          font-family: var(--main-font);
+          margin: 0;
+          padding: 0;
+        }
+ 
+        #mapInfo {
          display: grid; 
          position: absolute;
          width: 25vmin;

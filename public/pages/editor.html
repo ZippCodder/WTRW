@@ -141,7 +141,8 @@
             CROSS_TILE,
             SYRINGE,
             SHED,
-            STORE_SHELF_1
+            STORE_SHELF_1,
+            MAIN_AVATAR_GRAB
         } from "/public/scripts/models.js";
 
         // Import texture for editing and downloading...
@@ -188,9 +189,9 @@
         //SUPERMARKET(-98, -338, 0.2);
         //CAFE(-18, -18, 0.2);
         //MAIN_AVATAR_DEFAULT(-5, -5, 0.2);
-        resize(512, 512);
+        resize(256, 512);
         // export function draw(a, w, h, iw, ih, s, lw, attribs=[],canvas) {
-        let texture = STORE_SHELF_1;
+        let texture = MAIN_AVATAR_GRAB;
          
 //new Sheet([ROAD_RAIL,ROAD_SIGN,URBAN_FENCE_HALF,URBAN_FENCE,URBAN_FENCE_VERTICAL], 1024, 1024);
 
@@ -207,6 +208,6 @@
        // log(texture.getData());
           log(texture.getData());
           console.log(texture.textureDimensions);
-        setSource(`VENDOR_1.png`); 
+        setSource(`MAIN_AVATAR_GRAB.png`); 
     </script>
 </html>

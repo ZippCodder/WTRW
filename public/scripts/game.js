@@ -68,8 +68,8 @@
   $AVATAR.postLink();
 
 
-  const firstNames = ["Dave", "Richee", "Brenda", "Stacy", "Skylar", "Malcom", "Steven", "Brandon", "Halee", "Kaylee", "Peter", "Kate", "Hannah", "Joy", "Lenny", "Leon", "Teddy", "Amanda", "Pablo"];
-  const lastNames = ["Davidson", "Jackson", "Olvedo", "Cabello", "Kabrick", "Rich", "Dotson", "Latins", "Emmit", "James", "Havana", "York", "Ross", "Jean", "Masons", "Umada", "Gerannd"];
+  const firstNames = ["Dave", "Richee", "Brenda", "Stacy", "Skylar", "Malcom", "Steven", "Brandon", "Halee", "Kaylee", "Peter", "Kate", "Hannah", "Joy", "Lenny", "Leon", "Teddy", "Amanda", "Pablo", "Emma"];
+  const lastNames = ["Davidson", "Jackson", "Olvedo", "Cabello", "Kabrick", "Rich", "Dotson", "Latins", "Emmit", "James", "Havana", "York", "Ross", "Jean", "Masons", "Umada", "Gerannd", "Roberts", "Robby"];
 
   function getName() {
       return `${firstNames[random(firstNames.length)]} ${lastNames[random(lastNames.length)]}`;
@@ -271,20 +271,21 @@
     let id = Object.keys($CURRENT_MAP.avatars)[random($CURRENT_MAP.avatarCount)];
     let avatar = $CURRENT_MAP.avatars[id];   
 
-    if (Math.random() < 0.5 && avatar && avatar !== $AVATAR) avatar.sit();
+    if (Math.random() < 0.5 && avatar && avatar !== $AVATAR && avatar !== $ACTIVE_DIALOGUE_PARTY) avatar.sit();
  }, window, 5);
 
  const crimeLoop = new LoopAnimation(function() {
     let attacker = $CURRENT_MAP.avatars[Object.keys($CURRENT_MAP.avatars)[random($CURRENT_MAP.avatarCount)]];
     let victim = $CURRENT_MAP.avatars[Object.keys($CURRENT_MAP.avatars)[random($CURRENT_MAP.avatarCount)]];
 
-  if (attacker !== $AVATAR && attacker !== victim && attacker && !attacker.state.target.engaged && victim && Math.random() < 0.5) {
+  if (attacker !== $AVATAR && attacker !== victim && attacker && !attacker.state.target.engaged && victim && Math.random() < 0.5 && attacker !== $ACTIVE_DIALOGUE_PARTY && victim !== $ACTIVE_DIALOGUE_PARTY) {
     attacker.state.hostile = true;
     attacker.killTarget([victim.id],true,(Math.random < 0.5) ? true:false);
   }
- }, window, 5);
+ }, window, 60);
 
   $MAP.lighting = false;
+  $ACTIVE_DIALOGUE_PARTY = Object.values($CURRENT_MAP.avatars)[5];
   /*
   $MAP.SUB_MAPS[0].link(new KitchenKnife(40,0));
   $MAP.SUB_MAPS[0].link(new KitchenKnife(40,0));
@@ -299,7 +300,6 @@
   //$MAP.link(new VisibleBarrier(-70, 50, 50, 50));
 
   //$MAP.link(new Floor(0,0,500,500,0));
-  $MAP.showGeometry();
 
   //$AVATAR.state.armour = 1000;
 

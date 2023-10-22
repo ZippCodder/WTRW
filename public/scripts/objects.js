@@ -1029,6 +1029,7 @@ export class BlackBook extends _InstancedClusterClient_ {
     name = "black book";
     clusterName = "black book";
     texture = textures.objects.book1;
+    subLayer = 1;
     moveable = true;
 
     constructor(initialX, initialY, initialRotation) {
@@ -1045,6 +1046,7 @@ export class WhiteBook extends _InstancedClusterClient_ {
     name = "white book";
     clusterName = "white book";
     texture = textures.objects.book2;
+    subLayer = 1;
     moveable = true;
 
     constructor(initialX, initialY, initialRotation) {
@@ -1200,6 +1202,8 @@ class _Seat_ extends _StaticClusterClient_ {
   }
 
   action() {
+   if ($AVATAR.state.seat.ref) return false;
+
     let seat = this.getSeat($AVATAR); 
 
     if (!seat) return;
@@ -1355,6 +1359,7 @@ export class Laptop extends _StaticClusterClient_ {
     clusterName = "laptop";
     texture = textures.objects.laptop;
     height = 9.72;
+    subLayer = 1;
     moveable = true;
     name = "laptop";
 
@@ -1957,7 +1962,12 @@ export class Shed extends _Building_ {
     constructor(initialX, initialY, initialRotation) {
         super(initialX, initialY, initialRotation, [
             [0, -20, 0,[0,20]]
-        ], [new _Map_(90, 50, false, "House 1").init(undefined,undefined,[0,-30],true)], undefined);
+        ], [new _Map_(90, 50, false, "Shed").init(undefined,undefined,[0,-30],true)], undefined);
+
+        let floor = new Floor(0, 0, 150, 100, 1);
+        floor.exclude = true;
+
+        this.rooms[0].link(floor);
     }
 }
 
@@ -2006,6 +2016,7 @@ export class _Pickup_ extends _InstancedClusterClient_ {
     interactable = true;
     minDistance = 5;
     moveable = true;
+    subLayer = 1;
 
     postLink() {
         this.map.link(this.ring);
@@ -2259,6 +2270,7 @@ export class PickupRing extends _InstancedClusterClient_ {
     exclude = true;
     texture = textures.misc.pickupring;
     managedMovement = true;
+    subLayer = 2;
 
     constructor(initialX, initialY, initialRotation) {
         super(initialX, initialY, initialRotation);
@@ -2343,8 +2355,8 @@ export class Avatar {
                 pickup: {
                     x: 0,
                     y: 0,
-                    width: 5,
-                    height: 5
+                    width: 1,
+                    height: 1
                 }
             },
             seat: {
@@ -2359,7 +2371,7 @@ export class Avatar {
                     bRotation: 0,
                 },
                 current: false,
-                reachDistance: 2.5
+                reachDistance: 8
             },
             vitals: {
                 health: 100,
@@ -2553,6 +2565,8 @@ export class Avatar {
 
                     delete $CURRENT_MAP.avatars[this.id];
                     delete $CURRENT_MAP.obstacles[this.id];
+                    endDialogue();
+                    if (this.state.pickup.current) this.drop();
                     this.hidden = true;
                     noclip = true;
 
@@ -2612,6 +2626,8 @@ export class Avatar {
     }
 
     equipItem(slot) {
+        if (this.state.pickup.current) return;
+
         let item = this.inventory.items[slot];
 
         if (item) {
@@ -2726,6 +2742,8 @@ export class Avatar {
         if (this.state.armed && this.state.equippedItems.mainTool) this.state.recoilAnimation.run();
         if (this.state.reloadTimeout.reset) this.state.reloadTimeout.run();
 
+        if (this.state.pickup.current) this.state.position.body.texture = 24;
+
         this.movePickup();
     }
 
@@ -2787,7 +2805,8 @@ export class Avatar {
                 this.state.pickup.offset.aRotation = (this.trans.rotation * 180 / Math.PI);
                 this.state.pickup.offset.bRotation = obj.trans.rotation;
                 this.state.pickup.current = obj;
-                break;
+                
+                return true;
             }
         }
     }
@@ -3265,13 +3284,14 @@ export class Bot {
                 if (attacker) attacker.state.kills += 1;
 
                 this.purgeItems(5);
+                if (this === $ACTIVE_DIALOGUE_PARTY) endDialogue();
                 this.delete();
 
                 return;
             }
         }
 
-        if ((this.state.passive || (this.state.armed && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo <= 0)) && !this.state.running && !this.state.follow.target) {
+        if ((this.state.passive || (this.state.armed && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo <= 0)) && !this.state.running && !this.state.follow.target && this !== $ACTIVE_DIALOGUE_PARTY) {
             this.stopSitting();
             this.run();
         } else if (!this.state.target.id.includes(owner.state.targetId) && this.map.avatars[owner.id] && this.state.aggressive) {
@@ -3301,11 +3321,15 @@ export class Bot {
     }
 
     wander(anchorX, anchorY) {
-        this.state.wander.active = true;
+
         this.state.wander.anchor = {
-            x: anchorX,
-            y: anchorY
+            x: this.state.wander.anchor.x || anchorX,
+            y: this.state.wander.anchor.y || anchorY
         };
+
+        let {x,y} = this.state.wander.anchor;
+
+        if (x && y) this.state.wander.active = true;
     }
 
     stopWander() {
@@ -3839,7 +3863,7 @@ export class Bot {
 
     clean() {
         if (this.state.goto.reserve) this.map.GRAPH.reserved.splice(this.map.GRAPH.reserved.indexOf(this.state.goto.reserve), 1);
-        if (this.state.seat.ref) this.state.seat.ref.seats[this.state.seat.id].occupied = false;
+        if (this.state.seat.ref && this.state.seat.id !== undefined) this.state.seat.ref.seats[this.state.seat.id].occupied = false;
     }
 
     delete() {
@@ -4758,10 +4782,10 @@ export class _Map_ {
             }
         }
 
-        if (!this.currentInteractable && $ACTION_BUTTON) {
-            $ACTION_BUTTON.hidden = true;
-        } else if ($ACTION_BUTTON) {
-            $ACTION_BUTTON.hidden = false;
+        if (!this.currentInteractable) {
+            document.querySelector(".action-button").style.opacity = "0.5";
+        } else {
+            document.querySelector(".action-button").style.opacity = "1";
         }
     }
 
@@ -5083,7 +5107,7 @@ export class _Joystick_ extends _Object_ {
 
         // activate player firing state when the left joystick is at the edge, and viceversa
         if (!this.left && $CURRENT_MAP.move) {
-            if (this.distance.absolute === this.base.radius) {
+            if (this.distance.absolute === this.base.radius && !$AVATAR.state.pickup.current) {
 
                 if ($AVATAR.state.armed) {
                     $AVATAR.state.fire = true;

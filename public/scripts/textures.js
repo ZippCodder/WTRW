@@ -96,6 +96,7 @@ await textures.skins.addTexture("avatarassassinsknife2", "/public/images/texture
 await textures.skins.addTexture("avatarassassinsknife3", "/public/images/textures/MAIN_AVATAR_MELEE_ASSASSINS_KNIFE_3.png");
 await textures.skins.addTexture("avatarassassinsknifewalking1", "/public/images/textures/MAIN_AVATAR_MELEE_ASSASSINS_KNIFE_WALKING_1.png");
 await textures.skins.addTexture("avatarassassinsknifewalking2", "/public/images/textures/MAIN_AVATAR_MELEE_ASSASSINS_KNIFE_WALKING_2.png");
+await textures.skins.addTexture("avatargrab", "/public/images/textures/MAIN_AVATAR_GRAB.png");
 
 textures.objects = new TextureContainer();
 

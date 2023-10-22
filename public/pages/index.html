@@ -13,12 +13,29 @@
     <!-- screen loader -->
     
     <div id="loading-screen"><div class="loader-filter"><img src="/public/images/logo2.png" class="loading-img" /><div id="loader"></div></div></div>
+
     <canvas id="gameArea"></canvas>
+          
+    <!-- onscreen content and controls -->
+   <div id="dialogue">
+    <div class="top-panel panel"><p class="subtitles"><strong class="subtitles__name">ROBINHOOD:</strong> ...</p></div>
+    <div class="bottom-panel panel">
+    <div class="bottom-panel__dialogue">
+     <div class="bottom-panel__nav">
+      <div class="nav-up"><div></div></div><div class="nav-down"><div></div></div>
+     </div><div class="bottom-panel__options">
+      <p class="option-1 option"></p>
+      <p class="option-2 option"></p>
+     </div>
+    </div>
+    </div>
+   </div> 
+
+   <div id="mainControls">
     <div id="mapInfo">
      <canvas id="mapDisplay"></canvas>
      <div id="mapTime"><i><p>9:36</p> <small>am</small></i></div>
     </div>
-    <!-- onscreen content and controls --> 
            
             <div class="controls-container__inv">
                 <div class="controls-container__item item-1"></div>
@@ -38,6 +55,12 @@
                   <img class="controls-container__button" src="/public/images/icons/GEAR_ICON.png" />
                 </div>
 
+                <div class="controls-container__interaction-buttons">
+                  <button class="interaction-buttons__button action-button"><p>A</p></button>
+                  <button class="interaction-buttons__button grab-button"><p>G</p></button>
+                  <button class="interaction-buttons__button speak-button"><p>T</p></button>
+                </div>
+
              <div class="controls-container__info-boxes">
              <div class="info-box" id="armour-display"><img class="icon" src="/public/images/icons/SHLD_ICON.png" /><p id="armour">100</p></div>
              <div class="info-box" id="ammo-display"><div><div></div></div><img class="icon" src="/public/images/icons/AMMO_ICON.png" /><p id="ammo">0/0</p></div>
@@ -46,6 +69,7 @@
                 <div class="controls-container__stats">
                   <div class="controls-container__health"><img src="/public/images/icons/HLT_ICON.png" class="icon" /><div class="controls-container__healthbar"><div id="healthbar"></div></div><img src="/public/images/icons/FOD_ICON.png" class="icon" /><p id="hunger">100</p><img src="/public/images/icons/WTR_ICON.png" class="icon" /><p id="thirst">100</p></div>
                 </div>
+            </div>
 
    <!-- onscreen content and controls -->
 
@@ -180,7 +204,7 @@ Oh wait, what items? You're a noob lol.
                         <td>Confidence:</td><td>0</td>
                        </tr>
                        <tr>
-                        <td>Likability:</td><td>0</td>
+                        <td>Reputation:</td><td>0</td>
                        </tr>
                       </table>
                       </br>

@@ -25,6 +25,7 @@ window.onload = async () => {
     window.$AVATAR_MODE_BUTTON = null;
     window.$DROP_ITEM_BUTTON = null;
     window.$AVATAR = null;
+    window.$ACTIVE_DIALOGUE_PARTY = null;
     window.$MAP = null;
     window.$MAP_DISPLAY = null;
     window.$HEALTH_BAR = null;
@@ -417,7 +418,7 @@ window.onload = async () => {
     }
 
     $OBJECTS.push($AVATAR);
-    $CONTROLS.push($JOYSTICK_L, $JOYSTICK_R, $ACTION_BUTTON, $RELOAD_BUTTON, $AVATAR_MODE_BUTTON, $DROP_ITEM_BUTTON);
+    $CONTROLS.push($JOYSTICK_L, $JOYSTICK_R, $RELOAD_BUTTON, $AVATAR_MODE_BUTTON, $DROP_ITEM_BUTTON);
 
     let loadingScreen = document.querySelector("#loading-screen");
     let gameStats = document.querySelector("#game-stats");
