@@ -2180,7 +2180,7 @@ export class GP_K100 extends _Gun_ {
     static _properties = {
         fireRate: 3,
         bulletSpeed: 8,
-        damage: 7,
+        damage: 13,
         accuracy: 2,
         nozzelLength: 21,
         capacity: 15,
@@ -2379,6 +2379,8 @@ export class Avatar {
                 thirst: 100
             }, 
             targetId: undefined,
+            confidence: 25,
+            reputation: 25,
             walking: false,
             punching: false,
             stabbing: false,
@@ -2881,6 +2883,8 @@ export class Bot {
             speed: 1,
             strength: 5,
             armour: 0,
+            relationship: 0,
+            agreeableness: random(50),  
             invinsible: false,
             kills: 0,
             passive: false,

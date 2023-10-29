@@ -654,6 +654,125 @@ export let MAP_ICON = new TextureData(0, 0, 1, "control", {
     ctx.restore();
 });
 
+export let TOOL_ICON = new TextureData(0, 0, 1, "control", {
+    width: 600,
+    height: 600
+}, [
+    [0, 0, 600, 600]
+], 0, undefined, function(ctx) {
+    // base body: 600x600, texture: 1024x1024, size: 20
+    ctx.save();
+    ctx.scale(this.size || 0, this.size || 0);
+
+    ctx.strokeStyle = "#1A1A1A";
+    ctx.lineWidth = 10;
+    ctx.beginPath();
+
+    ctx.translate(0,-85);
+
+    // wrench
+    function w(r) { 
+    ctx.translate(150,235);
+    ctx.rotate(r * Math.PI / 180);
+    ctx.translate(-150,-235);
+
+    ctx.translate(150,150);
+    ctx.rotate(-55 * Math.PI / 180);
+    ctx.translate(-150,-150);
+    ctx.arc(150, 150, 50, 0, (2 * Math.PI) - ((2 * Math.PI)/5));
+
+    ctx.translate(150,150);
+    ctx.rotate(55 * Math.PI / 180);
+    ctx.translate(-150,-150);
+
+    ctx.fillStyle = "#888888";
+    ctx.lineTo(130,110);
+    ctx.lineTo(130,150);
+    ctx.lineTo(150,165);
+    ctx.lineTo(170,150);
+    ctx.lineTo(170,110);
+    ctx.lineTo(182,110);
+    ctx.fill();
+    ctx.stroke(); 
+
+    ctx.beginPath();
+    ctx.moveTo(135,170);
+    ctx.lineTo(135,350);
+    ctx.lineTo(140,360);
+    ctx.lineTo(160,360);
+    ctx.lineTo(165,350);
+    ctx.lineTo(165,170);
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(130,195);
+    ctx.lineTo(130,350);
+    ctx.lineTo(140,360);
+    ctx.lineTo(160,360);
+    ctx.lineTo(170,350);
+    ctx.lineTo(170,195);
+    ctx.stroke();
+
+    ctx.fillStyle = "#AAAAAA";
+    ctx.fillRect(142.5,200,15,130); 
+    
+    ctx.translate(150,235);
+    ctx.rotate(-r * Math.PI / 180);
+    ctx.translate(-150,-235);
+  }
+
+    // screwdriver
+    function s(r) {
+    ctx.translate(150,235);
+    ctx.rotate(r * Math.PI / 180);
+    ctx.translate(-150,-235);
+
+    ctx.fillStyle = "#565656";
+    ctx.beginPath();
+    ctx.moveTo(130,260);
+    ctx.lineTo(130,350);
+    ctx.lineTo(140,360);
+    ctx.lineTo(160,360);
+    ctx.lineTo(170,350);
+    ctx.lineTo(170,260);
+    ctx.lineTo(180,260);
+    ctx.lineTo(180,240);
+    ctx.lineTo(120,240);
+    ctx.lineTo(120,260);
+    ctx.lineTo(135,260);
+    ctx.fill();
+    ctx.stroke();
+ 
+    ctx.lineWidth = 5;
+    ctx.moveTo(130,257.5);
+    ctx.lineTo(180,257.5);
+    ctx.stroke();
+
+    ctx.fillStyle = "#AAAAAA";
+    ctx.beginPath();
+    ctx.lineWidth = 10;
+    ctx.moveTo(143,237);
+    ctx.lineTo(143,140);
+    ctx.lineTo(135,135);
+    ctx.lineTo(145,110);
+    ctx.lineTo(155,110);
+    ctx.lineTo(165,135);
+    ctx.lineTo(157,140);
+    ctx.lineTo(157,237);
+    ctx.fill();
+    ctx.stroke();
+    
+    ctx.translate(150,235);
+    ctx.rotate(-r * Math.PI / 180);
+    ctx.translate(-150,-235);
+  }
+
+  w(-45);
+  s(45);
+
+    ctx.restore();
+});
+
 
 /* icon container */
 
@@ -787,9 +906,9 @@ export let ICONS = new TextureData(0, 0, 8.25, "control", {
     ctx.fill();
 */
 
-/* ammo icon 
-      70x70
-   ctx.lineWidth = 5;
+// ammo icon 
+//      70x70
+ /*  ctx.lineWidth = 5;
 
    function bullet(x,y) {
     ctx.translate(x,y);
@@ -807,17 +926,30 @@ export let ICONS = new TextureData(0, 0, 8.25, "control", {
 
    bullet(-2,-13);
    bullet(17,-13);
-   bullet(36,-13);
-*/
+   bullet(36,-13); */
 
- //  ctx.strokeRect(370,228,90,90);
+// money icon
+
+   ctx.translate(365, 223);
+   ctx.fillRect(17,10,35,10);
+   ctx.fillRect(17,30,35,10);
+   ctx.fillRect(17,50,35,10);
+
+   ctx.fillRect(17,10,10,20);
+   ctx.fillRect(42,30,10,20);
+   ctx.fillRect(30,0,9,70);
+
+/*  
+ 
+   console icon  
+ 
    ctx.moveTo(382,273);
    ctx.lineTo(418,273);
    ctx.moveTo(382,253);
    ctx.lineTo(438,253);
    ctx.moveTo(382,293);
    ctx.lineTo(448,293);
-   ctx.stroke();
+   ctx.stroke(); */
 
 });
 

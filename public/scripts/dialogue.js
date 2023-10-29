@@ -1,3 +1,7 @@
+import {
+ random
+} from "/public/scripts/lib.js";
+
 const _dialogues = {
  defaultOptions: []
 };
@@ -5,13 +9,14 @@ const _dialogues = {
 // AVATAR: rep = reputation, con = confidence  CHARACTER: rel = relationship, agr = agreeableness
 
 class Option {
-    constructor(content, con = 0, rep = 0, rel = 0, dest, action) {
+    constructor(content, con = 0, rep = 0, rel = 0, dest, action, disable) {
         this.content = content;
         this.dest = dest;
         this.con = con;
         this.rep = rep;
         this.rel = rel;
         this.action = action;
+        this.enabled = !disable;
     }
 
     getContent(prevOption) {
@@ -63,9 +68,8 @@ _dialogues.defaultOptions.push(new Option("[exit]",0,0,0,false,function() {
 
 let entry = new OptionModule();
 
-entry.addOption(new Option("Hi, m name is whatever!",0,0,0,[1,0]));
-entry.addOption(new Option("Can you give me a benji?"));
-entry.addOption(new Option("Do you think you could spare some change? I need to eat today"));
+entry.addOption(new Option(function(){return `Hi, I'm ${$AVATAR?.character}.`},0,0,0,[1,0]));
+entry.addOption(new Option("Do you think you could spare some change? I need to eat today",0,0,0,false,false,true));
 entry.addOption(new Option("You have a shirt soi could get a job?"));
 entry.addOption(new Option("Max should see me make a move on you!"));
 entry.addOption(new Option("Whatever cracker.."));

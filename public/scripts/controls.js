@@ -128,8 +128,11 @@
               currentOptions = [selectedOption, selectedOption + 1];
           }
 
-          dialogueOption1.innerText = _dialogues[selectedModule].options[currentOptions[0]].content;
-          dialogueOption2.innerText = _dialogues[selectedModule].options[currentOptions[1]].content;
+          dialogueOption1.style.color = (_dialogues[selectedModule].options[currentOptions[0]].enabled) ? "white":"darkgray";
+          dialogueOption2.style.color = (_dialogues[selectedModule].options[currentOptions[1]].enabled) ? "white":"darkgray";
+
+          dialogueOption1.innerText = _dialogues[selectedModule].options[currentOptions[0]].getContent();
+          dialogueOption2.innerText = _dialogues[selectedModule].options[currentOptions[1]].getContent();
 
           if (selectedOption === currentOptions[0]) {
               dialogueOption1.style.backgroundColor = "#444444";
@@ -152,9 +155,12 @@
           if (selectedOption > currentOptions[0] && selectedOption > currentOptions[1]) {
               currentOptions = [selectedOption - 1, selectedOption];
           }
+          
+          dialogueOption1.style.color = (_dialogues[selectedModule].options[currentOptions[0]].enabled) ? "white":"darkgray";
+          dialogueOption2.style.color = (_dialogues[selectedModule].options[currentOptions[1]].enabled) ? "white":"darkgray";
 
-          dialogueOption1.innerText = _dialogues[selectedModule].options[currentOptions[0]].content;
-          dialogueOption2.innerText = _dialogues[selectedModule].options[currentOptions[1]].content;
+          dialogueOption1.innerText = _dialogues[selectedModule].options[currentOptions[0]].getContent();
+          dialogueOption2.innerText = _dialogues[selectedModule].options[currentOptions[1]].getContent();
 
           if (selectedOption === currentOptions[0]) {
               dialogueOption1.style.backgroundColor = "#444444";
@@ -170,8 +176,8 @@
 
   function updateOptions() {
     if (optionSelect) {
-      dialogueOption1.innerText = _dialogues[selectedModule].options[selectedOption].content;
-      dialogueOption2.innerText = _dialogues[selectedModule].options[selectedOption + 1].content;
+      dialogueOption1.innerText = _dialogues[selectedModule].options[selectedOption].getContent();
+      dialogueOption2.innerText = _dialogues[selectedModule].options[selectedOption + 1].getContent();
     } else {
       dialogueOption1.innerText = "...";
       dialogueOption2.innerText = "...";
@@ -222,7 +228,7 @@
      if (_dialogues[selectedModule].options[selectedOption].getDestination()) {
       setTimeout(function() {
        let [mod,op] = _dialogues[selectedModule].options[selectedOption].getDestination();
-       updateSubtitles(_dialogues[mod].responses[op].content,function() {
+       updateSubtitles(_dialogues[mod].responses[op].getContent(),function() {
         if (_dialogues[mod].responses[op].action) _dialogues[mod].responses[op].action();
 
         if (_dialogues[mod].responses[op].getDestination()) {
@@ -241,7 +247,7 @@
   }
 
   optionsContainer.onclick = function() {
-   if (optionSelect && $ACTIVE_DIALOGUE_PARTY) {
+   if (optionSelect && $ACTIVE_DIALOGUE_PARTY && _dialogues[selectedModule].options[selectedOption].enabled) {
     processResponse();
    }
   }
@@ -1019,6 +1025,10 @@
       command = command.replace(prefix, "").trim();
 
       switch (prefix) {
+          case "maximize": {
+           document.body.requestFullscreen();
+          };
+          break;
           case "run": {
               try {
                   result = eval(command);
