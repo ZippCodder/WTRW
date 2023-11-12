@@ -69,7 +69,12 @@
       Syringe,
       Vendor1,
       _Joystick_,
-      _Button_
+      _Button_,
+      House2,
+      GunStore,
+      GreyBackpack,
+      WhiteBackpack,
+      BlackBackpack
   } from "/public/scripts/objects.js";
 
   import _dialogues from "/public/scripts/dialogue.js";
@@ -80,22 +85,22 @@
   const actionButton = document.querySelector(".action-button");
 
   function toggleGrab(e) {
-   e.preventDefault();
+      e.preventDefault();
 
-   if ($AVATAR.grab()) {
-     grabButton.style.opacity = "0.5";
-   } else {
-     $AVATAR.drop();
-     grabButton.style.opacity = "1";
-   }
-  }  
+      if ($AVATAR.grab()) {
+          grabButton.style.opacity = "0.5";
+      } else {
+          $AVATAR.drop();
+          grabButton.style.opacity = "1";
+      }
+  }
 
   function runAction(e) {
-    e.preventDefault();
+      e.preventDefault();
 
-    const i = $CURRENT_MAP.interactables[$CURRENT_MAP.currentInteractable.id];
-    if (i) i.action();
-    $CURRENT_MAP.updateInteractable();
+      const i = $CURRENT_MAP.interactables[$CURRENT_MAP.currentInteractable.id];
+      if (i) i.action();
+      $CURRENT_MAP.updateInteractable();
   }
 
   grabButton.ontouchstart = toggleGrab;
@@ -128,11 +133,11 @@
               currentOptions = [selectedOption, selectedOption + 1];
           }
 
-          dialogueOption1.style.color = (_dialogues[selectedModule].options[currentOptions[0]].enabled) ? "white":"darkgray";
-          dialogueOption2.style.color = (_dialogues[selectedModule].options[currentOptions[1]].enabled) ? "white":"darkgray";
+          dialogueOption1.style.color = (_dialogues[selectedModule].options[currentOptions[0]].enabled) ? "white" : "darkgray";
+          dialogueOption2.style.color = (_dialogues[selectedModule].options[currentOptions[1]].enabled) ? "white" : "darkgray";
 
-          dialogueOption1.innerText = _dialogues[selectedModule].options[currentOptions[0]].getContent();
-          dialogueOption2.innerText = _dialogues[selectedModule].options[currentOptions[1]].getContent();
+          dialogueOption1.innerText = (_dialogues[selectedModule].options[currentOptions[0]].label || _dialogues[selectedModule].options[currentOptions[0]].getContent());
+          dialogueOption2.innerText = (_dialogues[selectedModule].options[currentOptions[1]].label || _dialogues[selectedModule].options[currentOptions[1]].getContent());
 
           if (selectedOption === currentOptions[0]) {
               dialogueOption1.style.backgroundColor = "#444444";
@@ -155,12 +160,12 @@
           if (selectedOption > currentOptions[0] && selectedOption > currentOptions[1]) {
               currentOptions = [selectedOption - 1, selectedOption];
           }
-          
-          dialogueOption1.style.color = (_dialogues[selectedModule].options[currentOptions[0]].enabled) ? "white":"darkgray";
-          dialogueOption2.style.color = (_dialogues[selectedModule].options[currentOptions[1]].enabled) ? "white":"darkgray";
 
-          dialogueOption1.innerText = _dialogues[selectedModule].options[currentOptions[0]].getContent();
-          dialogueOption2.innerText = _dialogues[selectedModule].options[currentOptions[1]].getContent();
+          dialogueOption1.style.color = (_dialogues[selectedModule].options[currentOptions[0]].enabled) ? "white" : "darkgray";
+          dialogueOption2.style.color = (_dialogues[selectedModule].options[currentOptions[1]].enabled) ? "white" : "darkgray";
+
+          dialogueOption1.innerText = (_dialogues[selectedModule].options[currentOptions[0]].label || _dialogues[selectedModule].options[currentOptions[0]].getContent());
+          dialogueOption2.innerText = (_dialogues[selectedModule].options[currentOptions[1]].label || _dialogues[selectedModule].options[currentOptions[1]].getContent());
 
           if (selectedOption === currentOptions[0]) {
               dialogueOption1.style.backgroundColor = "#444444";
@@ -175,142 +180,152 @@
   }
 
   function updateOptions() {
-    if (optionSelect) {
-      dialogueOption1.innerText = _dialogues[selectedModule].options[selectedOption].getContent();
-      dialogueOption2.innerText = _dialogues[selectedModule].options[selectedOption + 1].getContent();
-    } else {
-      dialogueOption1.innerText = "...";
-      dialogueOption2.innerText = "...";
-    }
+      if (_dialogues[0]) {
+          if (optionSelect) {
+              dialogueOption1.innerText = (_dialogues[selectedModule].options[selectedOption].label || _dialogues[selectedModule].options[selectedOption].getContent());
+              dialogueOption2.innerText = (_dialogues[selectedModule].options[selectedOption + 1].label || _dialogues[selectedModule].options[selectedOption + 1].getContent());
+          } else {
+              dialogueOption1.innerText = "...";
+              dialogueOption2.innerText = "...";
+          }
 
-      updateNav();
+          updateNav();
 
-      if (selectedOption === currentOptions[0]) {
-          dialogueOption1.style.backgroundColor = "#444444";
-          dialogueOption2.style.backgroundColor = "#222222";
+          if (selectedOption === currentOptions[0]) {
+              dialogueOption1.style.backgroundColor = "#444444";
+              dialogueOption2.style.backgroundColor = "#222222";
 
-          return;
+              return;
+          }
+
+          dialogueOption2.style.backgroundColor = "#444444";
+          dialogueOption1.style.backgroundColor = "#222222";
       }
-
-      dialogueOption2.style.backgroundColor = "#444444";
-      dialogueOption1.style.backgroundColor = "#222222";
   }
 
   function updateNav() {
-   document.querySelector(".nav-up div").style.opacity = (selectedOption-1 < 0) ? "0.5":"1";
-   document.querySelector(".nav-down div").style.opacity = (selectedOption+1 > (_dialogues[selectedModule].options.length-1)) ? "0.5":"1";
+      document.querySelector(".nav-up div").style.opacity = (selectedOption - 1 < 0) ? "0.5" : "1";
+      document.querySelector(".nav-down div").style.opacity = (selectedOption + 1 > (_dialogues[selectedModule].options.length - 1)) ? "0.5" : "1";
   }
 
   function updateSubtitles(content, callback) {
-    let characterName = (optionSelect) ? $AVATAR.character:$ACTIVE_DIALOGUE_PARTY.character;
+      let characterName = (optionSelect) ? $AVATAR.character : $ACTIVE_DIALOGUE_PARTY.character;
 
-    subtitles.innerHTML = `<strong>${characterName}:</strong> ...`;
+      subtitles.innerHTML = `<strong>${characterName}:</strong> ...`;
 
-    setTimeout(function() {
-     let interval, pos = 0, str = content;
+      setTimeout(function() {
+          let interval, pos = 0,
+              str = content;
 
-     interval = setInterval(function() {
-      subtitles.innerHTML = `<strong>${characterName}:</strong> ` + str.slice(0,pos);
-      pos++;
- 
-      if (pos > str.length) {
-       clearInterval(interval);
-       if (callback) callback();
-      }
-     },50);
-    },1000);
+          interval = setInterval(function() {
+              subtitles.innerHTML = `<strong>${characterName}:</strong> ` + str.slice(0, pos);
+              pos++;
+
+              if (pos > str.length) {
+                  clearInterval(interval);
+                  if (callback) callback();
+              }
+          }, 50);
+      }, 1000);
   }
 
   function processResponse() {
-    updateSubtitles(_dialogues[selectedModule].options[selectedOption].getContent(),function() {
-     if (_dialogues[selectedModule].options[selectedOption].action) _dialogues[selectedModule].options[selectedOption].action();
+      updateSubtitles(_dialogues[selectedModule].options[selectedOption].getContent(), function() {
+          if (_dialogues[selectedModule].options[selectedOption].action) _dialogues[selectedModule].options[selectedOption].action();
 
-     if (_dialogues[selectedModule].options[selectedOption].getDestination()) {
-      setTimeout(function() {
-       let [mod,op] = _dialogues[selectedModule].options[selectedOption].getDestination();
-       updateSubtitles(_dialogues[mod].responses[op].getContent(),function() {
-        if (_dialogues[mod].responses[op].action) _dialogues[mod].responses[op].action();
+          if (_dialogues[selectedModule].options[selectedOption].getDestination()) {
+              setTimeout(function() {
+                  let [mod, op] = _dialogues[selectedModule].options[selectedOption].getDestination();
+                  updateSubtitles(_dialogues[mod].responses[op].getContent(), function() {
+                      if (_dialogues[mod].responses[op].action) _dialogues[mod].responses[op].action();
 
-        if (_dialogues[mod].responses[op].getDestination()) {
-          selectedModule = _dialogues[mod].responses[op].getDestination()[0];
-          selectedOption = 0;
-          optionSelect = true;
-          updateOptions(); 
-        }
-       });
-      },1000);
-     }
-    });
+                      if (_dialogues[mod].responses[op].getDestination()) {
+                          selectedModule = _dialogues[mod].responses[op].getDestination()[0];
+                          selectedOption = 0;
+                          currentOptions = [0, 1];
+                          optionSelect = true;
+                          updateOptions();
+                      }
+                  });
+              }, 1000);
+          }
+      });
 
-    optionSelect = false;
-    updateOptions();
+      optionSelect = false;
+      updateOptions();
   }
 
   optionsContainer.onclick = function() {
-   if (optionSelect && $ACTIVE_DIALOGUE_PARTY && _dialogues[selectedModule].options[selectedOption].enabled) {
-    processResponse();
-   }
+      if (optionSelect && $ACTIVE_DIALOGUE_PARTY && _dialogues[selectedModule].options[selectedOption].enabled) {
+          processResponse();
+      }
   }
 
   function startDialogue(e) {
-    e.preventDefault();
+      e.preventDefault();
 
-    let res = undefined, dist = Infinity;
+      let res = undefined,
+          dist = Infinity;
 
-    for (let avatar in $CURRENT_MAP.avatars) {
-      avatar = $CURRENT_MAP.avatars[avatar];
+      for (let avatar in $CURRENT_MAP.avatars) {
+          avatar = $CURRENT_MAP.avatars[avatar];
 
-      if (avatar === $AVATAR || avatar.state.target.engaged) continue;
+          if (avatar === $AVATAR || avatar.state.target.engaged) continue;
 
-      let d = distance(0,0,avatar.trans.offsetX,avatar.trans.offsetY);
-      if ((d < dist || res === undefined) && d < 30) {
-        res = avatar;
-        dist = d;
-      } 
-    }  
+          let d = distance(0, 0, avatar.trans.offsetX, avatar.trans.offsetY);
+          if ((d < dist || res === undefined) && d < 30) {
+              res = avatar;
+              dist = d;
+          }
+      }
 
-    if (!res) return;
+      if (!res) return;
 
-    $ACTIVE_DIALOGUE_PARTY = res;
-    res.stopWander();
-    res.stopSitting();
-    if (res.state.path.engaged) res.disengagePath();
+      $ACTIVE_DIALOGUE_PARTY = res;
+      let [firstName, lastName] = res.character.split(" ");
 
-    res.state.rotationTarget = normalizeRotation((Math.atan2((0 - res.map.centerY) - (res.trans.offsetY - res.map.centerY), (0 - res.map.centerX) - (res.trans.offsetX - res.map.centerX)) * 180 / Math.PI) - 90);
+      $ACTIVE_DIALOGUE_PARTY.firstName = firstName;
+      $ACTIVE_DIALOGUE_PARTY.lastName = lastName;
 
-   requestTransition(function() {
-    document.querySelector("#mainControls").style.display = "none";
-    document.querySelector("#dialogue").style.display = "block";
-    subtitles.innerHTML = `<strong>${$AVATAR.character}:</strong> ...`;
+      res.stopWander();
+      res.stopSitting();
+      if (res.state.path.engaged) res.disengagePath();
 
-    selectedModule = 0;
-    selectedOption = 0;
-    optionSelect = true;    
+      res.state.rotationTarget = normalizeRotation((Math.atan2((0 - res.map.centerY) - (res.trans.offsetY - res.map.centerY), (0 - res.map.centerX) - (res.trans.offsetX - res.map.centerX)) * 180 / Math.PI) - 90);
 
-    updateOptions();
-   }, 10);
+      requestTransition(function() {
+          document.querySelector("#mainControls").style.display = "none";
+          document.querySelector("#dialogue").style.display = "block";
+          subtitles.innerHTML = `<strong>${$AVATAR.character}:</strong> ...`;
+
+          selectedModule = 0;
+          selectedOption = 0;
+          optionSelect = true;
+
+          updateOptions();
+      }, 10);
   }
 
   window.endDialogue = function(e) {
-   if ($ACTIVE_DIALOGUE_PARTY) {
-   
-    $ACTIVE_DIALOGUE_PARTY.wander();
-    $ACTIVE_DIALOGUE_PARTY = undefined;
- 
-   requestTransition(function() {
-     document.querySelector("#mainControls").style.display = "block";
-     document.querySelector("#dialogue").style.display = "none";
+      if ($ACTIVE_DIALOGUE_PARTY) {
 
-     $CURRENT_MAP.move = true;
-    }, 10);
-   }
+          $ACTIVE_DIALOGUE_PARTY.wander();
+          $ACTIVE_DIALOGUE_PARTY = undefined;
+
+          requestTransition(function() {
+              document.querySelector("#mainControls").style.display = "block";
+              document.querySelector("#dialogue").style.display = "none";
+
+              $CURRENT_MAP.move = true;
+          }, 10);
+      }
   }
 
   speakButton.ontouchstart = startDialogue;
   speakButton.onclick = startDialogue;
 
   updateOptions();
-  
+
 
   /* MAP CONTROLS AND MINIMAP RENDERING */
 
@@ -924,7 +939,7 @@
   window.addEventListener("contextmenu", function(e) {
       e.preventDefault();
   });
-  
+
   /* INVENTORY CONTROLS AND MANAGMENT LOGIC */
 
   const inventoryButton = document.querySelectorAll(".controls-container__button").item(0);
@@ -1026,7 +1041,7 @@
 
       switch (prefix) {
           case "maximize": {
-           document.body.requestFullscreen();
+              document.body.requestFullscreen();
           };
           break;
           case "run": {
@@ -1137,7 +1152,7 @@
   consoleSendButton.ontouchstart = sendMessage;
   consoleSendButton.onmousedown = sendMessage;
 
- 
+
   /* DATA BINDING FOR INVENTORY */
 
   const itemDescriptions = {
@@ -1147,7 +1162,10 @@
       "gp k100": "<h3><u>GP K100</u></h3>This quick and reliable handgun features good capacity, and a basic scilencer and is perfect for a good ol' gun-fight.</br></br><strong>Damage _____ 25</strong></br><strong>Fire Rate _____ 3</strong></br><strong>Accuracy _____ 2</strong></br><strong>Capacity _____ 12</strong>",
       "kitchen knife": "<h3><u>Kitchen Knife</u></h3>Your run-of-the-mill, single edged cooking knife. Go use this to slice some veggies...or somthing else.</br></br><strong>Damage _____ 25</strong>",
       "assassins knife": "<h3><u>Assassin's Knife</u></h3>One of the sharpest of blades with a fine edge built for the hand of a professional. This top-of-the-line knife can make quick work of any enemy with minimal armour.</br></br><strong>Damage _____ 100</strong>",
-      "syringe": "<h3><u>Syringe</u></h3>Basic medicine for rapid health regain and quick injection.</br></br><strong>Regain _____ 25</strong></br><strong>[used]</strong>"
+      "syringe": "<h3><u>Syringe</u></h3>Basic medicine for rapid health regain and quick injection.</br></br><strong>Regain _____ 25</strong></br><strong>[used]</strong>",
+      "grey backpack": "<h3><u>Grey Backpack</u></h3>A light backpack. Essential for collecting useful items to ensure survival.</br></br><strong>Capacity _____ 10</strong>",
+      "white backpack": "<h3><u>White Backpack</u></h3>Intermediate backpack with high capacity. A preference for many tacticians.</br></br><strong>Capacity _____ 25</strong>",
+      "black backpack": "<h3><u>Black Backpack</u></h3>This heavy-duty, military-grade backpack is the clear choice for professionals of all expertises. Never again will you have to decide between what to keep, and what to drop.</br></br><strong>Capacity _____ 50</strong>"
   }
 
   let equippedIndex = Infinity,
@@ -1175,10 +1193,12 @@
           $AVATAR.unequipItem(i);
           equippedIndex = Infinity;
       }
+
+      updateDescription($AVATAR.inventory.items[i]?.name, $AVATAR.inventory.items[i]);
   }
 
   const quickAccessItems = document.querySelectorAll(".controls-container__item");
-  const inventoryItems = document.querySelectorAll(".main-inventory__item");
+  let inventoryItems = document.querySelectorAll(".main-inventory__item");
   const controlButtonsContainer = document.querySelector(".main-inventory__buttons");
   const itemDescription = document.querySelector(".main-inventory__description-content");
   let controlSwitchButton;
@@ -1188,13 +1208,12 @@
 
       let d = itemDescriptions[itemName];
 
-      if (item) {
-          switch (item.type) {
-              case "medicine": {
-                  d = d.replace("[used]", (item.used) ? "<br><i>Used</i>" : "<br><i>New</i>");
-              };
-              break;
-          };
+      if (item && d) {
+          if (item.type === "medicine") {
+              d = d.replace("[used]", (item.used) ? "<br><i>Used</i>" : "<br><i>New</i>");
+          } else {
+              d = d.concat((item === $AVATAR.state.equippedItems.mainTool || item === $AVATAR.state.equippedItems.accessory1) ? "<br><br><i>Equipped</i>" : "<br><br><i>Not Equipped</i>");
+          }
       }
 
       itemDescription.innerHTML = d;
@@ -1226,6 +1245,31 @@
 
       selectedIndex = i;
   }
+
+  window.setInventoryCapacity = function(n) {
+      if (n > $AVATAR.inventory.slots) {
+          for (let i = $AVATAR.inventory.slots + 1; i <= n; i++) {
+              let slot = document.createElement("div");
+              slot.setAttribute("id", `inv-item-${i}`);
+              slot.setAttribute("class", "main-inventory__item");
+              slot.onclick = function() {
+                  selectSlot(i - 1);
+              }
+
+              inventoryItemsContainer.appendChild(slot);
+          }
+      } else if (n < $AVATAR.inventory.slots) {
+          for (let i = n; i < $AVATAR.inventory.slots; i++) {
+              inventoryItems.item(i).remove();
+          }
+      }
+
+      inventoryItems = document.querySelectorAll(".main-inventory__item");
+      $AVATAR.inventory.slots = n;
+
+      if (selectedIndex > 14) selectedIndex = 0;
+  }
+
 
   for (let i = 0; i < quickAccessItems.length; i++) {
       quickAccessItems.item(i).ontouchstart = function() {

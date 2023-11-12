@@ -1068,19 +1068,14 @@ html,body {
               display: block;
             }
 
-            .controls-container__info-boxes {
-              left: 0;
-              top: calc(25vmin + 5.4em);
-              flex-direction: column;
-            }
-
-            .info-box {
-              margin-bottom: 0.3em;
-              margin-right: 0;
-            }
-
-            .controls-container__inv {
+            .controls-container__inv, .controls-container__info-boxes {
               left: 1em;
+            }
+          
+            .controls-container__money { 
+              left: 0;
+              margin: 0;
+              top: calc(5.4em + 4px + 25vmin);
             }
           }
 

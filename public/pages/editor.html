@@ -143,7 +143,15 @@
             SHED,
             STORE_SHELF_1,
             MAIN_AVATAR_GRAB,
-            TOOL_ICON
+            TOOL_ICON,
+            HOUSE_2,
+            GREY_BACKPACK_ACC,
+            WHITE_BACKPACK_ACC,
+            BLACK_BACKPACK_ACC,
+            GUNSTORE,
+            GREY_BACKPACK,
+            WHITE_BACKPACK,
+            BLACK_BACKPACK
         } from "/public/scripts/models.js";
 
         // Import texture for editing and downloading...
@@ -190,26 +198,28 @@
         //SUPERMARKET(-98, -338, 0.2);
         //CAFE(-18, -18, 0.2);
         //MAIN_AVATAR_DEFAULT(-5, -5, 0.2);
-        resize(300, 300);
+        resize(256, 512);
         // export function draw(a, w, h, iw, ih, s, lw, attribs=[],canvas) {
-        let texture = BAG_ICON;
+        let texture = WHITE_BACKPACK_ACC;
          
 //new Sheet([ROAD_RAIL,ROAD_SIGN,URBAN_FENCE_HALF,URBAN_FENCE,URBAN_FENCE_VERTICAL], 1024, 1024);
 
         //ACTION_BUTTON_TEXTURE.render(ctx);
         //URBAN_FENCE.render(ctx);
         //PICNIC_TABLE.render(ctx);
-         //texture.render(ctx);
-         TOOL_ICON.render(ctx);
-        // MAIN_AVATAR_DEFAULT.render(ctx);
-       //  GAZEBO.render(ctx); 
+         //MAIN_AVATAR_DEFAULT.render(ctx);
+         texture.render(ctx);
+         //TOOL_ICON.render(ctx);
+         //LAPTOP.render(ctx);
+        // CONVENIENCE_STORE.render(ctx);
+       //  GAZEBO.render(ctx);
          //GLOCK_20.render(ctx); 
-         //NXR_44_MAG.render(ctx);
+        // NXR_44_MAG.render(ctx);
          //GP_K100_TOP_2.render(ctx,-90);
         //GLOCK_20_TOP.render(ctx,-90); 
        // log(texture.getData());
           log(texture.getData());
           console.log(texture.textureDimensions);
-        setSource(`TOOL_ICON.png`); 
+        setSource(`WHITE_BACKPACK_ACC.png`); 
     </script>
 </html>

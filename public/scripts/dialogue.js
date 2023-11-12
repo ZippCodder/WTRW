@@ -9,7 +9,7 @@ const _dialogues = {
 // AVATAR: rep = reputation, con = confidence  CHARACTER: rel = relationship, agr = agreeableness
 
 class Option {
-    constructor(content, con = 0, rep = 0, rel = 0, dest, action, disable) {
+    constructor(content, con = 0, rep = 0, rel = 0, dest, label, action, disable) {
         this.content = content;
         this.dest = dest;
         this.con = con;
@@ -17,6 +17,7 @@ class Option {
         this.rel = rel;
         this.action = action;
         this.enabled = !disable;
+        this.label = label;
     }
 
     getContent(prevOption) {
@@ -62,21 +63,19 @@ class ResponseModule {
     }
 }
 
-_dialogues.defaultOptions.push(new Option("[exit]",0,0,0,false,function() {
+class Phrase {
+   constructor(phrases) {
+     this.phrases = phrases;
+   }
+
+   getPhrase() {
+     return this.phrases[random(this.phrases.length)];
+   }
+}
+
+_dialogues.defaultOptions.push(new Option("...",0,0,0,false,"[exit]", function() {
  endDialogue();
 }));
 
-let entry = new OptionModule();
-
-entry.addOption(new Option(function(){return `Hi, I'm ${$AVATAR?.character}.`},0,0,0,[1,0]));
-entry.addOption(new Option("Do you think you could spare some change? I need to eat today",0,0,0,false,false,true));
-entry.addOption(new Option("You have a shirt soi could get a job?"));
-entry.addOption(new Option("Max should see me make a move on you!"));
-entry.addOption(new Option("Whatever cracker.."));
-entry.addOption(new Option("I think i just pee'd myself. You thirsty?"));
-
-let response1 = new ResponseModule();
-
-response1.addResponse(new Option("Hi there! Why dont i show you around town and you can get to know yourself? .. and I. lol.",0,0,0,[0]));
 
 export default _dialogues;

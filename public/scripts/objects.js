@@ -221,7 +221,7 @@ export class _BulletCluster_ {
 
                             if ((Math.abs(ox - b.trans.offsetX) < (b.width / 2 + ow / 2)) && (Math.abs(oy - b.trans.offsetY) < (b.height / 2 + oh / 2))) {
                                 b.delete();
-                                if (this.map.obstacles[o].hit) this.map.obstacles[o].hit(b.damage, b.rate.x, b.rate.y, b.owner);
+                                if (this.map.obstacles[o].hit) this.map.obstacles[o].hit(b.damage, b.owner, b);
                                 break outer;
                             }
 
@@ -894,7 +894,7 @@ export class Grass extends _InstancedClusterClient_ {
     }
 
     postLink() {
-      this.delete();
+        this.delete();
     }
 }
 
@@ -970,9 +970,9 @@ export class Grass2 extends _InstancedClusterClient_ {
     constructor(initialX, initialY, initialRotation) {
         super(initialX, initialY, initialRotation);
     }
- 
+
     postLink() {
-      this.delete();
+        this.delete();
     }
 }
 
@@ -993,7 +993,7 @@ export class Rocks1 extends _InstancedClusterClient_ {
     }
 
     postLink() {
-      this.delete();
+        this.delete();
     }
 }
 
@@ -1014,7 +1014,7 @@ export class Rocks2 extends _InstancedClusterClient_ {
     }
 
     postLink() {
-      this.delete();
+        this.delete();
     }
 }
 
@@ -1172,57 +1172,67 @@ export class StreetLight extends _StaticClusterClient_ {
 }
 
 class _Seat_ extends _StaticClusterClient_ {
-  
-  type = "seat";
-  interactable = true;
-  minDistance = 15;
 
-  constructor(initialX, initialY, initialRotation, seats) {
-    super(initialX, initialY, initialRotation);
+    type = "seat";
+    interactable = true;
+    minDistance = 15;
 
-    this.seats = [];
+    constructor(initialX, initialY, initialRotation, seats) {
+        super(initialX, initialY, initialRotation);
 
-    for (let i = 0; i < seats.length; i++) {
-      let [x,y,r,exit] = seats[i];
+        this.seats = [];
 
-      this.seats[i] = {x: x, y: y, r: r, exit: {x: exit[0], y: exit[1]}, occupied: false, id: i};
+        for (let i = 0; i < seats.length; i++) {
+            let [x, y, r, exit] = seats[i];
+
+            this.seats[i] = {
+                x: x,
+                y: y,
+                r: r,
+                exit: {
+                    x: exit[0],
+                    y: exit[1]
+                },
+                occupied: false,
+                id: i
+            };
+        }
     }
-  }
 
-  getSeat(avatar) {
-    let seat = undefined;    
+    getSeat(avatar) {
+        let seat = undefined;
 
-    for (let i of this.seats) {
-      if ((!seat || (distance(this.trans.offsetX + i.x, this.trans.offsetY + i.y, avatar.trans.offsetX, avatar.trans.offsetY) < distance(this.trans.offsetX + seat.x,this.trans.offsetY + seat.y, avatar.trans.offsetX, avatar.trans.offsetY))) && !i.occupied) {
-         seat = i;
-      }
+        for (let i of this.seats) {
+            if ((!seat || (distance(this.trans.offsetX + i.x, this.trans.offsetY + i.y, avatar.trans.offsetX, avatar.trans.offsetY) < distance(this.trans.offsetX + seat.x, this.trans.offsetY + seat.y, avatar.trans.offsetX, avatar.trans.offsetY))) && !i.occupied) {
+                seat = i;
+            }
+        }
+
+        return seat;
     }
 
-   return seat;
-  }
+    action() {
+        if ($AVATAR.state.seat.ref) return false;
 
-  action() {
-   if ($AVATAR.state.seat.ref) return false;
+        let seat = this.getSeat($AVATAR);
 
-    let seat = this.getSeat($AVATAR); 
+        if (!seat) return;
 
-    if (!seat) return;
+        noclip = true;
+        $CURRENT_MAP.translate(this.trans.offsetX + seat.x, this.trans.offsetY + seat.y);
+        $AVATAR.trans.rotation = seat.r * Math.PI / 180;
+        noclip = false;
 
-    noclip = true;
-    $CURRENT_MAP.translate(this.trans.offsetX + seat.x, this.trans.offsetY + seat.y);
-    $AVATAR.trans.rotation = seat.r * Math.PI / 180;
-    noclip = false;
+        $AVATAR.state.seat.id = seat.id;
+        $AVATAR.state.seat.ref = this;
 
-    $AVATAR.state.seat.id = seat.id;
-    $AVATAR.state.seat.ref = this;
-
-    this.seats[seat.id].occupied = true;
-  }
+        this.seats[seat.id].occupied = true;
+    }
 }
 
 export class Bench extends _Seat_ {
 
-    static _defaultVertices = [-15.4,10.2,1,0,0,15.4,10.2,1,0.6015625,0,-15.4,-10.2,1,0,0.796875,15.4,10.2,1,0.6015625,0,-15.4,-10.2,1,0,0.796875,15.4,-10.2,1,0.6015625,0.796875];
+    static _defaultVertices = [-15.4, 10.2, 1, 0, 0, 15.4, 10.2, 1, 0.6015625, 0, -15.4, -10.2, 1, 0, 0.796875, 15.4, 10.2, 1, 0.6015625, 0, -15.4, -10.2, 1, 0, 0.796875, 15.4, -10.2, 1, 0.6015625, 0.796875];
 
     width = 30.8;
     height = 20.4;
@@ -1231,11 +1241,14 @@ export class Bench extends _Seat_ {
     texture = textures.objects.bench;
     obstacle = true;
     segments = [
-        [-15.2,-5.840000000000003,30.4,14.720000000000002]
+        [-15.2, -5.840000000000003, 30.4, 14.720000000000002]
     ];
 
     constructor(initialX, initialY, initialRotation) {
-        super(initialX, initialY, initialRotation, [[-8,0,180,[-8,-15]],[8,0,180,[8,-15]]]);
+        super(initialX, initialY, initialRotation, [
+            [-8, 0, 180, [-8, -15]],
+            [8, 0, 180, [8, -15]]
+        ]);
     }
 }
 
@@ -1663,7 +1676,7 @@ export class Table extends _StaticClusterClient_ {
 
 export class Gazebo extends _StaticClusterClient_ {
 
-    static _defaultVertices = [-32.2,34.2,1,0,0,32.2,34.2,1,0.62890625,0,-32.2,-34.2,1,0,0.66796875,32.2,34.2,1,0.62890625,0,-32.2,-34.2,1,0,0.66796875,32.2,-34.2,1,0.62890625,0.66796875];
+    static _defaultVertices = [-32.2, 34.2, 1, 0, 0, 32.2, 34.2, 1, 0.62890625, 0, -32.2, -34.2, 1, 0, 0.66796875, 32.2, 34.2, 1, 0.62890625, 0, -32.2, -34.2, 1, 0, 0.66796875, 32.2, -34.2, 1, 0.62890625, 0.66796875];
 
     width = 64.4;
     height = 68.4;
@@ -1673,7 +1686,10 @@ export class Gazebo extends _StaticClusterClient_ {
     topLayer = true;
     obstacle = true;
     segments = [
-       [-28.2,-2,4,4],[23.8,-2,4,4],[-28.2,-34,4,4],[23.8,-34,4,4]
+        [-28.2, -2, 4, 4],
+        [23.8, -2, 4, 4],
+        [-28.2, -34, 4, 4],
+        [23.8, -34, 4, 4]
     ];
 
     constructor(initialX, initialY, initialRotation) {
@@ -1683,7 +1699,7 @@ export class Gazebo extends _StaticClusterClient_ {
 
 export class Vendor1 extends _StaticClusterClient_ {
 
-    static _defaultVertices = [-20.2,14.2,1,0,0,20.2,14.2,1,0.7890625,0,-20.2,-14.2,1,0,0.5546875,20.2,14.2,1,0.7890625,0,-20.2,-14.2,1,0,0.5546875,20.2,-14.2,1,0.7890625,0.5546875];
+    static _defaultVertices = [-20.2, 14.2, 1, 0, 0, 20.2, 14.2, 1, 0.7890625, 0, -20.2, -14.2, 1, 0, 0.5546875, 20.2, 14.2, 1, 0.7890625, 0, -20.2, -14.2, 1, 0, 0.5546875, 20.2, -14.2, 1, 0.7890625, 0.5546875];
 
     width = 40.4;
     height = 28.4;
@@ -1693,7 +1709,7 @@ export class Vendor1 extends _StaticClusterClient_ {
     topLayer = true;
     obstacle = true;
     segments = [
-       [-28.2,-2,4,4]
+        [-28.2, -2, 4, 4]
     ];
 
     constructor(initialX, initialY, initialRotation) {
@@ -1703,7 +1719,7 @@ export class Vendor1 extends _StaticClusterClient_ {
 
 export class Bush extends _StaticClusterClient_ {
 
-    static _defaultVertices = [-8.899999999999999,9.2,1,-0.0078125,-0.0078125,8.5,9.2,1,0.671875,-0.0078125,-8.899999999999999,-8.8,1,-0.0078125,0.6953125,8.5,9.2,1,0.671875,-0.0078125,-8.899999999999999,-8.8,1,-0.0078125,0.6953125,8.5,-8.8,1,0.671875,0.6953125];
+    static _defaultVertices = [-8.899999999999999, 9.2, 1, -0.0078125, -0.0078125, 8.5, 9.2, 1, 0.671875, -0.0078125, -8.899999999999999, -8.8, 1, -0.0078125, 0.6953125, 8.5, 9.2, 1, 0.671875, -0.0078125, -8.899999999999999, -8.8, 1, -0.0078125, 0.6953125, 8.5, -8.8, 1, 0.671875, 0.6953125];
 
     width = 17.4;
     height = 18;
@@ -1722,7 +1738,7 @@ export class Bush extends _StaticClusterClient_ {
 
 export class MetalFence extends _StaticClusterClient_ {
 
-    static _defaultVertices = [-14.8,8,1,0,0,14.8,8,1,0.578125,0,-14.8,-8,1,0,0.625,14.8,8,1,0.578125,0,-14.8,-8,1,0,0.625,14.8,-8,1,0.578125,0.625];
+    static _defaultVertices = [-14.8, 8, 1, 0, 0, 14.8, 8, 1, 0.578125, 0, -14.8, -8, 1, 0, 0.625, 14.8, 8, 1, 0.578125, 0, -14.8, -8, 1, 0, 0.625, 14.8, -8, 1, 0.578125, 0.625];
 
     width = 29.6;
     height = 16;
@@ -1732,7 +1748,7 @@ export class MetalFence extends _StaticClusterClient_ {
     obstacle = true;
     topLayer = true;
     segments = [
-        [-14.8,-7.6,29.2,2]
+        [-14.8, -7.6, 29.2, 2]
     ];
 
     constructor(initialX, initialY, initialRotation) {
@@ -1742,7 +1758,7 @@ export class MetalFence extends _StaticClusterClient_ {
 
 export class MetalFenceVertical extends _StaticClusterClient_ {
 
-    static _defaultVertices = [-0.85,18,1,0,0,0.85,18,1,0.53125,0,-0.85,-18,1,0,0.703125,0.85,18,1,0.53125,0,-0.85,-18,1,0,0.703125,0.85,-18,1,0.53125,0.703125];
+    static _defaultVertices = [-0.85, 18, 1, 0, 0, 0.85, 18, 1, 0.53125, 0, -0.85, -18, 1, 0, 0.703125, 0.85, 18, 1, 0.53125, 0, -0.85, -18, 1, 0, 0.703125, 0.85, -18, 1, 0.53125, 0.703125];
 
     width = 1.7;
     height = 36;
@@ -1751,7 +1767,7 @@ export class MetalFenceVertical extends _StaticClusterClient_ {
     texture = textures.objects.metalfencevertical;
     obstacle = true;
     segments = [
-        [-0.85,-18,1.7,36]
+        [-0.85, -18, 1.7, 36]
     ];
 
     constructor(initialX, initialY, initialRotation) {
@@ -1761,7 +1777,7 @@ export class MetalFenceVertical extends _StaticClusterClient_ {
 
 export class Atm extends _StaticClusterClient_ {
 
-    static _defaultVertices = [-5.7,10.2,1,0,0,5.7,10.2,1,0.890625,0,-5.7,-10.2,1,0,0.796875,5.7,10.2,1,0.890625,0,-5.7,-10.2,1,0,0.796875,5.7,-10.2,1,0.890625,0.796875];
+    static _defaultVertices = [-5.7, 10.2, 1, 0, 0, 5.7, 10.2, 1, 0.890625, 0, -5.7, -10.2, 1, 0, 0.796875, 5.7, 10.2, 1, 0.890625, 0, -5.7, -10.2, 1, 0, 0.796875, 5.7, -10.2, 1, 0.890625, 0.796875];
 
     width = 11.4;
     height = 20.4;
@@ -1770,7 +1786,7 @@ export class Atm extends _StaticClusterClient_ {
     texture = textures.objects.atm;
     obstacle = true;
     segments = [
-        [-5.7,-5.2,11.4,15.4]
+        [-5.7, -5.2, 11.4, 15.4]
     ];
 
     constructor(initialX, initialY, initialRotation) {
@@ -1780,7 +1796,7 @@ export class Atm extends _StaticClusterClient_ {
 
 export class Stopper extends _StaticClusterClient_ {
 
-    static _defaultVertices = [-4.7,12.2,1,0,0,4.7,12.2,1,0.734375,0,-4.7,-12.2,1,0,0.953125,4.7,12.2,1,0.734375,0,-4.7,-12.2,1,0,0.953125,4.7,-12.2,1,0.734375,0.953125];
+    static _defaultVertices = [-4.7, 12.2, 1, 0, 0, 4.7, 12.2, 1, 0.734375, 0, -4.7, -12.2, 1, 0, 0.953125, 4.7, 12.2, 1, 0.734375, 0, -4.7, -12.2, 1, 0, 0.953125, 4.7, -12.2, 1, 0.734375, 0.953125];
 
     width = 9.4;
     height = 24.4;
@@ -1790,7 +1806,7 @@ export class Stopper extends _StaticClusterClient_ {
     topLayer = true;
     obstacle = true;
     segments = [
-        [-4.7,-12.0,9,6]
+        [-4.7, -12.0, 9, 6]
     ];
 
     constructor(initialX, initialY, initialRotation) {
@@ -1800,7 +1816,7 @@ export class Stopper extends _StaticClusterClient_ {
 
 export class MixedBush extends _StaticClusterClient_ {
 
-    static _defaultVertices = [-8.899999999999999,9.2,1,-0.0078125,-0.0078125,8.5,9.2,1,0.671875,-0.0078125,-8.899999999999999,-8.8,1,-0.0078125,0.6953125,8.5,9.2,1,0.671875,-0.0078125,-8.899999999999999,-8.8,1,-0.0078125,0.6953125,8.5,-8.8,1,0.671875,0.6953125];
+    static _defaultVertices = [-8.899999999999999, 9.2, 1, -0.0078125, -0.0078125, 8.5, 9.2, 1, 0.671875, -0.0078125, -8.899999999999999, -8.8, 1, -0.0078125, 0.6953125, 8.5, 9.2, 1, 0.671875, -0.0078125, -8.899999999999999, -8.8, 1, -0.0078125, 0.6953125, 8.5, -8.8, 1, 0.671875, 0.6953125];
 
     width = 17.4;
     height = 18;
@@ -1819,7 +1835,7 @@ export class MixedBush extends _StaticClusterClient_ {
 
 export class LightBush extends _StaticClusterClient_ {
 
-    static _defaultVertices = [-8.899999999999999,9.2,1,-0.0078125,-0.0078125,8.5,9.2,1,0.671875,-0.0078125,-8.899999999999999,-8.8,1,-0.0078125,0.6953125,8.5,9.2,1,0.671875,-0.0078125,-8.899999999999999,-8.8,1,-0.0078125,0.6953125,8.5,-8.8,1,0.671875,0.6953125];
+    static _defaultVertices = [-8.899999999999999, 9.2, 1, -0.0078125, -0.0078125, 8.5, 9.2, 1, 0.671875, -0.0078125, -8.899999999999999, -8.8, 1, -0.0078125, 0.6953125, 8.5, 9.2, 1, 0.671875, -0.0078125, -8.899999999999999, -8.8, 1, -0.0078125, 0.6953125, 8.5, -8.8, 1, 0.671875, 0.6953125];
 
     width = 17.4;
     height = 18;
@@ -1923,7 +1939,7 @@ export class _Building_ extends _StaticClusterClient_ {
 
 export class ConvenienceStore extends _Building_ {
 
-    static _defaultVertices = [-62.2,46.1,1,0,0,62.2,46.1,1,0.607421875,0,-62.2,-46.1,1,0,0.900390625,62.2,46.1,1,0.607421875,0,-62.2,-46.1,1,0,0.900390625,62.2,-46.1,1,0.607421875,0.900390625];
+    static _defaultVertices = [-62.2, 46.1, 1, 0, 0, 62.2, 46.1, 1, 0.607421875, 0, -62.2, -46.1, 1, 0, 0.900390625, 62.2, 46.1, 1, 0.607421875, 0, -62.2, -46.1, 1, 0, 0.900390625, 62.2, -46.1, 1, 0.607421875, 0.900390625];
 
     width = 124.4;
     height = 92.2;
@@ -1932,7 +1948,8 @@ export class ConvenienceStore extends _Building_ {
     texture = textures.objects.conveniencestore;
     obstacle = true;
     segments = [
-      [-60,-43.9,120,36],[-62,-8.1,124,54]
+        [-60, -43.9, 120, 36],
+        [-62, -8.1, 124, 54]
     ];
 
     constructor(initialX, initialY, initialRotation) {
@@ -1941,13 +1958,38 @@ export class ConvenienceStore extends _Building_ {
             [23, 25, 0, [-50, 44.38]],
             [23, -57, 1],
             [-30, -65, 0]
-        ], [new _Map_(150, 100, false, "House 1").init(undefined,undefined,[-26,-41],true), new _Map_(150, 80, false, "House 1").init(), new _Map_(150, 80, false, "House 1").init()], undefined);
+        ], [new _Map_(150, 100, false, "House 1").init(undefined, undefined, [-26, -41], true), new _Map_(150, 80, false, "House 1").init(), new _Map_(150, 80, false, "House 1").init()], undefined);
+    }
+}
+
+export class GunStore extends _Building_ {
+
+    static _defaultVertices = [-76.25, 49.25, 1, 0, 0, 76.25, 49.25, 1, 0.74462890625, 0, -76.25, -49.25, 1, 0, 0.9619140625, 76.25, 49.25, 1, 0.74462890625, 0, -76.25, -49.25, 1, 0, 0.9619140625, 76.25, -49.25, 1, 0.74462890625, 0.9619140625];
+
+    width = 152.5;
+    height = 98.5;
+    name = "gun store";
+    clusterName = "gun store";
+    texture = textures.objects.gunstore;
+    obstacle = true;
+    segments = [
+        [-76.01, -12.989999999999998, 152, 62],
+        [-70.01, -46.989999999999995, 140, 34]
+    ];
+
+    constructor(initialX, initialY, initialRotation) {
+        super(initialX, initialY, initialRotation, [
+            [-26.1, -33, 0, [0, 44.38]],
+            [23, 25, 0, [-50, 44.38]],
+            [23, -57, 1],
+            [-30, -65, 0]
+        ], [new _Map_(150, 100, false, "House 1").init(undefined, undefined, [-26, -41], true), new _Map_(150, 80, false, "House 1").init(), new _Map_(150, 80, false, "House 1").init()], undefined);
     }
 }
 
 export class Shed extends _Building_ {
 
-    static _defaultVertices = [-30.2,24.6,1,0,0,30.2,24.6,1,0.58984375,0,-30.2,-24.6,1,0,0.9609375,30.2,24.6,1,0.58984375,0,-30.2,-24.6,1,0,0.9609375,30.2,-24.6,1,0.58984375,0.9609375];
+    static _defaultVertices = [-30.2, 24.6, 1, 0, 0, 30.2, 24.6, 1, 0.58984375, 0, -30.2, -24.6, 1, 0, 0.9609375, 30.2, 24.6, 1, 0.58984375, 0, -30.2, -24.6, 1, 0, 0.9609375, 30.2, -24.6, 1, 0.58984375, 0.9609375];
 
     width = 60.4;
     height = 49.2;
@@ -1956,13 +1998,14 @@ export class Shed extends _Building_ {
     texture = textures.objects.shed;
     obstacle = true;
     segments = [
-      [-30,-3.6,60,28],[-28,-23.6,56,20]
+        [-30, -3.6, 60, 28],
+        [-28, -23.6, 56, 20]
     ];
 
     constructor(initialX, initialY, initialRotation) {
         super(initialX, initialY, initialRotation, [
-            [0, -20, 0,[0,20]]
-        ], [new _Map_(90, 50, false, "Shed").init(undefined,undefined,[0,-30],true)], undefined);
+            [0, -20, 0, [0, 20]]
+        ], [new _Map_(90, 50, false, "Shed").init(undefined, undefined, [0, -30], true)], undefined);
 
         let floor = new Floor(0, 0, 150, 100, 1);
         floor.exclude = true;
@@ -1973,7 +2016,7 @@ export class Shed extends _Building_ {
 
 export class House1 extends _Building_ {
 
-    static _defaultVertices = [-73.7,72.2,1,0,0,73.7,72.2,1,0.7197265625,0,-73.7,-72.2,1,0,0.705078125,73.7,72.2,1,0.7197265625,0,-73.7,-72.2,1,0,0.705078125,73.7,-72.2,1,0.7197265625,0.705078125];
+    static _defaultVertices = [-73.7, 72.2, 1, 0, 0, 73.7, 72.2, 1, 0.7197265625, 0, -73.7, -72.2, 1, 0, 0.705078125, 73.7, 72.2, 1, 0.7197265625, 0, -73.7, -72.2, 1, 0, 0.705078125, 73.7, -72.2, 1, 0.7197265625, 0.705078125];
 
     width = 147.4;
     height = 144.4;
@@ -1982,7 +2025,16 @@ export class House1 extends _Building_ {
     texture = textures.objects.house1;
     obstacle = true;
     segments = [
-        [12.5,-70,50,24],[-71.5,-62,34,34],[-73.5,2,111,70],[2.5,-48,70,30],[2.5,-72,10,30],[62.5,-72,10,30],[2.5,0,70,64],[2.5,-20,6,64],[66.5,-20,6,64],[-71.5,-56,78,120]
+        [12.5, -70, 50, 24],
+        [-71.5, -62, 34, 34],
+        [-73.5, 2, 111, 70],
+        [2.5, -48, 70, 30],
+        [2.5, -72, 10, 30],
+        [62.5, -72, 10, 30],
+        [2.5, 0, 70, 64],
+        [2.5, -20, 6, 64],
+        [66.5, -20, 6, 64],
+        [-71.5, -56, 78, 120]
     ];
 
     constructor(initialX, initialY, initialRotation) {
@@ -1991,9 +2043,48 @@ export class House1 extends _Building_ {
             [23, 25, 0, [-50, 44.38]],
             [23, -57, 1],
             [-30, -65, 0]
-        ], [new _Map_(150, 100, false, "House 1").init(undefined,undefined,[-26,-41],true), new _Map_(150, 80, false, "House 1").init(), new _Map_(150, 80, false, "House 1").init()], undefined);
+        ], [new _Map_(150, 100, false, "House 1").init(undefined, undefined, [-26, -41], true), new _Map_(150, 80, false, "House 1").init(), new _Map_(150, 80, false, "House 1").init()], undefined);
 
-        let balconyDoor = new Door("Balcony", -1, -50, (this.rooms[0].height / 2) + 9.2, -1, [23,15], true);
+        let balconyDoor = new Door("Balcony", -1, -50, (this.rooms[0].height / 2) + 9.2, -1, [23, 15], true);
+
+        let floor = new Floor(0, 0, 150, 100, 1);
+        floor.exclude = true;
+
+        this.rooms[0].link(floor);
+        this.rooms[0].link(balconyDoor);
+    }
+}
+
+export class House2 extends _Building_ {
+
+    static _defaultVertices = [-85.2, 86.2, 1, 0, 0, 85.2, 86.2, 1, 0.83203125, 0, -85.2, -86.2, 1, 0, 0.841796875, 85.2, 86.2, 1, 0.83203125, 0, -85.2, -86.2, 1, 0, 0.841796875, 85.2, -86.2, 1, 0.83203125, 0.841796875];
+
+    width = 170.4;
+    height = 172.4;
+    name = "house 2";
+    clusterName = "house 2";
+    texture = textures.objects.house2;
+    obstacle = true;
+    segments = [
+        [-85, -20, 110, 106],
+        [-85, -26, 102, 112],
+        [-85, -30, 94, 116],
+        [-75, -42, 2, 24],
+        [-76, -86, 92, 16],
+        [82, -54, 3, 76],
+        [17, -86, 68, 32],
+        [25, 18, 60, 52]
+    ];
+
+    constructor(initialX, initialY, initialRotation) {
+        super(initialX, initialY, initialRotation, [
+            [-26.1, -33, 0, [0, 44.38]],
+            [23, 25, 0, [-50, 44.38]],
+            [23, -57, 1],
+            [-30, -65, 0]
+        ], [new _Map_(150, 100, false, "House 1").init(undefined, undefined, [-26, -41], true), new _Map_(150, 80, false, "House 1").init(), new _Map_(150, 80, false, "House 1").init()], undefined);
+
+        let balconyDoor = new Door("Balcony", -1, -50, (this.rooms[0].height / 2) + 9.2, -1, [23, 15], true);
 
         let floor = new Floor(0, 0, 150, 100, 1);
         floor.exclude = true;
@@ -2080,7 +2171,7 @@ export class Syringe extends _Medicine_ {
         regain: 25
     };
 
-    static _defaultVertices = [-1.25,5.3,1,0,0,1.25,5.3,1,0.78125,0,-1.25,-5.3,1,0,0.828125,1.25,5.3,1,0.78125,0,-1.25,-5.3,1,0,0.828125,1.25,-5.3,1,0.78125,0.828125];
+    static _defaultVertices = [-1.25, 5.3, 1, 0, 0, 1.25, 5.3, 1, 0.78125, 0, -1.25, -5.3, 1, 0, 0.828125, 1.25, 5.3, 1, 0.78125, 0, -1.25, -5.3, 1, 0, 0.828125, 1.25, -5.3, 1, 0.78125, 0.828125];
 
     width = 2.5;
     height = 10.6;
@@ -2259,6 +2350,75 @@ export class USP_45 extends _Gun_ {
     }
 }
 
+export class GreyBackpack extends _Pickup_ {
+
+    static _properties = {
+        capacity: 10,
+        useTexture: textures.skins.grey_backpack_acc.id
+    }
+
+    static _defaultVertices = [-4, 5.4, 1, 0, 0, 4, 5.4, 1, 0.625, 0, -4, -5.4, 1, 0, 0.84375, 4, 5.4, 1, 0.625, 0, -4, -5.4, 1, 0, 0.84375, 4, -5.4, 1, 0.625, 0.84375];
+
+    width = 8;
+    clusterName = "grey backpack";
+    texture = textures.objects.greybackpack;
+    height = 10.8;
+    subLayer = 1;
+    moveable = true;
+    name = "grey backpack";
+    type = "backpack";
+
+    constructor(initialX, initialY, initialRotation) {
+        super(initialX, initialY, initialRotation);
+    }
+}
+
+export class WhiteBackpack extends _Pickup_ {
+
+    static _properties = {
+        capacity: 25,
+        useTexture: textures.skins.white_backpack_acc.id
+    }
+
+    static _defaultVertices = [-4, 5.4, 1, 0, 0, 4, 5.4, 1, 0.625, 0, -4, -5.4, 1, 0, 0.84375, 4, 5.4, 1, 0.625, 0, -4, -5.4, 1, 0, 0.84375, 4, -5.4, 1, 0.625, 0.84375];
+
+    width = 8;
+    clusterName = "white backpack";
+    texture = textures.objects.whitebackpack;
+    height = 10.8;
+    subLayer = 1;
+    moveable = true;
+    name = "white backpack";
+    type = "backpack";
+
+    constructor(initialX, initialY, initialRotation) {
+        super(initialX, initialY, initialRotation);
+    }
+}
+
+export class BlackBackpack extends _Pickup_ {
+
+    static _properties = {
+        capacity: 50,
+        useTexture: textures.skins.black_backpack_acc.id
+    }
+
+    static _defaultVertices = [-4, 5.4, 1, 0, 0, 4, 5.4, 1, 0.625, 0, -4, -5.4, 1, 0, 0.84375, 4, 5.4, 1, 0.625, 0, -4, -5.4, 1, 0, 0.84375, 4, -5.4, 1, 0.625, 0.84375];
+
+    width = 8;
+    clusterName = "black backpack";
+    texture = textures.objects.blackbackpack;
+    height = 10.8;
+    subLayer = 1;
+    moveable = true;
+    name = "black backpack";
+    type = "backpack";
+
+    constructor(initialX, initialY, initialRotation) {
+        super(initialX, initialY, initialRotation);
+    }
+}
+
 export class PickupRing extends _InstancedClusterClient_ {
 
     static _defaultVertices = [-4.28, 4.28, 1, 0, 0, 4.28, 4.28, 1, 0.66875, 0, -4.28, -4.28, 1, 0, 0.66875, 4.28, 4.28, 1, 0.66875, 0, -4.28, -4.28, 1, 0, 0.66875, 4.28, -4.28, 1, 0.66875, 0.66875];
@@ -2303,7 +2463,8 @@ export class Avatar {
 
         this.vertices = {
             body: [-7.0200000000000005, 21.4, 1, 0, 0, 0, 7.0200000000000005, 21.4, 1, 0.5484375, 0, 0, -7.0200000000000005, -21.4, 1, 0, 0.8359375, 0, 7.0200000000000005, 21.4, 1, 0.5484375, 0, 0, -7.0200000000000005, -21.4, 1, 0, 0.8359375, 0, 7.0200000000000005, -21.4, 1, 0.5484375, 0.8359375, 0],
-            eyes: [-2.7, 3.379999999999999, 1, 0.16875, 0.351953125, 1, 2.7, 3.379999999999999, 1, 0.3796875, 0.351953125, 1, -2.7, 1.4800000000000004, 1, 0.16875, 0.3890625, 1, 2.7, 3.379999999999999, 1, 0.3796875, 0.351953125, 1, -2.7, 1.4800000000000004, 1, 0.16875, 0.3890625, 1, 2.7, 1.4800000000000004, 1, 0.3796875, 0.3890625, 1]
+            eyes: [-2.7, 3.379999999999999, 1, 0.16875, 0.351953125, 1, 2.7, 3.379999999999999, 1, 0.3796875, 0.351953125, 1, -2.7, 1.4800000000000004, 1, 0.16875, 0.3890625, 1, 2.7, 3.379999999999999, 1, 0.3796875, 0.351953125, 1, -2.7, 1.4800000000000004, 1, 0.16875, 0.3890625, 1, 2.7, 1.4800000000000004, 1, 0.3796875, 0.3890625, 1],
+            accessory1: [-7.12, 4.3799999999999955, 1, -0.00390625, 0.332421875, 2, 6.920000000000001, 4.3799999999999955, 1, 0.54453125, 0.332421875, 2, -7.12, -38.42, 1, -0.00390625, 1.168359375, 2, 6.920000000000001, 4.3799999999999955, 1, 0.54453125, 0.332421875, 2, -7.12, -38.42, 1, -0.00390625, 1.168359375, 2, 6.920000000000001, -38.42, 1, 0.54453125, 1.168359375, 2]
         }
 
         this.trans = {
@@ -2360,8 +2521,8 @@ export class Avatar {
                 }
             },
             seat: {
-             ref: undefined, 
-             id: undefined
+                ref: undefined,
+                id: undefined
             },
             pickup: {
                 offset: {
@@ -2377,7 +2538,7 @@ export class Avatar {
                 health: 100,
                 hunger: 100,
                 thirst: 100
-            }, 
+            },
             targetId: undefined,
             confidence: 25,
             reputation: 25,
@@ -2389,7 +2550,8 @@ export class Avatar {
             draw: false,
             fire: false,
             equippedItems: {
-                mainTool: undefined
+                mainTool: undefined,
+                accessory1: undefined
             },
             punchingAnimation: new LoopAnimation(function() {
                 let leftPunch = this.state.leftPunchAnimation,
@@ -2405,15 +2567,17 @@ export class Avatar {
 
             }, this, 0.01),
             reloadTimeout: new MultiFrameLinearAnimation([function() {
-             if (this.state.equippedItems.mainTool) {
-                this.state.equippedItems.mainTool.reloadProgress = 0;
-                this.state.equippedItems.mainTool.loaded = true;
-                enableReloadDisplay();
-                updateAmmoDisplay();
-             } else {
-                enableReloadDisplay();
-             }
-            }], this, [0], function(){enableReloadDisplay()}),
+                if (this.state.equippedItems.mainTool) {
+                    this.state.equippedItems.mainTool.reloadProgress = 0;
+                    this.state.equippedItems.mainTool.loaded = true;
+                    enableReloadDisplay();
+                    updateAmmoDisplay();
+                } else {
+                    enableReloadDisplay();
+                }
+            }], this, [0], function() {
+                enableReloadDisplay()
+            }),
             fireAnimation: undefined,
             recoilAnimation: new MultiFrameLinearAnimation([function() {
                 this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[1];
@@ -2481,6 +2645,9 @@ export class Avatar {
                     texture: 0
                 },
                 eyes: {
+                    texture: 0
+                },
+                accessory1: {
                     texture: 0
                 }
             }
@@ -2553,7 +2720,7 @@ export class Avatar {
         }, this, 0);
     }
 
-    hit(damage, x, y, owner) {
+    hit(damage, owner, bullet) {
         if (!this.state.invinsible) {
             (this.state.armour > 0) ? this.state.armour -= damage: this.state.vitals.health -= damage;
 
@@ -2565,12 +2732,12 @@ export class Avatar {
 
                 this.purgeItems(5);
 
-                    delete $CURRENT_MAP.avatars[this.id];
-                    delete $CURRENT_MAP.obstacles[this.id];
-                    endDialogue();
-                    if (this.state.pickup.current) this.drop();
-                    this.hidden = true;
-                    noclip = true;
+                delete $CURRENT_MAP.avatars[this.id];
+                delete $CURRENT_MAP.obstacles[this.id];
+                endDialogue();
+                if (this.state.pickup.current) this.drop();
+                this.hidden = true;
+                noclip = true;
 
                 return;
             }
@@ -2591,17 +2758,19 @@ export class Avatar {
         }
     }
 
-    reload() { 
-      if (this.state.equippedItems.mainTool.reloadProgress) {
-        this.state.reloadTimeout.start();
-        disableReloadDisplay();
-      }
+    reload() {
+        if (this.state.equippedItems.mainTool.reloadProgress) {
+            this.state.reloadTimeout.start();
+            disableReloadDisplay();
+        }
     }
 
     addItem(item, slot) {
         if (this.inventory.addItem(item, slot)) {
             updateInventoryItem(item.slot, item.name);
+            return true;
         }
+        return false;
     }
 
     dropItem(slot) {
@@ -2621,8 +2790,9 @@ export class Avatar {
         return true;
     }
 
-    purgeItems(limit) {
-        for (let i = 0; i < limit; i++) {
+    purgeItems(limit, start = 0, exclude = []) {
+        for (let i = start; i < limit; i++) {
+            if (exclude.includes(i)) continue;
             if (this.inventory.items[i]) this.dropItem(i);
         }
     }
@@ -2633,28 +2803,26 @@ export class Avatar {
         let item = this.inventory.items[slot];
 
         if (item) {
-            hideAmmoDisplay();
-
             switch (item.type) {
                 case "medicine": {
-                   this.state.armed = false;
+                    this.state.armed = false;
 
-                   switch (item.name) {
-                     case "syringe": {
-                      if (!item.used && this.state.vitals.health < 100) {
-                       this.state.vitals.health += Math.min(25,100-this.state.vitals.health);
-                       item.used = true;
-                       updateDescription();
-                       this.dropItem(slot);
-                       updateHealthBar();
-                      }
-                     };
-                     break;
-                     case "medkit": {
-                       console.log("medkit"); 
-                     };
-                     break;
-                   }  
+                    switch (item.name) {
+                        case "syringe": {
+                            if (!item.used && this.state.vitals.health < 100) {
+                                this.state.vitals.health += Math.min(25, 100 - this.state.vitals.health);
+                                item.used = true;
+                                updateDescription();
+                                this.dropItem(slot);
+                                updateHealthBar();
+                            }
+                        };
+                        break;
+                        case "medkit": {
+                            console.log("medkit");
+                        };
+                        break;
+                    }
                 }
                 break;
                 case "gun": {
@@ -2677,7 +2845,40 @@ export class Avatar {
                     this.state.equippedItems.mainTool = item;
                 }
                 break;
+                case "backpack": {
+                    this.state.position.accessory1.texture = item.constructor._properties.useTexture;
+
+                    ext.bindVertexArrayOES(this.vao);
+                    this.buffer = gl.createBuffer();
+                    gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
+                    gl.vertexAttribPointer(locations.coords, 3, gl.FLOAT, false, 24, 0);
+                    gl.vertexAttribPointer(locations.tcoords, 2, gl.FLOAT, false, 24, 12);
+                    gl.vertexAttribPointer(locations.textrUnit, 1, gl.FLOAT, false, 24, 20);
+                    gl.enableVertexAttribArray(locations.coords);
+                    gl.enableVertexAttribArray(locations.tcoords);
+                    gl.enableVertexAttribArray(locations.textrUnit);
+                    gl.disableVertexAttribArray(locations.offset);
+
+                    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([...this.vertices.body, ...this.vertices.eyes, ...this.vertices.accessory1]), gl.STATIC_DRAW);
+
+                    this.state.equippedItems.accessory1 = item;
+                    let obj;
+
+                    if (15 + item.constructor._properties.capacity < this.inventory.slots) {
+                        this.purgeItems(this.inventory.slots, 15 + item.constructor._properties.capacity, [slot]);
+                        if (slot > 15 + item.constructor._properties.capacity) obj = this.inventory.ejectItem(slot);
+                    }
+
+                    setInventoryCapacity(15 + item.constructor._properties.capacity);
+                    if (slot > 15 + item.constructor._properties.capacity && !this.addItem(obj)) {
+                        this.dropItem(14);
+                        this.inventory.addItem(obj, 14);
+                    }
+                }
+                break;
             }
+
+            if (!this.state.equippedItems.mainTool || this.state.equippedItems.mainTool.type !== "gun") hideAmmoDisplay();
 
             return true;
         }
@@ -2686,7 +2887,7 @@ export class Avatar {
     }
 
     unequipItem(slot) {
-        if (!this.inventory.items[slot]) return false;
+        if (!this.inventory.items[slot] || (this.inventory.items[slot] !== this.state.equippedItems.mainTool && this.inventory.items[slot] !== this.state.equippedItems.accessory1)) return false;
 
         let item = this.inventory.items[slot];
 
@@ -2707,6 +2908,36 @@ export class Avatar {
                 this.state.draw = false;
                 this.state.stabbing = false;
                 this.state.equippedItems.mainTool = undefined;
+            };
+            break;
+            case "backpack": {
+
+                ext.bindVertexArrayOES(this.vao);
+                this.buffer = gl.createBuffer();
+                gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
+                gl.vertexAttribPointer(locations.coords, 3, gl.FLOAT, false, 24, 0);
+                gl.vertexAttribPointer(locations.tcoords, 2, gl.FLOAT, false, 24, 12);
+                gl.vertexAttribPointer(locations.textrUnit, 1, gl.FLOAT, false, 24, 20);
+                gl.enableVertexAttribArray(locations.coords);
+                gl.enableVertexAttribArray(locations.tcoords);
+                gl.enableVertexAttribArray(locations.textrUnit);
+                gl.disableVertexAttribArray(locations.offset);
+
+                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([...this.vertices.body, ...this.vertices.eyes]), gl.STATIC_DRAW);
+
+                this.state.equippedItems.accessory1 = undefined;
+
+                this.purgeItems(this.inventory.slots, 15, [slot]);
+                let obj;
+
+                if (slot > 14) obj = this.inventory.ejectItem(slot);
+
+                setInventoryCapacity(15);
+
+                if (slot > 14 && !this.addItem(obj)) {
+                    this.dropItem(14);
+                    this.addItem(obj, 14);
+                }
             };
             break;
         }
@@ -2760,13 +2991,15 @@ export class Avatar {
         gl.bindTexture(gl.TEXTURE_2D, textures.skins.index[this.state.position.body.texture]);
         gl.activeTexture(gl.TEXTURE1);
         gl.bindTexture(gl.TEXTURE_2D, textures.skins.index[this.state.position.eyes.texture]);
+        gl.activeTexture(gl.TEXTURE2);
+        gl.bindTexture(gl.TEXTURE_2D, textures.skins.index[this.state.position.accessory1.texture]);
         gl.useProgram(program);
 
-        gl.drawArrays(gl.TRIANGLES, 0, 12);
+        gl.drawArrays(gl.TRIANGLES, 0, 18);
 
         this.nameObj.render();
     }
-    
+
     meleeAttack(damage, hitbox) {
         let [x, y] = rotate(hitbox.x, hitbox.y, (this.trans.rotation) * 180 / Math.PI), map = $CURRENT_MAP;
 
@@ -2782,7 +3015,7 @@ export class Avatar {
             let avatar = map.avatars[i];
 
             if ((Math.abs(x - avatar.trans.offsetX) < (avatar.width / 2 + width / 2)) && (Math.abs(y - avatar.trans.offsetY) < (avatar.height / 2 + height / 2))) {
-                avatar.hit(damage, 0, 0, this);
+                avatar.hit(damage, this);
             }
         }
     }
@@ -2807,7 +3040,7 @@ export class Avatar {
                 this.state.pickup.offset.aRotation = (this.trans.rotation * 180 / Math.PI);
                 this.state.pickup.offset.bRotation = obj.trans.rotation;
                 this.state.pickup.current = obj;
-                
+
                 return true;
             }
         }
@@ -2852,7 +3085,7 @@ export class Bot {
 
         this.vertices = {
             body: [-7.0200000000000005, 21.4, 1, 0, 0, 0, 7.0200000000000005, 21.4, 1, 0.5484375, 0, 0, -7.0200000000000005, -21.4, 1, 0, 0.8359375, 0, 7.0200000000000005, 21.4, 1, 0.5484375, 0, 0, -7.0200000000000005, -21.4, 1, 0, 0.8359375, 0, 7.0200000000000005, -21.4, 1, 0.5484375, 0.8359375, 0],
-            eyes: [-2.7, 3.379999999999999, 1, 0.16875, 0.351953125, 1, 2.7, 3.379999999999999, 1, 0.3796875, 0.351953125, 1, -2.7, 1.4800000000000004, 1, 0.16875, 0.3890625, 1, 2.7, 3.379999999999999, 1, 0.3796875, 0.351953125, 1, -2.7, 1.4800000000000004, 1, 0.16875, 0.3890625, 1, 2.7, 1.4800000000000004, 1, 0.3796875, 0.3890625, 1]
+            eyes: [-3.1, 3.379999999999999, 1, 0.153125, 0.351953125, 1, 3.1000000000000005, 3.379999999999999, 1, 0.3953125, 0.351953125, 1, -3.1, 1.4800000000000004, 1, 0.153125, 0.3890625, 1, 3.1000000000000005, 3.379999999999999, 1, 0.3953125, 0.351953125, 1, -3.1, 1.4800000000000004, 1, 0.153125, 0.3890625, 1, 3.1000000000000005, 1.4800000000000004, 1, 0.3953125, 0.3890625, 1]
         }
 
         this.trans = {
@@ -2884,7 +3117,7 @@ export class Bot {
             strength: 5,
             armour: 0,
             relationship: 0,
-            agreeableness: random(50),  
+            agreeableness: random(50),
             invinsible: false,
             kills: 0,
             passive: false,
@@ -2931,8 +3164,8 @@ export class Bot {
                 request: true
             },
             seat: {
-             ref: undefined, 
-             id: undefined
+                ref: undefined,
+                id: undefined
             },
             targetId: undefined,
             target: {
@@ -2980,7 +3213,7 @@ export class Bot {
             walking: false,
             punching: false,
             stabbing: false,
-            running: false, 
+            running: false,
             sitting: false,
             armed: false,
             melee: false,
@@ -2992,11 +3225,11 @@ export class Bot {
             rotationSpeed: 0.1,
             rotationTarget: undefined,
             wanderRateTimeout: new MultiFrameLinearAnimation([function() {
-              this.state.wander.waiting = false;
-	      this.state.speed = this.state.baseSpeed;
-              
-              let offsetX = random(this.state.wander.radius, true),
-                  offsetY = random(this.state.wander.radius, true);
+                this.state.wander.waiting = false;
+                this.state.speed = this.state.baseSpeed;
+
+                let offsetX = random(this.state.wander.radius, true),
+                    offsetY = random(this.state.wander.radius, true);
 
                 this.requestPath((this.state.wander.anchor.x + offsetX) - this.map.centerX, (this.state.wander.anchor.y + offsetY) - this.map.centerY);
             }], this, [0]),
@@ -3279,7 +3512,7 @@ export class Bot {
         }, this, 0);
     }
 
-    hit(damage, x, y, owner) {
+    hit(damage, owner, bullet) {
         if (!this.state.invinsible) {
             (this.state.armour > 0) ? this.state.armour -= damage: this.state.vitals.health -= damage;
 
@@ -3294,6 +3527,8 @@ export class Bot {
                 return;
             }
         }
+
+        // run or attack
 
         if ((this.state.passive || (this.state.armed && this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo <= 0)) && !this.state.running && !this.state.follow.target && this !== $ACTIVE_DIALOGUE_PARTY) {
             this.stopSitting();
@@ -3331,14 +3566,17 @@ export class Bot {
             y: this.state.wander.anchor.y || anchorY
         };
 
-        let {x,y} = this.state.wander.anchor;
+        let {
+            x,
+            y
+        } = this.state.wander.anchor;
 
         if (x && y) this.state.wander.active = true;
     }
 
     stopWander() {
-       this.state.wander.active = false;
-       this.disengagePath();
+        this.state.wander.active = false;
+        this.disengagePath();
     }
 
     follow(id) {
@@ -3351,31 +3589,34 @@ export class Bot {
     }
 
     sit(s) {
-     if (!this.state.seat.ref && !this.state.target.engaged && !this.state.running) {
-      let allSeats = Object.values(this.map.seats);
-      let seat = s || allSeats[random(allSeats.length)];
+        if (!this.state.seat.ref && !this.state.target.engaged && !this.state.running) {
+            let allSeats = Object.values(this.map.seats);
+            let seat = s || allSeats[random(allSeats.length)];
 
-      if (!seat) return false;
- 
-      this.state.seat.ref = seat;  
-     }
+            if (!seat) return false;
+
+            this.state.seat.ref = seat;
+        }
     }
 
-    stopSitting() { 
-      if (this.state.seat.ref) {
-        if (this.state.sitting) {
-          let seat = this.state.seat.ref.seats[this.state.seat.id];
-          seat.occupied = false;
-          this.state.sitting = false;
- 
-          let {x,y} = this.map.GRAPH.getPoint((this.state.seat.ref.trans.offsetX + $MAP.centerX) + seat.exit.x,(this.state.seat.ref.trans.offsetY + $MAP.centerY) + seat.exit.y);
-          this.translate((x - (this.trans.offsetX + $MAP.centerX)) + 5,(y - (this.trans.offsetY + $MAP.centerY)) - 5);
-        }
+    stopSitting() {
+        if (this.state.seat.ref) {
+            if (this.state.sitting) {
+                let seat = this.state.seat.ref.seats[this.state.seat.id];
+                seat.occupied = false;
+                this.state.sitting = false;
 
-        this.state.sittingTimeout.end();
-        this.state.seat.ref = undefined;
-        this.state.seat.id = undefined; 
-      }
+                let {
+                    x,
+                    y
+                } = this.map.GRAPH.getPoint((this.state.seat.ref.trans.offsetX + $MAP.centerX) + seat.exit.x, (this.state.seat.ref.trans.offsetY + $MAP.centerY) + seat.exit.y);
+                this.translate((x - (this.trans.offsetX + $MAP.centerX)) + 5, (y - (this.trans.offsetY + $MAP.centerY)) - 5);
+            }
+
+            this.state.sittingTimeout.end();
+            this.state.seat.ref = undefined;
+            this.state.seat.id = undefined;
+        }
     }
 
     addItem(item, slot) {
@@ -3499,22 +3740,22 @@ export class Bot {
 
             if (this.state.path.index === this.state.path.current.length) {
                 if (this.state.seat.ref && this.state.seat.id !== undefined) {
-                  let seat = this.state.seat.ref.seats[this.state.seat.id]; 
-                  
-                  if (seat.occupied) {
-                   this.stopSitting();
-                   break walk;
-                  }
-                  
-                  this.translate((this.state.seat.ref.trans.offsetX + seat.x) - this.trans.offsetX,(this.state.seat.ref.trans.offsetY + seat.y) - this.trans.offsetY);
-                  this.state.rotationTarget = undefined;
-                  this.trans.rotation = (seat.r) * Math.PI / 180;
+                    let seat = this.state.seat.ref.seats[this.state.seat.id];
 
-                  this.state.seat.ref.seats[seat.id].occupied = true
-                  this.state.sitting = true;
-                  this.state.sittingTimeout.timingConfig[0] = random(10);
-                  this.state.sittingTimeout.start();
-                }                  
+                    if (seat.occupied) {
+                        this.stopSitting();
+                        break walk;
+                    }
+
+                    this.translate((this.state.seat.ref.trans.offsetX + seat.x) - this.trans.offsetX, (this.state.seat.ref.trans.offsetY + seat.y) - this.trans.offsetY);
+                    this.state.rotationTarget = undefined;
+                    this.trans.rotation = (seat.r) * Math.PI / 180;
+
+                    this.state.seat.ref.seats[seat.id].occupied = true
+                    this.state.sitting = true;
+                    this.state.sittingTimeout.timingConfig[0] = random(10);
+                    this.state.sittingTimeout.start();
+                }
 
                 this.disengagePath();
                 break walk;
@@ -3686,30 +3927,30 @@ export class Bot {
             if (!this.state.target.engaged) this.state.wanderRateTimeout.run();
 
             if (!this.state.path.engaged && this.state.path.request && !this.state.wander.waiting) {
-               this.state.wander.waiting = true;
-               this.state.wanderRateTimeout.start();
+                this.state.wander.waiting = true;
+                this.state.wanderRateTimeout.start();
             }
         }
 
         sit: if (this.state.seat.ref && !this.state.sitting && !this.state.path.engaged && this.state.path.request) {
-          let seat, spot;
-         
-          if (this.state.seat.id === undefined) {
-            seat = this.state.seat.ref;
-            spot = seat.getSeat(this);
+            let seat, spot;
 
-            if (!spot) {
-             this.stopSitting();
-             break sit;
+            if (this.state.seat.id === undefined) {
+                seat = this.state.seat.ref;
+                spot = seat.getSeat(this);
+
+                if (!spot) {
+                    this.stopSitting();
+                    break sit;
+                }
+
+                this.state.seat.id = spot.id;
             }
 
-            this.state.seat.id = spot.id;
-          }
+            seat = this.state.seat.ref;
+            spot = this.state.seat.ref.seats[this.state.seat.id];
 
-           seat = this.state.seat.ref;
-           spot = this.state.seat.ref.seats[this.state.seat.id];
-
-           this.requestPath(seat.trans.offsetX + spot.exit.x, seat.trans.offsetY + spot.exit.y);
+            this.requestPath(seat.trans.offsetX + spot.exit.x, seat.trans.offsetY + spot.exit.y);
         }
     }
 
@@ -3785,7 +4026,7 @@ export class Bot {
         if (this.state.attack.openCarry) {
             this.drawWeapon();
             return;
-        } 
+        }
 
         this.holsterWeapon();
     }
@@ -3817,7 +4058,7 @@ export class Bot {
             let avatar = map.avatars[i];
 
             if ((Math.abs(x - avatar.trans.offsetX) < (avatar.width / 2 + width / 2)) && (Math.abs(y - avatar.trans.offsetY) < (avatar.height / 2 + height / 2))) {
-                avatar.hit(damage, 0, 0, this);
+                avatar.hit(damage, this);
             }
         }
     }
@@ -3848,12 +4089,12 @@ export class Bot {
             this.state.path.current = path.path;
             this.state.path.index = 0;
             this.state.path.engaged = true;
-        } 
+        }
 
         if (this.state.seat.ref && this.state.seat.id !== undefined && (!path.result || this.map.GRAPH.blocked.includes(this.state.path.end.unit))) {
             this.stopSitting();
-        } 
- 
+        }
+
         return path;
     }
 
@@ -5027,12 +5268,12 @@ export class _Joystick_ extends _Object_ {
                     $CURRENT_MAP.translate((this.distance.x * this.scale) * movementMultFactor, (this.distance.y * this.scale) * movementMultFactor);
 
                     if ($CURRENT_MAP.move) {
-                      $AVATAR.state.walking = true;
-                      if ($AVATAR.state.seat.ref) { 
-                        $AVATAR.state.seat.ref.seats[$AVATAR.state.seat.id].occupied = false;
-                        $AVATAR.state.seat.ref = undefined
-                        $AVATAR.state.seat.id = undefined;
-                      }
+                        $AVATAR.state.walking = true;
+                        if ($AVATAR.state.seat.ref) {
+                            $AVATAR.state.seat.ref.seats[$AVATAR.state.seat.id].occupied = false;
+                            $AVATAR.state.seat.ref = undefined
+                            $AVATAR.state.seat.id = undefined;
+                        }
                     }
                 }
 

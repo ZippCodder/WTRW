@@ -629,8 +629,9 @@ export class Inventory {
     }
 
     ejectItem(slot, newItem) {
-        let item = this.items[slot];
+        let item = this.items[slot], object;
 
+        if (item) {
         switch (item.type) {
             case "gun": {
                 if (--this.weapons[this.items[slot].name].count === 0) {
@@ -650,9 +651,10 @@ export class Inventory {
         item.trans.offsetX = 0;
         item.trans.offsetY = 0;
 
-        let object = item;
+        object = item;
         this.items[slot] = undefined;
         this.count--;
+       }
 
         if (newItem) this.addItem(newItem, slot);
 

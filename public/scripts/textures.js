@@ -36,7 +36,7 @@ class TextureContainer {
                 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, textureWrapS);
                 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, textureWrapT);
 
-                container.count++;
+                container[name].id = container.count++;
                 container.index.push(container[name]);
 
                 res();
@@ -97,6 +97,9 @@ await textures.skins.addTexture("avatarassassinsknife3", "/public/images/texture
 await textures.skins.addTexture("avatarassassinsknifewalking1", "/public/images/textures/MAIN_AVATAR_MELEE_ASSASSINS_KNIFE_WALKING_1.png");
 await textures.skins.addTexture("avatarassassinsknifewalking2", "/public/images/textures/MAIN_AVATAR_MELEE_ASSASSINS_KNIFE_WALKING_2.png");
 await textures.skins.addTexture("avatargrab", "/public/images/textures/MAIN_AVATAR_GRAB.png");
+await textures.skins.addTexture("grey_backpack_acc", "/public/images/textures/GREY_BACKPACK_ACC.png");
+await textures.skins.addTexture("black_backpack_acc", "/public/images/textures/BLACK_BACKPACK_ACC.png");
+await textures.skins.addTexture("white_backpack_acc", "/public/images/textures/WHITE_BACKPACK_ACC.png");
 
 textures.objects = new TextureContainer();
 
@@ -109,11 +112,16 @@ await textures.objects.addTexture("kitchenknife", "/public/images/textures/KITCH
 await textures.objects.addTexture("assassinsknife", "/public/images/textures/ASSASSINS_KNIFE.png");
 await textures.objects.addTexture("combatknife", "/public/images/textures/COMBAT_KNIFE.png");
 await textures.objects.addTexture("laptop", "/public/images/textures/LAPTOP.png");
+await textures.objects.addTexture("greybackpack", "/public/images/textures/GREY_BACKPACK.png");
+await textures.objects.addTexture("whitebackpack", "/public/images/textures/WHITE_BACKPACK.png");
+await textures.objects.addTexture("blackbackpack", "/public/images/textures/BLACK_BACKPACK.png");
 await textures.objects.addTexture("book1", "/public/images/textures/BOOK_1.png");
 await textures.objects.addTexture("book2", "/public/images/textures/BOOK_2.png");
 await textures.objects.addTexture("syringe", "/public/images/textures/SYRINGE.png");
 await textures.objects.addTexture("house1", "/public/images/textures/HOUSE_1.png");
+await textures.objects.addTexture("house2", "/public/images/textures/HOUSE_2.png");
 await textures.objects.addTexture("conveniencestore", "/public/images/textures/CONVENIENCE_STORE.png");
+await textures.objects.addTexture("gunstore", "/public/images/textures/GUNSTORE.png");
 await textures.objects.addTexture("table", "/public/images/textures/TABLE.png");
 await textures.objects.addTexture("vendor1", "/public/images/textures/VENDOR_1.png");
 await textures.objects.addTexture("gazebo", "/public/images/textures/GAZEBO.png");

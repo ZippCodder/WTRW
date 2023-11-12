@@ -11,24 +11,17 @@
 
 ## TODO
 
-* Implement map color codes
-* Separate logic between avatar and bot classes
+* Remove fade from lights
 * Fix weird healthbar issues
 * Standardize transitions 
 * Implement health, dying and respawning
-* Fix avatar stacking
 * Fix avatar path request lag and strange behavior on large maps
 * Add avatar settings inupt object
-* Implement explovives
 * Separate Avatar objects in to specialized class types
-* Implement wallpapers
-* Re-add bullet texture
 * Implement character zone restrictions to limit pathfinding 
 
 ## Objects to add 
  
-* Hot dog stand 
-* Ice Cream Stand
 * China Town Arc
 * Pawn Shop
 * Gun Store
