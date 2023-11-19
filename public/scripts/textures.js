@@ -100,6 +100,7 @@ await textures.skins.addTexture("avatargrab", "/public/images/textures/MAIN_AVAT
 await textures.skins.addTexture("grey_backpack_acc", "/public/images/textures/GREY_BACKPACK_ACC.png");
 await textures.skins.addTexture("black_backpack_acc", "/public/images/textures/BLACK_BACKPACK_ACC.png");
 await textures.skins.addTexture("white_backpack_acc", "/public/images/textures/WHITE_BACKPACK_ACC.png");
+await textures.skins.addTexture("police_hat_acc", "/public/images/textures/POLICE_HAT_ACC.png");
 
 textures.objects = new TextureContainer();
 
@@ -123,6 +124,9 @@ await textures.objects.addTexture("house2", "/public/images/textures/HOUSE_2.png
 await textures.objects.addTexture("conveniencestore", "/public/images/textures/CONVENIENCE_STORE.png");
 await textures.objects.addTexture("gunstore", "/public/images/textures/GUNSTORE.png");
 await textures.objects.addTexture("table", "/public/images/textures/TABLE.png");
+await textures.objects.addTexture("smalltable", "/public/images/textures/SMALL_TABLE.png");
+await textures.objects.addTexture("whiteboard", "/public/images/textures/WHITEBOARD.png");
+await textures.objects.addTexture("pinboard", "/public/images/textures/PINBOARD.png");
 await textures.objects.addTexture("vendor1", "/public/images/textures/VENDOR_1.png");
 await textures.objects.addTexture("gazebo", "/public/images/textures/GAZEBO.png");
 await textures.objects.addTexture("shed", "/public/images/textures/SHED.png");

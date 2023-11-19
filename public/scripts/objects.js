@@ -1033,7 +1033,7 @@ export class BlackBook extends _InstancedClusterClient_ {
     moveable = true;
 
     constructor(initialX, initialY, initialRotation) {
-        super(initialX, initialY, initialRotation);
+        super(initialX, initialY, initialRotation || random(360));
     }
 }
 
@@ -1050,7 +1050,7 @@ export class WhiteBook extends _InstancedClusterClient_ {
     moveable = true;
 
     constructor(initialX, initialY, initialRotation) {
-        super(initialX, initialY, initialRotation);
+        super(initialX, initialY, initialRotation || random(360));
     }
 }
 
@@ -1298,10 +1298,10 @@ export class LightSwitch extends _StaticClusterClient_ {
 
 export class Chair extends _StaticClusterClient_ {
 
-    static _defaultVertices = [-5.2, 7.5, 1, 0, 0, 5.2, 7.5, 1, 0.8125, 0, -5.2, -7.5, 1, 0, 0.5859375, 5.2, 7.5, 1, 0.8125, 0, -5.2, -7.5, 1, 0, 0.5859375, 5.2, -7.5, 1, 0.8125, 0.5859375];
+    static _defaultVertices = [-5.7, 10.7, 1, 0, 0, 5.7, 10.7, 1, 0.890625, 0, -5.7, -10.7, 1, 0, 0.8359375, 5.7, 10.7, 1, 0.890625, 0, -5.7, -10.7, 1, 0, 0.8359375, 5.7, -10.7, 1, 0.890625, 0.8359375];
 
-    width = 10.4;
-    height = 15;
+    width = 11.4;
+    height = 21.4;
     name = "chair";
     clusterName = "chair";
     texture = textures.objects.chair;
@@ -1309,7 +1309,7 @@ export class Chair extends _StaticClusterClient_ {
     interactable = true;
     minDistance = 12;
     segments = [
-        [-5, -5.7, 10, 13]
+        [-5.7, -7.5, 11.4, 18.2]
     ];
 
     action() {
@@ -1377,7 +1377,7 @@ export class Laptop extends _StaticClusterClient_ {
     name = "laptop";
 
     constructor(initialX, initialY, initialRotation) {
-        super(initialX, initialY, initialRotation);
+        super(initialX, initialY, initialRotation || random(360));
     }
 }
 
@@ -1565,9 +1565,10 @@ export class RoadQuadCorner extends _StaticClusterClient_ {
 
 export class Door extends _StaticClusterClient_ {
 
-    static _defaultVertices = [-7.3, 10.2, 1, 0, 0, 7.3, 10.2, 1, 0.5703125, 0, -7.3, -10.2, 1, 0, 0.796875, 7.3, 10.2, 1, 0.5703125, 0, -7.3, -10.2, 1, 0, 0.796875, 7.3, -10.2, 1, 0.5703125, 0.796875];
-    width = 14.6;
-    height = 20.4;
+    static _defaultVertices = [-7.4, 10.3, 1, 0, 0, 7.4, 10.3, 1, 0.578125, 0, -7.4, -10.3, 1, 0, 0.8046875, 7.4, 10.3, 1, 0.578125, 0, -7.4, -10.3, 1, 0, 0.8046875, 7.4, -10.3, 1, 0.578125, 0.8046875];
+
+    width = 14.8;
+    height = 20.6;
     clusterName = "door";
     texture = textures.objects.door;
     name = "door";
@@ -1657,16 +1658,35 @@ export class Door extends _StaticClusterClient_ {
 
 export class Table extends _StaticClusterClient_ {
 
-    static _defaultVertices = [-14.2, 9.3, 1, 0, 0, 14.2, 9.3, 1, 0.5546875, 0, -14.2, -7.1000000000000005, 1, 0, 0.640625, 14.2, 9.3, 1, 0.5546875, 0, -14.2, -7.1000000000000005, 1, 0, 0.640625, 14.2, -7.1000000000000005, 1, 0.5546875, 0.640625, -13.399999999999999, -6.700000000000001, 1, 0.015625, 0.625, -11, -6.700000000000001, 1, 0.0625, 0.625, -13.399999999999999, -9.3, 1, 0.015625, 0.7265625, -11, -6.700000000000001, 1, 0.0625, 0.625, -13.399999999999999, -9.3, 1, 0.015625, 0.7265625, -11, -9.3, 1, 0.0625, 0.7265625, 11, -6.700000000000001, 1, 0.4921875, 0.625, 13.400000000000002, -6.700000000000001, 1, 0.5390625, 0.625, 11, -9.3, 1, 0.4921875, 0.7265625, 13.400000000000002, -6.700000000000001, 1, 0.5390625, 0.625, 11, -9.3, 1, 0.4921875, 0.7265625, 13.400000000000002, -9.3, 1, 0.5390625, 0.7265625];
+    static _defaultVertices = [-14.2, 9.7, 1, 0, 0, 14.2, 9.7, 1, 0.5546875, 0, -14.2, -9.7, 1, 0, 0.7578125, 14.2, 9.7, 1, 0.5546875, 0, -14.2, -9.7, 1, 0, 0.7578125, 14.2, -9.7, 1, 0.5546875, 0.7578125];
 
     width = 28.4;
-    height = 18.6;
+    height = 19.4;
     name = "table";
     clusterName = "table";
     texture = textures.objects.table;
     obstacle = true;
     segments = [
-        [-14.2, -7.1, 28.4, 16.4]
+        [-14.2, -6.5, 28.4, 16.2]
+    ];
+
+    constructor(initialX, initialY, initialRotation) {
+        super(initialX, initialY, initialRotation);
+    }
+}
+
+export class SmallTable extends _StaticClusterClient_ {
+
+    static _defaultVertices = [-8.2, 11.2, 1, 0, 0, 8.2, 11.2, 1, 0.640625, 0, -8.2, -11.2, 1, 0, 0.875, 8.2, 11.2, 1, 0.640625, 0, -8.2, -11.2, 1, 0, 0.875, 8.2, -11.2, 1, 0.640625, 0.875];
+
+    width = 16.4;
+    height = 22.4;
+    name = "small table";
+    clusterName = "small table";
+    texture = textures.objects.smalltable;
+    obstacle = true;
+    segments = [
+        [-8.2, -3, 16.4, 14.2]
     ];
 
     constructor(initialX, initialY, initialRotation) {
@@ -1730,6 +1750,36 @@ export class Bush extends _StaticClusterClient_ {
     segments = [
         [-6.5, -6.5, 13, 13]
     ];
+
+    constructor(initialX, initialY, initialRotation) {
+        super(initialX, initialY, initialRotation);
+    }
+}
+
+export class Whiteboard extends _StaticClusterClient_ {
+
+    static _defaultVertices = [-15.649999999999999, 8.650000000000002, 1, -0.00390625, -0.0078125, 15.25, 8.650000000000002, 1, 0.599609375, -0.0078125, -15.649999999999999, -8.25, 1, -0.00390625, 0.65234375, 15.25, 8.650000000000002, 1, 0.599609375, -0.0078125, -15.649999999999999, -8.25, 1, -0.00390625, 0.65234375, 15.25, -8.25, 1, 0.599609375, 0.65234375];
+
+    width = 30.9;
+    height = 16.9;
+    name = "whiteboard";
+    clusterName = "whiteboard";
+    texture = textures.objects.whiteboard;
+
+    constructor(initialX, initialY, initialRotation) {
+        super(initialX, initialY, initialRotation);
+    }
+}
+
+export class Pinboard extends _StaticClusterClient_ {
+
+    static _defaultVertices = [-16.7, 9.7, 1, -0.00390625, -0.0078125, 16.299999999999997, 9.7, 1, 0.640625, -0.0078125, -16.7, -9.3, 1, -0.00390625, 0.734375, 16.299999999999997, 9.7, 1, 0.640625, -0.0078125, -16.7, -9.3, 1, -0.00390625, 0.734375, 16.299999999999997, -9.3, 1, 0.640625, 0.734375];
+
+    width = 33;
+    height = 19;
+    name = "pinboard";
+    clusterName = "pinboard";
+    texture = textures.objects.pinboard;
 
     constructor(initialX, initialY, initialRotation) {
         super(initialX, initialY, initialRotation);
@@ -1984,6 +2034,11 @@ export class GunStore extends _Building_ {
             [23, -57, 1],
             [-30, -65, 0]
         ], [new _Map_(150, 100, false, "House 1").init(undefined, undefined, [-26, -41], true), new _Map_(150, 80, false, "House 1").init(), new _Map_(150, 80, false, "House 1").init()], undefined);
+
+        let floor = new Floor(0, 0, 150, 100, 0);
+        floor.exclude = true;
+
+        this.rooms[0].link(floor);
     }
 }
 
@@ -2274,7 +2329,7 @@ export class GP_K100 extends _Gun_ {
         damage: 13,
         accuracy: 2,
         nozzelLength: 21,
-        capacity: 15,
+        capacity: 60,
         reloadTime: 2,
         useTextures: [6, 7]
     }
@@ -2464,7 +2519,8 @@ export class Avatar {
         this.vertices = {
             body: [-7.0200000000000005, 21.4, 1, 0, 0, 0, 7.0200000000000005, 21.4, 1, 0.5484375, 0, 0, -7.0200000000000005, -21.4, 1, 0, 0.8359375, 0, 7.0200000000000005, 21.4, 1, 0.5484375, 0, 0, -7.0200000000000005, -21.4, 1, 0, 0.8359375, 0, 7.0200000000000005, -21.4, 1, 0.5484375, 0.8359375, 0],
             eyes: [-2.7, 3.379999999999999, 1, 0.16875, 0.351953125, 1, 2.7, 3.379999999999999, 1, 0.3796875, 0.351953125, 1, -2.7, 1.4800000000000004, 1, 0.16875, 0.3890625, 1, 2.7, 3.379999999999999, 1, 0.3796875, 0.351953125, 1, -2.7, 1.4800000000000004, 1, 0.16875, 0.3890625, 1, 2.7, 1.4800000000000004, 1, 0.3796875, 0.3890625, 1],
-            accessory1: [-7.12, 4.3799999999999955, 1, -0.00390625, 0.332421875, 2, 6.920000000000001, 4.3799999999999955, 1, 0.54453125, 0.332421875, 2, -7.12, -38.42, 1, -0.00390625, 1.168359375, 2, 6.920000000000001, 4.3799999999999955, 1, 0.54453125, 0.332421875, 2, -7.12, -38.42, 1, -0.00390625, 1.168359375, 2, 6.920000000000001, -38.42, 1, 0.54453125, 1.168359375, 2]
+            accessory1: [-7.12, 4.3799999999999955, 1, -0.00390625, 0.332421875, 2, 6.920000000000001, 4.3799999999999955, 1, 0.54453125, 0.332421875, 2, -7.12, -38.42, 1, -0.00390625, 1.168359375, 2, 6.920000000000001, 4.3799999999999955, 1, 0.54453125, 0.332421875, 2, -7.12, -38.42, 1, -0.00390625, 1.168359375, 2, 6.920000000000001, -38.42, 1, 0.54453125, 1.168359375, 2],
+            accessory2: [-7.12, 4.3799999999999955, 1, -0.00390625, 0.332421875, 3, 6.920000000000001, 4.3799999999999955, 1, 0.54453125, 0.332421875, 3, -7.12, -38.42, 1, -0.00390625, 1.168359375, 3, 6.920000000000001, 4.3799999999999955, 1, 0.54453125, 0.332421875, 3, -7.12, -38.42, 1, -0.00390625, 1.168359375, 3, 6.920000000000001, -38.42, 1, 0.54453125, 1.168359375, 3]
         }
 
         this.trans = {
@@ -2551,7 +2607,8 @@ export class Avatar {
             fire: false,
             equippedItems: {
                 mainTool: undefined,
-                accessory1: undefined
+                accessory1: undefined,
+                accessory2: undefined
             },
             punchingAnimation: new LoopAnimation(function() {
                 let leftPunch = this.state.leftPunchAnimation,
@@ -2649,6 +2706,9 @@ export class Avatar {
                 },
                 accessory1: {
                     texture: 0
+                },
+                accessory2: {
+                    texture: 0
                 }
             }
         }
@@ -2722,7 +2782,13 @@ export class Avatar {
 
     hit(damage, owner, bullet) {
         if (!this.state.invinsible) {
-            (this.state.armour > 0) ? this.state.armour -= damage: this.state.vitals.health -= damage;
+
+            if (this.state.armour > 0) {
+                if (damage > this.state.armour) this.state.vitals.health = Math.max(0, this.state.vitals.health - Math.abs(this.state.armour - damage));
+                this.state.armour = Math.max(0, this.state.armour - damage);
+            } else {
+                this.state.vitals.health = Math.max(0, this.state.vitals.health - damage);
+            }
 
             updateHealthBar();
 
@@ -2800,7 +2866,8 @@ export class Avatar {
     equipItem(slot) {
         if (this.state.pickup.current) return;
 
-        let item = this.inventory.items[slot];
+        let item = this.inventory.items[slot],
+            accessoryChanged = false;
 
         if (item) {
             switch (item.type) {
@@ -2847,21 +2914,8 @@ export class Avatar {
                 break;
                 case "backpack": {
                     this.state.position.accessory1.texture = item.constructor._properties.useTexture;
-
-                    ext.bindVertexArrayOES(this.vao);
-                    this.buffer = gl.createBuffer();
-                    gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
-                    gl.vertexAttribPointer(locations.coords, 3, gl.FLOAT, false, 24, 0);
-                    gl.vertexAttribPointer(locations.tcoords, 2, gl.FLOAT, false, 24, 12);
-                    gl.vertexAttribPointer(locations.textrUnit, 1, gl.FLOAT, false, 24, 20);
-                    gl.enableVertexAttribArray(locations.coords);
-                    gl.enableVertexAttribArray(locations.tcoords);
-                    gl.enableVertexAttribArray(locations.textrUnit);
-                    gl.disableVertexAttribArray(locations.offset);
-
-                    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([...this.vertices.body, ...this.vertices.eyes, ...this.vertices.accessory1]), gl.STATIC_DRAW);
-
                     this.state.equippedItems.accessory1 = item;
+
                     let obj;
 
                     if (15 + item.constructor._properties.capacity < this.inventory.slots) {
@@ -2874,11 +2928,34 @@ export class Avatar {
                         this.dropItem(14);
                         this.inventory.addItem(obj, 14);
                     }
+
+                    accessoryChanged = true;
                 }
                 break;
             }
 
             if (!this.state.equippedItems.mainTool || this.state.equippedItems.mainTool.type !== "gun") hideAmmoDisplay();
+
+            if (accessoryChanged) {
+                ext.bindVertexArrayOES(this.vao);
+                this.buffer = gl.createBuffer();
+                gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
+                gl.vertexAttribPointer(locations.coords, 3, gl.FLOAT, false, 24, 0);
+                gl.vertexAttribPointer(locations.tcoords, 2, gl.FLOAT, false, 24, 12);
+                gl.vertexAttribPointer(locations.textrUnit, 1, gl.FLOAT, false, 24, 20);
+                gl.enableVertexAttribArray(locations.coords);
+                gl.enableVertexAttribArray(locations.tcoords);
+                gl.enableVertexAttribArray(locations.textrUnit);
+                gl.disableVertexAttribArray(locations.offset);
+
+                let buf = [...this.vertices.body, ...this.vertices.eyes];
+
+                if (this.state.position.accessory1.texture) buf = buf.concat(this.vertices.accessory1);
+                if (this.state.position.accessory2.texture) buf = buf.concat(this.vertices.accessory2);
+
+                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(buf), gl.STATIC_DRAW);
+            }
+
 
             return true;
         }
@@ -2889,7 +2966,8 @@ export class Avatar {
     unequipItem(slot) {
         if (!this.inventory.items[slot] || (this.inventory.items[slot] !== this.state.equippedItems.mainTool && this.inventory.items[slot] !== this.state.equippedItems.accessory1)) return false;
 
-        let item = this.inventory.items[slot];
+        let item = this.inventory.items[slot],
+            accessoryChanged = false;
 
         switch (item.type) {
             case "gun": {
@@ -2912,20 +2990,8 @@ export class Avatar {
             break;
             case "backpack": {
 
-                ext.bindVertexArrayOES(this.vao);
-                this.buffer = gl.createBuffer();
-                gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
-                gl.vertexAttribPointer(locations.coords, 3, gl.FLOAT, false, 24, 0);
-                gl.vertexAttribPointer(locations.tcoords, 2, gl.FLOAT, false, 24, 12);
-                gl.vertexAttribPointer(locations.textrUnit, 1, gl.FLOAT, false, 24, 20);
-                gl.enableVertexAttribArray(locations.coords);
-                gl.enableVertexAttribArray(locations.tcoords);
-                gl.enableVertexAttribArray(locations.textrUnit);
-                gl.disableVertexAttribArray(locations.offset);
-
-                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([...this.vertices.body, ...this.vertices.eyes]), gl.STATIC_DRAW);
-
                 this.state.equippedItems.accessory1 = undefined;
+                this.state.position.accessory1.texture = 0;
 
                 this.purgeItems(this.inventory.slots, 15, [slot]);
                 let obj;
@@ -2938,8 +3004,30 @@ export class Avatar {
                     this.dropItem(14);
                     this.addItem(obj, 14);
                 }
+
+                accessoryChanged = true;
             };
             break;
+        }
+
+        if (accessoryChanged) {
+            ext.bindVertexArrayOES(this.vao);
+            this.buffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
+            gl.vertexAttribPointer(locations.coords, 3, gl.FLOAT, false, 24, 0);
+            gl.vertexAttribPointer(locations.tcoords, 2, gl.FLOAT, false, 24, 12);
+            gl.vertexAttribPointer(locations.textrUnit, 1, gl.FLOAT, false, 24, 20);
+            gl.enableVertexAttribArray(locations.coords);
+            gl.enableVertexAttribArray(locations.tcoords);
+            gl.enableVertexAttribArray(locations.textrUnit);
+            gl.disableVertexAttribArray(locations.offset);
+
+            let buf = [...this.vertices.body, ...this.vertices.eyes];
+
+            if (this.state.position.accessory1.texture) buf = buf.concat(this.vertices.accessory1);
+            if (this.state.position.accessory2.texture) buf = buf.concat(this.vertices.accessory2);
+
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(buf), gl.STATIC_DRAW);
         }
 
         return true;
@@ -2993,9 +3081,11 @@ export class Avatar {
         gl.bindTexture(gl.TEXTURE_2D, textures.skins.index[this.state.position.eyes.texture]);
         gl.activeTexture(gl.TEXTURE2);
         gl.bindTexture(gl.TEXTURE_2D, textures.skins.index[this.state.position.accessory1.texture]);
+        gl.activeTexture(gl.TEXTURE3);
+        gl.bindTexture(gl.TEXTURE_2D, textures.skins.index[this.state.position.accessory2.texture]);
         gl.useProgram(program);
 
-        gl.drawArrays(gl.TRIANGLES, 0, 18);
+        gl.drawArrays(gl.TRIANGLES, 0, 24);
 
         this.nameObj.render();
     }

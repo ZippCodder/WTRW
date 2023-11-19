@@ -2402,15 +2402,6 @@ export let CONVENIENCE_STORE = new TextureData(-90, 2500, 0.2, "building", {
     ctx.fillRect(2200, 800, 2000, 700);
     ctx.strokeRect(2200, 800, 2000, 1200);
 
-    // door content 
-    /*
-        ctx.strokeStyle = "#676767";
-        ctx.fillStyle = "#BDBDBD";
-        ctx.lineWidth = 15;
-        ctx.fillRect(2500,800,1400,200);
-        ctx.strokeRect(2500,800,1400,200);
-    */
-
     // remining door frame
     ctx.lineWidth = 15;
     ctx.strokeStyle = "black";
@@ -2484,7 +2475,7 @@ export let CONVENIENCE_STORE = new TextureData(-90, 2500, 0.2, "building", {
     ctx.fillRect(450, 600, 1500, 1100);
 
     // window content 
-    ctx.strokeStyle = "#676767";
+    ctx.strokeStyle = "#404040";
     ctx.fillStyle = "#BDBDBD";
     ctx.fillRect(450, 750, 1500, 950);
     ctx.fillStyle = "#AAAAAA";
@@ -2492,7 +2483,12 @@ export let CONVENIENCE_STORE = new TextureData(-90, 2500, 0.2, "building", {
     ctx.fillRect(450, 1100, 1500, 200);
     ctx.fillRect(450, 1600, 1500, 100);
     ctx.strokeRect(450, 750, 1500, 950);
-    ctx.strokeRect(450, 1300, 1500, 50);
+    ctx.fillStyle = "#999999";
+    ctx.fillRect(450, 1300, 1500, 50);
+    ctx.lineWidth = 5;
+    ctx.strokeRect(450, 1100, 1500, 250);
+    ctx.lineWidth = 15;
+    //ctx.strokeRect(450, 1300, 1500, 50);
 
     // - cereal boxes 
     function cerealBox(x, y, width = 0) {
@@ -4234,9 +4230,112 @@ export let MAIN_AVATAR_DEFAULT = new TextureData(-5, 851, 0.2, "avatar", {
     //  ctx.strokeRect(221, 50, 270, 95);
 
     ctx.restore();
-}, [0], 0, 0, 0, 0);
+}, [0], 0, 0, 0, 1151);
 
-export let GREY_BACKPACK_ACC = new TextureData(-5, 851, 0.2, "avatar", {
+export let POLICE_HAT_ACC = new TextureData(-5, 851, 0.2, "avatar", {
+    width: 702,
+    height: 2140
+}, [
+    [0, 0, 702, 2140]
+], 0, undefined, function(ctx) {
+    // body: 700x428, texture: 1024,512, size: 0.15, boxes: [[152, 15, 408, 408],[561, 145, 136, 136],[15, 145, 136, 136]]
+    // -1, -1
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.scale(this.size, this.size);
+
+    ctx.strokeStyle = "#1A1A1A";
+    ctx.lineWidth = 15;
+
+    ctx.translate(100, 100);
+    ctx.rotate(180 * Math.PI / 180);
+    ctx.translate(-100, -100);
+
+    // edge piece
+    ctx.fillStyle = "#696969";
+    ctx.beginPath();
+    ctx.lineTo(50, 250);
+    ctx.lineTo(70, 350);
+    ctx.lineTo(200, 400);
+    ctx.lineTo(330, 350);
+    ctx.lineTo(350, 250);
+    ctx.fill();
+
+    ctx.fillStyle = "#575757";
+    ctx.beginPath();
+    ctx.lineTo(50, 250);
+    ctx.lineTo(70, 310);
+    ctx.lineTo(200, 360);
+    ctx.lineTo(330, 310);
+    ctx.lineTo(350, 250);
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.lineTo(50, 250);
+    ctx.lineTo(70, 350);
+    ctx.lineTo(200, 400);
+    ctx.lineTo(330, 350);
+    ctx.lineTo(350, 250);
+    ctx.stroke();
+
+    // main peice
+    ctx.fillStyle = "#A8A8A8";
+    ctx.beginPath();
+    ctx.lineTo(50, 50);
+    ctx.lineTo(200, 0);
+    ctx.lineTo(350, 50);
+    ctx.lineTo(400, 150);
+    ctx.lineTo(350, 250);
+    ctx.lineTo(250, 300);
+    ctx.lineTo(150, 300);
+    ctx.lineTo(50, 250);
+    ctx.lineTo(0, 150);
+    ctx.lineTo(54, 46);
+    ctx.fill();
+
+    ctx.fillStyle = "#919191";
+    ctx.beginPath();
+    ctx.lineTo(50, 50);
+    ctx.lineTo(200, 0);
+    ctx.lineTo(350, 50);
+    ctx.lineTo(400, 150);
+    ctx.lineTo(360, 210);
+    ctx.lineTo(40, 210);
+    ctx.lineTo(0, 150);
+    ctx.lineTo(54, 46);
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.lineTo(50, 50);
+    ctx.lineTo(200, 0);
+    ctx.lineTo(350, 50);
+    ctx.lineTo(400, 150);
+    ctx.lineTo(350, 250);
+    ctx.lineTo(250, 300);
+    ctx.lineTo(150, 300);
+    ctx.lineTo(50, 250);
+    ctx.lineTo(0, 150);
+    ctx.lineTo(54, 46);
+    ctx.stroke();
+
+    // details
+    ctx.lineWidth = 5;
+    ctx.beginPath();
+    ctx.moveTo(60, 280);
+    ctx.lineTo(150, 300);
+    ctx.moveTo(250, 300);
+    ctx.lineTo(350, 280);
+    ctx.stroke();
+
+    ctx.fillStyle = "#C5C5C5";
+    ctx.lineWidth = 10;
+    ctx.fillRect(180, 242, 40, 40);
+    ctx.strokeRect(180, 242, 40, 40);
+
+    ctx.restore();
+}, [3], 0, 0, 350, 1200);
+
+export let GREY_BACKPACK_ACC = new TextureData(-5, 851, 1, "avatar", {
     width: 702,
     height: 2140
 }, [
@@ -4352,7 +4451,7 @@ export let WHITE_BACKPACK_ACC = new TextureData(-5, 851, 0.2, "avatar", {
     ctx.restore();
 }, [2], 0, 0, 0, 0);
 
-export let BLACK_BACKPACK_ACC = new TextureData(-5, 851, 0.2, "avatar", {
+export let BLACK_BACKPACK_ACC = new TextureData(-5, 851, 1, "avatar", {
     width: 702,
     height: 2140
 }, [
@@ -5448,18 +5547,18 @@ export let GLOCK_20_TOP_2 = new TextureData(54, 182, 0.2, "firearm", {
 });
 
 export let DOOR = new TextureData(0, 0, 0.2, "pickup", {
-    width: 730,
-    height: 1020
+    width: 740,
+    height: 1030
 }, [
-    [0, 0, 730, 1020]
+    [0, 0, 740, 1030]
 ], 0, undefined, function(ctx) {
     // -12, -4
     ctx.save();
-    ctx.translate(this.offset.x, this.offset.y);
+    ctx.translate(this.offset.vx, this.offset.vy);
     ctx.scale(this.size, this.size);
     ctx.beginPath();
 
-    ctx.strokeStyle = "#1A1A1A";
+    ctx.strokeStyle = "black";
 
     ctx.fillStyle = "white";
     ctx.moveTo(700, 975);
@@ -5478,13 +5577,13 @@ export let DOOR = new TextureData(0, 0, 0.2, "pickup", {
     ctx.lineWidth = 15;
     ctx.fillStyle = "#999999";
     ctx.fillRect(150, 150, 550, 830);
-    ctx.strokeRect(150, 150, 550, 830);
+    ctx.strokeRect(150, 980, 550, 0);
     ctx.fillStyle = "#C5C5C5";
     ctx.fillRect(70, 30, 700, 50);
     ctx.fillStyle = "white";
     ctx.fillRect(600, 550, 50, 90);
     ctx.strokeRect(600, 550, 50, 90);
-    ctx.lineWidth = 20;
+    ctx.lineWidth = 15;
 
     ctx.beginPath();
     ctx.fillStyle = "white";
@@ -5501,8 +5600,16 @@ export let DOOR = new TextureData(0, 0, 0.2, "pickup", {
     ctx.lineTo(700, 975);
     ctx.stroke();
 
+    ctx.beginPath();
+    ctx.lineWidth = 5;
+    ctx.moveTo(70, 75);
+    ctx.lineTo(150, 150);
+    ctx.moveTo(700, 150);
+    ctx.lineTo(780, 75);
+    ctx.stroke();
+
     ctx.restore();
-});
+}, [], 0, 0, -55, -15);
 
 export let MAIN_AVATAR_BLINKING = new TextureData(-5, 851, 1, "avatar", {
     width: 702,
@@ -5739,7 +5846,7 @@ export let METAL_FENCE = new TextureData(0, 0, 0.2, "avatar", {
     ctx.lineWidth = 15;
 
     ctx.strokeStyle = "black";
-    ctx.fillStyle = "#444444";
+    ctx.fillStyle = "#666666";
 
     ctx.fillRect(110, 50, 40, 720);
     ctx.fillRect(310, 50, 40, 720);
@@ -5749,7 +5856,7 @@ export let METAL_FENCE = new TextureData(0, 0, 0.2, "avatar", {
     ctx.fillRect(1110, 50, 40, 720);
     ctx.fillRect(1310, 50, 40, 720);
 
-    ctx.fillStyle = "#333333";
+    ctx.fillStyle = "#444444";
     ctx.fillRect(110, 50, 40, 30);
     ctx.fillRect(310, 50, 40, 30);
     ctx.fillRect(510, 50, 40, 30);
@@ -5766,23 +5873,23 @@ export let METAL_FENCE = new TextureData(0, 0, 0.2, "avatar", {
     ctx.strokeRect(1110, 50, 40, 720);
     ctx.strokeRect(1310, 50, 40, 720);
 
-    ctx.fillStyle = "#444444";
+    ctx.fillStyle = "#666666";
     ctx.fillRect(5, 200, 1450, 60);
     ctx.fillRect(5, 600, 1450, 60);
     ctx.strokeRect(5, 200, 1450, 60);
     ctx.strokeRect(5, 600, 1450, 60);
 
-    ctx.fillStyle = "#444444";
+    ctx.fillStyle = "#666666";
     ctx.fillRect(1400, 0, 60, 780);
     ctx.fillRect(0, 0, 60, 780);
-    ctx.fillStyle = "#333333";
+    ctx.fillStyle = "#444444";
     ctx.fillRect(1400, 0, 60, 40);
     ctx.fillRect(0, 0, 60, 40);
     ctx.strokeRect(1400, 0, 60, 780);
     ctx.strokeRect(0, 0, 60, 780);
 
     ctx.restore();
-}, [], 0, 0, 100, 300);
+}, [], 0, 0, 10, 10);
 
 export let STOPPER = new TextureData(0, 0, 0.2, "avatar", {
     width: 470,
@@ -6178,11 +6285,168 @@ export let SHED = new TextureData(10, 10, 0.2, "avatar", {
     ctx.restore();
 }, [], 0, 0, 10, 10);
 
-export let TABLE = new TextureData(10, 10, 0.2, "avatar", {
-    width: 1400,
-    height: 910
+export let TABLE = new TextureData(0, 0, 0.2, "avatar", {
+    width: 1420,
+    height: 970
 }, [
-    [0, 0, 1400, 800],
+    [0, 0, 1420, 810],
+    // [40, 800, 100, 110, 0],
+    //  [1260, 800, 100, 110, 0]
+], 0, undefined, function(ctx) {
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.scale(this.size, this.size);
+
+    ctx.beginPath();
+    ctx.lineWidth = 15;
+
+
+    // legs
+    ctx.fillStyle = "#B1B1B1";
+    ctx.beginPath();
+    ctx.moveTo(100, 800);
+    ctx.lineTo(50, 950);
+    ctx.lineTo(100, 950);
+    ctx.lineTo(200, 800);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(1200, 800);
+    ctx.lineTo(1300, 950);
+    ctx.lineTo(1350, 950);
+    ctx.lineTo(1300, 800);
+    ctx.fill();
+    ctx.stroke();
+
+    // table top
+
+    ctx.fillStyle = "#B1B1B1";
+    ctx.beginPath();
+    ctx.moveTo(0, 50);
+    ctx.lineTo(50, 0);
+    ctx.lineTo(1350, 0);
+    ctx.lineTo(1400, 50);
+    ctx.lineTo(1400, 750);
+    ctx.lineTo(1350, 800);
+    ctx.lineTo(50, 800);
+    ctx.lineTo(0, 750);
+    ctx.lineTo(0, 50);
+    ctx.fill();
+
+    ctx.fillStyle = "#C8C8C8";
+    ctx.fillRect(50, 0, 1300, 800);
+
+    ctx.fillStyle = "#E3E3E3";
+    ctx.beginPath();
+    ctx.moveTo(0, 50);
+    ctx.lineTo(50, 0);
+    ctx.lineTo(1350, 0);
+    ctx.lineTo(1400, 50);
+    ctx.lineTo(1400, 680);
+    ctx.lineTo(1350, 730);
+    ctx.lineTo(50, 730);
+    ctx.lineTo(0, 680);
+    ctx.lineTo(0, 50);
+    ctx.fill();
+
+    ctx.strokeStyle = "black";
+    ctx.beginPath();
+    ctx.moveTo(0, 50);
+    ctx.lineTo(50, 0);
+    ctx.lineTo(1350, 0);
+    ctx.lineTo(1400, 50);
+    ctx.lineTo(1400, 750);
+    ctx.lineTo(1350, 800);
+    ctx.lineTo(50, 800);
+    ctx.lineTo(0, 750);
+    ctx.lineTo(0, 50);
+    ctx.stroke();
+
+    ctx.restore();
+}, [], 0, 0, 10, 10);
+
+export let SMALL_TABLE = new TextureData(0, 0, 0.2, "avatar", {
+    width: 820,
+    height: 1120
+}, [
+    [0, 0, 820, 710],
+    // [40, 800, 100, 110, 0],
+    //  [1260, 800, 100, 110, 0]
+], 0, undefined, function(ctx) {
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.scale(this.size, this.size);
+
+    ctx.beginPath();
+    ctx.lineWidth = 15;
+
+    // table top
+
+    ctx.fillStyle = "#B1B1B1";
+    ctx.beginPath();
+    ctx.moveTo(0, 50);
+    ctx.lineTo(50, 0);
+    ctx.lineTo(750, 0);
+    ctx.lineTo(800, 50);
+    ctx.lineTo(800, 650);
+    ctx.lineTo(750, 700);
+    ctx.lineTo(50, 700);
+    ctx.lineTo(0, 650);
+    ctx.lineTo(0, 50);
+    ctx.fill();
+
+    ctx.fillStyle = "#C8C8C8";
+    ctx.fillRect(50, 0, 700, 700);
+
+    ctx.fillStyle = "#E3E3E3";
+    ctx.beginPath();
+    ctx.moveTo(0, 50);
+    ctx.lineTo(50, 0);
+    ctx.lineTo(750, 0);
+    ctx.lineTo(800, 50);
+    ctx.lineTo(800, 580);
+    ctx.lineTo(750, 630);
+    ctx.lineTo(50, 630);
+    ctx.lineTo(0, 580);
+    ctx.lineTo(0, 50);
+    ctx.fill();
+
+    ctx.strokeStyle = "black";
+    ctx.beginPath();
+    ctx.moveTo(0, 50);
+    ctx.lineTo(50, 0);
+    ctx.lineTo(750, 0);
+    ctx.lineTo(800, 50);
+    ctx.lineTo(800, 650);
+    ctx.lineTo(750, 700);
+    ctx.lineTo(50, 700);
+    ctx.lineTo(0, 650);
+    ctx.lineTo(0, 50);
+    ctx.stroke();
+
+    ctx.fillStyle = "#B1B1B1";
+    ctx.fillRect(180, 780, 450, 60);
+    ctx.fillStyle = "#949494";
+    ctx.fillRect(180, 780, 450, 25);
+    ctx.strokeRect(180, 780, 450, 60);
+
+    ctx.fillStyle = "#B1B1B1";
+    ctx.fillRect(100, 700, 80, 300);
+    ctx.strokeRect(100, 700, 80, 300);
+
+    ctx.fillRect(620, 700, 80, 300);
+    ctx.strokeRect(620, 700, 80, 300);
+
+
+    ctx.restore();
+}, [], 0, 0, 10, 10);
+
+export let WHITEBOARD = new TextureData(0, 0, 0.2, "avatar", {
+    width: 1525,
+    height: 825
+}, [
+    [0, 0, 1525, 825],
     // [40, 800, 100, 110, 0],
     //  [1260, 800, 100, 110, 0]
 ], 20, undefined, function(ctx) {
@@ -6191,22 +6455,214 @@ export let TABLE = new TextureData(10, 10, 0.2, "avatar", {
     ctx.scale(this.size, this.size);
 
     ctx.beginPath();
-    ctx.lineWidth = 20;
+    ctx.lineWidth = 15;
 
-    ctx.strokeStyle = "#1A1A1A";
-    ctx.fillStyle = "white";
+    ctx.strokeStyle = "black";
+    ctx.fillStyle = "#818181";
 
-    ctx.fillRect(0, 0, 1400, 800);
-    ctx.fillStyle = "#E6E6E6";
-    ctx.fillRect(0, 0, 1400, 730);
-    ctx.strokeRect(0, 0, 1400, 800);
+    ctx.beginPath();
+    ctx.moveTo(10, 10);
+    ctx.lineTo(110, 10);
+    ctx.lineTo(110, 30);
+    ctx.lineTo(1400, 30);
+    ctx.lineTo(1400, 10);
+    ctx.lineTo(1500, 10);
+    ctx.lineTo(1500, 110);
+    ctx.lineTo(1480, 110);
+    ctx.lineTo(1480, 700);
+    ctx.lineTo(1500, 700);
+    ctx.lineTo(1500, 800);
+    ctx.lineTo(1400, 800);
+    ctx.lineTo(1400, 780);
+    ctx.lineTo(110, 780);
+    ctx.lineTo(110, 800);
+    ctx.lineTo(10, 800);
+    ctx.lineTo(10, 700);
+    ctx.lineTo(30, 700);
+    ctx.lineTo(30, 110);
+    ctx.lineTo(10, 110);
+    ctx.lineTo(10, 2);
+    ctx.fill();
 
-    ctx.fillRect(40, 800, 100, 110);
-    ctx.strokeRect(40, 800, 100, 110);
-    ctx.fillRect(1260, 800, 100, 110);
-    ctx.strokeRect(1260, 800, 100, 110);
+    ctx.fillStyle = "#B8B8B8";
+    ctx.fillRect(70, 40, 1400, 70);
+    ctx.fillRect(40, 730, 1400, 40);
+    ctx.fillRect(40, 40, 40, 700);
+    ctx.fillRect(1430, 40, 40, 730);
+
+    ctx.fillStyle = "#939393";
+    ctx.fillRect(30, 40, 1440, 20);
+
+    ctx.stroke();
+
+    ctx.fillStyle = "#F2F2F2";
+    ctx.fillRect(80, 100, 1350, 630);
+    ctx.strokeRect(80, 100, 1350, 630);
+
+    ctx.lineWidth = 5;
+    ctx.strokeRect(35, 35, 1440, 740);
+
+    ctx.lineWidth = 15;
+    ctx.fillStyle = "#989898";
+    ctx.fillRect(150, 700, 300, 100);
+    ctx.fillStyle = "#787878";
+    ctx.fillRect(150, 770, 300, 30);
+    ctx.strokeRect(150, 700, 300, 100);
+
+    ctx.lineWidth = 10;
+    ctx.fillStyle = "#525252";
+    ctx.fillRect(180, 690, 240, 40);
+    ctx.fillStyle = "#414141";
+    ctx.fillRect(180, 690, 240, 20);
+    ctx.strokeRect(180, 690, 240, 40);
+    ctx.lineWidth = 10;
+    ctx.strokeRect(180, 690, 50, 40);
+
     ctx.restore();
-});
+}, [], 0, 0, 5, 5);
+
+export let PINBOARD = new TextureData(0, 0, 0.2, "avatar", {
+    width: 1630,
+    height: 930
+}, [
+    [0, 0, 1630, 930],
+    // [40, 800, 100, 110, 0],
+    //  [1260, 800, 100, 110, 0]
+], 20, undefined, function(ctx) {
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.scale(this.size, this.size);
+
+    ctx.beginPath();
+    ctx.lineWidth = 15;
+
+    ctx.strokeStyle = "black";
+
+    ctx.fillStyle = "#999999";
+    ctx.fillRect(180, 390, 1600, 900);
+    ctx.fillStyle = "#787878";
+    ctx.fillRect(180, 390, 1600, 50);
+
+    ctx.lineWidth = 10;
+    ctx.strokeStyle = "#868686";
+    ctx.strokeRect(180, 550, 1600, 100);
+    ctx.strokeRect(180, 650, 1600, 100);
+    ctx.strokeRect(180, 750, 1600, 100);
+    ctx.strokeRect(180, 850, 1600, 100);
+    ctx.strokeRect(180, 950, 1600, 100);
+    ctx.strokeRect(180, 1050, 1600, 100);
+    ctx.strokeRect(180, 1150, 1600, 100);
+
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 15;
+    ctx.strokeRect(180, 390, 1600, 900);
+    ctx.fillStyle = "#616161";
+    ctx.fillRect(830, 470, 300, 30);
+    ctx.strokeRect(830, 470, 300, 30);
+
+    function note(x = 0, y = 0, r = 0) {
+        ctx.translate(x, y);
+
+        ctx.translate(100, 100);
+        ctx.rotate(r * Math.PI / 180);
+        ctx.translate(-100, -100);
+
+        ctx.lineWidth = 12;
+        ctx.fillStyle = "#787878";
+        ctx.fillRect(0, 0, 200, 200);
+        ctx.fillStyle = "#636363";
+        ctx.fillRect(0, 0, 200, 40);
+        ctx.strokeRect(0, 0, 200, 200);
+        ctx.lineWidth = 5;
+        ctx.strokeRect(90, 30, 20, 20);
+
+        ctx.translate(100, 100);
+        ctx.rotate(-r * Math.PI / 180);
+        ctx.translate(-100, -100);
+
+        ctx.translate(-x, -y);
+    }
+
+    function note2(x = 0, y = 0, r = 0) {
+        ctx.translate(x, y);
+
+        ctx.translate(100, 100);
+        ctx.rotate(r * Math.PI / 180);
+        ctx.translate(-100, -100);
+
+        ctx.lineWidth = 12;
+        ctx.fillStyle = "#B2B2B2";
+        ctx.fillRect(0, 0, 200, 200);
+        ctx.fillStyle = "#A1A1A1";
+        ctx.fillRect(0, 0, 200, 40);
+        ctx.strokeRect(0, 0, 200, 200);
+        ctx.lineWidth = 5;
+        ctx.strokeRect(90, 30, 20, 20);
+
+        ctx.translate(100, 100);
+        ctx.rotate(-r * Math.PI / 180);
+        ctx.translate(-100, -100);
+
+        ctx.translate(-x, -y);
+    }
+
+    function note3(x = 0, y = 0, r = 0) {
+        ctx.translate(x, y);
+
+        ctx.translate(100, 100);
+        ctx.rotate(r * Math.PI / 180);
+        ctx.translate(-100, -100);
+
+        ctx.lineWidth = 12;
+        ctx.fillStyle = "#C9C9C9";
+        ctx.fillRect(0, 0, 200, 200);
+        ctx.fillStyle = "#B8B8B8";
+        ctx.fillRect(0, 0, 200, 40);
+        ctx.strokeRect(0, 0, 200, 200);
+        ctx.lineWidth = 5;
+        ctx.strokeRect(90, 30, 20, 20);
+
+        ctx.translate(100, 100);
+        ctx.rotate(-r * Math.PI / 180);
+        ctx.translate(-100, -100);
+
+        ctx.translate(-x, -y);
+    }
+
+    note(300, 540, 10);
+    note2(400, 740, -20);
+    note3(280, 1000, 5);
+
+    ctx.translate(0, 50);
+    ctx.lineWidth = 12;
+    ctx.fillStyle = "#D8D8D8";
+    ctx.fillRect(800, 600, 360, 500);
+    ctx.strokeRect(800, 600, 360, 500);
+    ctx.fillStyle = "#B5B5B5";
+    ctx.fillRect(850, 640, 150, 20);
+    ctx.fillRect(850, 680, 190, 20);
+    ctx.fillRect(850, 750, 260, 20);
+    ctx.fillRect(850, 790, 260, 20);
+    ctx.fillRect(850, 830, 260, 20);
+    ctx.fillRect(850, 930, 260, 20);
+    ctx.fillRect(850, 970, 260, 20);
+
+    ctx.translate(500, 0);
+    ctx.lineWidth = 12;
+    ctx.fillStyle = "#D8D8D8";
+    ctx.fillRect(800, 600, 360, 500);
+    ctx.strokeRect(800, 600, 360, 500);
+    ctx.fillStyle = "#B5B5B5";
+    ctx.fillRect(850, 640, 150, 20);
+    ctx.fillRect(850, 680, 190, 20);
+    ctx.fillRect(850, 750, 260, 20);
+    ctx.fillRect(850, 790, 260, 20);
+    ctx.fillRect(850, 830, 260, 20);
+    ctx.fillRect(850, 930, 260, 20);
+    ctx.fillRect(850, 970, 260, 20);
+
+    ctx.restore();
+}, [], 0, 0, -165, -375);
 
 export let STORE_SHELF_1 = new TextureData(10, 10, 0.2, "avatar", {
     width: 2020,
@@ -8452,7 +8908,7 @@ export let FLOOR_TILE = new TextureData(0, 0, 0.2, "prop", {
     ctx.restore();
 });
 
-export let LIGHT_SWITCH = new TextureData(2, 2, 0.2, "prop", {
+export let LIGHT_SWITCH = new TextureData(0, 0, 0.2, "prop", {
     width: 160,
     height: 240
 }, [
@@ -8460,12 +8916,12 @@ export let LIGHT_SWITCH = new TextureData(2, 2, 0.2, "prop", {
 ], 0, undefined, function(ctx) {
     // 2,2
     ctx.save();
-    ctx.translate(this.offset.x, this.offset.y);
+    ctx.translate(this.offset.vx, this.offset.vy);
     ctx.scale(this.size, this.size);
     ctx.beginPath();
-    ctx.lineWidth = 20;
+    ctx.lineWidth = 15;
 
-    ctx.strokeStyle = "#1A1A1A";
+    ctx.strokeStyle = "black";
     ctx.fillStyle = "white";
 
     ctx.fillRect(0, 0, 140, 220);
@@ -8473,14 +8929,14 @@ export let LIGHT_SWITCH = new TextureData(2, 2, 0.2, "prop", {
     ctx.fillRect(0, 0, 140, 30);
     ctx.strokeRect(0, 0, 140, 220);
 
-    ctx.lineWidth = 15;
+    ctx.lineWidth = 10;
     ctx.strokeRect(40, 65, 60, 110);
     ctx.lineWidth = 10;
     ctx.strokeRect(40, 65, 60, 55);
 
 
     ctx.restore();
-});
+}, [], 0, 0, 10, 10);
 
 export let STREET_LIGHT = new TextureData(730, -190, 0.2, "prop", {
     width: 1580,
@@ -8673,43 +9129,128 @@ export let ROCKS_2 = new TextureData(0, 0, 0.2, "prop", {
     ctx.restore();
 });
 
-export let CHAIR = new TextureData(10, -50, 0.2, "prop", {
-    width: 520,
-    height: 750
+export let CHAIR = new TextureData(0, 0, 0.2, "prop", {
+    width: 570,
+    height: 1070
 }, [
-    [0, 60, 500, 650]
+    [0, 0, 570, 910]
 ], 0, undefined, function(ctx) {
     // 2, -10
     ctx.save();
     ctx.translate(this.offset.vx, this.offset.vy);
     ctx.scale(this.size, this.size);
     ctx.beginPath();
-    ctx.lineWidth = 20;
+    ctx.lineWidth = 15;
 
-    ctx.strokeStyle = "#1A1A1A";
-    ctx.fillStyle = "white";
+    ctx.strokeStyle = "black";
 
-    ctx.fillRect(0, 50, 500, 300);
-    ctx.fillStyle = "#E3E3E3";
-    ctx.fillRect(0, 60, 500, 50);
-    ctx.strokeRect(0, 60, 500, 300);
+    // legs
+    ctx.fillStyle = "#858585";
+    ctx.beginPath();
+    ctx.moveTo(50, 500);
+    ctx.lineTo(0, 650);
+    ctx.lineTo(50, 650);
+    ctx.lineTo(150, 500);
+    ctx.fill();
+    ctx.stroke();
 
-    ctx.fillStyle = "white";
-    ctx.fillRect(0, 360, 500, 350);
-    ctx.fillStyle = "#E3E3E3";
-    ctx.fillRect(0, 360, 500, 300);
-    ctx.strokeRect(0, 360, 500, 350);
+    ctx.beginPath();
+    ctx.moveTo(400, 500);
+    ctx.lineTo(500, 650);
+    ctx.lineTo(550, 650);
+    ctx.lineTo(500, 500);
+    ctx.fill();
+    ctx.stroke();
 
-    ctx.fillStyle = "#696969";
-    ctx.fillRect(20, 710, 60, 80);
-    ctx.strokeRect(20, 710, 60, 80);
-    ctx.fillRect(420, 710, 60, 80);
-    ctx.strokeRect(420, 710, 60, 80);
+    // seat 
 
+    ctx.fillStyle = "#858585";
+    ctx.beginPath();
+    ctx.moveTo(0, 50);
+    ctx.lineTo(50, 0);
+    ctx.lineTo(500, 0);
+    ctx.lineTo(550, 50);
+    ctx.lineTo(550, 450);
+    ctx.lineTo(0, 450);
+    ctx.lineTo(0, 50);
+    ctx.fill();
+
+    ctx.fillStyle = "#A2A2A2";
+    ctx.beginPath();
+    ctx.moveTo(0, 50);
+    ctx.lineTo(50, 0);
+    ctx.lineTo(500, 0);
+    ctx.lineTo(550, 50);
+    ctx.lineTo(550, 450);
+    ctx.lineTo(500, 400);
+    ctx.lineTo(50, 400);
+    ctx.lineTo(0, 450);
+    ctx.lineTo(0, 50);
+    ctx.fill();
+
+    ctx.fillStyle = "#B8B8B8";
+    ctx.fillRect(50, 0, 450, 400);
+
+    ctx.beginPath();
+    ctx.moveTo(0, 50);
+    ctx.lineTo(50, 0);
+    ctx.lineTo(500, 0);
+    ctx.lineTo(550, 50);
+    ctx.lineTo(550, 450);
+    ctx.lineTo(0, 450);
+    ctx.lineTo(0, 50);
+    ctx.stroke();
+
+    ctx.fillStyle = "#858585";
+    ctx.fillRect(0, 450, 550, 50);
+    ctx.strokeRect(0, 450, 550, 50);
+
+    // back
+    ctx.fillStyle = "#858585";
+    ctx.fillRect(120, -100, 50, 150);
+    ctx.fillRect(380, -100, 50, 150);
+    ctx.strokeRect(120, -100, 50, 150);
+    ctx.strokeRect(380, -100, 50, 150);
+
+    ctx.fillStyle = "#B8B8B8";
+    ctx.beginPath();
+    ctx.moveTo(0, -350);
+    ctx.lineTo(50, -400);
+    ctx.lineTo(500, -400);
+    ctx.lineTo(550, -350);
+    ctx.lineTo(550, -100);
+    ctx.lineTo(0, -100);
+    ctx.lineTo(0, -350);
+    ctx.fill();
+
+    ctx.fillStyle = "#858585";
+    ctx.beginPath();
+    ctx.moveTo(0, -350);
+    ctx.lineTo(50, -400);
+    ctx.lineTo(500, -400);
+    ctx.lineTo(550, -350);
+    ctx.lineTo(550, -290);
+    ctx.lineTo(500, -340);
+    ctx.lineTo(50, -340);
+    ctx.lineTo(0, -290);
+    ctx.lineTo(0, -350);
+    ctx.fill();
+
+    ctx.fillStyle = "#A2A2A2";
+    ctx.fillRect(50, -400, 450, 60);
+
+    ctx.beginPath();
+    ctx.moveTo(0, -350);
+    ctx.lineTo(50, -400);
+    ctx.lineTo(500, -400);
+    ctx.lineTo(550, -350);
+    ctx.lineTo(550, -100);
+    ctx.lineTo(0, -100);
+    ctx.lineTo(0, -350);
     ctx.stroke();
 
     ctx.restore();
-});
+}, [], 0, 0, 10, 410);
 
 export let BENCH = new TextureData(10, -110, 0.2, "prop", {
     width: 1540,

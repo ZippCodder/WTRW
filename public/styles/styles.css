@@ -414,12 +414,17 @@ html,body {
           .controls-container__item {
             width: auto;
             height: auto;
-            background: #898989;
+            background-color: #898989;
             border-bottom: 6px solid #676767;
             outline: 2px solid #111111;
             background-repeat: no-repeat;
             background-size: contain;
             background-position: bottom right;
+          }
+
+          .controls-container__item--equipped {
+            background-color: #666666;
+            border-bottom: 6px solid #444444;
           }
           
           .controls-container__item::before {

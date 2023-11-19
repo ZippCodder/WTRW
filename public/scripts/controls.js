@@ -74,7 +74,10 @@
       GunStore,
       GreyBackpack,
       WhiteBackpack,
-      BlackBackpack
+      BlackBackpack,
+      Whiteboard,
+      Pinboard,
+      SmallTable
   } from "/public/scripts/objects.js";
 
   import _dialogues from "/public/scripts/dialogue.js";
@@ -1157,15 +1160,15 @@
 
   const itemDescriptions = {
       default: "<strong>Pro tip:</strong> Click an item to select it and see a full description of its properties and usage.</br></br>Oh wait, what items? You're a noob lol.",
-      "glock 20": "<h3><u>GLOCK 20</u></h3>A simple, compact and lightweight handgun built for self defense and petty crime. Careful, there's no saftey!</br></br><strong>Damage _____ 16</strong></br><strong>Fire Rate _____ 1.5</strong></br><strong>Accuracy _____ 5</strong></br><strong>Capacity _____ 8</strong>",
-      "nxr 44 mag": "<h3><u>NXR_44_MAG</u></h3>High powered, large revolver. Go play sheriff with this I guess. This town ain't big enough for...nevermind.</br></br><strong>Damage _____ 42</strong></br><strong>Fire Rate _____ 0.8</strong></br><strong>Accuracy _____ 8</strong></br><strong>Capacity _____ 8</strong>",
-      "gp k100": "<h3><u>GP K100</u></h3>This quick and reliable handgun features good capacity, and a basic scilencer and is perfect for a good ol' gun-fight.</br></br><strong>Damage _____ 25</strong></br><strong>Fire Rate _____ 3</strong></br><strong>Accuracy _____ 2</strong></br><strong>Capacity _____ 12</strong>",
-      "kitchen knife": "<h3><u>Kitchen Knife</u></h3>Your run-of-the-mill, single edged cooking knife. Go use this to slice some veggies...or somthing else.</br></br><strong>Damage _____ 25</strong>",
-      "assassins knife": "<h3><u>Assassin's Knife</u></h3>One of the sharpest of blades with a fine edge built for the hand of a professional. This top-of-the-line knife can make quick work of any enemy with minimal armour.</br></br><strong>Damage _____ 100</strong>",
-      "syringe": "<h3><u>Syringe</u></h3>Basic medicine for rapid health regain and quick injection.</br></br><strong>Regain _____ 25</strong></br><strong>[used]</strong>",
-      "grey backpack": "<h3><u>Grey Backpack</u></h3>A light backpack. Essential for collecting useful items to ensure survival.</br></br><strong>Capacity _____ 10</strong>",
-      "white backpack": "<h3><u>White Backpack</u></h3>Intermediate backpack with high capacity. A preference for many tacticians.</br></br><strong>Capacity _____ 25</strong>",
-      "black backpack": "<h3><u>Black Backpack</u></h3>This heavy-duty, military-grade backpack is the clear choice for professionals of all expertises. Never again will you have to decide between what to keep, and what to drop.</br></br><strong>Capacity _____ 50</strong>"
+      "glock 20": "<h3><u>GLOCK 20</u></h3>A simple, compact and lightweight handgun built for self defense and petty crime. Careful, there's no saftey!",
+      "nxr 44 mag": "<h3><u>NXR_44_MAG</u></h3>High powered, large revolver. Go play sheriff with this I guess. This town ain't big enough for...nevermind.",
+      "gp k100": "<h3><u>GP K100</u></h3>This quick and reliable handgun features good capacity, and a basic scilencer and is perfect for a good ol' gun-fight.",
+      "kitchen knife": "<h3><u>Kitchen Knife</u></h3>Your run-of-the-mill, single edged cooking knife. Go use this to slice some veggies...or somthing else.",
+      "assassins knife": "<h3><u>Assassin's Knife</u></h3>One of the sharpest of blades with a fine edge built for the hand of a professional. This top-of-the-line knife can make quick work of any enemy with minimal armour.",
+      "syringe": "<h3><u>Syringe</u></h3>Basic medicine for rapid health regain and quick injection.",
+      "grey backpack": "<h3><u>Grey Backpack</u></h3>A light backpack. Essential for collecting useful items to ensure survival.",
+      "white backpack": "<h3><u>White Backpack</u></h3>Intermediate backpack with high capacity. A preference for many tacticians.",
+      "black backpack": "<h3><u>Black Backpack</u></h3>This heavy-duty, military-grade backpack is the clear choice for professionals of all expertises. Never again will you have to decide between what to keep, and what to drop."
   }
 
   let equippedIndex = Infinity,
@@ -1176,15 +1179,13 @@
       if (!$AVATAR.equipItem(i)) return;
 
       if (equippedIndex < 5) {
-          quickAccessItems.item(equippedIndex).style.backgroundColor = "#898989";
-          quickAccessItems.item(equippedIndex).style.borderBottomColor = "#676767";
+          quickAccessItems.item(equippedIndex).classList.remove("controls-container__item--equipped");
       }
       inventoryItems.item(equippedIndex).style.borderBottom = "none";
 
       if (equippedIndex !== i) {
           if (i < 5) {
-              quickAccessItems.item(i).style.backgroundColor = "#666666";
-              quickAccessItems.item(i).style.borderBottomColor = "#444444";
+              quickAccessItems.item(i).classList.add("controls-container__item--equipped");
           }
           inventoryItems.item(i).style.borderBottom = "3px solid white";
 
@@ -1210,8 +1211,41 @@
 
       if (item && d) {
           if (item.type === "medicine") {
-              d = d.replace("[used]", (item.used) ? "<br><i>Used</i>" : "<br><i>New</i>");
-          } else {
+              let {
+                  regain
+              } = item.constructor._properties;
+
+              d = d + `</br></br><strong>Regain _____ ${regain}</strong>`;
+
+              d = d.concat((item.used) ? "<br><br><i>Used</i>" : "<br><br><i>New</i>");
+          } else if (item.type === "backpack") {
+              let {
+                  capacity
+              } = item.constructor._properties;
+
+              d = d + `</br></br><strong>Capacity _____ ${capacity}</strong>`;
+
+              d = d.concat((item === $AVATAR.state.equippedItems.mainTool || item === $AVATAR.state.equippedItems.accessory1) ? "<br><br><i>Equipped</i>" : "<br><br><i>Not Equipped</i>");
+
+          } else if (item.type === "knife") {
+              let {
+                  damage
+              } = item.constructor._properties;
+
+              d = d + `</br></br><strong>Damage _____ ${damage}</strong>`;
+
+              d = d.concat((item === $AVATAR.state.equippedItems.mainTool || item === $AVATAR.state.equippedItems.accessory1) ? "<br><br><i>Equipped</i>" : "<br><br><i>Not Equipped</i>");
+
+          } else if (item.type === "gun") {
+              let {
+                  damage,
+                  fireRate,
+                  accuracy,
+                  capacity
+              } = item.constructor._properties;
+
+              d = d + `</br></br><strong>Damage _____ ${damage}</strong></br><strong>Fire Rate _____ ${fireRate}</strong></br><strong>Accuracy _____ ${accuracy}</strong></br><strong>Capacity _____ ${capacity}</strong>`;
+
               d = d.concat((item === $AVATAR.state.equippedItems.mainTool || item === $AVATAR.state.equippedItems.accessory1) ? "<br><br><i>Equipped</i>" : "<br><br><i>Not Equipped</i>");
           }
       }
@@ -1302,9 +1336,7 @@
       inventoryItems.item(slot).style.backgroundColor = "rgba(0,0,0,0.2)";
 
       if (slot < 5) {
-          quickAccessItems.item(slot).style.backgroundColor = "#898989";
-          quickAccessItems.item(slot).style.borderBottomColor = "#676767";
-          quickAccessItems.item(slot).style.backgroundImage = `none`;
+          quickAccessItems.item(slot).classList.remove("controls-container__item--equipped");
       }
 
       selectedIndex = undefined;

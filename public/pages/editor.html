@@ -151,7 +151,11 @@
             GUNSTORE,
             GREY_BACKPACK,
             WHITE_BACKPACK,
-            BLACK_BACKPACK
+            BLACK_BACKPACK,
+            WHITEBOARD,
+            PINBOARD,
+            POLICE_HAT_ACC, 
+            SMALL_TABLE
         } from "/public/scripts/models.js";
 
         // Import texture for editing and downloading...
@@ -198,9 +202,9 @@
         //SUPERMARKET(-98, -338, 0.2);
         //CAFE(-18, -18, 0.2);
         //MAIN_AVATAR_DEFAULT(-5, -5, 0.2);
-        resize(256, 512);
+        resize(2000, 2000);
         // export function draw(a, w, h, iw, ih, s, lw, attribs=[],canvas) {
-        let texture = WHITE_BACKPACK_ACC;
+        let texture = CONVENIENCE_STORE;
          
 //new Sheet([ROAD_RAIL,ROAD_SIGN,URBAN_FENCE_HALF,URBAN_FENCE,URBAN_FENCE_VERTICAL], 1024, 1024);
 
@@ -208,7 +212,11 @@
         //URBAN_FENCE.render(ctx);
         //PICNIC_TABLE.render(ctx);
          //MAIN_AVATAR_DEFAULT.render(ctx);
+       //  WHITEBOARD.render(ctx);
+         //TABLE.render(ctx);
          texture.render(ctx);
+         //BLACK_BACKPACK_ACC.render(ctx);
+         //POLICE_HAT_ACC.render(ctx);
          //TOOL_ICON.render(ctx);
          //LAPTOP.render(ctx);
         // CONVENIENCE_STORE.render(ctx);
@@ -220,6 +228,6 @@
        // log(texture.getData());
           log(texture.getData());
           console.log(texture.textureDimensions);
-        setSource(`WHITE_BACKPACK_ACC.png`); 
+        setSource(`CHAIR.png`); 
     </script>
 </html>
