@@ -3144,6 +3144,58 @@ export let MAIN_AVATAR_DRAW_NXR44MAG_2 = new TextureData(0, 0, 0.2, "avatar", {
     NXR_44_MAG_TOP_2.render(ctx, -90);
 }, [0], 0, 0, -1, -1);
 
+export let MAIN_AVATAR_DRAW_USP45_1 = new TextureData(0, 0, 0.2, "avatar", {
+    width: 702,
+    height: 2140
+}, [
+    [0, 0, 702, 2140]
+], 0, undefined, function(ctx) {
+    // body: 702x740, texture: 1024,512, size: 0.15, boxes: [[152, 15, 408, 408],[561, 145, 136, 136],[15, 145, 136, 136]]
+    // -1, -1
+
+    MAIN_AVATAR_DRAW_WEAPON.render(ctx);
+    USP_45_TOP.render(ctx, -90);
+}, [0], 0, 0, -1, -1);
+
+export let MAIN_AVATAR_DRAW_USP45_2 = new TextureData(0, 0, 0.2, "avatar", {
+    width: 702,
+    height: 2140
+}, [
+    [0, 0, 702, 2140]
+], 0, undefined, function(ctx) {
+    // body: 702x740, texture: 1024,512, size: 0.15, boxes: [[152, 15, 408, 408],[561, 145, 136, 136],[15, 145, 136, 136]]
+    // -1, -1
+
+    MAIN_AVATAR_DRAW_WEAPON.render(ctx);
+    USP_45_TOP_2.render(ctx, -90);
+}, [0], 0, 0, -1, -1);
+
+export let MAIN_AVATAR_DRAW_KC357_1 = new TextureData(0, 0, 0.2, "avatar", {
+    width: 702,
+    height: 2140
+}, [
+    [0, 0, 702, 2140]
+], 0, undefined, function(ctx) {
+    // body: 702x740, texture: 1024,512, size: 0.15, boxes: [[152, 15, 408, 408],[561, 145, 136, 136],[15, 145, 136, 136]]
+    // -1, -1
+
+    MAIN_AVATAR_DRAW_WEAPON.render(ctx);
+    KC_357_TOP.render(ctx, -90);
+}, [0], 0, 0, -1, -1);
+
+export let MAIN_AVATAR_DRAW_KC357_2 = new TextureData(0, 0, 0.2, "avatar", {
+    width: 702,
+    height: 2140
+}, [
+    [0, 0, 702, 2140]
+], 0, undefined, function(ctx) {
+    // body: 702x740, texture: 1024,512, size: 0.15, boxes: [[152, 15, 408, 408],[561, 145, 136, 136],[15, 145, 136, 136]]
+    // -1, -1
+
+    MAIN_AVATAR_DRAW_WEAPON.render(ctx);
+    KC_357_TOP_1.render(ctx, -90);
+}, [0], 0, 0, -1, -1);
+
 export let GP_K100 = new TextureData(-8, -20, 0.22, "firearm", {
     width: 740,
     height: 309
@@ -3330,7 +3382,7 @@ export let GP_K100 = new TextureData(-8, -20, 0.22, "firearm", {
     ctx.restore();
 }, [], 0, 0, 30, 200);
 
-export let USP_45 = new TextureData(-8, -5, 0.2, "firearm", {
+export let USP_45 = new TextureData(-8, -5, 0.22, "firearm", {
     width: 815,
     height: 393
 }, [
@@ -3340,7 +3392,7 @@ export let USP_45 = new TextureData(-8, -5, 0.2, "firearm", {
     // -8 -5 
 
     ctx.save();
-    ctx.translate(this.offset.x, this.offset.y);
+    ctx.translate(this.offset.vx, this.offset.vy);
     ctx.scale(this.size || 0, this.size || 0);
     ctx.lineWidth = 15;
 
@@ -3525,9 +3577,9 @@ export let USP_45 = new TextureData(-8, -5, 0.2, "firearm", {
     ctx.lineTo(241, 225);
     ctx.stroke();
     ctx.restore();
-});
+},[],0,0,0,200);
 
-export let KC_357 = new TextureData(1, -30, 0.2, "firearm", {
+export let KC_357 = new TextureData(1, -30, 0.22, "firearm", {
     width: 426,
     height: 280
 }, [
@@ -3537,7 +3589,7 @@ export let KC_357 = new TextureData(1, -30, 0.2, "firearm", {
     // 1, -30
 
     ctx.save();
-    ctx.translate(this.offset.x, this.offset.y);
+    ctx.translate(this.offset.vx, this.offset.vy);
     ctx.scale(0 || this.size, 0 || this.size);
 
     // main body
@@ -3691,7 +3743,7 @@ export let KC_357 = new TextureData(1, -30, 0.2, "firearm", {
     ctx.stroke();
 
     ctx.restore();
-});
+},[],0,0,240,170);
 
 export let GLOCK_20 = new TextureData(0, 0, 0.22, "firearm", {
     width: 439,
@@ -4230,7 +4282,7 @@ export let MAIN_AVATAR_DEFAULT = new TextureData(-5, 851, 0.2, "avatar", {
     //  ctx.strokeRect(221, 50, 270, 95);
 
     ctx.restore();
-}, [0], 0, 0, 0, 1151);
+}, [0], 0, 0, 0, 0);
 
 export let POLICE_HAT_ACC = new TextureData(-5, 851, 0.2, "avatar", {
     width: 702,
@@ -4334,6 +4386,350 @@ export let POLICE_HAT_ACC = new TextureData(-5, 851, 0.2, "avatar", {
 
     ctx.restore();
 }, [3], 0, 0, 350, 1200);
+
+export let MERCENARY_ARMOUR = new TextureData(0, 0, 0.2, "pickup", {
+    width: 370,
+    height: 510
+}, [
+    [0, 0, 370, 510]
+], 0, undefined, function(ctx) {
+    // body: 700x428, texture: 1024,512, size: 0.15, boxes: [[152, 15, 408, 408],[561, 145, 136, 136],[15, 145, 136, 136]]
+    // -1, -1
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.scale(this.size, this.size);
+
+    ctx.translate(356,49);
+
+    ctx.strokeStyle = "#1A1A1A";
+    ctx.fillStyle = "#747474";
+    ctx.lineWidth = 15;
+
+    ctx.beginPath();
+    ctx.moveTo(30,50);
+    ctx.lineTo(120,50);
+    ctx.lineTo(120,150);
+    ctx.lineTo(290,150);
+    ctx.lineTo(290,50);
+    ctx.lineTo(380,50);
+    ctx.lineTo(380,540);
+    ctx.lineTo(30,540);
+    ctx.lineTo(30,45);
+    ctx.fill();
+    
+    ctx.fillStyle = "#575757";
+    ctx.fillRect(35,460,340,70);
+ 
+    ctx.stroke();
+    
+    ctx.lineWidth = 10;
+    ctx.fillStyle = "#484848";
+    ctx.fillRect(55,480,300,40);
+    ctx.strokeRect(55,480,300,40);
+
+    ctx.lineWidth = 15;
+    ctx.fillStyle = "#575757";
+    ctx.fillRect(60,370,120,40);
+    ctx.strokeRect(60,230,120,180);
+
+    ctx.lineWidth = 15;
+    ctx.fillStyle = "#575757";
+    ctx.fillRect(230,370,120,40);
+    ctx.strokeRect(230,230,120,180);
+
+    ctx.lineWidth = 10;
+    ctx.strokeRect(90,275,60,20);
+    ctx.strokeRect(260,275,60,20);
+
+    ctx.lineWidth = 15;
+    ctx.beginPath();
+    ctx.moveTo(55,300);
+    ctx.lineTo(175,300);   
+    ctx.moveTo(230,300);
+    ctx.lineTo(350,300);   
+    ctx.stroke();
+
+    ctx.restore();
+}, [], 0, 0, -376, -90);
+
+export let BASIC_ARMOUR = new TextureData(0, 0, 0.2, "pickup", {
+    width: 370,
+    height: 510
+}, [
+    [0, 0, 370, 510]
+], 0, undefined, function(ctx) {
+    // body: 700x428, texture: 1024,512, size: 0.15, boxes: [[152, 15, 408, 408],[561, 145, 136, 136],[15, 145, 136, 136]]
+    // -1, -1
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.scale(this.size, this.size);
+
+    ctx.translate(356,49);
+
+    ctx.strokeStyle = "#1A1A1A";
+    ctx.fillStyle = "#A7A7A7";
+    ctx.lineWidth = 15;
+
+    ctx.beginPath();
+    ctx.moveTo(30,50);
+    ctx.lineTo(120,50);
+    ctx.lineTo(120,150);
+    ctx.lineTo(290,150);
+    ctx.lineTo(290,50);
+    ctx.lineTo(380,50);
+    ctx.lineTo(380,540);
+    ctx.lineTo(30,540);
+    ctx.lineTo(30,45);
+    ctx.fill();
+    
+    ctx.fillStyle = "#858585";
+    ctx.fillRect(35,460,340,70);
+ 
+    ctx.stroke();
+    
+    ctx.lineWidth = 10;
+    ctx.fillStyle = "#646464";
+    ctx.fillRect(55,480,300,40);
+    ctx.strokeRect(55,480,300,40);
+
+    ctx.lineWidth = 15;
+    ctx.fillStyle = "#858585";
+    ctx.fillRect(60,370,120,40);
+    ctx.strokeRect(60,230,120,180);
+
+    ctx.lineWidth = 15;
+    ctx.fillStyle = "#858585";
+    ctx.fillRect(230,370,120,40);
+    ctx.strokeRect(230,230,120,180);
+
+    ctx.lineWidth = 10;
+    ctx.strokeRect(90,275,60,20);
+    ctx.strokeRect(260,275,60,20);
+
+    ctx.lineWidth = 15;
+    ctx.beginPath();
+    ctx.moveTo(55,300);
+    ctx.lineTo(175,300);   
+    ctx.moveTo(230,300);
+    ctx.lineTo(350,300);   
+    ctx.stroke();
+
+    ctx.restore();
+}, [], 0, 0, -376, -90);
+
+export let SWAT_ARMOUR = new TextureData(0, 0, 0.22, "pickup", {
+    width: 370,
+    height: 510
+}, [
+    [0, 0, 370, 510]
+], 0, undefined, function(ctx) {
+    // body: 700x428, texture: 1024,512, size: 0.15, boxes: [[152, 15, 408, 408],[561, 145, 136, 136],[15, 145, 136, 136]]
+    // -1, -1
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.scale(this.size, this.size);
+
+    ctx.translate(356,49);
+
+    ctx.strokeStyle = "#1A1A1A";
+    ctx.fillStyle = "#CCCCCC";
+    ctx.lineWidth = 15;
+
+    ctx.beginPath();
+    ctx.moveTo(30,50);
+    ctx.lineTo(120,50);
+    ctx.lineTo(120,150);
+    ctx.lineTo(290,150);
+    ctx.lineTo(290,50);
+    ctx.lineTo(380,50);
+    ctx.lineTo(380,540);
+    ctx.lineTo(30,540);
+    ctx.lineTo(30,45);
+    ctx.fill();
+    
+    ctx.fillStyle = "#989898";
+    ctx.fillRect(35,460,340,70);
+ 
+    ctx.stroke();
+    
+    ctx.lineWidth = 10;
+    ctx.fillStyle = "#777777";
+    ctx.fillRect(55,480,300,40);
+    ctx.strokeRect(55,480,300,40);
+
+    ctx.lineWidth = 15;
+    ctx.fillStyle = "#989898";
+    ctx.fillRect(60,370,120,40);
+    ctx.strokeRect(60,230,120,180);
+
+    ctx.lineWidth = 15;
+    ctx.fillStyle = "#989898";
+    ctx.fillRect(230,370,120,40);
+    ctx.strokeRect(230,230,120,180);
+
+    ctx.lineWidth = 10;
+    ctx.strokeRect(90,275,60,20);
+    ctx.strokeRect(260,275,60,20);
+
+    ctx.lineWidth = 15;
+    ctx.beginPath();
+    ctx.moveTo(55,300);
+    ctx.lineTo(175,300);   
+    ctx.moveTo(230,300);
+    ctx.lineTo(350,300);   
+    ctx.stroke();
+
+    ctx.restore();
+}, [], 0, 0, -110, 700);
+//-376, -90
+
+export let BOOTS = new TextureData(0, 0, 0.2, "pickup", {
+    width: 370,
+    height: 510
+}, [
+    [0, 0, 370, 510]
+], 0, undefined, function(ctx) {
+    // body: 700x428, texture: 1024,512, size: 0.15, boxes: [[152, 15, 408, 408],[561, 145, 136, 136],[15, 145, 136, 136]]
+    // -1, -1
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.scale(this.size, this.size);
+
+    function boot(x,y) {
+    ctx.translate(x,y);
+
+    ctx.strokeStyle = "#1A1A1A";
+    ctx.lineWidth = 15;
+
+    ctx.beginPath();
+    ctx.fillStyle = "#727272";
+    ctx.fillRect(50,50,150,450);    
+    ctx.fillStyle = "#555555";
+    ctx.fillRect(50,50,150,140);    
+    ctx.fillStyle = "#474747";
+    ctx.fillRect(50,340,150,80);    
+    ctx.fillStyle = "#626262";
+    ctx.fillRect(50,420,150,20);   
+
+    ctx.fillStyle = "#363636";
+    ctx.fillRect(75,80,100,90); 
+ 
+    ctx.strokeRect(50,250,150,250);     
+    ctx.strokeRect(45,50,160,200);    
+    
+    ctx.lineWidth = 10;
+    ctx.strokeRect(75,80,100,90);    
+    
+    ctx.strokeRect(80,355,90,15);    
+    ctx.strokeRect(80,385,90,15);    
+ 
+    ctx.stroke();
+    ctx.translate(-x,-y);
+    }
+
+    boot(220,0);
+    //boot(395,0);
+
+    ctx.restore();
+}, [], 0, 0, -110, 110);
+
+export let SOLDIER_BOOTS = new TextureData(0, 0, 0.2, "pickup", {
+    width: 370,
+    height: 510
+}, [
+    [0, 0, 370, 510]
+], 0, undefined, function(ctx) {
+    // body: 700x428, texture: 1024,512, size: 0.15, boxes: [[152, 15, 408, 408],[561, 145, 136, 136],[15, 145, 136, 136]]
+    // -1, -1
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.scale(this.size, this.size);
+
+    function boot(x,y) {
+    ctx.translate(x,y);
+
+    ctx.strokeStyle = "#1A1A1A";
+    ctx.lineWidth = 15;
+
+    ctx.beginPath();
+    ctx.fillStyle = "#A2A2A2";
+    ctx.fillRect(50,50,150,450);    
+    ctx.fillStyle = "#777777";
+    ctx.fillRect(50,50,150,140);    
+    ctx.fillRect(50,340,150,80);    
+    ctx.fillStyle = "#929292";
+    ctx.fillRect(50,420,150,20);   
+
+    ctx.fillStyle = "#666666";
+    ctx.fillRect(75,80,100,90); 
+ 
+    ctx.strokeRect(50,250,150,250);     
+    ctx.strokeRect(45,50,160,200);    
+    
+    ctx.lineWidth = 10;
+    ctx.strokeRect(75,80,100,90);    
+    
+    ctx.strokeRect(80,355,90,15);    
+    ctx.strokeRect(80,385,90,15);    
+ 
+    ctx.stroke();
+    ctx.translate(-x,-y);
+    }
+
+    boot(220,0);
+    //boot(395,0);
+
+    ctx.restore();
+}, [], 0, 0, 310, 110);
+
+export let HIKING_BOOTS = new TextureData(0, 0, 0.2, "pickup", {
+    width: 370,
+    height: 510
+}, [
+    [0, 0, 370, 510]
+], 0, undefined, function(ctx) {
+    // body: 700x428, texture: 1024,512, size: 0.15, boxes: [[152, 15, 408, 408],[561, 145, 136, 136],[15, 145, 136, 136]]
+    // -1, -1
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.scale(this.size, this.size);
+
+    function boot(x,y) {
+    ctx.translate(x,y);
+
+    ctx.strokeStyle = "#1A1A1A";
+    ctx.lineWidth = 15;
+
+    ctx.beginPath();
+    ctx.fillStyle = "#D2D2D2";
+    ctx.fillRect(50,50,150,450);    
+    ctx.fillStyle = "#A7A7A7";
+    ctx.fillRect(50,50,150,140);    
+    ctx.fillRect(50,340,150,80);    
+    ctx.fillStyle = "#C2C2C2";
+    ctx.fillRect(50,420,150,20);   
+
+    ctx.fillStyle = "#999999";
+    ctx.fillRect(75,80,100,90); 
+ 
+    ctx.strokeRect(50,250,150,250);     
+    ctx.strokeRect(45,50,160,200);    
+    
+    ctx.lineWidth = 10;
+    ctx.strokeRect(75,80,100,90);    
+    
+    ctx.strokeRect(80,355,90,15);    
+    ctx.strokeRect(80,385,90,15);    
+ 
+    ctx.stroke();
+    ctx.translate(-x,-y);
+    }
+
+    boot(220,0);
+   // boot(395,0);
+
+    ctx.restore();
+}, [], 0, 0, 710, 110);
 
 export let GREY_BACKPACK_ACC = new TextureData(-5, 851, 1, "avatar", {
     width: 702,
@@ -4451,7 +4847,7 @@ export let WHITE_BACKPACK_ACC = new TextureData(-5, 851, 0.2, "avatar", {
     ctx.restore();
 }, [2], 0, 0, 0, 0);
 
-export let BLACK_BACKPACK_ACC = new TextureData(-5, 851, 1, "avatar", {
+export let BLACK_BACKPACK_ACC = new TextureData(-5, 851, 0.2, "avatar", {
     width: 702,
     height: 2140
 }, [
@@ -5546,6 +5942,209 @@ export let GLOCK_20_TOP_2 = new TextureData(54, 182, 0.2, "firearm", {
     ctx.restore();
 });
 
+export let USP_45_TOP = new TextureData(0, 0, 0.2, "firearm", {
+    width: 900,
+    height: 200
+}, [
+    [0, 0, 900, 200]
+], 0, undefined, function(ctx, r = 0) {
+    // body: 439x309, texture: 1024,512, size: 0.15
+    // -8 -20
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.rotate(r * Math.PI / 180);
+    ctx.scale(this.size || 0, this.size || 0);
+    ctx.lineWidth = 15;
+
+    ctx.fillStyle = "#787878";
+    ctx.strokeStyle = "#1A1A1A";
+    // handle
+
+    ctx.beginPath();
+    ctx.fillRect(90, 50, 364, 50);
+    ctx.strokeRect(90, 50, 364, 50);
+
+    ctx.fillStyle = "#555555";
+    ctx.fillRect(380, 52, 30, 45);
+    ctx.strokeRect(310, 52, 100, 45);
+
+    ctx.fillStyle = "#787878";
+    ctx.fillRect(462, 50, 380, 50);
+    ctx.strokeRect(462, 50, 380, 50);
+
+    ctx.lineWidth = 10;
+    ctx.strokeRect(460, 50, 32, 50);
+
+    // details
+    ctx.strokeRect(250, 75, 50, 20);
+    ctx.strokeRect(110, 68, 30, 14);
+
+    ctx.stroke();
+
+    ctx.restore();
+    ctx.save();
+    ctx.scale(this.size || 0, this.size || 0);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "red";
+    ctx.restore();
+},[],0,0,287,940);
+
+export let USP_45_TOP_2 = new TextureData(0, 0, 0.2, "firearm", {
+    width: 900,
+    height: 200
+}, [
+    [0, 0, 900, 200]
+], 0, undefined, function(ctx, r = 0) {
+    // body: 439x309, texture: 1024,512, size: 0.15
+    // -8 -20
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.rotate(r * Math.PI / 180);
+    ctx.scale(this.size || 0, this.size || 0);
+    ctx.lineWidth = 15;
+
+    ctx.fillStyle = "#787878";
+    ctx.strokeStyle = "#1A1A1A";
+    // handle
+
+    ctx.beginPath();
+    ctx.fillRect(40, 50, 364, 50);
+    ctx.strokeRect(40, 50, 364, 50);
+
+    ctx.fillStyle = "#555555";
+    ctx.fillRect(330, 52, 30, 45);
+    ctx.strokeRect(260, 52, 100, 45);
+
+    ctx.fillStyle = "#787878";
+    ctx.fillRect(462, 50, 380, 50);
+    ctx.strokeRect(462, 50, 380, 50);
+
+    ctx.fillStyle = "#BBBBBB";
+    ctx.fillRect(410, 60, 50, 30);
+    ctx.strokeRect(410, 60, 50, 30);
+
+    ctx.fillStyle = "#787878";
+    ctx.lineWidth = 10;
+    ctx.strokeRect(460, 50, 32, 50);
+
+    // details
+    ctx.strokeRect(200, 75, 50, 20);
+    ctx.strokeRect(60, 68, 30, 14);
+
+    ctx.stroke();
+
+    ctx.restore();
+    ctx.save();
+    ctx.scale(this.size || 0, this.size || 0);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "red";
+    ctx.restore();
+},[],0,0,287,940);
+
+export let KC_357_TOP = new TextureData(0, 0, 0.2, "firearm", {
+    width: 900,
+    height: 200
+}, [
+    [0, 0, 900, 200]
+], 0, undefined, function(ctx, r = 0) {
+    // body: 439x309, texture: 1024,512, size: 0.15
+    // -8 -20
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.rotate(r * Math.PI / 180);
+    ctx.scale(this.size || 0, this.size || 0);
+    ctx.lineWidth = 15;
+
+    ctx.fillStyle = "#F3F3F3";
+    ctx.strokeStyle = "#1A1A1A";
+    // handle
+    
+    ctx.fillRect(210, 58, 20, 50);
+    ctx.lineWidth = 10;
+    ctx.strokeRect(210, 58, 20, 50);
+
+    ctx.fillStyle = "#F3F3F3";
+    ctx.lineWidth = 15;
+
+    ctx.beginPath();
+    ctx.fillRect(50, 50, 160, 65);
+    ctx.fillStyle = "#D6D6D6";
+    ctx.fillRect(50, 50, 40, 65);
+    ctx.strokeRect(50, 50, 160, 65);
+
+    ctx.fillStyle = "#F3F3F3";
+    ctx.fillRect(230, 58, 155, 50);
+    ctx.strokeRect(230, 58, 155, 50);
+    
+    ctx.lineWidth = 15;
+    ctx.fillStyle = "#787878";
+    ctx.fillRect(20, 58, 30, 50);
+    ctx.strokeRect(20, 58, 30, 50);
+   
+    ctx.lineWidth = 10; 
+    ctx.fillStyle = "#F3F3F3";
+    ctx.fillRect(45, 75, 30, 15);
+    ctx.strokeRect(45, 75, 30, 15);
+
+    ctx.lineWidth = 15;
+    ctx.fillRect(90, 120, 90, 25);
+    ctx.strokeRect(90, 120, 90, 25);
+ 
+    ctx.restore();
+},[],0,0,275,850);
+
+export let KC_357_TOP_1 = new TextureData(0, 0, 0.2, "firearm", {
+    width: 900,
+    height: 200
+}, [
+    [0, 0, 900, 200]
+], 0, undefined, function(ctx, r = 0) {
+    // body: 439x309, texture: 1024,512, size: 0.15
+    // -8 -20
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.rotate(r * Math.PI / 180);
+    ctx.scale(this.size || 0, this.size || 0);
+    ctx.lineWidth = 15;
+
+    ctx.fillStyle = "#F3F3F3";
+    ctx.strokeStyle = "#1A1A1A";
+    // handle
+    
+    ctx.fillRect(210, 58, 20, 50);
+    ctx.lineWidth = 10;
+    ctx.strokeRect(210, 58, 20, 50);
+
+    ctx.fillStyle = "#F3F3F3";
+    ctx.lineWidth = 15;
+
+    ctx.beginPath();
+    ctx.fillRect(50, 50, 160, 65);
+    ctx.fillStyle = "#D6D6D6";
+    ctx.fillRect(50, 50, 40, 65);
+    ctx.strokeRect(50, 50, 160, 65);
+
+    ctx.fillStyle = "#F3F3F3";
+    ctx.fillRect(230, 58, 155, 50);
+    ctx.strokeRect(230, 58, 155, 50);
+    
+    ctx.lineWidth = 15;
+    ctx.fillStyle = "#787878";
+    ctx.fillRect(20, 58, 30, 50);
+    ctx.strokeRect(20, 58, 30, 50);
+   
+    ctx.lineWidth = 10; 
+    ctx.fillStyle = "#F3F3F3";
+    ctx.fillRect(45, 75, 30, 15);
+    ctx.strokeRect(45, 75, 30, 15);
+
+    ctx.lineWidth = 15;
+    ctx.fillRect(90, 120, 90, 10);
+    ctx.strokeRect(90, 120, 90, 10);
+ 
+    ctx.restore();
+},[],0,0,275,850);
+
 export let DOOR = new TextureData(0, 0, 0.2, "pickup", {
     width: 740,
     height: 1030
@@ -6368,9 +6967,9 @@ export let TABLE = new TextureData(0, 0, 0.2, "avatar", {
 
 export let SMALL_TABLE = new TextureData(0, 0, 0.2, "avatar", {
     width: 820,
-    height: 1120
+    height: 870
 }, [
-    [0, 0, 820, 710],
+    [0,0,820,720],
     // [40, 800, 100, 110, 0],
     //  [1260, 800, 100, 110, 0]
 ], 0, undefined, function(ctx) {
@@ -6380,6 +6979,26 @@ export let SMALL_TABLE = new TextureData(0, 0, 0.2, "avatar", {
 
     ctx.beginPath();
     ctx.lineWidth = 15;
+    
+    // legs
+    ctx.translate(0,-100);
+    ctx.fillStyle = "#B1B1B1";
+    ctx.beginPath();
+    ctx.moveTo(100, 800);
+    ctx.lineTo(50, 950);
+    ctx.lineTo(100, 950);
+    ctx.lineTo(200, 800);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(600, 800);
+    ctx.lineTo(700, 950);
+    ctx.lineTo(750, 950);
+    ctx.lineTo(700, 800);
+    ctx.fill();
+    ctx.stroke();
+    ctx.translate(0,100);
 
     // table top
 
@@ -6424,21 +7043,7 @@ export let SMALL_TABLE = new TextureData(0, 0, 0.2, "avatar", {
     ctx.lineTo(0, 650);
     ctx.lineTo(0, 50);
     ctx.stroke();
-
-    ctx.fillStyle = "#B1B1B1";
-    ctx.fillRect(180, 780, 450, 60);
-    ctx.fillStyle = "#949494";
-    ctx.fillRect(180, 780, 450, 25);
-    ctx.strokeRect(180, 780, 450, 60);
-
-    ctx.fillStyle = "#B1B1B1";
-    ctx.fillRect(100, 700, 80, 300);
-    ctx.strokeRect(100, 700, 80, 300);
-
-    ctx.fillRect(620, 700, 80, 300);
-    ctx.strokeRect(620, 700, 80, 300);
-
-
+    
     ctx.restore();
 }, [], 0, 0, 10, 10);
 
@@ -6861,7 +7466,7 @@ export let STORE_SHELF_1 = new TextureData(10, 10, 0.2, "avatar", {
     ctx.restore();
 }, [], 0, 0, 0, 0);
 
-export let SYRINGE = new TextureData(30, 200, 0.25, "avatar", {
+export let SYRINGE = new TextureData(30, 200, 0.2, "avatar", {
     width: 125,
     height: 530
 }, [
@@ -6933,6 +7538,421 @@ export let SYRINGE = new TextureData(30, 200, 0.25, "avatar", {
 
     ctx.restore();
 }, [], 0, 0, 360, 330);
+
+export let MED_KIT = new TextureData(0, 0, 0.2, "pickup", {
+    width: 570,
+    height: 380
+}, [
+    [0, 0, 570, 380]
+], 0, undefined, function(ctx) {
+    // 3,2
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.scale(this.size, this.size);
+
+    ctx.beginPath();
+    ctx.lineWidth = 15;
+
+    ctx.strokeStyle = "#1A1A1A";
+    ctx.fillStyle = "#F1F1F1";
+
+    ctx.fillRect(700, 80, 550, 360);
+    ctx.fillStyle = "#C8C8C8";
+    ctx.fillRect(700, 360, 550, 80);
+    ctx.strokeRect(700, 80, 550, 360);
+
+    ctx.lineWidth = 10;
+    ctx.fillStyle = "#858585";
+    ctx.fillRect(914, 380, 120, 40);
+    ctx.strokeRect(914, 380, 120, 40);
+    
+    ctx.lineWidth = 5;
+    ctx.strokeRect(700, 400, 550, 40);
+
+    ctx.lineWidth = 15;
+    ctx.fillStyle = "#C8C8C8";
+    ctx.fillRect(800, 320, 50, 100);
+    ctx.fillRect(1100, 320, 50, 100);
+    ctx.fillStyle = "#F1F1F1";
+    ctx.fillRect(800, 320, 50, 50);
+    ctx.fillRect(1100, 320, 50, 50);
+    ctx.strokeRect(800, 320, 50, 100);
+    ctx.strokeRect(1100, 320, 50, 100);
+
+    ctx.strokeStyle = "#707070";
+    ctx.lineWidth = 25;
+    ctx.font = "300px Arial";
+    ctx.textAlign = "center";
+    ctx.strokeText("+",975,320);
+
+    ctx.restore();
+},[],0,0,-690,-70);
+
+export let AMMO_BOX = new TextureData(0, 0, 0.22, "pickup", {
+    width: 320,
+    height: 430
+}, [
+    [0, 0, 320, 430]
+], 0, undefined, function(ctx) {
+    // 3,2
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.scale(this.size, this.size);
+
+    ctx.beginPath();
+    ctx.lineWidth = 15;
+
+    ctx.strokeStyle = "#1A1A1A";
+    ctx.fillStyle = "#898989";
+
+    ctx.fillRect(700, 80, 300, 410);
+    ctx.fillStyle = "#707070";
+    ctx.fillRect(700, 380, 300, 100);
+
+    ctx.lineWidth = 10;
+    ctx.fillStyle = "#555555";
+    ctx.beginPath();
+    ctx.moveTo(700,440);
+    ctx.lineTo(800,440);
+    ctx.lineTo(825,410);
+    ctx.lineTo(875,410);
+    ctx.lineTo(900,440);
+    ctx.lineTo(1000,440);
+    ctx.lineTo(1000,492);
+    ctx.lineTo(700,492);
+    ctx.lineTo(700,440);
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.fillStyle = "#444444";
+    ctx.lineWidth = 5;
+    ctx.moveTo(800,435);
+    ctx.lineTo(825,410);
+    ctx.lineTo(875,410);
+    ctx.lineTo(900,435);
+    ctx.lineTo(800,435);
+    ctx.fill();
+
+    ctx.lineWidth = 10;
+    ctx.fillStyle = "#555555";
+    ctx.beginPath();
+    ctx.moveTo(700,440);
+    ctx.lineTo(800,440);
+    ctx.lineTo(825,410);
+    ctx.lineTo(875,410);
+    ctx.lineTo(900,440);
+    ctx.lineTo(1000,440);
+    ctx.lineTo(1000,492);
+    ctx.lineTo(700,492);
+    ctx.lineTo(700,440);
+    ctx.stroke();
+
+
+    function b(x,y) {
+    ctx.translate(x,y);
+    ctx.beginPath();
+    ctx.lineWidth = 5;
+    ctx.fillStyle = "#EEEEEE";
+    ctx.strokeStyle = "white";
+    ctx.moveTo(750,200);
+    ctx.lineTo(780,200);
+    ctx.lineTo(780,150);
+    ctx.lineTo(770,130);
+    ctx.lineTo(760,130);
+    ctx.lineTo(750,150);
+    ctx.lineTo(750,206);
+    ctx.fill();
+    ctx.translate(-x,-y);
+    }
+
+    b(45,70); 
+    b(85,70); 
+    b(125,70); 
+    
+    ctx.strokeWidth = "white";
+    ctx.strokeRect(780,185,140,100);
+
+    ctx.translate(0,-25);
+    ctx.lineWidth = 10;
+    ctx.fillStyle = "#555555";
+    ctx.strokeStyle = "#1A1A1A";
+    ctx.fillRect(730,425,40,20);
+    ctx.fillRect(930,425,40,20);
+    ctx.strokeRect(930,425,40,20);
+    ctx.strokeRect(730,425,40,20);
+
+    ctx.translate(0,25);
+    ctx.lineWidth = 15;
+    ctx.strokeRect(700, 80, 300, 410);
+
+    ctx.restore();
+},[],0,0,-400,170);
+
+//-690,-70
+
+export let MULTI_AMMO_BOX = new TextureData(0, 0, 0.2, "pickup", {
+    width: 620,
+    height: 430
+}, [
+    [0, 0, 620, 430]
+], 0, undefined, function(ctx) {
+    // 3,2
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.scale(this.size, this.size);
+
+    ctx.beginPath();
+    ctx.lineWidth = 15;
+
+    ctx.strokeStyle = "#1A1A1A";
+    ctx.fillStyle = "#898989";
+
+    ctx.fillRect(700, 80, 600, 410);
+    ctx.fillStyle = "#707070";
+    ctx.fillRect(700, 380, 600, 100);
+
+    ctx.lineWidth = 10;
+    ctx.fillStyle = "#555555";
+    ctx.beginPath();
+    ctx.moveTo(700,440);
+    ctx.lineTo(900,440);
+    ctx.lineTo(925,410);
+    ctx.lineTo(1075,410);
+    ctx.lineTo(1100,440);
+    ctx.lineTo(1300,440);
+    ctx.lineTo(1300,492);
+    ctx.lineTo(700,492);
+    ctx.lineTo(700,440);
+    ctx.fill();
+    
+    ctx.lineWidth = 10;
+    ctx.fillStyle = "#444444";
+    ctx.beginPath();
+    ctx.lineTo(900,435);
+    ctx.lineTo(925,410);
+    ctx.lineTo(1075,410);
+    ctx.lineTo(1100,435);
+    ctx.fill();
+
+    ctx.lineWidth = 10;
+    ctx.beginPath();
+    ctx.moveTo(700,440);
+    ctx.lineTo(900,440);
+    ctx.lineTo(925,410);
+    ctx.lineTo(1075,410);
+    ctx.lineTo(1100,440);
+    ctx.lineTo(1300,440);
+    ctx.lineTo(1300,492);
+    ctx.lineTo(700,492);
+    ctx.lineTo(700,440);
+    ctx.stroke();
+
+    function b(x,y) {
+    ctx.translate(x,y);
+    ctx.beginPath();
+    ctx.lineWidth = 5;
+    ctx.fillStyle = "#EEEEEE";
+    ctx.strokeStyle = "white";
+    ctx.moveTo(750,200);
+    ctx.lineTo(780,200);
+    ctx.lineTo(780,150);
+    ctx.lineTo(770,130);
+    ctx.lineTo(760,130);
+    ctx.lineTo(750,150);
+    ctx.lineTo(750,206);
+    ctx.fill();
+    ctx.translate(-x,-y);
+    }
+
+    b(195,70); 
+    b(235,70); 
+    b(275,70); 
+    
+    ctx.strokeStyle = "white";
+    ctx.strokeRect(930,185,140,100);
+
+    ctx.strokeStyle = "#1A1A1A";
+    ctx.lineWidth = 15;
+    ctx.strokeRect(700, 80, 600, 410);
+    
+    ctx.translate(0,-25);
+    ctx.lineWidth = 10;
+    ctx.fillStyle = "#555555";
+    ctx.strokeStyle = "#1A1A1A";
+    ctx.fillRect(730,425,40,20);
+    ctx.fillRect(1230,425,40,20);
+    ctx.strokeRect(1230,425,40,20);
+    ctx.strokeRect(730,425,40,20);
+
+    ctx.restore();
+},[],0,0,-690,-70);
+
+export let STEAK_AND_FRIES = new TextureData(0, 0, 0.2, "pickup", {
+    width: 520,
+    height: 520
+}, [
+    [0, 0, 520, 520]
+], 0, undefined, function(ctx) {
+    // 3,2
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.scale(this.size, this.size);
+
+    ctx.beginPath();
+    ctx.lineWidth = 15;
+    ctx.strokeStyle = "#1A1A1A";
+    ctx.fillStyle = "#C2C2C2";
+    
+    ctx.beginPath();
+    ctx.moveTo(0,130);
+    ctx.lineTo(130,0);
+    ctx.lineTo(370,0);
+    ctx.lineTo(500,130);
+    ctx.lineTo(500,370);
+    ctx.lineTo(370,500);
+    ctx.lineTo(130,500);
+    ctx.lineTo(0,370);
+    ctx.lineTo(0,128);
+    ctx.fill();
+
+    ctx.fillStyle = "#D7D7D7";
+    ctx.fillRect(130,0,240,500);
+
+    ctx.fillStyle = "#F1F1F1";
+    
+    ctx.beginPath();
+    ctx.moveTo(0,130);
+    ctx.lineTo(130,0);
+    ctx.lineTo(370,0);
+    ctx.lineTo(500,130);
+    ctx.lineTo(500,330);
+    ctx.lineTo(370,460);
+    ctx.lineTo(130,460);
+    ctx.lineTo(0,330);
+    ctx.lineTo(0,128);
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(0,130);
+    ctx.lineTo(130,0);
+    ctx.lineTo(370,0);
+    ctx.lineTo(500,130);
+    ctx.lineTo(500,370);
+    ctx.lineTo(370,500);
+    ctx.lineTo(130,500);
+    ctx.lineTo(0,370);
+    ctx.lineTo(0,128);
+    ctx.stroke();
+
+    ctx.translate(100,100); 
+    ctx.scale(0.6,0.6);
+    ctx.fillStyle = "#D2D2D2";
+    ctx.beginPath();
+    ctx.moveTo(0,130);
+    ctx.lineTo(130,0);
+    ctx.lineTo(370,0);
+    ctx.lineTo(500,130);
+    ctx.lineTo(500,370);
+    ctx.lineTo(370,500);
+    ctx.lineTo(130,500);
+    ctx.lineTo(0,370);
+    ctx.lineTo(0,128);
+    ctx.fill();
+
+    // food
+    ctx.scale(1.4, 1.4);
+
+    ctx.translate(40,-15);
+    function frie(x,y,r) {
+     ctx.rotate(r * Math.PI/180);
+     ctx.translate(x,y);
+     ctx.fillStyle = "#F0F0F0";
+     ctx.fillRect(40,40,200,30);
+     ctx.strokeRect(40,40,200,30);
+     ctx.translate(-x,-y);
+     ctx.rotate(-(r * Math.PI/180));
+    }
+
+    frie(0,0,5);
+    frie(0,0,15);
+    frie(-20,10,40);
+    frie(-35,30,-40);
+    frie(-150,95,-35);
+    frie(-190,90,-60);
+    frie(-70,-50,-10);
+    ctx.translate(-40,15);
+
+    ctx.translate(220,100);
+    ctx.fillStyle = "#757575";
+    ctx.beginPath();
+    ctx.moveTo(50,50);
+    ctx.lineTo(130,70);
+    ctx.lineTo(170,140);
+    ctx.lineTo(140,260);
+    ctx.lineTo(40,300);
+    ctx.lineTo(-150,260);
+    ctx.lineTo(-190,200);
+    ctx.lineTo(-150,150);
+    ctx.lineTo(-40,130);
+    ctx.lineTo(53,50);
+    ctx.fill();
+
+    ctx.fillStyle = "#929292";
+    ctx.beginPath();
+    ctx.moveTo(50,50);
+    ctx.lineTo(130,70);
+    ctx.lineTo(170,140);
+    ctx.lineTo(140,210);
+    ctx.lineTo(40,250);
+    ctx.lineTo(-150,230);
+    ctx.lineTo(-190,200);
+    ctx.lineTo(-150,150);
+    ctx.lineTo(-40,130);
+    ctx.lineTo(53,50);
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.moveTo(50,50);
+    ctx.lineTo(130,70);
+    ctx.lineTo(170,140);
+    ctx.lineTo(140,260);
+    ctx.lineTo(40,300);
+    ctx.lineTo(-150,260);
+    ctx.lineTo(-190,200);
+    ctx.lineTo(-150,150);
+    ctx.lineTo(-40,130);
+    ctx.lineTo(53,50);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.fillStyle = "#757575";
+    ctx.moveTo(50,70);
+    ctx.lineTo(60,200);
+    ctx.lineTo(40,280);
+    ctx.fill();
+
+    ctx.moveTo(100,70);
+    ctx.lineTo(110,200);
+    ctx.lineTo(90,280);
+    ctx.fill();
+
+    ctx.moveTo(0,100);
+    ctx.lineTo(10,200);
+    ctx.lineTo(-10,280);
+    ctx.fill();
+
+    ctx.moveTo(-50,140);
+    ctx.lineTo(-40,200);
+    ctx.lineTo(-60,270);
+    ctx.fill();
+
+    ctx.moveTo(-100,150);
+    ctx.lineTo(-90,200);
+    ctx.lineTo(-110,260);
+    ctx.fill();
+
+    ctx.restore();
+},[],0,0,10,10);
 
 export let MIXED_BUSH = new TextureData(0, 0, 0.2, "avatar", {
     width: 850,
@@ -7904,6 +8924,1071 @@ export let LAPTOP = new TextureData(1, -9, 0.2, "pickup", {
 
     ctx.restore();
 });
+
+export let WORLD_MAP = new TextureData(0, 0, 1, "text", {
+    width: 2400,
+    height: 1200
+}, [
+    [0, 0, 2400, 1200]
+], 0, undefined, function(ctx) {
+    // 1 -9
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.scale(this.size, this.size);
+    ctx.beginPath();
+
+    let img = new Image();
+    img.src = "https://www.pngall.com/wp-content/uploads/1/World-Map-PNG-Transparent-HD-Photo.png";
+  
+     //img.onload = function() {
+     //ctx.drawImage(img,0,0,1200,600);
+     {
+     ctx.strokeStyle = "black";
+     ctx.fillStyle = "#A4A4A4";
+    
+     ctx.lineWidth = 2.5;
+     ctx.beginPath();
+     ctx.moveTo(107,118);
+     ctx.lineTo(90,112);
+     ctx.lineTo(80,115);
+     ctx.lineTo(77,112);
+     ctx.lineTo(70,112);
+     ctx.lineTo(67,110);
+     ctx.lineTo(62,110);
+     ctx.lineTo(60,108);
+     ctx.lineTo(57,105);
+     ctx.lineTo(53,108);
+     ctx.lineTo(45,109);
+     ctx.lineTo(40,112);
+     ctx.lineTo(34,118);
+     ctx.lineTo(25,120);
+     ctx.lineTo(23,125);
+     ctx.lineTo(30,130);
+     ctx.lineTo(40,130);
+     ctx.lineTo(43,135);
+     ctx.lineTo(40,137);
+     ctx.lineTo(30,137);
+     ctx.lineTo(29,134);
+     ctx.lineTo(20,138);
+     ctx.lineTo(23,144);
+     ctx.lineTo(36,143);
+     ctx.lineTo(40,142);
+     ctx.lineTo(43,146);
+     ctx.lineTo(37,148);
+     ctx.lineTo(31,148);
+     ctx.lineTo(27,159);
+     ctx.lineTo(29,163);
+     ctx.lineTo(31,166);
+     ctx.lineTo(36,165);
+     ctx.lineTo(38,172);
+     ctx.lineTo(44,171);
+     ctx.lineTo(48,173);
+     ctx.lineTo(54,171);
+     ctx.lineTo(51,178);
+     ctx.lineTo(43,183);
+     ctx.lineTo(30,187);
+     ctx.lineTo(28,190);
+     ctx.lineTo(50,185);
+     ctx.lineTo(53,183);
+     ctx.lineTo(60,178);
+     ctx.lineTo(65,168);
+     ctx.lineTo(68,166);
+     ctx.lineTo(70,163);
+     ctx.lineTo(76,159);
+     ctx.lineTo(78,161);
+     ctx.lineTo(72,166);
+     ctx.lineTo(70,169);
+     ctx.lineTo(71,170);
+     ctx.lineTo(79,166);
+     ctx.lineTo(83,166);
+     ctx.lineTo(85,164);
+     ctx.lineTo(83,160);
+     ctx.lineTo(92,161);
+     ctx.lineTo(93,164);
+     ctx.lineTo(98,166);
+     ctx.lineTo(100,165);
+     ctx.lineTo(108,168);
+     ctx.lineTo(112,166);
+     ctx.lineTo(118,172);
+     ctx.lineTo(125,171);
+     ctx.lineTo(143,190);
+     ctx.lineTo(141,193);
+     ctx.lineTo(142,195);
+     ctx.lineTo(149,197);
+     ctx.lineTo(151,200);
+     ctx.lineTo(152,206); 
+     ctx.lineTo(155,207); 
+     ctx.lineTo(159,211); 
+     ctx.lineTo(169,213); 
+     ctx.lineTo(168,218); 
+     ctx.lineTo(161,217); 
+     ctx.lineTo(163,225); 
+     ctx.lineTo(163,230); 
+     ctx.lineTo(160,240); 
+     ctx.lineTo(161,245); 
+     ctx.lineTo(164,254); 
+     ctx.lineTo(171,264); 
+     ctx.lineTo(174,270); 
+     ctx.lineTo(182,271); 
+     ctx.lineTo(184,276); 
+     ctx.lineTo(195,290); 
+     ctx.lineTo(191,291); 
+     ctx.lineTo(199,297); 
+     ctx.lineTo(203,304); 
+     ctx.lineTo(209,307); 
+     ctx.lineTo(212,305); 
+     ctx.lineTo(204,296); 
+     ctx.lineTo(194,282); 
+     ctx.lineTo(194,280); 
+     ctx.lineTo(200,282); 
+     ctx.lineTo(203,288); 
+     ctx.lineTo(215,302); 
+     ctx.lineTo(225,312); 
+     ctx.lineTo(221,314); 
+     ctx.lineTo(232,324); 
+     ctx.lineTo(236,324); 
+     ctx.lineTo(241,327); 
+     ctx.lineTo(246,328); 
+     ctx.lineTo(253,331); 
+     ctx.lineTo(257,328); 
+     ctx.lineTo(270,338); 
+     ctx.lineTo(275,339); 
+     ctx.lineTo(279,340); 
+     ctx.lineTo(282,338); 
+     ctx.lineTo(284,341); 
+     ctx.lineTo(286,345); 
+     ctx.lineTo(290,350); 
+     ctx.lineTo(297,355); 
+     ctx.lineTo(305,357); 
+     ctx.lineTo(309,354); 
+     ctx.lineTo(317,360); 
+     ctx.lineTo(317,368); 
+     ctx.lineTo(311,373); 
+     ctx.lineTo(311,376); 
+     ctx.lineTo(304,383); 
+     ctx.lineTo(304,387); 
+     ctx.lineTo(307,391); 
+     ctx.lineTo(303,395); 
+     ctx.lineTo(303,399); 
+     ctx.lineTo(310,406); 
+     ctx.lineTo(315,416); 
+     ctx.lineTo(320,421); 
+     ctx.lineTo(320,425); 
+     ctx.lineTo(325,431); 
+     ctx.lineTo(334,434); 
+     ctx.lineTo(334,436); 
+     ctx.lineTo(340,440); 
+     ctx.lineTo(340,446); 
+     ctx.lineTo(338,452); 
+     ctx.lineTo(338,462); 
+     ctx.lineTo(335,472); 
+     ctx.lineTo(334,490); 
+     ctx.lineTo(328,515); 
+     ctx.lineTo(328,519); 
+     ctx.lineTo(330,523); 
+     ctx.lineTo(329,533); 
+     ctx.lineTo(326,540); 
+     ctx.lineTo(326,555); 
+     ctx.lineTo(328,564); 
+     ctx.lineTo(334,568); 
+     ctx.lineTo(339,567); 
+     ctx.lineTo(345,574); 
+     ctx.lineTo(356,572); 
+     ctx.lineTo(346,564); 
+     ctx.lineTo(343,553); 
+     ctx.lineTo(348,550); 
+     ctx.lineTo(348,546); 
+     ctx.lineTo(354,543); 
+     ctx.lineTo(354,538); 
+     ctx.lineTo(347,538); 
+     ctx.lineTo(345,535); 
+     ctx.lineTo(353,532); 
+     ctx.lineTo(355,528); 
+     ctx.lineTo(354,525); 
+     ctx.lineTo(356,521); 
+     ctx.lineTo(355,515); 
+     ctx.lineTo(359,515); 
+     ctx.lineTo(363,516); 
+     ctx.lineTo(367,513); 
+     ctx.lineTo(367,508); 
+     ctx.lineTo(380,506); 
+     ctx.lineTo(385,499); 
+     ctx.lineTo(377,493); 
+     ctx.lineTo(377,490); 
+     ctx.lineTo(391,494); 
+     ctx.lineTo(392,488); 
+     ctx.lineTo(395,480); 
+     ctx.lineTo(400,476); 
+     ctx.lineTo(405,477); 
+     ctx.lineTo(411,468); 
+     ctx.lineTo(410,462); 
+     ctx.lineTo(413,457); 
+     ctx.lineTo(424,452); 
+     ctx.lineTo(432,452); 
+     ctx.lineTo(435,450); 
+     ctx.lineTo(438,443); 
+     ctx.lineTo(440,442); 
+     ctx.lineTo(440,437); 
+     ctx.lineTo(443,431); 
+     ctx.lineTo(441,422); 
+     ctx.lineTo(446,419); 
+     ctx.lineTo(448,413); 
+     ctx.lineTo(456,406); 
+     ctx.lineTo(454,396); 
+     ctx.lineTo(448,396); 
+     ctx.lineTo(440,389); 
+     ctx.lineTo(431,389); 
+     ctx.lineTo(426,386); 
+     ctx.lineTo(424,389); 
+     ctx.lineTo(421,385); 
+     ctx.lineTo(405,380); 
+     ctx.lineTo(405,375); 
+     ctx.lineTo(395,362); 
+     ctx.lineTo(383,362); 
+     ctx.lineTo(374,353); 
+     ctx.lineTo(370,353); 
+     ctx.lineTo(365,348); 
+     ctx.lineTo(354,348); 
+     ctx.lineTo(350,345); 
+     ctx.lineTo(347,345); 
+     ctx.lineTo(345,344); 
+     ctx.lineTo(340,343); 
+     ctx.lineTo(335,346); 
+     ctx.lineTo(335,341); 
+     ctx.lineTo(330,344); 
+     ctx.lineTo(325,344); 
+     ctx.lineTo(321,345); 
+     ctx.lineTo(321,350); 
+     ctx.lineTo(317,354); 
+     ctx.lineTo(310,348); 
+     ctx.lineTo(308,348); 
+     ctx.lineTo(302,351); 
+     ctx.lineTo(293,346); 
+     ctx.lineTo(294,340); 
+     ctx.lineTo(296,333); 
+     ctx.lineTo(292,330); 
+     ctx.lineTo(279,330); 
+     ctx.lineTo(280,325); 
+     ctx.lineTo(282,320); 
+     ctx.lineTo(280,317); 
+     ctx.lineTo(284,313); 
+     ctx.lineTo(279,312); 
+     ctx.lineTo(273,314); 
+     ctx.lineTo(269,322); 
+     ctx.lineTo(265,322); 
+     ctx.lineTo(262,324); 
+     ctx.lineTo(255,321); 
+     ctx.lineTo(249,308); 
+     ctx.lineTo(249,302); 
+     ctx.lineTo(252,298); 
+     ctx.lineTo(248,295); 
+     ctx.lineTo(250,290); 
+     ctx.lineTo(254,286); 
+     ctx.lineTo(270,285); 
+     ctx.lineTo(274,288); 
+     ctx.lineTo(278,285); 
+     ctx.lineTo(277,283); 
+     ctx.lineTo(288,283); 
+     ctx.lineTo(290,285); 
+     ctx.lineTo(292,283); 
+     ctx.lineTo(298,288); 
+     ctx.lineTo(298,293); 
+     ctx.lineTo(299,295); 
+     ctx.lineTo(303,299); 
+     ctx.lineTo(305,300); 
+     ctx.lineTo(307,300); 
+     ctx.lineTo(308,296); 
+     ctx.lineTo(307,290); 
+     ctx.lineTo(302,284); 
+     ctx.lineTo(303,278); 
+     ctx.lineTo(309,270); 
+     ctx.lineTo(315,270); 
+     ctx.lineTo(320,264); 
+     ctx.lineTo(318,253); 
+     ctx.lineTo(323,255); 
+     ctx.lineTo(326,250); 
+     ctx.lineTo(326,245); 
+     ctx.lineTo(338,242); 
+     ctx.lineTo(336,237); 
+     ctx.lineTo(342,231); 
+     ctx.lineTo(347,232); 
+     ctx.lineTo(350,227); 
+     ctx.lineTo(357,227); 
+     ctx.lineTo(352,233); 
+     ctx.lineTo(355,236); 
+     ctx.lineTo(361,230); 
+     ctx.lineTo(371,226); 
+     ctx.lineTo(368,223); 
+     ctx.lineTo(360,222); 
+     ctx.lineTo(358,218); 
+     ctx.lineTo(362,216); 
+     ctx.lineTo(358,213); 
+     ctx.lineTo(354,212); 
+     ctx.lineTo(345,215); 
+     ctx.lineTo(340,218); 
+     ctx.lineTo(338,222); 
+     ctx.lineTo(332,224); 
+     ctx.lineTo(321,232); 
+     ctx.lineTo(321,236); 
+     ctx.lineTo(311,237); 
+     ctx.lineTo(302,243); 
+     ctx.lineTo(294,242); 
+     ctx.lineTo(296,237); 
+     ctx.lineTo(294,233); 
+     ctx.lineTo(295,229); 
+     ctx.lineTo(290,228); 
+     ctx.lineTo(286,232); 
+     ctx.lineTo(286,235); 
+     ctx.lineTo(287,238); 
+     ctx.lineTo(285,244); 
+     ctx.lineTo(280,240); 
+     ctx.lineTo(280,236); 
+     ctx.lineTo(282,232); 
+     ctx.lineTo(285,226); 
+     ctx.lineTo(292,226); 
+     ctx.lineTo(294,224); 
+     ctx.lineTo(291,221); 
+     ctx.lineTo(284,223); 
+     ctx.lineTo(280,221); 
+     ctx.lineTo(268,223); 
+     ctx.lineTo(266,221); 
+     ctx.lineTo(278,217); 
+     ctx.lineTo(280,213); 
+     ctx.lineTo(285,214); 
+     ctx.lineTo(286,217); 
+     ctx.lineTo(291,218); 
+     ctx.lineTo(297,225); 
+     ctx.lineTo(305,226); 
+     ctx.lineTo(306,229); 
+     ctx.lineTo(303,228); 
+     ctx.lineTo(299,238); 
+     ctx.lineTo(308,237); 
+     ctx.lineTo(311,233); 
+     ctx.lineTo(321,231); 
+     ctx.lineTo(335,225); 
+     ctx.lineTo(350,207); 
+     ctx.lineTo(374,207); 
+     ctx.lineTo(383,202); 
+     ctx.lineTo(388,195); 
+     ctx.lineTo(380,192); 
+     ctx.lineTo(374,196); 
+     ctx.lineTo(371,194); 
+     ctx.lineTo(376,189); 
+     ctx.lineTo(368,184); 
+     ctx.lineTo(368,180); 
+     ctx.lineTo(360,171); 
+     ctx.lineTo(359,165); 
+     ctx.lineTo(355,164); 
+     ctx.lineTo(353,172); 
+     ctx.lineTo(349,176); 
+     ctx.lineTo(345,170); 
+     ctx.lineTo(340,170); 
+     ctx.lineTo(340,162); 
+     ctx.lineTo(327,155); 
+     ctx.lineTo(324,156); 
+     ctx.lineTo(316,153); 
+     ctx.lineTo(314,156); 
+     ctx.lineTo(315,160); 
+     ctx.lineTo(315,166); 
+     ctx.lineTo(313,173); 
+     ctx.lineTo(318,177); 
+     ctx.lineTo(319,183); 
+     ctx.lineTo(315,187); 
+     ctx.lineTo(308,189); 
+     ctx.lineTo(312,200); 
+     ctx.lineTo(308,208); 
+     ctx.lineTo(300,200); 
+     ctx.lineTo(299,186); 
+     ctx.lineTo(290,186); 
+     ctx.lineTo(270,178); 
+     ctx.lineTo(265,178); 
+     ctx.lineTo(262,170); 
+     ctx.lineTo(257,168); 
+     ctx.lineTo(265,152); 
+     ctx.lineTo(270,151); 
+     ctx.lineTo(275,145); 
+     ctx.lineTo(280,145); 
+     ctx.lineTo(288,134); 
+     ctx.lineTo(298,133); 
+     ctx.lineTo(304,129); 
+     ctx.lineTo(300,117); 
+     ctx.lineTo(292,116); 
+     ctx.lineTo(283,130); 
+     ctx.lineTo(278,127); 
+     ctx.lineTo(281,120); 
+     ctx.lineTo(277,119); 
+     ctx.lineTo(274,124); 
+     ctx.lineTo(271,118); 
+     ctx.lineTo(267,118); 
+     ctx.lineTo(270,114); 
+     ctx.lineTo(265,109); 
+     ctx.lineTo(265,105); 
+     ctx.lineTo(262,102); 
+     ctx.lineTo(263,98); 
+     ctx.lineTo(268,98); 
+     ctx.lineTo(273,92); 
+     ctx.lineTo(259,91); 
+     ctx.lineTo(256,95); 
+     ctx.lineTo(256,102); 
+     ctx.lineTo(258,104); 
+     ctx.lineTo(254,109); 
+     ctx.lineTo(254,116); 
+     ctx.lineTo(262,124); 
+     ctx.lineTo(246,124); 
+     ctx.lineTo(245,128); 
+     ctx.lineTo(235,128); 
+     ctx.lineTo(223,124); 
+     ctx.lineTo(216,128); 
+     ctx.lineTo(216,133); 
+     ctx.lineTo(213,128); 
+     ctx.lineTo(203,128); 
+     ctx.lineTo(190,126); 
+     ctx.lineTo(195,123); 
+     ctx.lineTo(168,115); 
+     ctx.lineTo(162,119); 
+     ctx.lineTo(161,116); 
+     ctx.lineTo(158,119); 
+     ctx.lineTo(150,114); 
+     ctx.lineTo(145,115); 
+     ctx.lineTo(143,113); 
+     ctx.lineTo(126,120); 
+     ctx.lineTo(120,120); 
+     ctx.lineTo(114,117); 
+     ctx.lineTo(107,118); 
+
+     // greenland
+
+     ctx.moveTo(390,96);
+     ctx.lineTo(388,104);
+     ctx.lineTo(392,105);
+     ctx.lineTo(397,105);
+     ctx.lineTo(402,111);
+     ctx.lineTo(394,109);
+     ctx.lineTo(391,112);
+     ctx.lineTo(402,117);
+     ctx.lineTo(402,121);
+     ctx.lineTo(395,125);
+     ctx.lineTo(393,130);
+     ctx.lineTo(394,136);
+     ctx.lineTo(404,145);
+     ctx.lineTo(402,149);
+     ctx.lineTo(408,156);
+     ctx.lineTo(407,158);
+     ctx.lineTo(423,166);
+     ctx.lineTo(427,164);
+     ctx.lineTo(430,155);
+     ctx.lineTo(436,149);
+     ctx.lineTo(436,141);
+     ctx.lineTo(446,136);
+     ctx.lineTo(450,138);
+     ctx.lineTo(460,130);
+     ctx.lineTo(458,128);
+     ctx.lineTo(465,124);
+     ctx.lineTo(473,124);
+     ctx.lineTo(477,122);
+     ctx.lineTo(483,122);
+     ctx.lineTo(494,115);
+     ctx.lineTo(486,111);
+     ctx.lineTo(482,105);
+     ctx.lineTo(492,108);
+     ctx.lineTo(494,111);
+     ctx.lineTo(498,108);
+     ctx.lineTo(496,103);
+     ctx.lineTo(490,101);
+     ctx.lineTo(485,96);
+     ctx.lineTo(489,93);
+     ctx.lineTo(496,95);
+     ctx.lineTo(500,93);
+     ctx.lineTo(497,90);
+     ctx.lineTo(500,88);
+     ctx.lineTo(507,89);
+     ctx.lineTo(500,84);
+     ctx.lineTo(507,83);
+     ctx.lineTo(504,76);
+     ctx.lineTo(500,77);
+     ctx.lineTo(496,73);
+     ctx.lineTo(502,72);
+     ctx.lineTo(509,73);
+     ctx.lineTo(507,66);
+     ctx.lineTo(498,66);
+     ctx.lineTo(506,55);
+     ctx.lineTo(501,55);
+     ctx.lineTo(504,50);
+     ctx.lineTo(517,49);
+     ctx.lineTo(530,38);
+     ctx.lineTo(518,38);
+     ctx.lineTo(514,41);
+     ctx.lineTo(509,38);
+     ctx.lineTo(505,38);
+     ctx.lineTo(500,43);
+     ctx.lineTo(495,45);
+     ctx.lineTo(498,37);
+     ctx.lineTo(494,37);
+     ctx.lineTo(484,42);
+     ctx.lineTo(486,36);
+     ctx.lineTo(462,39);
+     ctx.lineTo(473,34);
+     ctx.lineTo(495,31);
+     ctx.lineTo(488,27);
+     ctx.lineTo(470,28);
+     ctx.lineTo(455,30);
+     ctx.lineTo(466,26);
+     ctx.lineTo(479,26);
+     ctx.lineTo(460,24);
+     ctx.lineTo(442,26);
+     ctx.lineTo(441,30);
+     ctx.lineTo(431,27);
+     ctx.lineTo(404,32);
+     ctx.lineTo(406,37);
+     ctx.lineTo(403,38);
+     ctx.lineTo(399,33);
+     ctx.lineTo(395,38);
+     ctx.lineTo(392,33);
+     ctx.lineTo(370,38);
+     ctx.lineTo(369,45);
+     ctx.lineTo(362,43);
+     ctx.lineTo(349,49);
+     ctx.lineTo(357,54);
+     ctx.lineTo(353,57);
+     ctx.lineTo(343,58);
+     ctx.lineTo(340,60);
+     ctx.lineTo(331,62);
+     ctx.lineTo(328,65);
+     ctx.lineTo(343,67);
+     ctx.lineTo(349,67);
+     ctx.lineTo(353,70);
+     ctx.lineTo(338,72);
+     ctx.lineTo(345,77);
+     ctx.lineTo(365,76);
+     ctx.lineTo(385,87);
+     ctx.lineTo(390,96);
+
+     ctx.moveTo(520,300);
+     ctx.lineTo(514,310);
+     ctx.lineTo(518,320);
+     ctx.lineTo(516,330);
+     ctx.lineTo(513,333);
+     ctx.lineTo(516,336);
+     ctx.lineTo(513,341);
+     ctx.lineTo(525,349);
+     ctx.lineTo(526,357);
+     ctx.lineTo(547,365);
+     ctx.lineTo(557,363);
+     ctx.lineTo(561,366);
+     ctx.lineTo(575,360);
+     ctx.lineTo(585,360);
+     ctx.lineTo(590,367);
+     ctx.lineTo(598,365);
+     ctx.lineTo(602,370);
+     ctx.lineTo(598,382);
+     ctx.lineTo(608,394);
+     ctx.lineTo(614,406);
+     ctx.lineTo(612,408);
+     ctx.lineTo(616,415);
+     ctx.lineTo(610,422);
+     ctx.lineTo(608,429);
+     ctx.lineTo(609,438);
+     ctx.lineTo(617,451);
+     ctx.lineTo(620,469);
+     ctx.lineTo(630,484);
+     ctx.lineTo(627,486);
+     ctx.lineTo(634,494);
+     ctx.lineTo(644,490);
+     ctx.lineTo(652,492);
+     ctx.lineTo(655,487);
+     ctx.lineTo(660,489);
+     ctx.lineTo(668,480);
+     ctx.lineTo(671,474);
+     ctx.lineTo(676,470);
+     ctx.lineTo(676,465);
+     ctx.lineTo(675,461);
+     ctx.lineTo(685,458);
+     ctx.lineTo(686,450);
+     ctx.lineTo(682,445);
+     ctx.lineTo(683,442);
+     ctx.lineTo(689,437);
+     ctx.lineTo(701,431);
+     ctx.lineTo(704,427);
+     ctx.lineTo(701,413);
+     ctx.lineTo(698,407);
+     ctx.lineTo(701,389);
+     ctx.lineTo(706,386);
+     ctx.lineTo(726,368);
+     ctx.lineTo(737,350);
+     ctx.lineTo(737,343);
+     ctx.lineTo(716,348);
+     ctx.lineTo(710,344);
+     ctx.lineTo(713,341);
+     ctx.lineTo(697,330);
+     ctx.lineTo(697,325);
+     ctx.lineTo(692,320);
+     ctx.lineTo(692,310);
+     ctx.lineTo(686,307);
+     ctx.lineTo(673,286);
+     ctx.lineTo(676,284);
+     ctx.lineTo(682,293);
+     ctx.lineTo(684,290);
+     ctx.lineTo(694,304);
+     ctx.lineTo(700,307);
+     ctx.lineTo(700,315);
+     ctx.lineTo(710,328);
+     ctx.lineTo(715,339);
+     ctx.lineTo(730,336);
+     ctx.lineTo(740,331);
+     ctx.lineTo(744,326);
+     ctx.lineTo(753,326);
+     ctx.lineTo(758,320);
+     ctx.lineTo(759,315);
+     ctx.lineTo(764,315);
+     ctx.lineTo(767,310);
+     ctx.lineTo(762,304);
+     ctx.lineTo(757,305);
+     ctx.lineTo(754,298);
+     ctx.lineTo(750,304);
+     ctx.lineTo(740,305);
+     ctx.lineTo(734,300);
+     ctx.lineTo(734,295);
+     ctx.lineTo(728,290);
+     ctx.lineTo(728,283);
+     ctx.lineTo(734,283);
+     ctx.lineTo(738,290);
+     ctx.lineTo(748,296);
+     ctx.lineTo(754,293);
+     ctx.lineTo(757,293);
+     ctx.lineTo(760,297);
+     ctx.lineTo(775,299);
+     ctx.lineTo(788,297);
+     ctx.lineTo(802,315);
+     ctx.lineTo(805,313);
+     ctx.lineTo(807,309);
+     ctx.lineTo(808,317);
+     ctx.lineTo(810,327);
+     ctx.lineTo(820,352);
+     ctx.lineTo(825,355);
+     ctx.lineTo(832,348);
+     ctx.lineTo(834,338);
+     ctx.lineTo(832,331);
+     ctx.lineTo(856,310);
+     ctx.lineTo(867,310);
+     ctx.lineTo(870,307);
+     ctx.lineTo(874,316);
+     ctx.lineTo(879,318);
+     ctx.lineTo(881,326);
+     ctx.lineTo(879,331);
+     ctx.lineTo(882,331);
+     ctx.lineTo(888,325);
+     ctx.lineTo(893,337);
+     ctx.lineTo(892,354);
+     ctx.lineTo(900,371);
+     ctx.lineTo(910,375);
+     ctx.lineTo(909,362);
+     ctx.lineTo(900,357);
+     ctx.lineTo(899,350);
+     ctx.lineTo(911,337);
+     ctx.lineTo(916,350);
+     ctx.lineTo(928,344);
+     ctx.lineTo(926,330);
+     ctx.lineTo(915,320);
+     ctx.lineTo(928,310);
+     ctx.lineTo(948,307);
+     ctx.lineTo(968,288);
+     ctx.lineTo(970,278);
+     ctx.lineTo(964,268);
+     ctx.lineTo(960,267);
+     ctx.lineTo(966,260);
+     ctx.lineTo(971,259);
+     ctx.lineTo(964,256);
+     ctx.lineTo(961,260);
+     ctx.lineTo(958,255);
+     ctx.lineTo(955,252);
+     ctx.lineTo(960,251);
+     ctx.lineTo(968,244);
+     ctx.lineTo(972,247);
+     ctx.lineTo(969,253);
+     ctx.lineTo(978,248);
+     ctx.lineTo(983,250);
+     ctx.lineTo(979,253);
+     ctx.lineTo(986,256);
+     ctx.lineTo(985,268);
+     ctx.lineTo(994,266);
+     ctx.lineTo(994,258);
+     ctx.lineTo(987,250);
+     ctx.lineTo(995,244);
+     ctx.lineTo(994,241);
+     ctx.lineTo(1004,234);
+     ctx.lineTo(1004,239);
+     ctx.lineTo(1012,237);
+     ctx.lineTo(1030,215);
+     ctx.lineTo(1031,205);
+     ctx.lineTo(1034,202);
+     ctx.lineTo(1034,194);
+     ctx.lineTo(1030,190);
+     ctx.lineTo(1025,190);
+     ctx.lineTo(1022,194);
+     ctx.lineTo(1014,189);
+     ctx.lineTo(1042,168);
+     ctx.lineTo(1057,168);
+     ctx.lineTo(1059,166);
+     ctx.lineTo(1064,166);
+     ctx.lineTo(1067,170);
+     ctx.lineTo(1075,170);
+     ctx.lineTo(1083,158);
+     ctx.lineTo(1096,156);
+     ctx.lineTo(1095,160);
+     ctx.lineTo(1098,163);
+     ctx.lineTo(1104,153);
+     ctx.lineTo(1110,152);
+     ctx.lineTo(1108,160);
+     ctx.lineTo(1086,178);
+     ctx.lineTo(1082,188);
+     ctx.lineTo(1085,205);
+     ctx.lineTo(1096,190);
+     ctx.lineTo(1102,190);
+     ctx.lineTo(1099,186);
+     ctx.lineTo(1104,182);
+     ctx.lineTo(1100,172);
+     ctx.lineTo(1113,163);
+     ctx.lineTo(1129,162);
+     ctx.lineTo(1150,153);
+     ctx.lineTo(1158,154);
+     ctx.lineTo(1156,146);
+     ctx.lineTo(1150,145);
+     ctx.lineTo(1148,142);
+     ctx.lineTo(1158,142);
+     ctx.lineTo(1162,135);
+     ctx.lineTo(1168,139);
+     ctx.lineTo(1173,138);
+     ctx.lineTo(1174,141);
+     ctx.lineTo(1184,144);
+     ctx.lineTo(1186,138);
+     ctx.lineTo(1192,135);
+     ctx.lineTo(1180,130);
+     ctx.lineTo(1179,133);
+     ctx.lineTo(1175,128);
+     ctx.lineTo(1148,116);
+     ctx.lineTo(1129,115);
+     ctx.lineTo(1131,120);
+     ctx.lineTo(1127,122);
+     ctx.lineTo(1123,117);
+     ctx.lineTo(1113,117);
+     ctx.lineTo(1107,115);
+     ctx.lineTo(1100,118);
+     ctx.lineTo(1094,115);
+     ctx.lineTo(1093,111);
+     ctx.lineTo(1087,108);
+     ctx.lineTo(1070,110);
+     ctx.lineTo(1059,105);
+     ctx.lineTo(1063,103);
+     ctx.lineTo(1054,101);
+     ctx.lineTo(1047,105);
+     ctx.lineTo(1044,100);
+     ctx.lineTo(1027,100);
+     ctx.lineTo(1030,106);
+     ctx.lineTo(1010,106);
+     ctx.lineTo(1005,103);
+     ctx.lineTo(1000,110);
+     ctx.lineTo(994,104);
+     ctx.lineTo(994,95);
+     ctx.lineTo(982,94);
+     ctx.lineTo(978,91);
+     ctx.lineTo(975,98);
+     ctx.lineTo(959,97);
+     ctx.lineTo(957,94);
+     ctx.lineTo(934,94);
+     ctx.lineTo(919,97);
+     ctx.lineTo(942,85);
+     ctx.lineTo(942,79);
+     ctx.lineTo(938,75);
+     ctx.lineTo(925,75);
+     ctx.lineTo(915,68);
+     ctx.lineTo(904,68);
+     ctx.lineTo(902,74);
+     ctx.lineTo(888,78);
+     ctx.lineTo(886,76);
+     ctx.lineTo(880,77);
+     ctx.lineTo(878,80);
+     ctx.lineTo(864,81);
+     ctx.lineTo(852,87);
+     ctx.lineTo(856,93);
+     ctx.lineTo(835,93);
+     ctx.lineTo(837,100);
+     ctx.lineTo(844,104);
+     ctx.lineTo(845,113);
+     ctx.lineTo(838,104);
+     ctx.lineTo(827,100);
+     ctx.lineTo(822,104);
+     ctx.lineTo(826,106);
+     ctx.lineTo(828,108);
+     ctx.lineTo(820,108);
+     ctx.lineTo(817,104);
+     ctx.lineTo(816,101);
+     ctx.lineTo(812,107);
+     ctx.lineTo(814,112);
+     ctx.lineTo(813,116);
+     ctx.lineTo(813,118);
+     ctx.lineTo(820,118);
+     ctx.lineTo(825,120);
+     ctx.lineTo(827,128);
+     ctx.lineTo(823,128);
+     ctx.lineTo(821,121);
+     ctx.lineTo(812,121);
+     ctx.lineTo(815,127);
+     ctx.lineTo(806,135);
+     ctx.lineTo(803,132);
+     ctx.lineTo(809,122);
+     ctx.lineTo(808,109);
+     ctx.lineTo(806,105);
+     ctx.lineTo(809,100);
+     ctx.lineTo(805,97);
+     ctx.lineTo(797,98);
+     ctx.lineTo(796,103);
+     ctx.lineTo(791,109);
+     ctx.lineTo(790,116);
+     ctx.lineTo(796,120);
+     ctx.lineTo(795,125);
+     ctx.lineTo(778,116);
+     ctx.lineTo(770,116);
+     ctx.lineTo(763,115);
+     ctx.lineTo(767,120);
+     ctx.lineTo(746,125);
+     ctx.lineTo(746,121);
+     ctx.lineTo(726,128);
+     ctx.lineTo(724,132);
+     ctx.lineTo(721,132);
+     ctx.lineTo(719,129);
+     ctx.lineTo(721,125);
+     ctx.lineTo(715,122);
+     ctx.lineTo(714,129);
+     ctx.lineTo(715,137);
+     ctx.lineTo(708,132);
+     ctx.lineTo(700,138);
+     ctx.lineTo(704,143);
+     ctx.lineTo(684,141);
+     ctx.lineTo(676,130);
+     ctx.lineTo(697,135);
+     ctx.lineTo(705,129);
+     ctx.lineTo(684,118);
+     ctx.lineTo(667,116);
+     ctx.lineTo(671,113);
+     ctx.lineTo(670,111);
+     ctx.lineTo(630,117);
+     ctx.lineTo(615,132);
+     ctx.lineTo(608,145);
+     ctx.lineTo(585,156);
+     ctx.lineTo(589,174);
+     ctx.lineTo(597,174);
+     ctx.lineTo(603,168);
+     ctx.lineTo(607,168);
+     ctx.lineTo(612,186);
+     ctx.lineTo(624,181);
+     ctx.lineTo(624,171);
+     ctx.lineTo(632,167);
+     ctx.lineTo(624,161);
+     ctx.lineTo(629,150);
+     ctx.lineTo(639,147);
+     ctx.lineTo(639,140);
+     ctx.lineTo(647,137);
+     ctx.lineTo(653,142);
+     ctx.lineTo(639,151);
+     ctx.lineTo(639,161);
+     ctx.lineTo(647,165);
+     ctx.lineTo(662,163);
+     ctx.lineTo(669,165);
+     ctx.lineTo(662,169);
+     ctx.lineTo(647,169);
+     ctx.lineTo(646,173);
+     ctx.lineTo(650,174);
+     ctx.lineTo(652,178);
+     ctx.lineTo(646,179);
+     ctx.lineTo(642,176);
+     ctx.lineTo(638,179);
+     ctx.lineTo(639,188);
+     ctx.lineTo(630,192);
+     ctx.lineTo(630,187);
+     ctx.lineTo(615,194);
+     ctx.lineTo(614,190);
+     ctx.lineTo(608,194);
+     ctx.lineTo(602,190);
+     ctx.lineTo(602,186);
+     ctx.lineTo(605,182);
+     ctx.lineTo(602,178);
+     ctx.lineTo(597,183);
+     ctx.lineTo(599,194);
+     ctx.lineTo(586,196);
+     ctx.lineTo(583,203);
+     ctx.lineTo(576,205);
+     ctx.lineTo(575,209);
+     ctx.lineTo(565,211);
+     ctx.lineTo(565,215);
+     ctx.lineTo(556,215);
+     ctx.lineTo(555,217);
+     ctx.lineTo(566,224);
+     ctx.lineTo(565,236);
+     ctx.lineTo(540,238);
+     ctx.lineTo(542,246);
+     ctx.lineTo(540,253);
+     ctx.lineTo(541,259);
+     ctx.lineTo(548,258);
+     ctx.lineTo(551,260);
+     ctx.lineTo(553,258);
+     ctx.lineTo(567,258);
+     ctx.lineTo(570,254);
+     ctx.lineTo(567,250);
+     ctx.lineTo(572,243);
+     ctx.lineTo(580,241);
+     ctx.lineTo(582,234);
+     ctx.lineTo(589,236);
+     ctx.lineTo(598,231);
+     ctx.lineTo(604,233);
+     ctx.lineTo(604,237);
+     ctx.lineTo(621,247);
+     ctx.lineTo(621,254);
+     ctx.lineTo(626,248);
+     ctx.lineTo(630,249);
+     ctx.lineTo(610,231);
+     ctx.lineTo(610,227);
+     ctx.lineTo(615,226);
+     ctx.lineTo(615,230);
+     ctx.lineTo(619,230);
+     ctx.lineTo(619,233);
+     ctx.lineTo(633,240);
+     ctx.lineTo(633,246);
+     ctx.lineTo(643,261);
+     ctx.lineTo(645,250);
+     ctx.lineTo(643,248);
+     ctx.lineTo(654,244);
+     ctx.lineTo(658,247);
+     ctx.lineTo(663,244);
+     ctx.lineTo(661,238);
+     ctx.lineTo(672,223);
+     ctx.lineTo(682,231);
+     ctx.lineTo(689,230);
+     ctx.lineTo(682,225);
+     ctx.lineTo(698,220);
+     ctx.lineTo(693,229);
+     ctx.lineTo(707,239);
+     ctx.lineTo(725,237);
+     ctx.lineTo(726,234);
+     ctx.lineTo(724,228);
+     ctx.lineTo(737,220);
+     ctx.lineTo(745,223);
+     ctx.lineTo(743,228);
+     ctx.lineTo(737,233);
+     ctx.lineTo(744,242);
+     ctx.lineTo(746,240);
+     ctx.lineTo(749,246);
+     ctx.lineTo(743,246);
+     ctx.lineTo(747,254);
+     ctx.lineTo(747,260);
+     ctx.lineTo(739,262);
+     ctx.lineTo(730,255);
+     ctx.lineTo(734,247);
+     ctx.lineTo(725,237);
+     ctx.lineTo(707,239);
+     ctx.lineTo(707,243);
+     ctx.lineTo(704,246);
+     ctx.lineTo(695,246);
+     ctx.lineTo(684,241);
+     ctx.lineTo(677,241);
+     ctx.lineTo(673,244);
+     ctx.lineTo(666,244);
+     ctx.lineTo(666,247);
+     ctx.lineTo(657,250);
+     ctx.lineTo(659,260);
+     ctx.lineTo(670,262);
+     ctx.lineTo(670,259);
+     ctx.lineTo(678,262);
+     ctx.lineTo(688,260);
+     ctx.lineTo(688,270);
+     ctx.lineTo(680,278);
+     ctx.lineTo(667,278);
+     ctx.lineTo(664,280);
+     ctx.lineTo(645,276);
+     ctx.lineTo(642,273);
+     ctx.lineTo(637,278);
+     ctx.lineTo(635,285);
+     ctx.lineTo(620,280);
+     ctx.lineTo(619,275);
+     ctx.lineTo(604,272);
+     ctx.lineTo(602,268);
+     ctx.lineTo(605,265);
+     ctx.lineTo(602,259);
+     ctx.lineTo(574,261);
+     ctx.lineTo(564,268);
+     ctx.lineTo(555,266);
+     ctx.lineTo(551,262);
+     ctx.lineTo(549,269);
+     ctx.lineTo(540,275);
+     ctx.lineTo(536,280);
+     ctx.lineTo(538,284);
+     ctx.lineTo(527,290);
+     ctx.lineTo(520,300);
+
+     ctx.moveTo(1030,500);
+     ctx.lineTo(1035,506);
+     ctx.lineTo(1042,508);
+     ctx.lineTo(1045,503);
+     ctx.lineTo(1048,509);
+     ctx.lineTo(1056,504);
+     ctx.lineTo(1062,504);
+     ctx.lineTo(1062,495);
+     ctx.lineTo(1067,486);
+     ctx.lineTo(1070,484);
+     ctx.lineTo(1074,474);
+     ctx.lineTo(1072,461);
+     ctx.lineTo(1060,452);
+     ctx.lineTo(1057,444);
+     ctx.lineTo(1050,441);
+     ctx.lineTo(1046,425);
+     ctx.lineTo(1041,425);
+     ctx.lineTo(1037,413);
+     ctx.lineTo(1037,418);
+     ctx.lineTo(1035,419);
+     ctx.lineTo(1035,430);
+     ctx.lineTo(1030,436);
+     ctx.lineTo(1014,428);
+     ctx.lineTo(1021,418);
+     ctx.lineTo(1011,418);
+     ctx.lineTo(1005,415);
+     ctx.lineTo(1005,419);
+     ctx.lineTo(998,419);
+     ctx.lineTo(995,423);
+     ctx.lineTo(995,428);
+     ctx.lineTo(990,428);
+     ctx.lineTo(987,425);
+     ctx.lineTo(980,427);
+     ctx.lineTo(976,437);
+     ctx.lineTo(972,435);
+     ctx.lineTo(966,443);
+     ctx.lineTo(950,447);
+     ctx.lineTo(944,452);
+     ctx.lineTo(942,458);
+     ctx.lineTo(945,464);
+     ctx.lineTo(942,464);
+     ctx.lineTo(947,472);
+     ctx.lineTo(950,487);
+     ctx.lineTo(947,489);
+     ctx.lineTo(950,493);
+     ctx.lineTo(958,493);
+     ctx.lineTo(964,490);
+     ctx.lineTo(974,490);
+     ctx.lineTo(984,484);
+     ctx.lineTo(990,484);
+     ctx.lineTo(1000,481);
+     ctx.lineTo(1010,484);
+     ctx.lineTo(1015,494);
+     ctx.lineTo(1020,487);
+     ctx.lineTo(1023,486);
+     ctx.lineTo(1019,495);
+     ctx.lineTo(1027,496);
+     ctx.lineTo(1030,500);
+
+     //ctx.stroke();    
+     ctx.fill();
+    }
+
+    ctx.restore();
+},[],2400,1200,0,0);
 
 export let GREY_BACKPACK = new TextureData(10, 210, 0.22, "pickup", {
     width: 400,
@@ -9056,37 +11141,44 @@ export let ROCKS_1 = new TextureData(0, 0, 0.2, "prop", {
     ctx.strokeStyle = "#3C3C3C";
     ctx.fillStyle = "#F3F3F3";
 
-    ctx.translate(8, 8);
-    ctx.moveTo(15, 80);
-    ctx.lineTo(30, 70);
-    ctx.lineTo(35, 65);
-    ctx.lineTo(20, 40);
-    ctx.lineTo(10, 40);
-    ctx.lineTo(0, 60);
-    ctx.lineTo(15, 80);
+    function leaf(x, y, r) {
 
-    ctx.moveTo(50, 60);
-    ctx.lineTo(70, 60);
-    ctx.lineTo(100, 50);
-    ctx.lineTo(110, 30);
-    ctx.lineTo(80, 20);
-    ctx.lineTo(50, 30);
-    ctx.lineTo(40, 45);
-    ctx.lineTo(50, 60);
-    ctx.fill();
-    ctx.stroke();
+        ctx.fillStyle = "#ABABAB";
+        ctx.scale(0.4, 0.4);
+        ctx.translate(x, y);
 
-    ctx.beginPath();
-    ctx.translate(40, 50);
-    ctx.moveTo(15, 80);
-    ctx.lineTo(30, 70);
-    ctx.lineTo(35, 65);
-    ctx.lineTo(20, 40);
-    ctx.lineTo(10, 40);
-    ctx.lineTo(0, 60);
-    ctx.lineTo(15, 80);
-    ctx.fill();
-    ctx.stroke();
+        ctx.translate(140, -25);
+        ctx.rotate(r*Math.PI/180);
+        ctx.translate(-140, 25);
+
+        ctx.lineWidth = 30;
+
+        ctx.beginPath();
+        ctx.moveTo(70, 90);
+        ctx.lineTo(90, -60);
+        ctx.lineTo(130, -100);
+        ctx.lineTo(200, -120);
+        ctx.lineTo(220, -50);
+        ctx.lineTo(200, 10);
+        ctx.lineTo(65, 90);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.lineWidth = 10;
+        ctx.moveTo(200, -120);
+        ctx.lineTo(140, -25);
+        ctx.stroke();
+
+        ctx.translate(140, -25);
+        ctx.rotate(-(r*Math.PI/180));
+        ctx.translate(-140, 25);
+
+        ctx.translate(-x, -y);
+        ctx.scale(2.5, 2.5);
+   }
+
+    //leaf(40,270);
+    leaf(30,110,80);
 
     ctx.restore();
 });
@@ -9252,134 +11344,132 @@ export let CHAIR = new TextureData(0, 0, 0.2, "prop", {
     ctx.restore();
 }, [], 0, 0, 10, 410);
 
-export let BENCH = new TextureData(10, -110, 0.2, "prop", {
-    width: 1540,
-    height: 1020
+export let BENCH = new TextureData(0, 0, 0.2, "prop", {
+    width: 1370,
+    height: 1070
 }, [
-    [-10, 110, 1540, 1020, 0],
-    [0, 176, 1520, 736]
+    [0,0,1370,900]
 ], 0, undefined, function(ctx) {
     // 2, -10
     ctx.save();
     ctx.translate(this.offset.vx, this.offset.vy);
     ctx.scale(this.size, this.size);
-    ctx.scale(0.8, 0.8);
     ctx.beginPath();
-    ctx.lineWidth = 18;
+    ctx.lineWidth = 15;
 
     ctx.strokeStyle = "black";
-    ctx.fillStyle = "#F1F1F1";
 
-    ctx.fillRect(0, 650, 1900, 500);
-    ctx.fillStyle = "#CCCCCC";
-    ctx.fillRect(0, 1080, 1900, 60);
-    ctx.strokeRect(0, 650, 1900, 500);
+    // legs
+    ctx.fillStyle = "#858585";
+    ctx.beginPath();
+    ctx.moveTo(50, 500);
+    ctx.lineTo(0, 650);
+    ctx.lineTo(50, 650);
+    ctx.lineTo(150, 500);
+    ctx.fill();
+    ctx.stroke();
 
-    ctx.fillStyle = "#E5E5E5";
-    ctx.fillRect(100, 560, 1700, 100);
-    ctx.fillStyle = "#CCCCCC";
-    ctx.fillRect(100, 560, 1700, 40);
-    ctx.strokeRect(100, 560, 1700, 100);
+    ctx.beginPath();
+    ctx.moveTo(1200, 500);
+    ctx.lineTo(1300, 650);
+    ctx.lineTo(1350, 650);
+    ctx.lineTo(1300, 500);
+    ctx.fill();
+    ctx.stroke();
 
-    ctx.fillStyle = "#E5E5E5";
-    ctx.fillRect(100, 390, 1700, 100);
-    ctx.fillStyle = "#CCCCCC";
-    ctx.fillRect(100, 390, 1700, 40);
-    ctx.strokeRect(100, 390, 1700, 100);
+    // seat 
 
-    ctx.fillStyle = "#E5E5E5";
-    ctx.fillRect(100, 220, 1700, 100);
-    ctx.fillStyle = "#CCCCCC";
-    ctx.fillRect(100, 220, 1700, 40);
-    ctx.strokeRect(100, 220, 1700, 100);
-    /*
-        ctx.fillStyle = "#E5E5E5";
-        ctx.moveTo(100,280);
-        ctx.lineTo(200,280);
-        ctx.lineTo(280,200);
-        ctx.lineTo(1620,200);
-        ctx.lineTo(1700,280);
-        ctx.lineTo(1800,280);
-        ctx.lineTo(1800,450);
-        ctx.lineTo(100,450);
-        ctx.lineTo(100,200);
-        ctx.fill();
+    ctx.fillStyle = "#858585";
+    ctx.beginPath();
+    ctx.moveTo(0, 50);
+    ctx.lineTo(50, 0);
+    ctx.lineTo(1300, 0);
+    ctx.lineTo(1350, 50);
+    ctx.lineTo(1350, 450);
+    ctx.lineTo(0, 450);
+    ctx.lineTo(0, 50);
+    ctx.fill();
 
-        ctx.beginPath();
-        ctx.fillStyle = "#A2A2A2";
-        ctx.moveTo(100,280);
-        ctx.lineTo(200,280);
-        ctx.lineTo(280,200);
-        ctx.lineTo(1620,200);
-        ctx.lineTo(1700,280);
-        ctx.lineTo(1800,280);
-        ctx.lineTo(1800,320);
-        ctx.lineTo(1700,320);
-        ctx.lineTo(1620,240);
-        ctx.lineTo(280,240);
-        ctx.lineTo(200,320);
-        ctx.lineTo(100,320);
-        ctx.lineTo(100,280);
-        ctx.fill();
+    ctx.fillStyle = "#A2A2A2";
+    ctx.beginPath();
+    ctx.moveTo(0, 50);
+    ctx.lineTo(50, 0);
+    ctx.lineTo(1300, 0);
+    ctx.lineTo(1350, 50);
+    ctx.lineTo(1350, 450);
+    ctx.lineTo(1300, 400);
+    ctx.lineTo(50, 400);
+    ctx.lineTo(0, 450);
+    ctx.lineTo(0, 50);
+    ctx.fill();
 
-        ctx.fillStyle = "#CCCCCC";
-        ctx.fillRect(280, 200, 1340, 40);
-        ctx.fillRect(100, 280, 100, 40);
-        ctx.fillRect(1700, 280, 100, 40);
+    ctx.fillStyle = "#B8B8B8";
+    ctx.fillRect(50, 0, 1250, 400);
 
-        ctx.beginPath();
-        ctx.strokeStyle = "#999999";
-        ctx.lineWidth = 10;
-        ctx.moveTo(100,360);
-        ctx.lineTo(1800,360);
-        ctx.moveTo(100,860);
-        ctx.lineTo(1800,860);
-        ctx.stroke();
-        ctx.strokeStyle = "black";
-        ctx.lineWidth = 15; 
+    ctx.beginPath();
+    ctx.moveTo(0, 50);
+    ctx.lineTo(50, 0);
+    ctx.lineTo(1300, 0);
+    ctx.lineTo(1350, 50);
+    ctx.lineTo(1350, 450);
+    ctx.lineTo(0, 450);
+    ctx.lineTo(0, 50);
+    ctx.stroke();
 
-        ctx.beginPath();
-        ctx.moveTo(100,280);
-        ctx.lineTo(200,280);
-        ctx.lineTo(280,200);
-        ctx.lineTo(1620,200);
-        ctx.lineTo(1700,280);
-        ctx.lineTo(1800,280);
-        ctx.lineTo(1800,450);
-        ctx.lineTo(100,450);
-        ctx.lineTo(100,200);
-        ctx.stroke();
-    */
+    ctx.fillStyle = "#858585";
+    ctx.fillRect(0, 450, 1350, 50);
+    ctx.strokeRect(0, 450, 1350, 50);
 
-    ctx.fillStyle = "#E5E5E5";
-    ctx.fillRect(1800, 150, 100, 600);
-    ctx.fillRect(0, 150, 100, 600);
-    ctx.fillStyle = "#CCCCCC";
-    ctx.fillRect(1800, 150, 100, 70);
-    ctx.fillRect(0, 150, 100, 70);
+    // back
+    ctx.fillStyle = "#858585";
+    ctx.fillRect(120, -100, 50, 150);
+    ctx.fillRect(1180, -100, 50, 150);
+    ctx.strokeRect(120, -100, 50, 150);
+    ctx.strokeRect(1180, -100, 50, 150);
 
-    ctx.strokeRect(1800, 150, 100, 600);
-    ctx.strokeRect(0, 150, 100, 600);
+    ctx.fillStyle = "#B8B8B8";
+    ctx.beginPath();
+    ctx.moveTo(0, -350);
+    ctx.lineTo(50, -400);
+    ctx.lineTo(1300, -400);
+    ctx.lineTo(1350, -350);
+    ctx.lineTo(1350, -100);
+    ctx.lineTo(0, -100);
+    ctx.lineTo(0, -350);
+    ctx.fill();
 
-    ctx.fillStyle = "#F1F1F1";
-    ctx.fillRect(0, 550, 100, 400);
-    ctx.fillRect(1800, 550, 100, 400);
-    ctx.fillStyle = "#CCCCCC";
-    ctx.fillRect(0, 800, 100, 140);
-    ctx.fillRect(1800, 800, 100, 140);
-    ctx.strokeRect(0, 550, 100, 400);
-    ctx.strokeRect(1800, 550, 100, 400);
+    ctx.fillStyle = "#858585";
+    ctx.beginPath();
+    ctx.moveTo(0, -350);
+    ctx.lineTo(50, -400);
+    ctx.lineTo(1300, -400);
+    ctx.lineTo(1350, -350);
+    ctx.lineTo(1350, -290);
+    ctx.lineTo(1300, -340);
+    ctx.lineTo(50, -340);
+    ctx.lineTo(0, -290);
+    ctx.lineTo(0, -350);
+    ctx.fill();
 
-    ctx.fillRect(0, 1150, 100, 250);
-    ctx.fillRect(1800, 1150, 100, 250);
-    ctx.strokeRect(0, 1150, 100, 250);
-    ctx.strokeRect(1800, 1150, 100, 250);
+    ctx.fillStyle = "#A2A2A2";
+    ctx.fillRect(50, -400, 1250, 60);
+
+    ctx.beginPath();
+    ctx.moveTo(0, -350);
+    ctx.lineTo(50, -400);
+    ctx.lineTo(1300, -400);
+    ctx.lineTo(1350, -350);
+    ctx.lineTo(1350, -100);
+    ctx.lineTo(0, -100);
+    ctx.lineTo(0, -350);
+    ctx.stroke();
 
     ctx.strokeStyle = "red";
-    ctx.strokeRect(0, 220, 1900, 920);
+   // ctx.strokeRect(-10,-410,1360,900);
 
     ctx.restore();
-}, [], 0, 0, 0, 0);
+}, [], 0, 0, 10, 410);
+
 // 1300, 550
 
 export let ROAD_RAIL = new TextureData(-290, -90, 0.2, "prop", {

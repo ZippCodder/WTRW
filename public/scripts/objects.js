@@ -1232,16 +1232,16 @@ class _Seat_ extends _StaticClusterClient_ {
 
 export class Bench extends _Seat_ {
 
-    static _defaultVertices = [-15.4, 10.2, 1, 0, 0, 15.4, 10.2, 1, 0.6015625, 0, -15.4, -10.2, 1, 0, 0.796875, 15.4, 10.2, 1, 0.6015625, 0, -15.4, -10.2, 1, 0, 0.796875, 15.4, -10.2, 1, 0.6015625, 0.796875];
+    static _defaultVertices = [-13.7,10.7,1,0,0,13.7,10.7,1,0.53515625,0,-13.7,-10.7,1,0,0.8359375,13.7,10.7,1,0.53515625,0,-13.7,-10.7,1,0,0.8359375,13.7,-10.7,1,0.53515625,0.8359375];
 
-    width = 30.8;
-    height = 20.4;
+    width = 27.4;
+    height = 21.4;
     name = "bench";
     clusterName = "bench";
     texture = textures.objects.bench;
     obstacle = true;
     segments = [
-        [-15.2, -5.840000000000003, 30.4, 14.720000000000002]
+       [-13.7,-7.3,27.4,18]
     ];
 
     constructor(initialX, initialY, initialRotation) {
@@ -1375,6 +1375,23 @@ export class Laptop extends _StaticClusterClient_ {
     subLayer = 1;
     moveable = true;
     name = "laptop";
+
+    constructor(initialX, initialY, initialRotation) {
+        super(initialX, initialY, initialRotation || random(360));
+    }
+}
+
+export class SteakAndFries extends _StaticClusterClient_ {
+
+    static _defaultVertices = [-5.2,5.2,1,0,0,5.2,5.2,1,0.8125,0,-5.2,-5.2,1,0,0.8125,5.2,5.2,1,0.8125,0,-5.2,-5.2,1,0,0.8125,5.2,-5.2,1,0.8125,0.8125];
+
+    width = 10.4;
+    clusterName = "steak and fries";
+    texture = textures.objects.steakandfries;
+    height = 10.4;
+    subLayer = 1;
+    moveable = true;
+    name = "stak and fries";
 
     constructor(initialX, initialY, initialRotation) {
         super(initialX, initialY, initialRotation || random(360));
@@ -1677,16 +1694,16 @@ export class Table extends _StaticClusterClient_ {
 
 export class SmallTable extends _StaticClusterClient_ {
 
-    static _defaultVertices = [-8.2, 11.2, 1, 0, 0, 8.2, 11.2, 1, 0.640625, 0, -8.2, -11.2, 1, 0, 0.875, 8.2, 11.2, 1, 0.640625, 0, -8.2, -11.2, 1, 0, 0.875, 8.2, -11.2, 1, 0.640625, 0.875];
+    static _defaultVertices = [-8.2,8.7,1,0,0,8.2,8.7,1,0.640625,0,-8.2,-8.7,1,0,0.6796875,8.2,8.7,1,0.640625,0,-8.2,-8.7,1,0,0.6796875,8.2,-8.7,1,0.640625,0.6796875];
 
     width = 16.4;
-    height = 22.4;
+    height = 17.4;
     name = "small table";
     clusterName = "small table";
     texture = textures.objects.smalltable;
     obstacle = true;
     segments = [
-        [-8.2, -3, 16.4, 14.2]
+        [-8.2,-5.7,16.4,14.4]
     ];
 
     constructor(initialX, initialY, initialRotation) {
@@ -2220,6 +2237,16 @@ export class _Medicine_ extends _Pickup_ {
     used = false;
 }
 
+export class _Ammo_ extends _Pickup_ {
+
+    constructor(initialX, initialY, initialRotation) {
+        super(initialX, initialY, initialRotation);
+    }
+
+    type = "ammo";
+    used = false;
+}
+
 export class Syringe extends _Medicine_ {
 
     static _properties = {
@@ -2233,6 +2260,128 @@ export class Syringe extends _Medicine_ {
     clusterName = "syringe";
     texture = textures.objects.syringe;
     name = "syringe";
+
+    constructor(initialX, initialY, initialRotation) {
+        super(initialX, initialY, initialRotation);
+    }
+}
+
+export class MedKit extends _Medicine_ {
+
+    static _properties = {
+        regain: 75
+    };
+
+    static _defaultVertices = [-5.7,3.8,1,0,0,5.7,3.8,1,0.890625,0,-5.7,-3.8,1,0,0.59375,5.7,3.8,1,0.890625,0,-5.7,-3.8,1,0,0.59375,5.7,-3.8,1,0.890625,0.59375];
+
+    width = 11.4;
+    height = 7.6;
+    clusterName = "med kit";
+    texture = textures.objects.medkit;
+    name = "med kit";
+
+    constructor(initialX, initialY, initialRotation) {
+        super(initialX, initialY, initialRotation);
+    }
+}
+
+export class BasicArmour extends _Pickup_ {
+    
+    static _properties = {
+     strength: 50
+    };
+
+    static _defaultVertices = [-3.7,5.1,1,0,0,3.7,5.1,1,0.578125,0,-3.7,-5.1,1,0,0.796875,3.7,5.1,1,0.578125,0,-3.7,-5.1,1,0,0.796875,3.7,-5.1,1,0.578125,0.796875];
+
+    width = 7.4;
+    height = 10.2;
+    clusterName = "basic armour";
+    texture = textures.objects.basicarmour;
+    name = "basic armour";
+    type = "armour";
+    
+    constructor(initialX, initialY, initialRotation) {
+        super(initialX, initialY, initialRotation); 
+        this.integrity = 50;
+    }
+}
+
+export class MercenaryArmour extends _Pickup_ {
+    
+    static _properties = {
+     strength: 150
+    };
+
+    static _defaultVertices = [-3.7,5.1,1,0,0,3.7,5.1,1,0.578125,0,-3.7,-5.1,1,0,0.796875,3.7,5.1,1,0.578125,0,-3.7,-5.1,1,0,0.796875,3.7,-5.1,1,0.578125,0.796875];
+
+    width = 7.4;
+    height = 10.2;
+    clusterName = "mercenary armour";
+    texture = textures.objects.mercenaryarmour;
+    name = "mercenary armour";
+    type = "armour";
+    
+    constructor(initialX, initialY, initialRotation) {
+        super(initialX, initialY, initialRotation); 
+        this.integrity = 150;
+    }
+}
+
+export class SwatArmour extends _Pickup_ {
+    
+    static _properties = {
+     strength: 100
+    };
+
+    static _defaultVertices = [-3.7,5.1,1,0,0,3.7,5.1,1,0.578125,0,-3.7,-5.1,1,0,0.796875,3.7,5.1,1,0.578125,0,-3.7,-5.1,1,0,0.796875,3.7,-5.1,1,0.578125,0.796875];
+
+    width = 7.4;
+    height = 10.2;
+    clusterName = "swat armour";
+    texture = textures.objects.swatarmour;
+    name = "swat armour";
+    type = "armour";
+    
+    constructor(initialX, initialY, initialRotation) {
+        super(initialX, initialY, initialRotation); 
+        this.integrity = 100;
+    }
+}
+
+export class AmmoBox extends _Ammo_ {
+
+    static _properties = {
+     increase: 5
+    };
+
+    static _defaultVertices = [-3.2,4.3,1,0,0,3.2,4.3,1,0.5,0,-3.2,-4.3,1,0,0.671875,3.2,4.3,1,0.5,0,-3.2,-4.3,1,0,0.671875,3.2,-4.3,1,0.5,0.671875];
+
+    width = 6.4;
+    height = 8.6;
+    clusterName = "ammo box";
+    type = "ammo";
+    texture = textures.objects.ammobox;
+    name = "ammo box";
+
+    constructor(initialX, initialY, initialRotation) {
+        super(initialX, initialY, initialRotation);
+    }
+}
+
+export class MultiAmmoBox extends _Ammo_ {
+
+    static _properties = {
+     increase: 3
+    };
+
+    static _defaultVertices = [-6.2,4.3,1,0,0,6.2,4.3,1,0.96875,0,-6.2,-4.3,1,0,0.671875,6.2,4.3,1,0.96875,0,-6.2,-4.3,1,0,0.671875,6.2,-4.3,1,0.96875,0.671875];
+
+    width = 12.4;
+    height = 8.6;
+    clusterName = "multi ammo box";
+    type = "ammo";
+    texture = textures.objects.multiammobox;
+    name = "multi ammo box";
 
     constructor(initialX, initialY, initialRotation) {
         super(initialX, initialY, initialRotation);
@@ -2329,7 +2478,7 @@ export class GP_K100 extends _Gun_ {
         damage: 13,
         accuracy: 2,
         nozzelLength: 21,
-        capacity: 60,
+        capacity: 12,
         reloadTime: 2,
         useTextures: [6, 7]
     }
@@ -2371,11 +2520,22 @@ export class NXR_44_MAG extends _Gun_ {
 
     constructor(initialX, initialY, initialRotation, bullets) {
         super(initialX, initialY, initialRotation);
-        this.bullets = bullets ?? 36;
+        this.bullets = bullets ?? 24;
     }
 }
 
 export class KC_357 extends _Gun_ {
+    
+    static _properties = {
+        fireRate: 2.5,
+        bulletSpeed: 5,
+        damage: 12,
+        accuracy: 5,
+        nozzelLength: 15,
+        capacity: 6,
+        reloadTime: 3,
+        useTextures: [textures.skins.avatardrawkc357.id, textures.skins.avatardrawkc357pullback.id]
+    }
 
     static _defaultVertices = [-4.26, 2.8, 1, 0, 0, 4.26, 2.8, 1, 0.665625, 0, -4.26, -2.8, 1, 0, 0.875, 4.26, 2.8, 1, 0.665625, 0, -4.26, -2.8, 1, 0, 0.875, 4.26, -2.8, 1, 0.665625, 0.875];
 
@@ -2385,12 +2545,24 @@ export class KC_357 extends _Gun_ {
     texture = textures.objects.kc357;
     name = "kc 357";
 
-    constructor(initialX, initialY, initialRotation) {
+    constructor(initialX, initialY, initialRotation, bullets) {
         super(initialX, initialY, initialRotation);
+        this.bullets = bullets ?? 48;
     }
 }
 
 export class USP_45 extends _Gun_ {
+    
+    static _properties = {
+        fireRate: 2,
+        bulletSpeed: 7,
+        damage: 52,
+        accuracy: 5,
+        nozzelLength: 21,
+        capacity: 8,
+        reloadTime: 4,
+        useTextures: [textures.skins.avatardrawusp45.id, textures.skins.avatardrawusp45pullback.id]
+    }
 
     static _defaultVertices = [-8.15, 3.9300000000000006, 1, 0, 0, 8.15, 3.9300000000000006, 1, 0.63671875, 0, -8.15, -3.9300000000000006, 1, 0, 0.6140625000000001, 8.15, 3.9300000000000006, 1, 0.63671875, 0, -8.15, -3.9300000000000006, 1, 0, 0.6140625000000001, 8.15, -3.9300000000000006, 1, 0.63671875, 0.6140625000000001];
 
@@ -2400,8 +2572,9 @@ export class USP_45 extends _Gun_ {
     texture = textures.objects.usp45;
     name = "usp 45";
 
-    constructor(initialX, initialY, initialRotation) {
+    constructor(initialX, initialY, initialRotation, bullets) {
         super(initialX, initialY, initialRotation);
+        this.bullets = bullets ?? 52;
     }
 }
 
@@ -2607,6 +2780,7 @@ export class Avatar {
             fire: false,
             equippedItems: {
                 mainTool: undefined,
+                armour: undefined,
                 accessory1: undefined,
                 accessory2: undefined
             },
@@ -2786,13 +2960,19 @@ export class Avatar {
             if (this.state.armour > 0) {
                 if (damage > this.state.armour) this.state.vitals.health = Math.max(0, this.state.vitals.health - Math.abs(this.state.armour - damage));
                 this.state.armour = Math.max(0, this.state.armour - damage);
+                if (this.state.equippedItems.armour) {
+                  this.state.equippedItems.armour.integrity = Math.max(0, this.state.equippedItems.armour.integrity - damage);
+                  updateArmourDisplay();
+                }
+
+                if (this.state.armour === 0) hideArmourDisplay();
             } else {
                 this.state.vitals.health = Math.max(0, this.state.vitals.health - damage);
             }
 
             updateHealthBar();
 
-            if (this.state.vitals.health <= 0) {
+            if (this.state.vitals.health <= 0 && this.state.armour === 0) {
                 let attacker = $CURRENT_MAP.avatars[owner.id];
                 if (attacker) attacker.state.kills += 1;
 
@@ -2871,25 +3051,43 @@ export class Avatar {
 
         if (item) {
             switch (item.type) {
+                case "armour": {
+                 if (this.state.equippedItems.armour !== item) {
+                   this.state.equippedItems.armour = item;
+                   this.state.armour = item.integrity;
+                   updateArmourDisplay();
+                   showArmourDisplay();
+                 }
+                };
+                break;
+                case "ammo": {
+                    if (!item.used) {
+                     if (item.name === "ammo box" && this.state.equippedItems.mainTool?.type === "gun") {
+                       this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo += this.state.equippedItems.mainTool.constructor._properties.capacity * item.constructor._properties.increase;
+
+                       item.used = true;
+                       this.dropItem(slot);
+                       updateAmmoDisplay();
+                      } else if (item.name === "multi ammo box") {
+                        for (let w in this.inventory.weapons) {
+                          this.inventory.weapons[w].ammo += this.state.equippedItems.mainTool.constructor._properties.capacity * item.constructor._properties.increase;
+                        } 
+                        item.used = true;
+                        this.dropItem(slot);
+                        updateAmmoDisplay();
+                      }
+                     }
+                }
+                break;
                 case "medicine": {
                     this.state.armed = false;
-
-                    switch (item.name) {
-                        case "syringe": {
-                            if (!item.used && this.state.vitals.health < 100) {
-                                this.state.vitals.health += Math.min(25, 100 - this.state.vitals.health);
-                                item.used = true;
-                                updateDescription();
-                                this.dropItem(slot);
-                                updateHealthBar();
-                            }
-                        };
-                        break;
-                        case "medkit": {
-                            console.log("medkit");
-                        };
-                        break;
-                    }
+                    if (!item.used && this.state.vitals.health < 100) {
+                       this.state.vitals.health += Math.min(item.constructor._properties.regain, 100 - this.state.vitals.health);
+                       item.used = true;
+                       updateDescription();
+                       this.dropItem(slot);
+                       updateHealthBar();
+                     }
                 }
                 break;
                 case "gun": {
@@ -2964,12 +3162,18 @@ export class Avatar {
     }
 
     unequipItem(slot) {
-        if (!this.inventory.items[slot] || (this.inventory.items[slot] !== this.state.equippedItems.mainTool && this.inventory.items[slot] !== this.state.equippedItems.accessory1)) return false;
+        if (!this.inventory.items[slot] || (this.inventory.items[slot] !== this.state.equippedItems.mainTool && this.inventory.items[slot] !== this.state.equippedItems.accessory1 && this.inventory.items[slot] !== this.state.equippedItems.accessory2 && this.inventory.items[slot] !== this.state.equippedItems.armour)) return false;
 
         let item = this.inventory.items[slot],
             accessoryChanged = false;
 
         switch (item.type) {
+            case "armour": {
+               this.state.equippedItems.armour = undefined;
+               this.state.armour = 0;
+               hideArmourDisplay();
+            };
+            break;
             case "gun": {
                 if (this.state.equippedItems.mainTool && item.slot === this.state.equippedItems.mainTool.slot) {
                     this.state.armed = false;

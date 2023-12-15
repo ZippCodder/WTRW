@@ -77,7 +77,14 @@
       BlackBackpack,
       Whiteboard,
       Pinboard,
-      SmallTable
+      SmallTable,
+      MedKit,
+      AmmoBox,
+      MultiAmmoBox, 
+      BasicArmour,
+      MercenaryArmour, 
+      SwatArmour,
+      SteakAndFries
   } from "/public/scripts/objects.js";
 
   import _dialogues from "/public/scripts/dialogue.js";
@@ -100,6 +107,7 @@
 
   function runAction(e) {
       e.preventDefault();
+      if (!$CURRENT_MAP.currentInteractable) return;
 
       const i = $CURRENT_MAP.interactables[$CURRENT_MAP.currentInteractable.id];
       if (i) i.action();
@@ -430,8 +438,10 @@
 
         attribute vec3 coords;
         attribute float color;
+        attribute vec2 tcoords;
 
         varying float colorCode;
+        varying vec2 textrCoord;
 
         uniform float worldUnitX;
         uniform float worldUnitY;
@@ -448,6 +458,7 @@
          y = (coords.y + translation.y)*worldUnitY;
 
          gl_Position = vec4(x,y,1,scale);
+         textrCoord = vec2(tcoords[0],tcoords[1]);
          colorCode = color;
         }
   `;
@@ -458,6 +469,7 @@
         precision highp float;
 
         varying float colorCode;
+        varying vec2 textrCoord;
 
         uniform vec4 color1; 
         uniform vec4 color2;
@@ -465,10 +477,13 @@
         uniform vec4 color4;
         uniform vec4 color5;
         uniform vec4 color6;
+        uniform float useTexture;
+        uniform sampler2D texture;
         
         void main() {
-          vec4 color;
-       
+         vec4 color = texture2D(texture,textrCoord);
+        
+        if (useTexture == 0.0) {
           if (colorCode == 1.0) {
            color = color1;
           } else if (colorCode == 2.0) {
@@ -482,6 +497,7 @@
           } else if (colorCode == 6.0) {
            color = color6;
           }
+        } 
      
          gl_FragColor = color;
         }
@@ -495,6 +511,9 @@
       } else {
           mdgl.viewport(0, 0, interactiveMap.width, interactiveMap.height);
       }
+
+      mdgl.enable(mdgl.BLEND);
+      mdgl.blendFunc(mdgl.ONE, mdgl.ONE_MINUS_SRC_ALPHA);
 
       const mdVShader = mdgl.createShader(mdgl.VERTEX_SHADER);
       mdgl.shaderSource(mdVShader, vShaderSrc);
@@ -527,9 +546,13 @@
           color5: mdgl.getUniformLocation(mdProgram, "color5"),
           color6: mdgl.getUniformLocation(mdProgram, "color6"),
           coords: mdgl.getAttribLocation(mdProgram, "coords"),
-          color: mdgl.getAttribLocation(mdProgram, "color")
+          tcoords: mdgl.getAttribLocation(mdProgram, "tcoords"),
+          color: mdgl.getAttribLocation(mdProgram, "color"),
+          useTexture: mdgl.getUniformLocation(mdProgram, "useTexture"),
+          texture: mdgl.getUniformLocation(mdProgram, "texture")
       }
 
+      mdgl.uniform1i(mdLocations.texture, 0);
       mdgl.uniform1f(mdLocations.scale, 1);
       mdgl.uniform2fv(mdLocations.translation, [0, 0]);
       mdgl.uniform4fv(mdLocations.color1, [0.39, 0.39, 0.39, 1]);
@@ -540,12 +563,23 @@
       mdgl.uniform4fv(mdLocations.color6, fromRGB([204, 44, 219, 1]));
       mdgl.uniform1f(mdLocations.worldUnitX, (worldUnitX / 4) + (worldUnitY / 4));
       mdgl.uniform1f(mdLocations.worldUnitY, (worldUnitX / 4) + (worldUnitY / 4));
+      mdgl.uniform1f(mdLocations.useTexture, 0);
+
+                let t = mdgl.createTexture();
+
+                mdgl.bindTexture(mdgl.TEXTURE_2D, t);
+                mdgl.texImage2D(mdgl.TEXTURE_2D, 0, mdgl.RGBA, mdgl.RGBA, mdgl.UNSIGNED_BYTE, document.querySelector("#world-map"));
+                mdgl.texParameteri(mdgl.TEXTURE_2D, mdgl.TEXTURE_MAG_FILTER, mdgl.LINEAR);
+                mdgl.texParameteri(mdgl.TEXTURE_2D, mdgl.TEXTURE_MIN_FILTER, mdgl.LINEAR);
+                mdgl.texParameteri(mdgl.TEXTURE_2D, mdgl.TEXTURE_WRAP_S, mdgl.CLAMP_TO_EDGE);
+                mdgl.texParameteri(mdgl.TEXTURE_2D, mdgl.TEXTURE_WRAP_T, mdgl.CLAMP_TO_EDGE);
 
       return {
           buffer: mdgl.createBuffer(),
           vao: mdglExt.createVertexArrayOES(),
           ext: mdglExt,
-          locations: mdLocations
+          locations: mdLocations,
+          texture: t
       };
   }
 
@@ -555,17 +589,35 @@
 
       ctx.uniform1f(props.locations.scale, ($MAP_DISPLAY.useInteractiveDisplay) ? $MAP_DISPLAY.interactiveScale : $MAP_DISPLAY.scale);
       ctx.uniform2fv(props.locations.translation, [-$CURRENT_MAP.centerX - $MAP_DISPLAY.displayOffset.x, -$CURRENT_MAP.centerY + $MAP_DISPLAY.displayOffset.y]);
+      ctx.uniform1f(props.locations.useTexture, ($MAP_DISPLAY.useWorldMap) ? 1:0);
+
+      ctx.activeTexture(ctx.TEXTURE0);
+      ctx.bindTexture(ctx.TEXTURE_2D, props.texture);
+
+      let bufferData = [...$MAP_DISPLAY.objectsVertices, ...$MAP_DISPLAY.avatarsVertices];
+
+      if ($MAP_DISPLAY.useWorldMap) bufferData = $MAP_DISPLAY.mapVertices;
 
       ctx.bindBuffer(ctx.ARRAY_BUFFER, props.buffer);
-      ctx.bufferData(ctx.ARRAY_BUFFER, new Float32Array([...$MAP_DISPLAY.objectsVertices, ...$MAP_DISPLAY.avatarsVertices]), ctx.DYNAMIC_DRAW);
-      ctx.vertexAttribPointer(props.locations.coords, 3, ctx.FLOAT, false, 16, 0);
-      ctx.vertexAttribPointer(props.locations.color, 1, ctx.FLOAT, false, 16, 12);
+      ctx.bufferData(ctx.ARRAY_BUFFER, new Float32Array(bufferData), ctx.DYNAMIC_DRAW);
+
+      ctx.vertexAttribPointer(props.locations.coords, 3, ctx.FLOAT, false, 24, 0);
+      ctx.vertexAttribPointer(props.locations.color, 1, ctx.FLOAT, false, 24, 12);
+      ctx.vertexAttribPointer(props.locations.tcoords, 2, ctx.FLOAT, false, 24, 16);
       ctx.enableVertexAttribArray(0);
       ctx.enableVertexAttribArray(1);
+      ctx.enableVertexAttribArray(2);
 
-      ctx.drawArrays(ctx.TRIANGLES, 0, ($MAP_DISPLAY.objectsVertices.length + $MAP_DISPLAY.avatarsVertices.length) / 4);
+      let count = $MAP_DISPLAY.mapVertices.length / 6;
 
-      if ($MAP_DISPLAY.waypoint.set && $CURRENT_MAP.id === $MAP_DISPLAY.waypoint.map) {
+      if (!$MAP_DISPLAY.useWorldMap) {
+       ctx.disableVertexAttribArray(2);
+       count = [...$MAP_DISPLAY.objectsVertices, ...$MAP_DISPLAY.avatarsVertices].length / 6;
+      }
+
+      ctx.drawArrays(ctx.TRIANGLES, 0, count);
+
+      if ($MAP_DISPLAY.waypoint.set && $CURRENT_MAP.id === $MAP_DISPLAY.waypoint.map && !$MAP_DISPLAY.useWorldMap) {
           if (distance($CURRENT_MAP.centerX, $CURRENT_MAP.centerY, $MAP_DISPLAY.waypoint.x, $MAP_DISPLAY.waypoint.y) < 30) {
               toggleWaypoint();
               return;
@@ -607,6 +659,7 @@
       scale: 2,
       interactiveScale: 7,
       useInteractiveDisplay: false,
+      useWorldMap: true,
       displayOffset: {
           x: 0,
           y: 0
@@ -614,6 +667,7 @@
       objectsVertices: [],
       avatarsVertices: [],
       waypointVertices: [],
+      mapVertices: [-600,300,1,0,0,0,600,300,1,0,1,0,-600,-300,1,0,0,1,600,300,1,0,1,0,-600,-300,1,0,0,1,600,-300,1,0,1,1],
       waypoint: {
           x: 0,
           y: 0,
@@ -636,7 +690,7 @@
 
           this.objectsVertices = this.objectsVertices.concat(cut([
               [((-obj.width / 2) + offsetX) + $CURRENT_MAP.centerX, ((-obj.height / 2) + offsetY) + $CURRENT_MAP.centerY, obj.width, obj.height]
-          ], false, [1, color], true));
+          ], false, [1, color, 0, 0], true));
       },
       update: function(renderAvatars) {
           if (renderAvatars) {
@@ -658,13 +712,13 @@
               if (renderAvatars) {
                   this.avatarsVertices = this.avatarsVertices.concat(cut([
                       [((-obj.width / 2) + offsetX) + $CURRENT_MAP.centerX, ((-obj.height / 2) + offsetY) + $CURRENT_MAP.centerY, obj.width, obj.height]
-                  ], false, [1, (obj.state.hostile) ? 3 : 2], true));
+                  ], false, [1, (obj.state.hostile) ? 3 : 2, 0, 0], true));
                   continue;
               }
 
               this.objectsVertices = this.objectsVertices.concat(cut([
                   [((-obj.width / 2) + offsetX) + $CURRENT_MAP.centerX, ((-obj.height / 2) + offsetY) + $CURRENT_MAP.centerY, obj.width, obj.height]
-              ], false, [1, color], true));
+              ], false, [1, color, 0, 0], true));
           }
 
           if (this.waypoint.set) this.updateWaypoint($CURRENT_MAP.centerX, $CURRENT_MAP.centerY, this.waypoint.x, this.waypoint.y);
@@ -675,6 +729,14 @@
               return;
           }
           renderDisplayContext(mdContext1, mdContextProperties1);
+      },
+      toggleWorldMap: function() {
+       if (!this.useWorldMap) {
+        this.useWorldMap = true;
+        return;
+       }
+  
+       this.useWorldMap = false; 
       }
   }
 
@@ -761,13 +823,29 @@
       ammoDisplay.querySelector("p").innerText = `${Math.min(gun.constructor._properties.capacity - gun.reloadProgress, $AVATAR.inventory.weapons[gun.name].ammo)}/${$AVATAR.inventory.weapons[gun.name].ammo}`;
   }
 
+  /* ARMOUR DISPLAY FUNCTIONALITY */
+
+  let armourDisplay = document.querySelector("#armour-display");
+
+  window.showArmourDisplay = function() {
+      armourDisplay.style.display = "flex";
+  }
+
+  window.hideArmourDisplay = function() {
+      armourDisplay.style.display = "none";
+  }
+
+  window.updateArmourDisplay = function() {
+    armourDisplay.querySelector("p").innerText = `${$AVATAR.state.armour}`;
+  }
+
 
   /* HEALTH BAR DISPLAY */
 
   $HEALTH_BAR = document.querySelector("#healthbar");
 
   window.updateHealthBar = function() {
-      $HEALTH_BAR.style.width = `${aisofb($AVATAR.state.vitals.health,100)}%`;
+      $HEALTH_BAR.style.width = `${Math.round(aisofb($AVATAR.state.vitals.health,100))}%`;
   }
 
   /* JOYSTICK AND BUTTON CONTROLS LOGIC */
@@ -1161,14 +1239,22 @@
   const itemDescriptions = {
       default: "<strong>Pro tip:</strong> Click an item to select it and see a full description of its properties and usage.</br></br>Oh wait, what items? You're a noob lol.",
       "glock 20": "<h3><u>GLOCK 20</u></h3>A simple, compact and lightweight handgun built for self defense and petty crime. Careful, there's no saftey!",
+      "usp 45": "<h3><u>USP 45</u></h3>Powerful high powered scilenced pistol. The most elegible option for a slick assassin.",
       "nxr 44 mag": "<h3><u>NXR_44_MAG</u></h3>High powered, large revolver. Go play sheriff with this I guess. This town ain't big enough for...nevermind.",
       "gp k100": "<h3><u>GP K100</u></h3>This quick and reliable handgun features good capacity, and a basic scilencer and is perfect for a good ol' gun-fight.",
+      "kc 357": "<h3><u>KC 357</u></h3> Need a reliable side arm? Try this lightweight revolver with good durability and a long lasting build. Sensetive trigger so, watch it bro. Don't really have anything funny to say here.",
       "kitchen knife": "<h3><u>Kitchen Knife</u></h3>Your run-of-the-mill, single edged cooking knife. Go use this to slice some veggies...or somthing else.",
       "assassins knife": "<h3><u>Assassin's Knife</u></h3>One of the sharpest of blades with a fine edge built for the hand of a professional. This top-of-the-line knife can make quick work of any enemy with minimal armour.",
       "syringe": "<h3><u>Syringe</u></h3>Basic medicine for rapid health regain and quick injection.",
+      "med kit": "<h3><u>Med Kit</u></h3>A fully equipped medical store, good for thorough treatment of injuries and heavy health regain. A couple of these on hand will keep your medicinal needs covered. And I know what you're thinking..the answer is no. You can't drink rubbing alcohol.",
       "grey backpack": "<h3><u>Grey Backpack</u></h3>A light backpack. Essential for collecting useful items to ensure survival.",
       "white backpack": "<h3><u>White Backpack</u></h3>Intermediate backpack with high capacity. A preference for many tacticians.",
-      "black backpack": "<h3><u>Black Backpack</u></h3>This heavy-duty, military-grade backpack is the clear choice for professionals of all expertises. Never again will you have to decide between what to keep, and what to drop."
+      "black backpack": "<h3><u>Black Backpack</u></h3>This heavy-duty, military-grade backpack is the clear choice for professionals of all expertises. Never again will you have to decide between what to keep, and what to drop.",
+      "ammo box": "<h3><u>Ammo Box</u></h3>Best for a quick bullet refill in the middle of intense battel. Use this to increase the bullet count for the currently equipped weapon by a given factor.",
+      "multi ammo box": "<h3><u>Multi Ammo Box</u></h3>An army grade ammunition store, with a variety of calibers for all types of arms. Use this to increase the bullet count for all weapons in your inventory by a given factor.",
+      "basic armour": "<h3><u>Basic Armour</u></h3>Lightweight armour built for protection from close calls and bullet scathes. I mean, I wouldn't go looking for trouble or anything with this on though. Then again, pfft, do whatever you want lol.",
+      "mercenary armour": "<h3><u>Mercenary Armour</u></h3>Top quality armour made to withstand large blows. Used by soldiers, mercenaries, S.W.A.T and now you. You're in the big leagues now son.",
+      "swat armour": "<h3><u>S.W.A.T Armour</u></h3>Ok, I now I know I used S.W.A.T. in the description for the mercenary armour but, hear me out...I ran out of soldier names. Look just, point is, this is some decent armour. not the best, but decent. Shut up and wear it.",
   }
 
   let equippedIndex = Infinity,
@@ -1210,7 +1296,25 @@
       let d = itemDescriptions[itemName];
 
       if (item && d) {
-          if (item.type === "medicine") {
+         if (item.type === "armour") {
+              let {
+                integrity
+              } = item.constructor._properties;
+
+              d = d + `</br></br><strong>Strength _____ ${item.constructor._properties.strength}</strong>`;
+
+              d = d.concat((item === $AVATAR.state.equippedItems.armour) ? "<br><br><i>Equipped</i>" : "<br><br><i>Not Equipped</i>");
+
+              d = d.concat(`</br><i>Integrity ${aisofb(item.integrity,item.constructor._properties.strength)}%</i>`);
+         } else if (item.type === "ammo") {
+              let {
+                increase
+              } = item.constructor._properties;
+
+              d = d + `</br></br><strong>Increase _____ capacity x${increase}</strong>`;
+
+              d = d.concat((item.used) ? "<br><br><i>Empty</i>" : "<br><br><i>Full</i>");
+         } else if (item.type === "medicine") {
               let {
                   regain
               } = item.constructor._properties;
@@ -1337,6 +1441,7 @@
 
       if (slot < 5) {
           quickAccessItems.item(slot).classList.remove("controls-container__item--equipped");
+          quickAccessItems.item(slot).style.backgroundImage = `none`;
       }
 
       selectedIndex = undefined;

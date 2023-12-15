@@ -1,14 +1,14 @@
 // Texture managment
 
-class TextureContainer {
+export default class TextureContainer {
     constructor(settings = {mipmap: false, repeat: false}) {
         this.count = 0;
         this.index = [];
         this.settings = settings;
     }
 
-    addTexture(name, src, settings = {mipmap: undefined, repeat: undefined}) {
-        let container = this;
+    addTexture(name, src, settings = {mipmap: undefined, repeat: undefined, context: undefined}) {
+        let container = this, gl = settings.context || window.gl;
 
         return new Promise((res, rej) => {
             let img = new Image();
@@ -39,7 +39,7 @@ class TextureContainer {
                 container[name].id = container.count++;
                 container.index.push(container[name]);
 
-                res();
+                res(container[name]);
             };
         });
     }
@@ -101,6 +101,11 @@ await textures.skins.addTexture("grey_backpack_acc", "/public/images/textures/GR
 await textures.skins.addTexture("black_backpack_acc", "/public/images/textures/BLACK_BACKPACK_ACC.png");
 await textures.skins.addTexture("white_backpack_acc", "/public/images/textures/WHITE_BACKPACK_ACC.png");
 await textures.skins.addTexture("police_hat_acc", "/public/images/textures/POLICE_HAT_ACC.png");
+await textures.skins.addTexture("armour_acc", "/public/images/textures/ARMOUR_ACC.png");
+await textures.skins.addTexture("avatardrawusp45", "/public/images/textures/MAIN_AVATAR_DRAW_USP45_1.png");
+await textures.skins.addTexture("avatardrawusp45pullback", "/public/images/textures/MAIN_AVATAR_DRAW_USP45_2.png");
+await textures.skins.addTexture("avatardrawkc357", "/public/images/textures/MAIN_AVATAR_DRAW_KC357_1.png");
+await textures.skins.addTexture("avatardrawkc357pullback", "/public/images/textures/MAIN_AVATAR_DRAW_KC357_2.png");
 
 textures.objects = new TextureContainer();
 
@@ -113,12 +118,19 @@ await textures.objects.addTexture("kitchenknife", "/public/images/textures/KITCH
 await textures.objects.addTexture("assassinsknife", "/public/images/textures/ASSASSINS_KNIFE.png");
 await textures.objects.addTexture("combatknife", "/public/images/textures/COMBAT_KNIFE.png");
 await textures.objects.addTexture("laptop", "/public/images/textures/LAPTOP.png");
+await textures.objects.addTexture("steakandfries", "/public/images/textures/STEAK_AND_FRIES.png");
 await textures.objects.addTexture("greybackpack", "/public/images/textures/GREY_BACKPACK.png");
 await textures.objects.addTexture("whitebackpack", "/public/images/textures/WHITE_BACKPACK.png");
 await textures.objects.addTexture("blackbackpack", "/public/images/textures/BLACK_BACKPACK.png");
 await textures.objects.addTexture("book1", "/public/images/textures/BOOK_1.png");
 await textures.objects.addTexture("book2", "/public/images/textures/BOOK_2.png");
 await textures.objects.addTexture("syringe", "/public/images/textures/SYRINGE.png");
+await textures.objects.addTexture("medkit", "/public/images/textures/MED_KIT.png");
+await textures.objects.addTexture("basicarmour", "/public/images/textures/BASIC_ARMOUR.png");
+await textures.objects.addTexture("mercenaryarmour", "/public/images/textures/MERCENARY_ARMOUR.png");
+await textures.objects.addTexture("swatarmour", "/public/images/textures/SWAT_ARMOUR.png");
+await textures.objects.addTexture("ammobox", "/public/images/textures/AMMO_BOX.png");
+await textures.objects.addTexture("multiammobox", "/public/images/textures/MULTI_AMMO_BOX.png");
 await textures.objects.addTexture("house1", "/public/images/textures/HOUSE_1.png");
 await textures.objects.addTexture("house2", "/public/images/textures/HOUSE_2.png");
 await textures.objects.addTexture("conveniencestore", "/public/images/textures/CONVENIENCE_STORE.png");

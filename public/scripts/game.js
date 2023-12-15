@@ -62,7 +62,10 @@
       Bench, 
       ConvenienceStore,
       Bush,
-      GunStore
+      GunStore,
+      BasicArmour,
+      MercenaryArmour, 
+      SwatArmour
   } from "/public/scripts/objects.js";
 
   $AVATAR = new Avatar("R O B I N H O O D");
@@ -78,13 +81,13 @@
   // Game setup and initialization
 
   $MAP = new _Map_(500, 500, true, "Downtown SmallVille").init();
-
+/*
   for (let i = 0; i < $MAP.units.total; i++) {
     let x = random($MAP.width,true), y = random($MAP.height, true);    
 
     $MAP.link(((Math.random() < 0.5) ? new Rocks1(x,y):new Rocks2(x,y)));
   }
-
+*/
   //$MAP.parseLayoutScript(Map1);
 
   $CURRENT_MAP = $MAP;
@@ -306,6 +309,8 @@
   $MAP.link(new GunStore(-50,-100));
   $MAP.link(new Bench(0,20));
   $MAP.link(new Bench(-60,20));
+
+  $MAP.link(new BasicArmour);
 
   $GAME_LOOP = function() {
       sitLoop.run();
