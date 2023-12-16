@@ -1129,7 +1129,7 @@ html,body {
             height: 100%;
          }
 
-          .styled__btn {
+          .styled-btn {
             font-family: inherit;
             font-size: 1.2em;
             background: var(--light-red);
@@ -1225,4 +1225,26 @@ html,body {
           .onscreen-button {
             background: rgba(0,0,0,0.5);
             position: absolute;
+          }
+
+          .map__buttons {
+            width: 100%; 
+            height: 3em; 
+            display: flex; 
+            justify-content: space-around;
+            align-items: center; 
+          }
+ 
+          .map__buttons button {
+            background: none;
+            border-color: white;
+            border-top: 1px solid white; 
+            border-left: 1px solid white; 
+            border-right: 1px solid white;
+            width: 40%;
+            margin: 0;
+          }
+ 
+          #goto {
+            opacity: 0.5;
           }

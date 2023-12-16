@@ -170,7 +170,19 @@
             SOLDIER_BOOTS, 
             HIKING_BOOTS,
             STEAK_AND_FRIES,
-            WORLD_MAP
+            WORLD_MAP,
+            DX_9,
+            MAIN_AVATAR_DRAW_DX9_1,
+            MAIN_AVATAR_DRAW_DX9_2,
+            FURS_55,
+            MAIN_AVATAR_DRAW_FURS55_1,
+            MAIN_AVATAR_DRAW_FURS55_2,
+            NOSS_7,
+            MAIN_AVATAR_DRAW_NOSS7_1,
+            MAIN_AVATAR_DRAW_NOSS7_2,
+            X6_91,
+            MAIN_AVATAR_DRAW_X691_1,
+            MAIN_AVATAR_DRAW_X691_2
         } from "/public/scripts/models.js";
 
         // Import texture for editing and downloading...
@@ -217,9 +229,9 @@
         //SUPERMARKET(-98, -338, 0.2);
         //CAFE(-18, -18, 0.2);
         //MAIN_AVATAR_DEFAULT(-5, -5, 0.2);
-        resize(2400, 1200);
+        resize(256, 512);
         // export function draw(a, w, h, iw, ih, s, lw, attribs=[],canvas) {
-        let texture = WORLD_MAP;
+        let texture = X6_91;
          
 //new Sheet([ROAD_RAIL,ROAD_SIGN,URBAN_FENCE_HALF,URBAN_FENCE,URBAN_FENCE_VERTICAL], 1024, 1024);
 
@@ -248,6 +260,6 @@
        // log(texture.getData());
           log(texture.getData());
           console.log(texture.textureDimensions);
-          setSource(`WORLD_MAP.png`);
+          setSource(`MAIN_AVATAR_DRAW_X691_2.png`);
     </script>
 </html>

@@ -22,11 +22,15 @@ import {
 
 const pathfinder = new Worker("/public/scripts/pathfinder.js");
 
+pathfinder.registerMap = function(map) {
+ pathfinder.postMessage({requestType: 1, mapId: map.id, nodes: map.GRAPH.nodes});
+}
+
 pathfinder.requestPath = function(avatar, start, end) {
     this.postMessage({
         mapId: avatar.map.id,
         blocked: avatar.map.GRAPH.blocked,
-        nodes: avatar.map.GRAPH.nodes,
+        requestType: 0,
         avatarId: avatar.id,
         path: {
             start: start,
@@ -2470,6 +2474,87 @@ export class GLOCK_20 extends _Gun_ {
     }
 }
 
+export class DX_9 extends _Gun_ {
+
+    static _properties = {
+        fireRate: 3,
+        bulletSpeed: 5,
+        damage: 12,
+        accuracy: 5,
+        nozzelLength: 13,
+        capacity: 26,
+        reloadTime: 3,
+        useTextures: [textures.skins.avatardrawdx9.id, textures.skins.avatardrawdx9pullback.id]
+    }
+
+    static _defaultVertices = [-4.55,3.2,1,0,0,4.55,3.2,1,0.7109375,0,-4.55,-3.2,1,0,0.5,4.55,3.2,1,0.7109375,0,-4.55,-3.2,1,0,0.5,4.55,-3.2,1,0.7109375,0.5];
+
+    width = 9.1;
+    height = 6.4;
+    name = "dx 9";
+    clusterName = "dx 9";
+    texture = textures.objects.dx9;
+
+    constructor(initialX, initialY, initialRotation, bullets) {
+        super(initialX, initialY, initialRotation);
+        this.bullets = bullets ?? 65;
+    }
+}
+
+export class NOSS_7 extends _Gun_ {
+
+    static _properties = {
+        fireRate: 12,
+        bulletSpeed: 8,
+        damage: 28,
+        accuracy: 15,
+        nozzelLength: 13,
+        capacity: 46,
+        reloadTime: 3,
+        useTextures: [textures.skins.avatardrawnoss7.id, textures.skins.avatardrawnoss7pullback.id]
+    }
+
+    static _defaultVertices = [-7.2,3.3,1,0,0,7.2,3.3,1,0.5625,0,-7.2,-3.3,1,0,0.515625,7.2,3.3,1,0.5625,0,-7.2,-3.3,1,0,0.515625,7.2,-3.3,1,0.5625,0.515625];
+
+    width = 14.4;
+    height = 6.6;
+    name = "noss 7";
+    clusterName = "noss 7";
+    texture = textures.objects.noss7;
+
+    constructor(initialX, initialY, initialRotation, bullets) {
+        super(initialX, initialY, initialRotation);
+        this.bullets = bullets ?? 216;
+    }
+}
+
+export class FURS_55 extends _Gun_ {
+
+    static _properties = {
+        fireRate: 0.8,
+        bulletSpeed: 5,
+        damage: 16,
+        accuracy: 5,
+        nozzelLength: 13,
+        capacity: 26,
+        reloadTime: 3,
+        useTextures: [textures.skins.avatardrawfurs55.id, textures.skins.avatardrawfurs55pullback.id]
+    }
+
+    static _defaultVertices = [-6.3,3.7,1,0,0,6.3,3.7,1,0.984375,0,-6.3,-3.7,1,0,0.578125,6.3,3.7,1,0.984375,0,-6.3,-3.7,1,0,0.578125,6.3,-3.7,1,0.984375,0.578125];
+
+    width = 12.6;
+    height = 7.4;
+    name = "furs 55";
+    clusterName = "furs 55";
+    texture = textures.objects.furs55;
+
+    constructor(initialX, initialY, initialRotation, bullets) {
+        super(initialX, initialY, initialRotation);
+        this.bullets = bullets ?? 65;
+    }
+}
+
 export class GP_K100 extends _Gun_ {
 
     static _properties = {
@@ -2548,6 +2633,33 @@ export class KC_357 extends _Gun_ {
     constructor(initialX, initialY, initialRotation, bullets) {
         super(initialX, initialY, initialRotation);
         this.bullets = bullets ?? 48;
+    }
+}
+
+export class X6_91 extends _Gun_ {
+    
+    static _properties = {
+        fireRate: 2.2,
+        bulletSpeed: 4,
+        damage: 64,
+        accuracy: 1,
+        nozzelLength: 21,
+        capacity: 7,
+        reloadTime: 4,
+        useTextures: [textures.skins.avatardrawx691.id, textures.skins.avatardrawx691pullback.id]
+    }
+
+    static _defaultVertices = [-4.6,3.4,1,0,0,4.6,3.4,1,0.71875,0,-4.6,-3.4,1,0,0.53125,4.6,3.4,1,0.71875,0,-4.6,-3.4,1,0,0.53125,4.6,-3.4,1,0.71875,0.53125];
+
+    width = 9.2;
+    height = 6.8;
+    clusterName = "x6 91";
+    texture = textures.objects.x691;
+    name = "x6 91";
+
+    constructor(initialX, initialY, initialRotation, bullets) {
+        super(initialX, initialY, initialRotation);
+        this.bullets = bullets ?? 52;
     }
 }
 
@@ -4894,6 +5006,7 @@ export class _Map_ {
         this.groundPlate = new VisibleBarrier(0, 0, 500, 500, this.groundColor);
 
         _Map_._all[this.id] = this;
+        pathfinder.registerMap(this);
     }
 
     render() {

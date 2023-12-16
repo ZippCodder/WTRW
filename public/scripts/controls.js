@@ -84,7 +84,11 @@
       BasicArmour,
       MercenaryArmour, 
       SwatArmour,
-      SteakAndFries
+      SteakAndFries, 
+      DX_9,
+      FURS_55,
+      NOSS_7,
+      X6_91
   } from "/public/scripts/objects.js";
 
   import _dialogues from "/public/scripts/dialogue.js";
@@ -394,18 +398,31 @@
   function startDisplayMovement(e) {
       e.preventDefault();
       move = true;
+   
+      if (!$MAP_DISPLAY.useWorldMap) {
       offsetAnchor.x = ((e.touches) ? e.touches[0].clientX : e.clientX) + $MAP_DISPLAY.displayOffset.x;
       offsetAnchor.y = ((e.touches) ? e.touches[0].clientY : e.clientY) + $MAP_DISPLAY.displayOffset.y;
+      } else {
+      offsetAnchor.x = ((e.touches) ? e.touches[0].clientX : e.clientX) + $MAP_DISPLAY.worldMapOffset.x;
+      offsetAnchor.y = ((e.touches) ? e.touches[0].clientY : e.clientY) + $MAP_DISPLAY.worldMapOffset.y;
+      }
   }
 
   function moveDisplay(e) {
       e.preventDefault();
 
       if (move) {
+       if (!$MAP_DISPLAY.useWorldMap) {
           $MAP_DISPLAY.displayOffset.x = offsetAnchor.x - ((e.touches) ? e.touches[0].clientX : e.clientX);
           $MAP_DISPLAY.displayOffset.y = offsetAnchor.y - ((e.touches) ? e.touches[0].clientY : e.clientY);
 
           updateCoordinates($CURRENT_MAP.centerX + $MAP_DISPLAY.displayOffset.x, $CURRENT_MAP.centerY - $MAP_DISPLAY.displayOffset.y);
+       } else {
+          $MAP_DISPLAY.worldMapOffset.x = offsetAnchor.x - ((e.touches) ? e.touches[0].clientX : e.clientX);
+          $MAP_DISPLAY.worldMapOffset.y = offsetAnchor.y - ((e.touches) ? e.touches[0].clientY : e.clientY);
+
+          updateCoordinates($MAP_DISPLAY.worldMapOffset.x, $MAP_DISPLAY.worldMapOffset.y);
+       }
       }
   }
 
@@ -587,8 +604,8 @@
       ctx.clear(ctx.COLOR_BUFFER_BIT);
       props.ext.bindVertexArrayOES(props.vao);
 
-      ctx.uniform1f(props.locations.scale, ($MAP_DISPLAY.useInteractiveDisplay) ? $MAP_DISPLAY.interactiveScale : $MAP_DISPLAY.scale);
-      ctx.uniform2fv(props.locations.translation, [-$CURRENT_MAP.centerX - $MAP_DISPLAY.displayOffset.x, -$CURRENT_MAP.centerY + $MAP_DISPLAY.displayOffset.y]);
+      ctx.uniform1f(props.locations.scale, ($MAP_DISPLAY.useInteractiveDisplay) ? (!$MAP_DISPLAY.useWorldMap) ? $MAP_DISPLAY.interactiveScale:$MAP_DISPLAY.worldMapScale : $MAP_DISPLAY.scale);
+      ctx.uniform2fv(props.locations.translation, [($MAP_DISPLAY.useWorldMap) ? -$MAP_DISPLAY.worldMapOffset.x:(-$CURRENT_MAP.centerX - $MAP_DISPLAY.displayOffset.x), ($MAP_DISPLAY.useWorldMap) ? $MAP_DISPLAY.worldMapOffset.y:(-$CURRENT_MAP.centerY + $MAP_DISPLAY.displayOffset.y)]);
       ctx.uniform1f(props.locations.useTexture, ($MAP_DISPLAY.useWorldMap) ? 1:0);
 
       ctx.activeTexture(ctx.TEXTURE0);
@@ -658,10 +675,15 @@
   $MAP_DISPLAY = {
       scale: 2,
       interactiveScale: 7,
+      worldMapScale: 7,
       useInteractiveDisplay: false,
-      useWorldMap: true,
+      useWorldMap: false,
       displayOffset: {
           x: 0,
+          y: 0
+      },
+      worldMapOffset: {
+          x: 0, 
           y: 0
       },
       objectsVertices: [],
@@ -729,19 +751,13 @@
               return;
           }
           renderDisplayContext(mdContext1, mdContextProperties1);
-      },
-      toggleWorldMap: function() {
-       if (!this.useWorldMap) {
-        this.useWorldMap = true;
-        return;
-       }
-  
-       this.useWorldMap = false; 
       }
   }
 
   function toggleWaypoint(e) {
       if (e) e.preventDefault();
+      if ($MAP_DISPLAY.useWorldMap) return;
+
       if (!$MAP_DISPLAY.waypoint.set) {
           $MAP_DISPLAY.waypoint.x = $CURRENT_MAP.centerX + $MAP_DISPLAY.displayOffset.x;
           $MAP_DISPLAY.waypoint.y = $CURRENT_MAP.centerY - $MAP_DISPLAY.displayOffset.y;
@@ -771,12 +787,21 @@
   function mapZoomIn(e) {
       e.preventDefault();
 
+    if (!$MAP_DISPLAY.useWorldMap) {
       if ($MAP_DISPLAY.interactiveScale - 0.5 > 1) $MAP_DISPLAY.interactiveScale -= 0.5;
+    } else {
+      if ($MAP_DISPLAY.worldMapScale - 0.5 > 1) $MAP_DISPLAY.worldMapScale -= 0.5;
+    }
   }
 
   function mapZoomOut(e) {
       e.preventDefault();
+
+    if (!$MAP_DISPLAY.useWorldMap) {
       if ($MAP_DISPLAY.interactiveScale + 0.5 < 15) $MAP_DISPLAY.interactiveScale += 0.5;
+    } else {
+      if ($MAP_DISPLAY.worldMapScale + 0.5 < 15) $MAP_DISPLAY.worldMapScale += 0.5;
+    }
   }
 
   mapZoomInButton.ontouchstart = mapZoomIn;
@@ -1255,6 +1280,10 @@
       "basic armour": "<h3><u>Basic Armour</u></h3>Lightweight armour built for protection from close calls and bullet scathes. I mean, I wouldn't go looking for trouble or anything with this on though. Then again, pfft, do whatever you want lol.",
       "mercenary armour": "<h3><u>Mercenary Armour</u></h3>Top quality armour made to withstand large blows. Used by soldiers, mercenaries, S.W.A.T and now you. You're in the big leagues now son.",
       "swat armour": "<h3><u>S.W.A.T Armour</u></h3>Ok, I now I know I used S.W.A.T. in the description for the mercenary armour but, hear me out...I ran out of soldier names. Look just, point is, this is some decent armour. not the best, but decent. Shut up and wear it.",
+      "dx 9": "<h3><u>DX 9</u></h3> High end handgun built to be light and reliable, and features a light trigger which alows for no hesitation. High capacity, quick fire and decent damage. You can't beat it!",
+      "x6 91": "<h3><u>X6 91</u></h3> A powerful firearm made for battling multiple foes with heavy armour. Moderate capacity, sky-high damage. Try this one on for size.",
+      "noss 7": "<h3><u>NOSS 7</u></h3> This scilenced pistol puts most others to shame by taking speed to the next level. It features an extended magazine allowing for a split-second mag dump of epic proportions. Not very accurate though.",
+      "furs 55": "<h3><u>FURS 55</u></h3> Try on this oldschool revolver pulled right out of a Clint Eastwood film. Good capacity and acceptable damage. Take of that what you will."
   }
 
   let equippedIndex = Infinity,
@@ -1518,4 +1547,27 @@
 
       controlSwitchButton.style.opacity = 1;
       switchMode = false;
+  }
+
+
+  const switchMap = document.querySelector("#switch-map");
+  const goTo = document.querySelector("#goto");
+
+  switchMap.onclick = function() {
+       if (!$MAP_DISPLAY.useWorldMap) {
+        $MAP_DISPLAY.useWorldMap = true;
+        goTo.style.opacity = 1;
+        setWaypointButton.style.opacity = 0.5; 
+        switchMap.innerText = "Local Map"; 
+          
+        updateCoordinates($MAP_DISPLAY.worldMapOffset.x, $MAP_DISPLAY.worldMapOffset.y);
+        return;
+       }
+  
+       $MAP_DISPLAY.useWorldMap = false; 
+       goTo.style.opacity = 0.5;
+       setWaypointButton.style.opacity = 1; 
+       switchMap.innerText = "World Map";
+ 
+       updateCoordinates($MAP_DISPLAY.displayOffset.x, $MAP_DISPLAY.displayOffset.y);
   }

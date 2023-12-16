@@ -106,6 +106,14 @@ await textures.skins.addTexture("avatardrawusp45", "/public/images/textures/MAIN
 await textures.skins.addTexture("avatardrawusp45pullback", "/public/images/textures/MAIN_AVATAR_DRAW_USP45_2.png");
 await textures.skins.addTexture("avatardrawkc357", "/public/images/textures/MAIN_AVATAR_DRAW_KC357_1.png");
 await textures.skins.addTexture("avatardrawkc357pullback", "/public/images/textures/MAIN_AVATAR_DRAW_KC357_2.png");
+await textures.skins.addTexture("avatardrawdx9", "/public/images/textures/MAIN_AVATAR_DRAW_DX9_1.png");
+await textures.skins.addTexture("avatardrawdx9pullback", "/public/images/textures/MAIN_AVATAR_DRAW_DX9_2.png");
+await textures.skins.addTexture("avatardrawfurs55", "/public/images/textures/MAIN_AVATAR_DRAW_FURS55_1.png");
+await textures.skins.addTexture("avatardrawfurs55pullback", "/public/images/textures/MAIN_AVATAR_DRAW_FURS55_2.png");
+await textures.skins.addTexture("avatardrawnoss7", "/public/images/textures/MAIN_AVATAR_DRAW_NOSS7_1.png");
+await textures.skins.addTexture("avatardrawnoss7pullback", "/public/images/textures/MAIN_AVATAR_DRAW_NOSS7_2.png");
+await textures.skins.addTexture("avatardrawx691", "/public/images/textures/MAIN_AVATAR_DRAW_X691_1.png");
+await textures.skins.addTexture("avatardrawx691pullback", "/public/images/textures/MAIN_AVATAR_DRAW_X691_2.png");
 
 textures.objects = new TextureContainer();
 
@@ -113,6 +121,10 @@ await textures.objects.addTexture("nxr44mag", "/public/images/textures/NXR_44_MA
 await textures.objects.addTexture("gpk100", "/public/images/textures/GP_K100.png");
 await textures.objects.addTexture("usp45", "/public/images/textures/USP_45.png");
 await textures.objects.addTexture("glock20", "/public/images/textures/GLOCK_20.png");
+await textures.objects.addTexture("dx9", "/public/images/textures/DX_9.png");
+await textures.objects.addTexture("furs55", "/public/images/textures/FURS_55.png");
+await textures.objects.addTexture("noss7", "/public/images/textures/NOSS_7.png");
+await textures.objects.addTexture("x691", "/public/images/textures/X6_91.png");
 await textures.objects.addTexture("kc357", "/public/images/textures/KC_357.png");
 await textures.objects.addTexture("kitchenknife", "/public/images/textures/KITCHEN_KNIFE.png");
 await textures.objects.addTexture("assassinsknife", "/public/images/textures/ASSASSINS_KNIFE.png");

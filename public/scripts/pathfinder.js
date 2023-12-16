@@ -8,6 +8,8 @@
 
  function getPath(s, g) {
 
+     let $NODES = $GRAPHS[this.mapId];
+
      const start = s,
          goal = g,
          open = [s],
@@ -20,7 +22,7 @@
      while (open.length > 0) {
 
          current = open.reduce((a, v) => {
-             return ((this.nodes[v].f < a.f || (this.nodes[v].f === a.f && this.nodes[v].h < a.h)) ? this.nodes[v] : a)
+             return (($NODES[v].f < a.f || ($NODES[v].f === a.f && $NODES[v].h < a.h)) ? $NODES[v] : a)
          }, {
              f: Infinity,
              h: Infinity
@@ -33,7 +35,7 @@
              let n = current;
 
              while (n.id !== start) {
-                 n = this.nodes[n.parent];
+                 n = $NODES[n.parent];
                  if (n.id === start) break;
                  result.path.unshift(n.position);
              }
@@ -44,13 +46,13 @@
          }
 
          for (let i of current.edges) {
-             let edge = this.nodes[i];
+             let edge = $NODES[i];
 
              if (edge === undefined) continue;
 
              let calc = {
                  g: current.g + euclideanDistance(edge.position.x, edge.position.y, current.position.x, current.position.y),
-                 h: manhattanDistance(edge.position.x, edge.position.y, this.nodes[goal].position.x, this.nodes[goal].position.y)
+                 h: manhattanDistance(edge.position.x, edge.position.y, $NODES[goal].position.x, $NODES[goal].position.y)
              };
              calc.f = calc.g + calc.h;
 
@@ -73,12 +75,23 @@
      return result;
  }
 
+ let $GRAPHS = {};
+
  self.onmessage = function({
      data
  }) {
-     postMessage({
+   switch (data.requestType) {
+     case 0: {
+        postMessage({
          result: getPath.call(data, data.path.start, data.path.end),
          mapId: data.mapId,
          avatarId: data.avatarId
-     });
+        });
+     };
+     break;
+     case 1: {
+        $GRAPHS[data.mapId] = data.nodes;
+     };
+     break;
+   }
  }

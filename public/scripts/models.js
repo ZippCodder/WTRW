@@ -3028,6 +3028,250 @@ export let NXR_44_MAG = new TextureData(-2, -7, 0.22, "firearm", {
     ctx.restore();
 }, [], 0, 0, 90, 230);
 
+export let FURS_55 = new TextureData(-2, -20, 0.2, "firearm", {
+    width: 630,
+    height: 370
+}, [
+    [2, 20, 630, 370]
+], 0, undefined, function(ctx) {
+    // -2 -7
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.scale(this.size || 0, this.size || 0);
+    ctx.lineWidth = 15;
+
+    ctx.beginPath();
+    ctx.strokeStyle = "#1A1A1A";
+    ctx.fillStyle = "#E0E0E0";
+    ctx.scale(0.8, 0.8);
+    ctx.translate(50, 30);
+    ctx.moveTo(130, 140);
+    ctx.lineTo(130, 125);
+    ctx.lineTo(160, 124);
+    ctx.lineTo(190, 100);
+    ctx.lineTo(195, 70);
+    ctx.lineTo(195, 60);
+    ctx.lineTo(380, 60);
+    ctx.lineTo(374, 185);
+
+    // trigger house outside
+    ctx.lineTo(350, 220);
+    ctx.lineTo(320, 220);
+    ctx.lineTo(315, 240);
+    ctx.lineTo(300, 260);
+    ctx.lineTo(270, 280);
+    ctx.lineTo(210, 255);
+
+    // trigger house
+    ctx.moveTo(290, 210);
+    ctx.lineTo(270, 205);
+    ctx.lineTo(225, 210);
+    ctx.lineTo(222, 220);
+    ctx.lineTo(225, 242);
+    ctx.lineTo(272, 262);
+    ctx.lineTo(290, 245);
+    ctx.lineTo(300, 230);
+    ctx.lineTo(305, 213);
+    ctx.lineTo(290, 210);
+
+    // nozzel
+    ctx.moveTo(380, 60);
+    ctx.lineTo(700, 60);
+    ctx.lineTo(700, 125);
+    ctx.lineTo(394, 125);
+    ctx.lineTo(348, 224);
+
+    ctx.fill();
+
+    ctx.resetTransform();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.scale(this.size || 0, this.size || 0);
+
+    ctx.fillStyle = "#656565";
+
+    // handle
+    ctx.beginPath();
+    ctx.moveTo(150, 370);
+    ctx.lineTo(60, 370);
+    ctx.lineTo(30, 360);
+    ctx.lineTo(20, 350);
+    ctx.lineTo(40, 310);
+    ctx.lineTo(55, 260);
+    ctx.lineTo(65, 240);
+    ctx.lineTo(90, 210);
+    ctx.lineTo(110, 160);
+    ctx.lineTo(110, 140);
+    ctx.lineTo(150, 140);
+    ctx.lineTo(165, 175);
+    ctx.lineTo(200, 190);
+    ctx.lineTo(205, 215);
+    ctx.lineTo(210, 230);
+    ctx.lineTo(180, 225);
+    ctx.lineTo(170, 235);
+    ctx.lineTo(170, 250);
+    ctx.lineTo(180, 260);
+    ctx.lineTo(180, 265);
+    ctx.lineTo(160, 280);
+    ctx.lineTo(160, 300);
+    ctx.lineTo(165, 310);
+    ctx.lineTo(145, 330);
+    ctx.lineTo(150, 350);
+    ctx.lineTo(155, 360);
+    ctx.lineTo(155, 370);
+    ctx.lineTo(150, 370);
+    ctx.fill();
+
+    // OUTLINE______________________________________
+    // handle
+    ctx.beginPath();
+    ctx.moveTo(150, 370);
+    ctx.lineTo(60, 370);
+    ctx.lineTo(30, 360);
+    ctx.lineTo(20, 350);
+    ctx.lineTo(40, 310);
+    ctx.lineTo(55, 260);
+    ctx.lineTo(65, 240);
+    ctx.lineTo(90, 210);
+    ctx.lineTo(110, 160);
+    ctx.lineTo(110, 140);
+    ctx.lineTo(150, 140);
+    ctx.lineTo(165, 175);
+    ctx.lineTo(200, 190);
+    ctx.lineTo(205, 215);
+    ctx.lineTo(210, 230);
+    ctx.lineTo(180, 225);
+    ctx.lineTo(170, 235);
+    ctx.lineTo(170, 250);
+    ctx.lineTo(180, 260);
+    ctx.lineTo(180, 265);
+    ctx.lineTo(160, 280);
+    ctx.lineTo(160, 300);
+    ctx.lineTo(165, 310);
+    ctx.lineTo(145, 330);
+    ctx.lineTo(150, 350);
+    ctx.lineTo(155, 360);
+    ctx.lineTo(155, 370);
+    ctx.lineTo(150, 370);
+    ctx.stroke();
+
+    // main body
+    ctx.beginPath();
+    ctx.lineWidth = 20;
+    ctx.scale(0.8, 0.8);
+    ctx.translate(50, 30);
+    ctx.moveTo(130, 140);
+    ctx.lineTo(130, 125);
+    ctx.lineTo(160, 124);
+    ctx.lineTo(190, 100);
+    ctx.lineTo(195, 70);
+    ctx.lineTo(195, 60);
+    ctx.lineTo(380, 60);
+
+    // trigger house outside
+    ctx.moveTo(350, 220);
+    ctx.lineTo(320, 220);
+    ctx.lineTo(315, 240);
+    ctx.lineTo(300, 260);
+    ctx.lineTo(270, 280);
+    ctx.lineTo(210, 255);
+
+    // nozzel
+    ctx.moveTo(380, 60);
+    ctx.lineTo(700, 60);
+    ctx.lineTo(700, 125);
+    ctx.lineTo(392, 125);
+    ctx.lineTo(348, 224);
+
+    ctx.stroke();
+    ctx.resetTransform();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.scale(this.size || 0, this.size || 0);
+
+    // trigger house
+    ctx.beginPath();
+    ctx.lineWidth = 10;
+    ctx.moveTo(270, 190);
+    ctx.lineTo(250, 185);
+    ctx.lineTo(220, 190);
+    ctx.lineTo(215, 200);
+    ctx.lineTo(220, 220);
+    ctx.lineTo(255, 235);
+    ctx.lineTo(270, 225);
+    ctx.lineTo(282, 210);
+    ctx.lineTo(285, 193);
+    ctx.lineTo(270, 190);
+    ctx.stroke();
+
+    // trigger
+    ctx.beginPath();
+    ctx.moveTo(230, 190);
+    ctx.lineTo(240, 210);
+    ctx.lineTo(245, 215);
+    ctx.lineTo(255, 220);
+    ctx.lineTo(258, 218);
+    ctx.lineTo(250, 205);
+    ctx.lineTo(250, 187);
+
+    // rear thingy
+    ctx.moveTo(190, 100);
+    ctx.lineTo(180, 95);
+    ctx.lineTo(170, 80);
+    ctx.lineTo(165, 85);
+    ctx.lineTo(170, 100);
+    ctx.lineTo(177, 111);
+    ctx.fillStyle = "#E0E0E0";
+    ctx.fill();
+    ctx.stroke();
+
+    // cylinder
+    ctx.beginPath();
+    ctx.strokeRect(230, 90, 75, 70);
+    ctx.moveTo(305, 115);
+    ctx.lineTo(260, 115);
+    ctx.lineTo(250, 125);
+    ctx.lineTo(260, 135);
+    ctx.lineTo(305, 135);
+
+    ctx.moveTo(305, 150);
+    ctx.lineTo(260, 150);
+    ctx.lineTo(250, 160);
+
+    ctx.moveTo(305, 100);
+    ctx.lineTo(260, 100);
+    ctx.lineTo(250, 90);
+
+    ctx.moveTo(230, 100);
+    ctx.lineTo(215, 115);
+    ctx.lineTo(215, 135);
+    ctx.lineTo(230, 150);
+
+    // details
+
+    // middle line
+    ctx.moveTo(320, 200);
+    ctx.lineTo(350, 150);
+    ctx.lineTo(350, 75);
+
+    // top nozzel holes
+    ctx.fillRect(600, 75, 15, 45);
+    ctx.strokeRect(600, 75, 15, 45);
+    ctx.stroke();
+
+    // crosshair
+    ctx.beginPath();
+    ctx.lineWidth = 15;
+    ctx.moveTo(515, 68);
+    ctx.lineTo(515, 60);
+    ctx.lineTo(575, 40);
+    ctx.lineTo(595, 40);
+    ctx.lineTo(595, 68);
+    ctx.fill();
+
+    ctx.stroke();
+
+    ctx.restore();
+}, [], 0, 0, 170, 300);
+
 export let NXR_44_MAG_TOP = new TextureData(54, 182, 0.2, "firearm", {
     width: 900,
     height: 200
@@ -3118,6 +3362,96 @@ export let NXR_44_MAG_TOP_2 = new TextureData(54, 182, 0.2, "firearm", {
     ctx.restore();
 }, [], 0, 0, 270, 880);
 
+export let FURS_55_TOP = new TextureData(54, 182, 0.2, "firearm", {
+    width: 900,
+    height: 200
+}, [
+    [0, 0, 900, 200]
+], 0, undefined, function(ctx, r = 0) {
+    // body: 439x309, texture: 1024,512, size: 0.15
+    // -8 -20
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.rotate(r * Math.PI / 180);
+    ctx.scale(this.size || 0, this.size || 0);
+    ctx.lineWidth = 15;
+
+    ctx.fillStyle = "#E0E0E0";
+    ctx.strokeStyle = "#1A1A1A";
+    // handle
+
+    ctx.beginPath();
+    ctx.fillStyle = "#656565";
+    ctx.fillRect(32, 52, 47, 45);
+    ctx.strokeRect(32, 52, 47, 45);
+
+    ctx.fillStyle = "#E0E0E0";
+    ctx.fillRect(290, 52, 230, 45);
+    ctx.fillRect(90, 50, 200, 50);
+    ctx.fillRect(180, 100, 75, 25);
+    ctx.strokeRect(290, 52, 230, 45);
+    ctx.strokeRect(90, 50, 200, 50);
+    ctx.strokeRect(180, 100, 75, 25);
+
+    ctx.lineWidth = 10;
+    ctx.fillRect(100, 65, 30, 20);
+    ctx.fillRect(430, 71, 70, 5);
+    ctx.fillRect(90, 50, 50, 50);
+    ctx.fillRect(520, 60, 15, 30);
+
+    ctx.strokeRect(100, 65, 30, 20);
+    ctx.strokeRect(430, 72, 70, 5);
+    ctx.strokeRect(90, 50, 50, 50);
+    ctx.strokeRect(520, 60, 15, 30);
+
+    ctx.restore();
+}, [], 0, 0, 270, 880);
+
+export let FURS_55_TOP_2 = new TextureData(54, 182, 0.2, "firearm", {
+    width: 900,
+    height: 200
+}, [
+    [0, 0, 900, 200]
+], 0, undefined, function(ctx, r = 0) {
+    // body: 439x309, texture: 1024,512, size: 0.15
+    // -8 -20
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.rotate(r * Math.PI / 180);
+    ctx.scale(this.size || 0, this.size || 0);
+    ctx.lineWidth = 15;
+
+    ctx.fillStyle = "#E0E0E0";
+    ctx.strokeStyle = "#1A1A1A";
+    // handle
+
+    ctx.beginPath();
+    ctx.fillStyle = "#656565";
+    ctx.fillRect(32, 52, 47, 45);
+    ctx.strokeRect(32, 52, 47, 45);
+
+    ctx.fillStyle = "#E0E0E0";
+    ctx.fillRect(290, 52, 230, 45);
+    ctx.fillRect(90, 50, 200, 50);
+    ctx.fillRect(180, 100, 75, 10);
+    ctx.strokeRect(290, 52, 230, 45);
+    ctx.strokeRect(90, 50, 200, 50);
+    ctx.strokeRect(180, 100, 75, 10);
+
+    ctx.lineWidth = 10;
+    ctx.fillRect(100, 65, 30, 20);
+    ctx.fillRect(430, 71, 70, 5);
+    ctx.fillRect(90, 50, 50, 50);
+    ctx.fillRect(520, 60, 15, 30);
+
+    ctx.strokeRect(100, 65, 30, 20);
+    ctx.strokeRect(430, 72, 70, 5);
+    ctx.strokeRect(90, 50, 50, 50);
+    ctx.strokeRect(520, 60, 15, 30);
+
+    ctx.restore();
+}, [], 0, 0, 270, 880);
+
 export let MAIN_AVATAR_DRAW_NXR44MAG_1 = new TextureData(0, 0, 0.2, "avatar", {
     width: 702,
     height: 2140
@@ -3194,6 +3528,110 @@ export let MAIN_AVATAR_DRAW_KC357_2 = new TextureData(0, 0, 0.2, "avatar", {
 
     MAIN_AVATAR_DRAW_WEAPON.render(ctx);
     KC_357_TOP_1.render(ctx, -90);
+}, [0], 0, 0, -1, -1);
+
+export let MAIN_AVATAR_DRAW_DX9_1 = new TextureData(0, 0, 0.2, "avatar", {
+    width: 702,
+    height: 2140
+}, [
+    [0, 0, 702, 2140]
+], 0, undefined, function(ctx) {
+    // body: 702x740, texture: 1024,512, size: 0.15, boxes: [[152, 15, 408, 408],[561, 145, 136, 136],[15, 145, 136, 136]]
+    // -1, -1
+
+    MAIN_AVATAR_DRAW_WEAPON.render(ctx);
+    DX_9_TOP.render(ctx, -90);
+}, [0], 0, 0, -1, -1);
+
+export let MAIN_AVATAR_DRAW_DX9_2 = new TextureData(0, 0, 0.2, "avatar", {
+    width: 702,
+    height: 2140
+}, [
+    [0, 0, 702, 2140]
+], 0, undefined, function(ctx) {
+    // body: 702x740, texture: 1024,512, size: 0.15, boxes: [[152, 15, 408, 408],[561, 145, 136, 136],[15, 145, 136, 136]]
+    // -1, -1
+
+    MAIN_AVATAR_DRAW_WEAPON.render(ctx);
+    DX_9_TOP_2.render(ctx, -90);
+}, [0], 0, 0, -1, -1);
+
+export let MAIN_AVATAR_DRAW_FURS55_1 = new TextureData(0, 0, 0.2, "avatar", {
+    width: 702,
+    height: 2140
+}, [
+    [0, 0, 702, 2140]
+], 0, undefined, function(ctx) {
+    // body: 702x740, texture: 1024,512, size: 0.15, boxes: [[152, 15, 408, 408],[561, 145, 136, 136],[15, 145, 136, 136]]
+    // -1, -1
+
+    MAIN_AVATAR_DRAW_WEAPON.render(ctx);
+    FURS_55_TOP.render(ctx, -90);
+}, [0], 0, 0, -1, -1);
+
+export let MAIN_AVATAR_DRAW_FURS55_2 = new TextureData(0, 0, 0.2, "avatar", {
+    width: 702,
+    height: 2140
+}, [
+    [0, 0, 702, 2140]
+], 0, undefined, function(ctx) {
+    // body: 702x740, texture: 1024,512, size: 0.15, boxes: [[152, 15, 408, 408],[561, 145, 136, 136],[15, 145, 136, 136]]
+    // -1, -1
+
+    MAIN_AVATAR_DRAW_WEAPON.render(ctx);
+    FURS_55_TOP_2.render(ctx, -90);
+}, [0], 0, 0, -1, -1);
+
+export let MAIN_AVATAR_DRAW_NOSS7_1 = new TextureData(0, 0, 0.2, "avatar", {
+    width: 702,
+    height: 2140
+}, [
+    [0, 0, 702, 2140]
+], 0, undefined, function(ctx) {
+    // body: 702x740, texture: 1024,512, size: 0.15, boxes: [[152, 15, 408, 408],[561, 145, 136, 136],[15, 145, 136, 136]]
+    // -1, -1
+
+    MAIN_AVATAR_DRAW_WEAPON.render(ctx);
+    NOSS_7_TOP.render(ctx, -90);
+}, [0], 0, 0, -1, -1);
+
+export let MAIN_AVATAR_DRAW_NOSS7_2 = new TextureData(0, 0, 0.2, "avatar", {
+    width: 702,
+    height: 2140
+}, [
+    [0, 0, 702, 2140]
+], 0, undefined, function(ctx) {
+    // body: 702x740, texture: 1024,512, size: 0.15, boxes: [[152, 15, 408, 408],[561, 145, 136, 136],[15, 145, 136, 136]]
+    // -1, -1
+
+    MAIN_AVATAR_DRAW_WEAPON.render(ctx);
+    NOSS_7_TOP_2.render(ctx, -90);
+}, [0], 0, 0, -1, -1);
+
+export let MAIN_AVATAR_DRAW_X691_1 = new TextureData(0, 0, 0.2, "avatar", {
+    width: 702,
+    height: 2140
+}, [
+    [0, 0, 702, 2140]
+], 0, undefined, function(ctx) {
+    // body: 702x740, texture: 1024,512, size: 0.15, boxes: [[152, 15, 408, 408],[561, 145, 136, 136],[15, 145, 136, 136]]
+    // -1, -1
+
+    MAIN_AVATAR_DRAW_WEAPON.render(ctx);
+    X6_91_TOP.render(ctx, -90);
+}, [0], 0, 0, -1, -1);
+
+export let MAIN_AVATAR_DRAW_X691_2 = new TextureData(0, 0, 0.2, "avatar", {
+    width: 702,
+    height: 2140
+}, [
+    [0, 0, 702, 2140]
+], 0, undefined, function(ctx) {
+    // body: 702x740, texture: 1024,512, size: 0.15, boxes: [[152, 15, 408, 408],[561, 145, 136, 136],[15, 145, 136, 136]]
+    // -1, -1
+
+    MAIN_AVATAR_DRAW_WEAPON.render(ctx);
+    X6_91_TOP_2.render(ctx, -90);
 }, [0], 0, 0, -1, -1);
 
 export let GP_K100 = new TextureData(-8, -20, 0.22, "firearm", {
@@ -3381,6 +3819,374 @@ export let GP_K100 = new TextureData(-8, -20, 0.22, "firearm", {
     ctx.stroke();
     ctx.restore();
 }, [], 0, 0, 30, 200);
+
+export let DX_9 = new TextureData(-35, -90, 0.2, "firearm", {
+    width: 455,
+    height: 320
+}, [
+    [35, 90, 455, 320]
+], 0, undefined, function(ctx) {
+    // body: 744x315, texture: 1024,512, size: 0.15
+    // -8 -20
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.scale(this.size || 0, this.size || 0);
+    ctx.lineWidth = 15;
+
+    ctx.beginPath();
+    ctx.fillStyle = "#C5C5C5";
+    ctx.strokeStyle = "#1A1A1A";
+
+    // handle
+    ctx.moveTo(150, 400);
+    ctx.lineTo(90, 390);
+    ctx.lineTo(80, 380);
+    ctx.lineTo(60, 370);
+    ctx.lineTo(50, 360);
+    ctx.lineTo(80, 280);
+    ctx.lineTo(120, 210);
+
+    // curve and nozzel
+    ctx.lineTo(115, 190);
+    ctx.lineTo(100, 175);
+    ctx.lineTo(80, 173);
+    ctx.lineTo(60, 170);
+    ctx.lineTo(60, 160);
+    ctx.lineTo(80, 150);
+    ctx.lineTo(95, 125);
+    ctx.lineTo(100, 105);
+    ctx.lineTo(250, 105);
+    ctx.lineTo(250, 112);
+    ctx.lineTo(300, 112);
+    ctx.lineTo(300, 105);
+    ctx.lineTo(450, 105);
+    ctx.lineTo(460, 110);
+    ctx.lineTo(460, 170);
+    ctx.lineTo(440, 190);
+    ctx.lineTo(320, 190);
+
+    // trigger house outside
+    ctx.lineTo(310, 200);
+    ctx.lineTo(310, 235);
+    ctx.lineTo(230, 235);
+
+    // handle
+    ctx.lineTo(210, 255);
+    ctx.lineTo(210, 280);
+    ctx.lineTo(205, 285);
+    ctx.lineTo(190, 295);
+    ctx.lineTo(190, 310);
+    ctx.lineTo(195, 320);
+    ctx.lineTo(195, 330);
+    ctx.lineTo(180, 350);
+    ctx.lineTo(185, 365);
+    ctx.lineTo(185, 380);
+    ctx.lineTo(180, 390);
+    ctx.lineTo(170, 390);
+    ctx.lineTo(165, 400);
+    ctx.lineTo(148, 400);
+
+    ctx.moveTo(240, 225);
+    ctx.lineTo(295, 225);
+    ctx.lineTo(300, 215);
+    ctx.lineTo(300, 185);
+    ctx.lineTo(220, 185);
+    ctx.lineTo(220, 220);
+    ctx.lineTo(241, 225);
+
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.fillStyle = "#787878";
+    ctx.moveTo(100, 100);
+    ctx.lineTo(200, 100);
+    ctx.lineTo(200, 110);
+    ctx.lineTo(455, 110);
+    ctx.lineTo(455, 150);
+    ctx.lineTo(88, 150);
+    ctx.lineTo(100, 100);
+    ctx.fill();
+
+    // OUTLINE ___________________________________________
+    // handle
+    ctx.beginPath();
+    ctx.moveTo(150, 400);
+    ctx.lineTo(90, 390);
+    ctx.lineTo(80, 380);
+    ctx.lineTo(82, 375);
+    ctx.lineTo(60, 370);
+    ctx.lineTo(50, 360);
+    ctx.lineTo(80, 280);
+    ctx.lineTo(120, 210);
+
+    // curve and nozzel
+    ctx.lineTo(115, 190);
+    ctx.lineTo(100, 175);
+    ctx.lineTo(80, 173);
+    ctx.lineTo(60, 170);
+    ctx.lineTo(60, 160);
+    ctx.lineTo(80, 150);
+    ctx.lineTo(95, 125);
+    ctx.lineTo(100, 105);
+    ctx.lineTo(250, 105);
+    ctx.lineTo(250, 112);
+    ctx.lineTo(300, 112);
+    ctx.lineTo(300, 105);
+    ctx.lineTo(450, 105);
+    ctx.lineTo(460, 110);
+    ctx.lineTo(460, 170);
+    ctx.lineTo(440, 190);
+    ctx.lineTo(320, 190);
+
+    // trigger house outside
+    ctx.lineTo(310, 200);
+    ctx.lineTo(310, 235);
+    ctx.lineTo(230, 235);
+
+    // handle
+    ctx.lineTo(210, 255);
+    ctx.lineTo(210, 280);
+    ctx.lineTo(205, 285);
+    ctx.lineTo(190, 295);
+    ctx.lineTo(190, 310);
+    ctx.lineTo(195, 320);
+    ctx.lineTo(195, 330);
+    ctx.lineTo(180, 350);
+    ctx.lineTo(185, 365);
+    ctx.lineTo(185, 380);
+    ctx.lineTo(180, 390);
+    ctx.lineTo(170, 390);
+    ctx.lineTo(165, 400);
+    ctx.lineTo(148, 400);
+
+    ctx.stroke();
+
+    // trigger
+    ctx.beginPath();
+    ctx.lineWidth = 10;
+    ctx.moveTo(221, 195);
+    ctx.lineTo(228, 200);
+    ctx.lineTo(235, 210);
+    ctx.lineTo(240, 215);
+    ctx.lineTo(245, 215);
+    ctx.lineTo(238, 200);
+    ctx.lineTo(240, 185);
+    ctx.lineTo(220, 185);
+
+    // details
+    ctx.moveTo(85, 373);
+    ctx.lineTo(170, 387);
+    ctx.moveTo(80, 150);
+    ctx.lineTo(460, 150);
+    ctx.strokeRect(248, 112, 54, 20);
+    ctx.strokeRect(110, 105, 10, 35);
+    ctx.strokeRect(130, 105, 10, 35);
+    ctx.strokeRect(150, 105, 10, 35);
+    ctx.fillRect(467, 125, 10, 35);
+    ctx.strokeRect(462, 125, 15, 35);
+    ctx.fill();
+    ctx.stroke();
+
+    // trigger house
+    ctx.beginPath();
+    ctx.lineWidth = 10;
+    ctx.moveTo(240, 225);
+    ctx.lineTo(295, 225);
+    ctx.lineTo(300, 215);
+    ctx.lineTo(300, 185);
+    ctx.lineTo(220, 185);
+    ctx.lineTo(220, 220);
+    ctx.lineTo(241, 225);
+    ctx.stroke();
+    
+    ctx.restore();
+}, [], 0, 0, 0, 0);
+
+export let X6_91 = new TextureData(-38, -80, 0.2, "firearm", {
+    width: 460,
+    height: 340
+}, [
+    [38, 80, 460, 340]
+], 0, undefined, function(ctx) {
+    // body: 819x398, texture: 1024,512, size: 0.18
+    // -8 -5 
+
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.scale(this.size || 0, this.size || 0);
+    ctx.lineWidth = 15;
+
+    ctx.fillStyle = "#D7D7D7";
+    ctx.strokeStyle = "#1A1A1A";
+
+    // silencer
+    ctx.fillRect(460, 111, 20, 50);
+    ctx.strokeRect(460, 111, 20, 50);
+
+    ctx.beginPath();
+    ctx.lineWidth = 15;
+
+    // handle
+
+    ctx.beginPath();
+    ctx.moveTo(150, 400);
+    ctx.lineTo(90, 390);
+    ctx.lineTo(80, 380);
+    ctx.lineTo(82, 375);
+    ctx.lineTo(60, 370);
+    ctx.lineTo(50, 360);
+    ctx.lineTo(84, 280);
+    ctx.lineTo(115, 205);
+
+    // curve and nozzel
+    ctx.lineTo(115, 190);
+    ctx.lineTo(105, 180);
+    ctx.lineTo(90, 173);
+    ctx.lineTo(90, 165);
+    ctx.lineTo(90, 150);
+    ctx.lineTo(100, 105);
+    ctx.lineTo(250, 105);
+    ctx.lineTo(250, 112);
+    ctx.lineTo(300, 112);
+    ctx.lineTo(300, 105);
+    ctx.lineTo(450, 105);
+    ctx.lineTo(460, 110);
+    ctx.lineTo(460, 190);
+    ctx.lineTo(320, 190);
+
+    // trigger house outside
+    ctx.lineTo(310, 200);
+    ctx.lineTo(310, 235);
+    ctx.lineTo(230, 235);
+
+    // handle
+
+    ctx.lineTo(210, 255);
+    ctx.lineTo(180, 350);
+    ctx.lineTo(182, 375);
+    ctx.lineTo(186, 385);
+    ctx.lineTo(190, 395);
+    ctx.lineTo(187, 407);
+    ctx.lineTo(150, 400);
+
+    ctx.moveTo(240, 225);
+    ctx.lineTo(295, 225);
+    ctx.lineTo(300, 215);
+    ctx.lineTo(300, 185);
+    ctx.lineTo(220, 185);
+    ctx.lineTo(220, 220);
+    ctx.lineTo(241, 225);
+
+    ctx.fill();
+
+    // OUTLINE ___________________________________________
+    // handle
+
+    ctx.beginPath();
+    ctx.moveTo(150, 400);
+    ctx.lineTo(90, 390);
+    ctx.lineTo(80, 380);
+    ctx.lineTo(82, 375);
+    ctx.lineTo(60, 370);
+    ctx.lineTo(50, 360);
+    ctx.lineTo(84, 280);
+    ctx.lineTo(115, 205);
+
+    // curve and nozzel
+    ctx.lineTo(115, 190);
+    ctx.lineTo(105, 180);
+    ctx.lineTo(90, 173);
+    ctx.lineTo(90, 165);
+    ctx.lineTo(90, 150);
+    ctx.lineTo(100, 105);
+    ctx.lineTo(250, 105);
+    ctx.lineTo(250, 112);
+    ctx.lineTo(300, 112);
+    ctx.lineTo(300, 105);
+    ctx.lineTo(450, 105);
+    ctx.lineTo(460, 110);
+    ctx.lineTo(460, 190);
+    ctx.lineTo(320, 190);
+
+    // trigger house outside
+    ctx.lineTo(310, 200);
+    ctx.lineTo(310, 235);
+    ctx.lineTo(230, 235);
+
+    // handle
+    ctx.lineTo(210, 255);
+    ctx.lineTo(180, 350);
+    ctx.lineTo(182, 375);
+    ctx.lineTo(186, 385);
+    ctx.lineTo(190, 395);
+    ctx.lineTo(187, 407);
+    ctx.lineTo(150, 400);
+
+    ctx.stroke();
+
+    // trigger
+    ctx.beginPath();
+    ctx.lineWidth = 10;
+    ctx.moveTo(221, 195);
+    ctx.lineTo(228, 200);
+    ctx.lineTo(235, 210);
+    ctx.lineTo(240, 215);
+    ctx.lineTo(245, 215);
+    ctx.lineTo(238, 200);
+    ctx.lineTo(240, 185);
+    ctx.lineTo(220, 185);
+
+    // rear crosshair
+
+    ctx.moveTo(140, 101);
+    ctx.lineTo(140, 100);
+    ctx.lineTo(135, 90);
+    ctx.lineTo(115, 90);
+    ctx.lineTo(115, 100);
+    ctx.lineTo(115, 102);
+    ctx.lineTo(140, 102);
+
+    // details
+
+    ctx.moveTo(85, 373);
+    ctx.lineTo(185, 387);
+    ctx.moveTo(90, 150);
+    ctx.lineTo(460, 150);
+    ctx.strokeRect(248, 112, 54, 20);
+
+    ctx.fill();
+    ctx.stroke();
+
+    // trigger house
+    ctx.beginPath();
+    ctx.lineWidth = 10;
+
+    // thingys
+    ctx.moveTo(335, 187);
+    ctx.lineTo(342, 168);
+    ctx.lineTo(350, 168);
+    ctx.lineTo(344, 188);
+    ctx.moveTo(355, 187);
+    ctx.lineTo(362, 168);
+    ctx.lineTo(370, 168);
+    ctx.lineTo(364, 188);
+    ctx.moveTo(375, 187);
+    ctx.lineTo(382, 168);
+    ctx.lineTo(390, 168);
+    ctx.lineTo(384, 188);
+
+    // silencer lines
+
+    ctx.moveTo(240, 225);
+    ctx.lineTo(295, 225);
+    ctx.lineTo(300, 215);
+    ctx.lineTo(300, 185);
+    ctx.lineTo(220, 185);
+    ctx.lineTo(220, 220);
+    ctx.lineTo(241, 225);
+    ctx.stroke();
+    ctx.restore();
+},[],0,0,170,200);
 
 export let USP_45 = new TextureData(-8, -5, 0.22, "firearm", {
     width: 815,
@@ -3910,6 +4716,180 @@ export let GLOCK_20 = new TextureData(0, 0, 0.22, "firearm", {
     ctx.stroke();
     ctx.restore();
 }, [], false, false, 180, 200);
+
+export let NOSS_7 = new TextureData(-35, -90, 0.2, "firearm", {
+    width: 720,
+    height: 330
+}, [
+    [35, 90, 720, 330]
+], 0, undefined, function(ctx) {
+    // body: 439x309, texture: 1024,512, size: 0.15
+    // -8 -20
+
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.scale(this.size || 0, this.size || 0);
+    ctx.lineWidth = 15;
+
+    ctx.fillStyle = "#A9A9A9";
+    ctx.strokeStyle = "#1A1A1A";
+
+    ctx.fillRect(485, 118, 250, 50);
+    ctx.strokeRect(485, 118, 250, 50);
+
+    // handle
+
+    ctx.fillStyle = "#585858";
+    ctx.beginPath();
+    ctx.moveTo(150, 400);
+    ctx.lineTo(90, 390);
+    ctx.lineTo(80, 380);
+    ctx.lineTo(60, 370);
+    ctx.lineTo(50, 360);
+    ctx.lineTo(80, 280);
+    ctx.lineTo(120, 200);
+
+    // curve and nozzel
+    ctx.lineTo(115, 190);
+    ctx.lineTo(100, 175);
+    ctx.lineTo(85, 175);
+    ctx.lineTo(80, 165);
+    ctx.lineTo(90, 150);
+    ctx.lineTo(90, 105);
+    ctx.lineTo(250, 105);
+    ctx.lineTo(250, 112);
+    ctx.lineTo(300, 112);
+    ctx.lineTo(300, 105);
+    ctx.lineTo(450, 105);
+    ctx.lineTo(460, 110);
+    ctx.lineTo(460, 190);
+    ctx.lineTo(320, 190);
+
+    // trigger house outside
+    ctx.lineTo(310, 200);
+    ctx.lineTo(310, 235);
+    ctx.lineTo(230, 235);
+
+    // handle
+
+    ctx.lineTo(210, 255);
+    ctx.lineTo(210, 280);
+    ctx.lineTo(205, 285);
+    ctx.lineTo(190, 295);
+    ctx.lineTo(190, 310);
+    ctx.lineTo(195, 320);
+    ctx.lineTo(195, 330);
+    ctx.lineTo(180, 350);
+    ctx.lineTo(185, 365);
+    ctx.lineTo(185, 380);
+    ctx.lineTo(180, 390);
+    ctx.lineTo(170, 390);
+    ctx.lineTo(165, 400);
+    ctx.lineTo(148, 400);
+
+    ctx.moveTo(240, 225);
+    ctx.lineTo(295, 225);
+    ctx.lineTo(300, 215);
+    ctx.lineTo(300, 185);
+    ctx.lineTo(220, 185);
+    ctx.lineTo(220, 220);
+    ctx.lineTo(241, 225);
+
+    ctx.fill();
+
+    // OUTLINE ___________________________________________
+    // handle
+
+    ctx.beginPath();
+    ctx.moveTo(150, 400);
+    ctx.lineTo(90, 390);
+    ctx.lineTo(80, 380);
+    ctx.lineTo(82, 375);
+    ctx.lineTo(60, 370);
+    ctx.lineTo(50, 360);
+    ctx.lineTo(80, 280);
+    ctx.lineTo(120, 200);
+
+    // curve and nozzel
+    ctx.lineTo(115, 190);
+    ctx.lineTo(100, 175);
+    ctx.lineTo(85, 175);
+    ctx.lineTo(80, 165);
+    ctx.lineTo(90, 150);
+    ctx.lineTo(90, 105);
+    ctx.lineTo(250, 105);
+    ctx.lineTo(250, 112);
+    ctx.lineTo(300, 112);
+    ctx.lineTo(300, 105);
+    ctx.lineTo(450, 105);
+    ctx.lineTo(460, 110);
+    ctx.lineTo(460, 190);
+    ctx.lineTo(320, 190);
+
+    // trigger house outside
+    ctx.lineTo(310, 200);
+    ctx.lineTo(310, 235);
+    ctx.lineTo(230, 235);
+
+    // handle
+    ctx.lineTo(210, 255);
+    ctx.lineTo(210, 280);
+    ctx.lineTo(205, 285);
+    ctx.lineTo(190, 295);
+    ctx.lineTo(190, 310);
+    ctx.lineTo(195, 320);
+    ctx.lineTo(195, 330);
+    ctx.lineTo(180, 350);
+    ctx.lineTo(185, 365);
+    ctx.lineTo(185, 380);
+    ctx.lineTo(180, 390);
+    ctx.lineTo(170, 390);
+    ctx.lineTo(165, 400);
+    ctx.lineTo(148, 400);
+
+    ctx.stroke();
+
+    // trigger
+    ctx.beginPath();
+    ctx.lineWidth = 10;
+    ctx.moveTo(221, 195);
+    ctx.lineTo(228, 200);
+    ctx.lineTo(235, 210);
+    ctx.lineTo(240, 215);
+    ctx.lineTo(245, 215);
+    ctx.lineTo(238, 200);
+    ctx.lineTo(240, 185);
+    ctx.lineTo(220, 185);
+
+    // details
+    ctx.moveTo(85, 373);
+    ctx.lineTo(170, 387);
+    ctx.moveTo(90, 150);
+    ctx.lineTo(460, 150);
+    ctx.strokeRect(248, 112, 54, 20);
+    ctx.strokeRect(110, 105, 10, 35);
+    ctx.strokeRect(130, 105, 10, 35);
+    ctx.fillRect(465, 125, 10, 35);
+    ctx.strokeRect(460, 125, 15, 35);
+    ctx.fill();
+    ctx.stroke();
+
+    // trigger house
+    ctx.beginPath();
+    ctx.lineWidth = 10;
+    ctx.moveTo(240, 225);
+    ctx.lineTo(295, 225);
+    ctx.lineTo(300, 215);
+    ctx.lineTo(300, 185);
+    ctx.lineTo(220, 185);
+    ctx.lineTo(220, 220);
+    ctx.lineTo(241, 225);
+    ctx.stroke();
+
+    ctx.strokeRect(485, 118, 210, 50);
+
+    ctx.restore();
+}, [], false, false, 50, 200);
 
 export let OFF_ROADER = new TextureData(0, 0, 0.25, "avatar", {
     width: 1816,
@@ -5849,6 +6829,113 @@ export let GP_K100_TOP_2 = new TextureData(282, 900, 0.2, "firearm", {
     ctx.restore();
 }, [], 0, 0, 0, 0);
 
+export let DX_9_TOP = new TextureData(282, 900, 0.2, "firearm", {
+    width: 900,
+    height: 200
+}, [
+    [0, 0, 900, 200]
+], 0, undefined, function(ctx, r = 0) {
+    // body: 439x309, texture: 1024,512, size: 0.15
+    // -8 -20
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.rotate(r * Math.PI / 180);
+    ctx.scale(this.size || 0, this.size || 0);
+    ctx.lineWidth = 15;
+
+    ctx.fillStyle = "#787878";
+    ctx.strokeStyle = "#1A1A1A";
+    // handle
+
+    ctx.beginPath();
+    ctx.fillRect(90, 50, 370, 60);
+    ctx.strokeRect(90, 50, 370, 60);
+
+    // scilencer 
+
+    ctx.lineWidth = 10;
+    ctx.fillRect(460, 63, 20, 35);
+    ctx.strokeRect(460, 63, 20, 35);
+
+    // rear tip
+    ctx.lineWidth = 15;
+    ctx.fillRect(60, 55, 30, 50);
+    ctx.strokeRect(60, 55, 30, 50);
+
+    ctx.lineWidth = 10;
+    // details
+    ctx.strokeRect(110, 50, 10, 60);
+    ctx.strokeRect(130, 50, 10, 60);
+    ctx.strokeRect(140, 50, 10, 60);
+
+    ctx.strokeRect(250, 85, 50, 20);
+
+    ctx.stroke();
+
+    ctx.restore();
+    ctx.save();
+    ctx.scale(this.size || 0, this.size || 0);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "red";
+    //ctx.strokeRect(0,0,900,200);
+    ctx.restore();
+}, [], 0, 0, 0, 0);
+
+export let DX_9_TOP_2 = new TextureData(282, 900, 0.2, "firearm", {
+    width: 900,
+    height: 200
+}, [
+    [0, 0, 900, 200]
+], 0, undefined, function(ctx, r = 0) {
+    // body: 439x309, texture: 1024,512, size: 0.15
+    // -8 -20
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.rotate(r * Math.PI / 180);
+    ctx.scale(this.size || 0, this.size || 0);
+    ctx.lineWidth = 15;
+
+    ctx.fillStyle = "#787878";
+    ctx.strokeStyle = "#1A1A1A";
+    // handle
+
+    ctx.fillRect(90, 60, 370, 40);
+    ctx.strokeRect(90, 60, 370, 40);
+
+    ctx.beginPath();
+    ctx.fillRect(50, 50, 370, 60);
+    ctx.strokeRect(50, 50, 370, 60);
+
+    // scilencer 
+
+    ctx.lineWidth = 10;
+    ctx.fillRect(460, 63, 20, 35);
+    ctx.strokeRect(460, 63, 20, 35);
+
+    // rear tip
+    ctx.lineWidth = 15;
+    ctx.fillRect(20, 55, 30, 50);
+    ctx.strokeRect(20, 55, 30, 50);
+
+    ctx.lineWidth = 10;
+    // details
+    ctx.strokeRect(70, 50, 10, 60);
+    ctx.strokeRect(90, 50, 10, 60);
+    ctx.strokeRect(100, 50, 10, 60);
+
+    ctx.strokeRect(210, 85, 50, 20);
+
+    ctx.stroke();
+
+    ctx.restore();
+    ctx.save();
+    ctx.scale(this.size || 0, this.size || 0);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "red";
+    //ctx.strokeRect(0,0,900,200);
+    ctx.restore();
+}, [], 0, 0, 0, 0);
+
 export let GLOCK_20_TOP = new TextureData(54, 182, 0.2, "firearm", {
     width: 900,
     height: 200
@@ -5908,6 +6995,116 @@ export let GLOCK_20_TOP_2 = new TextureData(54, 182, 0.2, "firearm", {
     ctx.fillStyle = "#787878";
     ctx.strokeStyle = "#1A1A1A";
     // handle
+
+    ctx.beginPath();
+    ctx.fillRect(90, 60, 370, 50);
+    ctx.strokeRect(90, 60, 370, 50);
+    ctx.lineWidth = 10;
+    ctx.fillRect(465, 67, 10, 35);
+    ctx.strokeRect(460, 67, 15, 35);
+
+    // details
+    ctx.strokeRect(110, 50, 10, 70);
+    ctx.strokeRect(130, 50, 10, 70);
+
+    ctx.strokeRect(250, 100, 50, 20);
+
+    // slide pullback
+    ctx.lineWidth = 15;
+    ctx.fillRect(90 - 50, 50, 370, 70);
+    ctx.strokeRect(90 - 50, 50, 370, 70);
+    ctx.lineWidth = 10;
+    ctx.strokeRect(110 - 50, 50, 10, 70);
+    ctx.strokeRect(130 - 50, 50, 10, 70);
+    ctx.strokeRect(250 - 50, 100, 50, 20);
+
+    ctx.stroke();
+
+    ctx.restore();
+    ctx.save();
+    ctx.scale(this.size || 0, this.size || 0);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "red";
+    //ctx.strokeRect(0,0,900,200);
+    ctx.restore();
+});
+
+export let NOSS_7_TOP = new TextureData(278, 940, 0.2, "firearm", {
+    width: 900,
+    height: 200
+}, [
+    [0, 0, 900, 200]
+], 0, undefined, function(ctx, r = 0) {
+    // body: 439x309, texture: 1024,512, size: 0.15
+    // -8 -20
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.rotate(r * Math.PI / 180);
+    ctx.scale(this.size || 0, this.size || 0);
+    ctx.lineWidth = 15;
+
+    ctx.strokeStyle = "#1A1A1A";
+    ctx.fillStyle = "#A9A9A9";
+
+    ctx.fillRect(485, 60, 250, 50);
+    ctx.strokeRect(485, 60, 250, 50);
+    ctx.lineWidth = 10;
+    ctx.strokeRect(485, 60, 210, 50);
+
+    // handle
+    ctx.lineWidth = 15;
+    ctx.fillStyle = "#585858";
+
+    ctx.beginPath();
+    ctx.fillRect(90, 50, 370, 70);
+    ctx.strokeRect(90, 50, 370, 70);
+    ctx.lineWidth = 10;
+    ctx.fillRect(465, 67, 10, 35);
+    ctx.strokeRect(460, 67, 15, 35);
+
+    // details
+    ctx.strokeRect(110, 50, 10, 70);
+    ctx.strokeRect(130, 50, 10, 70);
+
+    ctx.strokeRect(250, 100, 50, 20);
+
+    ctx.stroke();
+
+    ctx.restore();
+    ctx.save();
+    ctx.scale(this.size || 0, this.size || 0);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "red";
+    //ctx.strokeRect(0,0,900,200);
+    ctx.restore();
+});
+
+export let NOSS_7_TOP_2 = new TextureData(278, 940, 0.2, "firearm", {
+    width: 900,
+    height: 200
+}, [
+    [0, 0, 900, 200]
+], 0, undefined, function(ctx, r = 0) {
+    // body: 439x309, texture: 1024,512, size: 0.15
+    // -8 -20
+    ctx.save();
+    ctx.translate(this.offset.x, this.offset.y);
+    ctx.rotate(r * Math.PI / 180);
+    ctx.scale(this.size || 0, this.size || 0);
+    ctx.lineWidth = 15;
+
+    ctx.strokeStyle = "#1A1A1A";
+
+    ctx.fillStyle = "#A9A9A9";
+
+    ctx.fillRect(485, 60, 250, 50);
+    ctx.strokeRect(485, 60, 250, 50);
+    ctx.lineWidth = 10;
+    ctx.strokeRect(485, 60, 210, 50);
+
+    // handle
+    ctx.fillStyle = "#585858";
+    ctx.lineWidth = 15;
 
     ctx.beginPath();
     ctx.fillRect(90, 60, 370, 50);
@@ -6026,6 +7223,90 @@ export let USP_45_TOP_2 = new TextureData(0, 0, 0.2, "firearm", {
     ctx.fillStyle = "#787878";
     ctx.lineWidth = 10;
     ctx.strokeRect(460, 50, 32, 50);
+
+    // details
+    ctx.strokeRect(200, 75, 50, 20);
+    ctx.strokeRect(60, 68, 30, 14);
+
+    ctx.stroke();
+
+    ctx.restore();
+    ctx.save();
+    ctx.scale(this.size || 0, this.size || 0);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "red";
+    ctx.restore();
+},[],0,0,287,940);
+
+export let X6_91_TOP = new TextureData(0, 0, 0.2, "firearm", {
+    width: 900,
+    height: 200
+}, [
+    [0, 0, 900, 200]
+], 0, undefined, function(ctx, r = 0) {
+    // body: 439x309, texture: 1024,512, size: 0.15
+    // -8 -20
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.rotate(r * Math.PI / 180);
+    ctx.scale(this.size || 0, this.size || 0);
+    ctx.lineWidth = 15;
+
+    ctx.fillStyle = "#D7D7D7";
+    ctx.strokeStyle = "#1A1A1A";
+    // handle
+
+    ctx.beginPath();
+    ctx.fillRect(90, 50, 364, 50);
+    ctx.strokeRect(90, 50, 364, 50);
+
+    ctx.fillRect(452, 60, 20, 30);
+    ctx.strokeRect(452, 60, 20, 30);
+
+    // details
+    ctx.strokeRect(250, 75, 50, 20);
+    ctx.strokeRect(110, 68, 30, 14);
+
+    ctx.stroke();
+
+    ctx.restore();
+    ctx.save();
+    ctx.scale(this.size || 0, this.size || 0);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "red";
+    ctx.restore();
+},[],0,0,287,940);
+
+export let X6_91_TOP_2 = new TextureData(0, 0, 0.2, "firearm", {
+    width: 900,
+    height: 200
+}, [
+    [0, 0, 900, 200]
+], 0, undefined, function(ctx, r = 0) {
+    // body: 439x309, texture: 1024,512, size: 0.15
+    // -8 -20
+    ctx.save();
+    ctx.translate(this.offset.vx, this.offset.vy);
+    ctx.rotate(r * Math.PI / 180);
+    ctx.scale(this.size || 0, this.size || 0);
+    ctx.lineWidth = 15;
+
+    ctx.strokeStyle = "#1A1A1A";
+    ctx.fillStyle = "#D7D7D7";
+    // handle
+
+    ctx.beginPath();
+    ctx.fillRect(40, 50, 364, 50);
+    ctx.strokeRect(40, 50, 364, 50);
+
+    ctx.fillStyle = "#898989";
+    ctx.fillRect(410, 60, 50, 30);
+    ctx.strokeRect(410, 60, 50, 30);
+
+    ctx.lineWidth = 10;
+    ctx.fillStyle = "#D7D7D7";
+    ctx.fillRect(452, 60, 20, 30);
+    ctx.strokeRect(452, 60, 20, 30);
 
     // details
     ctx.strokeRect(200, 75, 50, 20);
