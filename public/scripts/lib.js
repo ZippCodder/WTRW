@@ -573,9 +573,12 @@ export class Inventory {
     constructor(defaultItems = [], slots) {
         this.items = defaultItems;
         this.weapons = {};
+        this.explosives = [];
         this.slots = slots || defaultItems.length || 15;
         this.count = defaultItems.length;
         this.activeSlot = 0;
+        this.cash = 0;
+        this.bank = 0;
     }
 
     addItem(item, slot) {

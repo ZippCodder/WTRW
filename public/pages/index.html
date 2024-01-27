@@ -70,7 +70,7 @@
                 
                 <div class="controls-container__stats">
                   <div class="controls-container__health"><img src="/public/images/icons/HLT_ICON.png" class="icon" /><div class="controls-container__healthbar"><div id="healthbar"></div></div><img src="/public/images/icons/FOD_ICON.png" class="icon" /><p id="hunger">100</p><img src="/public/images/icons/WTR_ICON.png" class="icon" /><p id="thirst">100</p></div>
-                  <div class="controls-container__money"><img class="icon" src="/public/images/icons/MON_ICON.png" /><p id="money">2500</p></div>
+                  <div class="controls-container__money"><img class="icon" src="/public/images/icons/MON_ICON.png" /><p id="money">0</p></div>
                 </div>
             </div>
 
@@ -265,8 +265,69 @@ Oh wait, what items? You're a noob lol.
                           <button class="main-inventory__controls-help">?</button>
                       </div>
                 </div>
+
+                <div id="store">
+                    <h1 class="store__title">Store<button id="store-close">Close</button><button id="sell-items">Sell Items</button></h1>
+
+                    <template id="store-item-template">
+                     <div class="store__item">
+                      <img class="item__icon" src="/public/images/icons/glock_20_icon.png"></img><p class="item__name">GLOCK 20</p>
+                     </div> 
+                    </template>
+
+                    <div class="store__items"> 
+                      <h2>Items</h2>
+                     <div class="store__item">
+                      <img class="item__icon" src="/public/images/icons/glock_20_icon.png"></img><p class="item__name">GLOCK 20</p>
+                     </div> 
+                     <div class="store__item">
+                      <img class="item__icon" src="/public/images/icons/glock_20_icon.png"></img><p class="item__name">GLOCK 20</p>
+                     </div> 
+                     <div class="store__item">
+                      <img class="item__icon" src="/public/images/icons/glock_20_icon.png"></img><p class="item__name">GLOCK 20</p>
+                     </div> 
+                     <div class="store__item">
+                      <img class="item__icon" src="/public/images/icons/glock_20_icon.png"></img><p class="item__name">GLOCK 20</p>
+                     </div> 
+                     <div class="store__item">
+                      <img class="item__icon" src="/public/images/icons/glock_20_icon.png"></img><p class="item__name">GLOCK 20</p>
+                     </div> 
+                     <div class="store__item">
+                      <img class="item__icon" src="/public/images/icons/glock_20_icon.png"></img><p class="item__name">GLOCK 20</p>
+                     </div> 
+                    </div>
+                    <div class="store__checkout">
+                      <h2>Checkout</h2>
+                      <div class="checkout__balance">
+                       <p>Cash: <mark>$12.50</mark></p><p>Bank: <mark>$12.50</mark></p>
+                      </div>
+                      <div class="checkout__info-box"> 
+                       <div class="info-box__item-info">
+                       <img src="/public/images/icons/remote_explosive_icon.png" class="info-box__icon"></img>
+                       <div class="info-box__item">
+                       <h3 class="item__title"><u>Remote Explosive</u></h3>
+                       <h5 class="item__price">Price: $12.50</h5>
+                       </div>
+                      </div>
+                      <div class="checkout__controls">
+                       <p class="controls__buy">Buy <input id="item-quantity" type="number" value="1"></input> for <b id="item-total">$12.50</b></p><button id="item-purchase">Purchase</button>
+                      </div>
+                       <details class="info-box__description"><summary>View item details</summary></br><p>The whatever and the thing is that I dont know if the also thing is you are in lorem Ipsum and whatever else for the needed thingy.</p></details>
+                      </div>
+                    </div>
+                </div>
+
+               <div class="note-wrapper">
+                <div id="note">
+                  <h1 class="note__title">Note<button id="note-close">Close</button></h1>
+                  <div class="note__content">
+                   <p></p>
+                  </div>
+                </div> 
+               </div>
                   
  <img class="texture" id="world-map" src="/public/images/textures/WORLD_MAP.png" />
+ <img class="texture" id="pinpoint" src="/public/images/textures/PINPOINT.png" />
 </body>
 <script type="module" src="/public/scripts/index.js"></script>
 </html>

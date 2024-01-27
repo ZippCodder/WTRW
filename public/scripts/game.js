@@ -69,7 +69,8 @@
       DX_9, 
       NOSS_7,   
       FURS_55, 
-      X6_91
+      X6_91, 
+      Money
   } from "/public/scripts/objects.js";
 
   $AVATAR = new Avatar("R O B I N H O O D");
@@ -84,7 +85,7 @@
 
   // Game setup and initialization
 
-  $MAP = new _Map_(5000, 5000, true, "Downtown SmallVille").init();
+  $MAP = new _Map_(500, 500, true, "Downtown SmallVille").init();
 /*
   for (let i = 0; i < $MAP.units.total; i++) {
     let x = random($MAP.width,true), y = random($MAP.height, true);    
@@ -208,7 +209,7 @@
   movementMultFactor = 0.05;
 
   const enemySpawnLoop = new LoopAnimation(function() {
-      if ($MAP.avatarCount < 50) {
+      if ($MAP.avatarCount < 20) {
 
           let {
               x,
@@ -226,6 +227,13 @@
           a.state.openCarry = false;
           a.state.targetUpdateAnimation.rate = 1 / 5;
           a.addItem([new GLOCK_20, new GP_K100, new KitchenKnife,new NXR_44_MAG, undefined, new NOSS_7, new X6_91, new FURS_55, new DX_9][random(9)]);
+
+          if (Math.random() < 0.5) {
+           if (Math.random() < 0.5) a.addItem(new Money);
+           if (Math.random() < 0.5) a.addItem(new Money);
+           if (Math.random() < 0.5) a.addItem(new Money);
+          }
+
           a.equipItem(0);
           a.state.targetId = a.id;
           //   (Math.random() < 0.5) ? a.state.passive = true:a.state.aggressive = true;

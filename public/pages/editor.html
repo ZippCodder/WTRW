@@ -182,7 +182,12 @@
             MAIN_AVATAR_DRAW_NOSS7_2,
             X6_91,
             MAIN_AVATAR_DRAW_X691_1,
-            MAIN_AVATAR_DRAW_X691_2
+            MAIN_AVATAR_DRAW_X691_2,
+            PINPOINT_ICON,
+            PROXIMITY_EXPLOSIVE,
+            REMOTE_EXPLOSIVE,
+            REMOTE_DETONATOR,
+            MONEY
         } from "/public/scripts/models.js";
 
         // Import texture for editing and downloading...
@@ -229,21 +234,20 @@
         //SUPERMARKET(-98, -338, 0.2);
         //CAFE(-18, -18, 0.2);
         //MAIN_AVATAR_DEFAULT(-5, -5, 0.2);
-        resize(256, 512);
+        resize(200, 200);
         // export function draw(a, w, h, iw, ih, s, lw, attribs=[],canvas) {
-        let texture = X6_91;
-         
+        let texture = MONEY;
 //new Sheet([ROAD_RAIL,ROAD_SIGN,URBAN_FENCE_HALF,URBAN_FENCE,URBAN_FENCE_VERTICAL], 1024, 1024);
 
         //ACTION_BUTTON_TEXTURE.render(ctx);
         //URBAN_FENCE.render(ctx);
         //PICNIC_TABLE.render(ctx);
          //KC_357.render(ctx);
-         //MAIN_AVATAR_DEFAULT.render(ctx);
          //BLACK_BACKPACK_ACC.render(ctx);
        //  WHITEBOARD.render(ctx);
          //TABLE.render(ctx);
          //MULTI_AMMO_BOX.render(ctx);
+         //REMOTE_EXPLOSIVE.render(ctx);
          texture.render(ctx);
          //AMMO_BOX.render(ctx);
          //MED_KIT.render(ctx);
@@ -260,6 +264,6 @@
        // log(texture.getData());
           log(texture.getData());
           console.log(texture.textureDimensions);
-          setSource(`MAIN_AVATAR_DRAW_X691_2.png`);
+          setSource(`money_icon.png`);
     </script>
 </html>

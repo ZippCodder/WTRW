@@ -88,7 +88,12 @@
       DX_9,
       FURS_55,
       NOSS_7,
-      X6_91
+      X6_91,
+      RemoteExplosive,
+      RemoteDetonator, 
+      ProximityExplosive,
+      CombatKnife,
+      Money
   } from "/public/scripts/objects.js";
 
   import _dialogues from "/public/scripts/dialogue.js";
@@ -372,6 +377,7 @@
   function hideMap(e) {
       e.preventDefault();
       $MAP_DISPLAY.useInteractiveDisplay = false;
+      $MAP_DISPLAY.useWorldMap = false;
       $MAP_DISPLAY.displayOffset.x = 0;
       $MAP_DISPLAY.displayOffset.y = 0;
       mapContainer.style.display = "none";
@@ -455,6 +461,7 @@
 
         attribute vec3 coords;
         attribute float color;
+        attribute vec2 point;
         attribute vec2 tcoords;
 
         varying float colorCode;
@@ -470,11 +477,20 @@
         uniform float scale;
  
         void main() {
+         float offsetX = translation.x; 
+         float offsetY = translation.y;
+         float size = scale;
 
-         x = (coords.x + translation.x)*worldUnitX;
-         y = (coords.y + translation.y)*worldUnitY;
+         if (point[0] != 0.01) {
+          offsetX = (point[0] + translation.x) / scale;
+          offsetY = (point[1] + translation.y) / scale;
+          size = 1.0;
+         }
 
-         gl_Position = vec4(x,y,1,scale);
+         x = (coords.x + offsetX)*worldUnitX;
+         y = (coords.y + offsetY)*worldUnitY;
+ 
+         gl_Position = vec4(x,y,1,size);
          textrCoord = vec2(tcoords[0],tcoords[1]);
          colorCode = color;
         }
@@ -494,13 +510,12 @@
         uniform vec4 color4;
         uniform vec4 color5;
         uniform vec4 color6;
-        uniform float useTexture;
         uniform sampler2D texture;
+        uniform sampler2D texture2;
         
         void main() {
          vec4 color = texture2D(texture,textrCoord);
         
-        if (useTexture == 0.0) {
           if (colorCode == 1.0) {
            color = color1;
           } else if (colorCode == 2.0) {
@@ -513,8 +528,20 @@
            color = color5;
           } else if (colorCode == 6.0) {
            color = color6;
+          } else if (colorCode == 0.5) {
+           color = texture2D(texture2,textrCoord);
+           if (color[3] < 0.4) {
+            color[0] = 0.0;
+            color[1] = 0.0;
+            color[2] = 0.0;
+            color[3] = 0.0;
+           }
+          } else if (color[3] > 0.0) {
+           color[0] = 0.7;
+           color[1] = 0.7;
+           color[2] = 0.7;
+           color[3] = 1.0;
           }
-        } 
      
          gl_FragColor = color;
         }
@@ -564,12 +591,14 @@
           color6: mdgl.getUniformLocation(mdProgram, "color6"),
           coords: mdgl.getAttribLocation(mdProgram, "coords"),
           tcoords: mdgl.getAttribLocation(mdProgram, "tcoords"),
+          point: mdgl.getAttribLocation(mdProgram, "point"),
           color: mdgl.getAttribLocation(mdProgram, "color"),
-          useTexture: mdgl.getUniformLocation(mdProgram, "useTexture"),
-          texture: mdgl.getUniformLocation(mdProgram, "texture")
+          texture: mdgl.getUniformLocation(mdProgram, "texture"),
+          texture2: mdgl.getUniformLocation(mdProgram, "texture2"),
       }
 
       mdgl.uniform1i(mdLocations.texture, 0);
+      mdgl.uniform1i(mdLocations.texture2, 1);
       mdgl.uniform1f(mdLocations.scale, 1);
       mdgl.uniform2fv(mdLocations.translation, [0, 0]);
       mdgl.uniform4fv(mdLocations.color1, [0.39, 0.39, 0.39, 1]);
@@ -580,7 +609,7 @@
       mdgl.uniform4fv(mdLocations.color6, fromRGB([204, 44, 219, 1]));
       mdgl.uniform1f(mdLocations.worldUnitX, (worldUnitX / 4) + (worldUnitY / 4));
       mdgl.uniform1f(mdLocations.worldUnitY, (worldUnitX / 4) + (worldUnitY / 4));
-      mdgl.uniform1f(mdLocations.useTexture, 0);
+      mdgl.vertexAttrib2fv(mdLocations.point, [0.01,0.01]);
 
                 let t = mdgl.createTexture();
 
@@ -591,12 +620,22 @@
                 mdgl.texParameteri(mdgl.TEXTURE_2D, mdgl.TEXTURE_WRAP_S, mdgl.CLAMP_TO_EDGE);
                 mdgl.texParameteri(mdgl.TEXTURE_2D, mdgl.TEXTURE_WRAP_T, mdgl.CLAMP_TO_EDGE);
 
+                let t2 = mdgl.createTexture();
+
+                mdgl.bindTexture(mdgl.TEXTURE_2D, t2);
+                mdgl.texImage2D(mdgl.TEXTURE_2D, 0, mdgl.RGBA, mdgl.RGBA, mdgl.UNSIGNED_BYTE, document.querySelector("#pinpoint"));
+                mdgl.texParameteri(mdgl.TEXTURE_2D, mdgl.TEXTURE_MAG_FILTER, mdgl.LINEAR);
+                mdgl.texParameteri(mdgl.TEXTURE_2D, mdgl.TEXTURE_MIN_FILTER, mdgl.LINEAR);
+                mdgl.texParameteri(mdgl.TEXTURE_2D, mdgl.TEXTURE_WRAP_S, mdgl.CLAMP_TO_EDGE);
+                mdgl.texParameteri(mdgl.TEXTURE_2D, mdgl.TEXTURE_WRAP_T, mdgl.CLAMP_TO_EDGE);
+
       return {
           buffer: mdgl.createBuffer(),
           vao: mdglExt.createVertexArrayOES(),
           ext: mdglExt,
           locations: mdLocations,
-          texture: t
+          texture: t,
+          texture2: t2
       };
   }
 
@@ -606,33 +645,43 @@
 
       ctx.uniform1f(props.locations.scale, ($MAP_DISPLAY.useInteractiveDisplay) ? (!$MAP_DISPLAY.useWorldMap) ? $MAP_DISPLAY.interactiveScale:$MAP_DISPLAY.worldMapScale : $MAP_DISPLAY.scale);
       ctx.uniform2fv(props.locations.translation, [($MAP_DISPLAY.useWorldMap) ? -$MAP_DISPLAY.worldMapOffset.x:(-$CURRENT_MAP.centerX - $MAP_DISPLAY.displayOffset.x), ($MAP_DISPLAY.useWorldMap) ? $MAP_DISPLAY.worldMapOffset.y:(-$CURRENT_MAP.centerY + $MAP_DISPLAY.displayOffset.y)]);
-      ctx.uniform1f(props.locations.useTexture, ($MAP_DISPLAY.useWorldMap) ? 1:0);
 
       ctx.activeTexture(ctx.TEXTURE0);
       ctx.bindTexture(ctx.TEXTURE_2D, props.texture);
+      ctx.activeTexture(ctx.TEXTURE1);
+      ctx.bindTexture(ctx.TEXTURE_2D, props.texture2);
 
       let bufferData = [...$MAP_DISPLAY.objectsVertices, ...$MAP_DISPLAY.avatarsVertices];
 
-      if ($MAP_DISPLAY.useWorldMap) bufferData = $MAP_DISPLAY.mapVertices;
+      if ($MAP_DISPLAY.useWorldMap) bufferData = [...$MAP_DISPLAY.mapVertices];
 
       ctx.bindBuffer(ctx.ARRAY_BUFFER, props.buffer);
       ctx.bufferData(ctx.ARRAY_BUFFER, new Float32Array(bufferData), ctx.DYNAMIC_DRAW);
 
-      ctx.vertexAttribPointer(props.locations.coords, 3, ctx.FLOAT, false, 24, 0);
-      ctx.vertexAttribPointer(props.locations.color, 1, ctx.FLOAT, false, 24, 12);
-      ctx.vertexAttribPointer(props.locations.tcoords, 2, ctx.FLOAT, false, 24, 16);
+      ctx.vertexAttribPointer(props.locations.coords, 3, ctx.FLOAT, false, 32, 0);
+      ctx.vertexAttribPointer(props.locations.color, 1, ctx.FLOAT, false, 32, 12);
+      ctx.vertexAttribPointer(props.locations.point, 2, ctx.FLOAT, false, 32, 16);
+      ctx.vertexAttribPointer(props.locations.tcoords, 2, ctx.FLOAT, false, 32, 24);
       ctx.enableVertexAttribArray(0);
       ctx.enableVertexAttribArray(1);
       ctx.enableVertexAttribArray(2);
-
-      let count = $MAP_DISPLAY.mapVertices.length / 6;
+      ctx.enableVertexAttribArray(3);
 
       if (!$MAP_DISPLAY.useWorldMap) {
        ctx.disableVertexAttribArray(2);
-       count = [...$MAP_DISPLAY.objectsVertices, ...$MAP_DISPLAY.avatarsVertices].length / 6;
-      }
+       ctx.disableVertexAttribArray(3);
+      }   
 
-      ctx.drawArrays(ctx.TRIANGLES, 0, count);
+      ctx.drawArrays(ctx.TRIANGLES, 0, bufferData.length / 8);
+
+      if ($MAP_DISPLAY.useWorldMap) {
+       bufferData = [...$MAP_DISPLAY.pinpointVertices];
+
+       ctx.bindBuffer(ctx.ARRAY_BUFFER, props.buffer);
+       ctx.bufferData(ctx.ARRAY_BUFFER, new Float32Array(bufferData), ctx.DYNAMIC_DRAW);
+      
+       ctx.drawArrays(ctx.TRIANGLES, 0, bufferData.length / 8);
+      }
 
       if ($MAP_DISPLAY.waypoint.set && $CURRENT_MAP.id === $MAP_DISPLAY.waypoint.map && !$MAP_DISPLAY.useWorldMap) {
           if (distance($CURRENT_MAP.centerX, $CURRENT_MAP.centerY, $MAP_DISPLAY.waypoint.x, $MAP_DISPLAY.waypoint.y) < 30) {
@@ -649,6 +698,118 @@
           ctx.drawArrays(ctx.TRIANGLE_STRIP, 0, ($MAP_DISPLAY.waypointVertices.length) / 4);
       }
   }
+
+  $MAP_DISPLAY = {
+      scale: 2,
+      interactiveScale: 7,
+      worldMapScale: 7,
+      useInteractiveDisplay: false,
+      useWorldMap: false,
+      displayOffset: {
+          x: 0,
+          y: 0
+      },
+      worldMapOffset: {
+          x: 0, 
+          y: 0
+      },
+      objectsVertices: [],
+      avatarsVertices: [],
+      waypointVertices: [],
+      pinpointVertices: [],
+      mapVertices: [-600,300,1,0,0.01,0.01,0,0,600,300,1,0,0.01,0.01,1,0,-600,-300,1,0,0.01,0.01,0,1,600,300,1,0,0.01,0.01,1,0,-600,-300,1,0,0.01,0.01,0,1,600,-300,1,0,0.01,0.01,1,1],
+      waypoint: {
+          x: 0,
+          y: 0,
+          set: false,
+          map: undefined
+      },
+      colorCodes: {
+          "door": 5,
+          "building": 5,
+          "visible barrier": 4,
+      },
+      updateWaypoint: function(x1, y1, x2, y2) {
+          $MAP_DISPLAY.waypointVertices = [x1, y1, 1, 6, x1, y1 + 5, 1, 6, x2, y2, 1, 6, x2, y2 + 5, 1, 6, x1 + 5, y1, 1, 6, x1, y1, 1, 6, x2, y2, 1, 6, x2 + 5, y2, 1, 6];
+      },
+      addObject: function(obj) {
+          let {
+              offsetX,
+              offsetY
+          } = obj.trans, color = this.colorCodes[obj.name] || this.colorCodes[obj.type] || 1;
+
+          this.objectsVertices = this.objectsVertices.concat(cut([
+              [((-obj.width / 2) + offsetX) + $CURRENT_MAP.centerX, ((-obj.height / 2) + offsetY) + $CURRENT_MAP.centerY, obj.width, obj.height]
+          ], false, [1, color, 0, 0, 0, 0], true));
+      },
+      update: function(renderAvatars) {
+          if (renderAvatars) {
+              this.avatarsVertices = [];
+          } else {
+              this.objectsVertices = [];
+          }
+
+          for (let o in $CURRENT_MAP.obstacles) {
+              let obj = $CURRENT_MAP.obstacles[o];
+
+              if ((obj.type === "avatar" && !renderAvatars) || (obj.type !== "avatar" && renderAvatars) || obj.hideFromMap) continue;
+
+              let {
+                  offsetX,
+                  offsetY
+              } = obj.trans, color = this.colorCodes[obj.name] || this.colorCodes[obj.type] || 1;
+
+              if (renderAvatars) {
+                  this.avatarsVertices = this.avatarsVertices.concat(cut([
+                      [((-obj.width / 2) + offsetX) + $CURRENT_MAP.centerX, ((-obj.height / 2) + offsetY) + $CURRENT_MAP.centerY, obj.width, obj.height]
+                  ], false, [1, (obj.state.hostile) ? 3 : 2, 0, 0, 0, 0], true));
+                  continue;
+              }
+
+              this.objectsVertices = this.objectsVertices.concat(cut([
+                  [((-obj.width / 2) + offsetX) + $CURRENT_MAP.centerX, ((-obj.height / 2) + offsetY) + $CURRENT_MAP.centerY, obj.width, obj.height]
+              ], false, [1, color, 0, 0, 0, 0], true));
+          }
+
+          if (this.waypoint.set) this.updateWaypoint($CURRENT_MAP.centerX, $CURRENT_MAP.centerY, this.waypoint.x, this.waypoint.y);
+      },
+      addPinpoint: function(x,y) {
+        this.pinpointVertices.push(-8,16,1,0.5,x,y,0,0,8,16,1,0.5,x,y,1,0,-8,-16,1,0.5,x,y,0,1,8,16,1,0.5,x,y,1,0,-8,-16,1,0.5,x,y,0,1,8,-16,1,0.5,x,y,1,1);
+      }, 
+      render: function() {
+          if (this.useInteractiveDisplay) {
+              renderDisplayContext(mdContext2, mdContextProperties2);
+              return;
+          }
+          renderDisplayContext(mdContext1, mdContextProperties1);
+      }
+  }
+
+  $MAP_DISPLAY.addPinpoint(0,0);
+  $MAP_DISPLAY.addPinpoint(-377,80);
+  $MAP_DISPLAY.addPinpoint(-190,240);
+  $MAP_DISPLAY.addPinpoint(-159,220);
+  $MAP_DISPLAY.addPinpoint(61,172);
+  $MAP_DISPLAY.addPinpoint(-412,55);
+  $MAP_DISPLAY.addPinpoint(-313,39);
+  $MAP_DISPLAY.addPinpoint(-297,8);
+  $MAP_DISPLAY.addPinpoint(-268,75);
+  $MAP_DISPLAY.addPinpoint(-292,-51);
+  $MAP_DISPLAY.addPinpoint(-327,-19);
+  $MAP_DISPLAY.addPinpoint(-544,-184);
+  $MAP_DISPLAY.addPinpoint(-480,136);
+  $MAP_DISPLAY.addPinpoint(-416,170);
+  $MAP_DISPLAY.addPinpoint(-304,177);
+  $MAP_DISPLAY.addPinpoint(-340,192);
+  $MAP_DISPLAY.addPinpoint(-409,114);
+  $MAP_DISPLAY.addPinpoint(-253,-192);
+  $MAP_DISPLAY.addPinpoint(-220,-178);
+  $MAP_DISPLAY.addPinpoint(-49,54);
+  $MAP_DISPLAY.addPinpoint(338,144);
+  $MAP_DISPLAY.addPinpoint(408,86);
+  $MAP_DISPLAY.addPinpoint(398,-151);
+  $MAP_DISPLAY.addPinpoint(451,-172);
+  $MAP_DISPLAY.addPinpoint(543,167);
 
   const mdContextProperties1 = setDisplayContext(mdContext1);
   const mdContextProperties2 = setDisplayContext(mdContext2);
@@ -672,87 +833,6 @@
       mdContext2.viewport(0, 0, width * 2, height * 2);
   }
 
-  $MAP_DISPLAY = {
-      scale: 2,
-      interactiveScale: 7,
-      worldMapScale: 7,
-      useInteractiveDisplay: false,
-      useWorldMap: false,
-      displayOffset: {
-          x: 0,
-          y: 0
-      },
-      worldMapOffset: {
-          x: 0, 
-          y: 0
-      },
-      objectsVertices: [],
-      avatarsVertices: [],
-      waypointVertices: [],
-      mapVertices: [-600,300,1,0,0,0,600,300,1,0,1,0,-600,-300,1,0,0,1,600,300,1,0,1,0,-600,-300,1,0,0,1,600,-300,1,0,1,1],
-      waypoint: {
-          x: 0,
-          y: 0,
-          set: false,
-          map: undefined
-      },
-      colorCodes: {
-          "door": 5,
-          "building": 5,
-          "visible barrier": 4,
-      },
-      updateWaypoint: function(x1, y1, x2, y2) {
-          $MAP_DISPLAY.waypointVertices = [x1, y1, 1, 6, x1, y1 + 5, 1, 6, x2, y2, 1, 6, x2, y2 + 5, 1, 6, x1 + 5, y1, 1, 6, x1, y1, 1, 6, x2, y2, 1, 6, x2 + 5, y2, 1, 6];
-      },
-      addObject: function(obj) {
-          let {
-              offsetX,
-              offsetY
-          } = obj.trans, color = this.colorCodes[obj.name] || this.colorCodes[obj.type] || 1;
-
-          this.objectsVertices = this.objectsVertices.concat(cut([
-              [((-obj.width / 2) + offsetX) + $CURRENT_MAP.centerX, ((-obj.height / 2) + offsetY) + $CURRENT_MAP.centerY, obj.width, obj.height]
-          ], false, [1, color, 0, 0], true));
-      },
-      update: function(renderAvatars) {
-          if (renderAvatars) {
-              this.avatarsVertices = [];
-          } else {
-              this.objectsVertices = [];
-          }
-
-          for (let o in $CURRENT_MAP.obstacles) {
-              let obj = $CURRENT_MAP.obstacles[o];
-
-              if ((obj.type === "avatar" && !renderAvatars) || (obj.type !== "avatar" && renderAvatars) || obj.hideFromMap) continue;
-
-              let {
-                  offsetX,
-                  offsetY
-              } = obj.trans, color = this.colorCodes[obj.name] || this.colorCodes[obj.type] || 1;
-
-              if (renderAvatars) {
-                  this.avatarsVertices = this.avatarsVertices.concat(cut([
-                      [((-obj.width / 2) + offsetX) + $CURRENT_MAP.centerX, ((-obj.height / 2) + offsetY) + $CURRENT_MAP.centerY, obj.width, obj.height]
-                  ], false, [1, (obj.state.hostile) ? 3 : 2, 0, 0], true));
-                  continue;
-              }
-
-              this.objectsVertices = this.objectsVertices.concat(cut([
-                  [((-obj.width / 2) + offsetX) + $CURRENT_MAP.centerX, ((-obj.height / 2) + offsetY) + $CURRENT_MAP.centerY, obj.width, obj.height]
-              ], false, [1, color, 0, 0], true));
-          }
-
-          if (this.waypoint.set) this.updateWaypoint($CURRENT_MAP.centerX, $CURRENT_MAP.centerY, this.waypoint.x, this.waypoint.y);
-      },
-      render: function() {
-          if (this.useInteractiveDisplay) {
-              renderDisplayContext(mdContext2, mdContextProperties2);
-              return;
-          }
-          renderDisplayContext(mdContext1, mdContextProperties1);
-      }
-  }
 
   function toggleWaypoint(e) {
       if (e) e.preventDefault();
@@ -810,6 +890,13 @@
   mapZoomOutButton.ontouchstart = mapZoomOut;
   mapZoomOutButton.onmousedown = mapZoomOut;
 
+  /* MONEY DISPLAY */
+
+  const moneyDisplay = document.querySelector("#money");
+
+  window.updateMoneyDisplay = function() {
+   moneyDisplay.innerText = $AVATAR.inventory.cash;
+  }
 
   /* AMMO BUTTON AND RELOAD FUNCTIONALITY */
 
@@ -1065,6 +1152,7 @@
   function openInventory(e) {
       e.preventDefault();
       inventoryWindow.style.display = "grid";
+      updateDescription();
   }
 
   inventoryCloseButton.onmousedown = closeInventory;
@@ -1283,11 +1371,17 @@
       "dx 9": "<h3><u>DX 9</u></h3> High end handgun built to be light and reliable, and features a light trigger which alows for no hesitation. High capacity, quick fire and decent damage. You can't beat it!",
       "x6 91": "<h3><u>X6 91</u></h3> A powerful firearm made for battling multiple foes with heavy armour. Moderate capacity, sky-high damage. Try this one on for size.",
       "noss 7": "<h3><u>NOSS 7</u></h3> This scilenced pistol puts most others to shame by taking speed to the next level. It features an extended magazine allowing for a split-second mag dump of epic proportions. Not very accurate though.",
-      "furs 55": "<h3><u>FURS 55</u></h3> Try on this oldschool revolver pulled right out of a Clint Eastwood film. Good capacity and acceptable damage. Take of that what you will."
+      "furs 55": "<h3><u>FURS 55</u></h3> Try on this oldschool revolver pulled right out of a Clint Eastwood film. Good capacity and acceptable damage. Take of that what you will.",
+      "remote detonator": "<h3><u>Remote Detonator</u></h3> Use <i>\"Equip\"</i> on this object to detonate all currently armed explosives. </br></br>Don't lose this, because you'll only ever need one.",
+      "remote explosive": "<h3><u>Remote Explosive</u></h3> A powerful nitroglycerin based explosive, used for building traps and taking out a large number of enemies.</br></br> Use <i>\"Equip\"</i> to arm and place the explosive. You'll need a <i>Remote Detonator</i> to detonate it.</br></br>Careful, you'll want to stand way back.",
+      "proximity explosive": "<h3><u>Proximity Explosive</u></h3> A powerful C-4 based explosive rigged to a motion sensor.</br></br> Use <i>\"Equip\"</i> to arm and place the explosive. Any enemy within close proximity will cause the explosive to detonate, no remote needed. </br></br>The sensor will be active 3 seconds after being armed.",
+      "combat knife": "<h3><u>Combat Knife</u></h3> A common choice of melee used by hunters to mercy-kill deer, and by soldiers to get the job done. Features good durabilty, and good damage.",
+      "money": "<h3><u>Money</u></h3> It's money. If you need me to explain any further you probably shouldn't have it. Use <i>\"Equip\"</i> to add the specified amount into your cash balance."
   }
 
   let equippedIndex = Infinity,
       selectedIndex = undefined,
+      lastIndex = undefined,
       switchMode = false;
 
   function equipSlot(i) {
@@ -1310,7 +1404,7 @@
           equippedIndex = Infinity;
       }
 
-      updateDescription($AVATAR.inventory.items[i]?.name, $AVATAR.inventory.items[i]);
+      updateDescription();
   }
 
   const quickAccessItems = document.querySelectorAll(".controls-container__item");
@@ -1319,28 +1413,36 @@
   const itemDescription = document.querySelector(".main-inventory__description-content");
   let controlSwitchButton;
 
-  window.updateDescription = function(itemName, item) {
-      if (!itemName) return;
+  window.updateDescription = function(getDescription, itemData) {
 
-      let d = itemDescriptions[itemName];
+      let item = itemData || $AVATAR.inventory.items[lastIndex];
+      let itemName = item?.name;
+
+      let d = itemDescriptions[itemName] || itemDescriptions["default"];
 
       if (item && d) {
-         if (item.type === "armour") {
+         if (item.type === "cash") {
+              d = d + `</br></br><strong>Amount _____ ${item.amount}$</strong>`;
+         } else if (item.type === "armour") {
               let {
                 integrity
               } = item.constructor._properties;
 
               d = d + `</br></br><strong>Strength _____ ${item.constructor._properties.strength}</strong>`;
 
+              if (getDescription) return d;
+
               d = d.concat((item === $AVATAR.state.equippedItems.armour) ? "<br><br><i>Equipped</i>" : "<br><br><i>Not Equipped</i>");
 
-              d = d.concat(`</br><i>Integrity ${aisofb(item.integrity,item.constructor._properties.strength)}%</i>`);
+              d = d.concat(`</br><i>Integrity ${Math.round(aisofb(item.integrity,item.constructor._properties.strength))}%</i>`);
          } else if (item.type === "ammo") {
               let {
                 increase
               } = item.constructor._properties;
 
               d = d + `</br></br><strong>Increase _____ capacity x${increase}</strong>`;
+
+              if (getDescription) return d;
 
               d = d.concat((item.used) ? "<br><br><i>Empty</i>" : "<br><br><i>Full</i>");
          } else if (item.type === "medicine") {
@@ -1350,6 +1452,8 @@
 
               d = d + `</br></br><strong>Regain _____ ${regain}</strong>`;
 
+              if (getDescription) return d;
+
               d = d.concat((item.used) ? "<br><br><i>Used</i>" : "<br><br><i>New</i>");
           } else if (item.type === "backpack") {
               let {
@@ -1358,16 +1462,22 @@
 
               d = d + `</br></br><strong>Capacity _____ ${capacity}</strong>`;
 
+              if (getDescription) return d;
+
               d = d.concat((item === $AVATAR.state.equippedItems.mainTool || item === $AVATAR.state.equippedItems.accessory1) ? "<br><br><i>Equipped</i>" : "<br><br><i>Not Equipped</i>");
 
           } else if (item.type === "knife") {
               let {
-                  damage
+                  damage, 
+                  durability
               } = item.constructor._properties;
 
-              d = d + `</br></br><strong>Damage _____ ${damage}</strong>`;
+              d = d + `</br></br><strong>Damage _____ ${damage}</strong></br><strong>Durability _____ ${durability}</strong>`;
 
-              d = d.concat((item === $AVATAR.state.equippedItems.mainTool || item === $AVATAR.state.equippedItems.accessory1) ? "<br><br><i>Equipped</i>" : "<br><br><i>Not Equipped</i>");
+              if (getDescription) return d;
+
+              d = d.concat((item === $AVATAR.state.equippedItems.mainTool || item === $AVATAR.state.equippedItems.accessory1) ? "<br><br><i>Equipped</i>" : "</br></br><i>Not Equipped</i>");
+              d = d.concat(`</br><i>Integrity ${item.integrity}%</i>`);
 
           } else if (item.type === "gun") {
               let {
@@ -1379,17 +1489,19 @@
 
               d = d + `</br></br><strong>Damage _____ ${damage}</strong></br><strong>Fire Rate _____ ${fireRate}</strong></br><strong>Accuracy _____ ${accuracy}</strong></br><strong>Capacity _____ ${capacity}</strong>`;
 
+              if (getDescription) return d;
+
               d = d.concat((item === $AVATAR.state.equippedItems.mainTool || item === $AVATAR.state.equippedItems.accessory1) ? "<br><br><i>Equipped</i>" : "<br><br><i>Not Equipped</i>");
           }
       }
+
+      if (getDescription) return d;
 
       itemDescription.innerHTML = d;
   }
 
   function selectSlot(i) {
       if (!$AVATAR.inventory.items[i] && !switchMode) return;
-
-      updateDescription($AVATAR.inventory.items[i]?.name, $AVATAR.inventory.items[i]);
 
       controlButtonsContainer.style.opacity = 1;
       inventoryItems.item(selectedIndex).style.backgroundColor = "rgba(0,0,0,0.2)";
@@ -1411,6 +1523,9 @@
       }
 
       selectedIndex = i;
+      lastIndex = i;
+
+      updateDescription();
   }
 
   window.setInventoryCapacity = function(n) {
@@ -1532,7 +1647,9 @@
       if (equippedIndex === selectedIndex) equippedIndex = Infinity;
 
       $AVATAR.dropItem(selectedIndex);
-      updateDescription("default");
+
+      lastIndex = undefined;
+      updateDescription();
   }
 
   controlSwitchButton = document.querySelector(".main-inventory__controls-switch");
@@ -1571,3 +1688,110 @@
  
        updateCoordinates($MAP_DISPLAY.displayOffset.x, $MAP_DISPLAY.displayOffset.y);
   }
+
+// Store controls
+
+const storeContainer = document.querySelector("#store");
+const closeStoreButton = document.querySelector("#store-close");
+const storeItemsContainer = document.querySelector(".store__items");
+const storeItemTemplate = document.querySelector("#store-item-template");
+
+let currentStoreItem = undefined;
+let highlightedItem = undefined;
+
+closeStoreButton.onclick = function() {
+ storeContainer.style.display = "none"; 
+}
+
+window.toggleStore = function(s) {
+ storeContainer.style.display = "grid"; 
+}
+
+function updateStore(s) {
+ let items = storeItemsContainer.querySelectorAll(".store__item");
+ 
+ currentStoreItem = s[0];
+
+ items.forEach((item) => {
+  item.remove();
+ });
+
+ for (let i of s) {
+  let content = storeItemTemplate.content.cloneNode(true);
+  let storeItem = content.querySelector(".store__item");
+
+   if (i === s[0]) {
+    highlightedItem = storeItem;
+    highlightedItem.style.background = "#555555";
+   }
+  
+  storeItem.addEventListener("click",function() {
+   updateCheckout(i);
+
+   highlightedItem.style.background = "rgba(0,0,0,0.2)";
+   highlightedItem = storeItem;
+   highlightedItem.style.background = "#555555";
+  });
+
+  content.querySelector(".item__icon").setAttribute("src",`/public/images/icons/${i.name.replaceAll(" ","_")}_icon.png`);
+  content.querySelector(".item__name").innerText = i.title;
+
+  storeItemsContainer.appendChild(content);
+ }
+
+updateCheckout(currentStoreItem);
+}
+
+const itemTitle = document.querySelector(".item__title u"); 
+const itemPrice = document.querySelector(".item__price"); 
+const itemIcon = document.querySelector(".info-box__icon");
+const itemTotal = document.querySelector("#item-total");
+const infoDescription = document.querySelector(".info-box__description p");
+const itemQuantity = document.querySelector("#item-quantity");
+
+function updateCheckout(storeItem) {
+ let {name, title, price, type} = storeItem;
+
+ itemTitle.innerText = title;
+ itemPrice.innerText = "Price: $" + price;
+ itemIcon.src = `/public/images/icons/${name.replaceAll(" ","_")}_icon.png`;
+ itemTotal.innerText = "$" + price;
+ infoDescription.innerHTML = updateDescription(true, {name: name, type: type, constructor: (type === "gun") ? eval(title.replaceAll(" ","_")):eval(title.replaceAll(" ",""))});
+
+ itemQuantity.value = 1;
+ currentStoreItem = storeItem;
+}
+
+itemQuantity.addEventListener("change",function() {
+ itemTotal.innerText = "$" + Math.round(itemQuantity.value * currentStoreItem.price);
+});
+
+updateStore([
+{name: "combat knife", title: "Combat Knife", price: 42.99, type: "knife"}, 
+{name: "kitchen knife", title: "Kitchen Knife", price: 8.50, type: "knife"}, 
+{name: "ammo box", title: "Ammo Box", price: 29.30, type: "ammo"}, 
+{name: "multi ammo box", title: "Multi Ammo Box", price: 42.30, type: "ammo"},
+{name: "syringe", title: "Syringe", price: 9.50, type: "medicine"},
+{name: "med kit", title: "Med Kit", price: 28.50, type: "medicine"},
+{name: "glock 20", title: "GLOCK 20", price: 1423.50, type: "gun"},
+{name: "remote detonator", title: "Remote Detonator", price: 142.20, type: "detonator"}, 
+{name: "proximity explosive", title: "Proximity Explosive", price: 70.10, type: "explosive"},
+{name: "x6 91", title: "X6 91", price: 895.99, type: "gun"}
+]);
+
+// note logic 
+
+const noteContainer = document.querySelector(".note-wrapper");
+const closeNoteButton = document.querySelector("#note-close");
+const noteContent = document.querySelector(".note__content p");
+
+function toggleNote(content) {
+ noteContent.innerText = content;
+ noteContainer.style.display = "flex";
+}
+
+closeNoteButton.addEventListener("click",() => {
+ noteContainer.style.display = "none";
+});
+
+toggleNote("You dont have enough money to purchase this item. Always do what is right. Always persevere and create the blade to slash through obstacles.");

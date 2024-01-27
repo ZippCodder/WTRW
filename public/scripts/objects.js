@@ -1250,8 +1250,8 @@ export class Bench extends _Seat_ {
 
     constructor(initialX, initialY, initialRotation) {
         super(initialX, initialY, initialRotation, [
-            [-8, 0, 180, [-8, -15]],
-            [8, 0, 180, [8, -15]]
+            [-8, 1, 180, [-8, -16]],
+            [8, 1, 180, [8, -16]]
         ]);
     }
 }
@@ -1300,7 +1300,7 @@ export class LightSwitch extends _StaticClusterClient_ {
     }
 }
 
-export class Chair extends _StaticClusterClient_ {
+export class Chair extends _Seat_ {
 
     static _defaultVertices = [-5.7, 10.7, 1, 0, 0, 5.7, 10.7, 1, 0.890625, 0, -5.7, -10.7, 1, 0, 0.8359375, 5.7, 10.7, 1, 0.890625, 0, -5.7, -10.7, 1, 0, 0.8359375, 5.7, -10.7, 1, 0.890625, 0.8359375];
 
@@ -1316,15 +1316,10 @@ export class Chair extends _StaticClusterClient_ {
         [-5.7, -7.5, 11.4, 18.2]
     ];
 
-    action() {
-        noclip = true;
-        $CURRENT_MAP.translate(this.trans.offsetX, this.trans.offsetY + 1);
-        noclip = false;
-        $AVATAR.trans.rotation = 180 * Math.PI / 180;
-    }
-
     constructor(initialX, initialY, initialRotation) {
-        super(initialX, initialY, initialRotation);
+        super(initialX, initialY, initialRotation, [
+          [0, 1, 180, [0, -16]]
+        ]);
     }
 }
 
@@ -1838,7 +1833,7 @@ export class MetalFenceVertical extends _StaticClusterClient_ {
     texture = textures.objects.metalfencevertical;
     obstacle = true;
     segments = [
-        [-0.85, -18, 1.7, 36]
+        [-0.85, -7.6, 1.7, 36]
     ];
 
     constructor(initialX, initialY, initialRotation) {
@@ -2186,11 +2181,11 @@ export class _Pickup_ extends _InstancedClusterClient_ {
     subLayer = 1;
 
     postLink() {
-        this.map.link(this.ring);
+      if (this.ring) this.map.link(this.ring);
     }
 
     clean() {
-        this.ring.delete();
+      if (this.ring) this.ring.delete();
     }
 
     action() {
@@ -2201,7 +2196,9 @@ export class _Pickup_ extends _InstancedClusterClient_ {
 
         this.trans.offsetX += x;
         this.trans.offsetY += y;
-        this.ring.translate(this.trans.offsetX - this.ring.trans.offsetX, this.trans.offsetY - this.ring.trans.offsetY, false, translateVertices);
+        if (this.ring) {
+         this.ring.translate(this.trans.offsetX - this.ring.trans.offsetX, this.trans.offsetY - this.ring.trans.offsetY, false, translateVertices);
+        }
 
         if (rotation) {
             this.trans.rotation = rotation;
@@ -2228,7 +2225,16 @@ export class _Blade_ extends _Pickup_ {
         super(initialX, initialY, initialRotation);
     }
 
+    degrade() {
+     this.integrity -= aofb(100 - this.constructor._properties.durability,5);
+     if (this.integrity <= 0 && this === $AVATAR.state.equippedItems.mainTool) {
+      $AVATAR.dropItem(this.slot);
+      this.delete();
+     } 
+    }
+
     type = "knife";
+    integrity = 100;
 }
 
 export class _Medicine_ extends _Pickup_ {
@@ -2270,6 +2276,23 @@ export class Syringe extends _Medicine_ {
     }
 }
 
+export class Money extends _Pickup_ {
+
+    static _defaultVertices = [-3.7,1.9,1,0,0,3.7,1.9,1,0.578125,0,-3.7,-1.9,1,0,0.59375,3.7,1.9,1,0.578125,0,-3.7,-1.9,1,0,0.59375,3.7,-1.9,1,0.578125,0.59375];
+
+    width = 7.4;
+    height = 3.8;
+    clusterName = "money";
+    texture = textures.objects.money;
+    name = "money";
+    type = "cash";
+
+    constructor(initialX, initialY, initialRotation, amount) {
+        super(initialX, initialY, initialRotation);
+        this.amount = amount || (5 + random(100));
+    }
+}
+
 export class MedKit extends _Medicine_ {
 
     static _properties = {
@@ -2307,6 +2330,138 @@ export class BasicArmour extends _Pickup_ {
     constructor(initialX, initialY, initialRotation) {
         super(initialX, initialY, initialRotation); 
         this.integrity = 50;
+    }
+}
+
+export class RemoteDetonator extends _Pickup_ { 
+
+    static _defaultVertices = [-1.2,3,1,0,0,1.2,3,1,0.75,0,-1.2,-3,1,0,0.9375,1.2,3,1,0.75,0,-1.2,-3,1,0,0.9375,1.2,-3,1,0.75,0.9375];
+
+    width = 2.4;
+    height = 6;
+    clusterName = "remote detonator";
+    texture = textures.objects.remotedetonator;
+    name = "remote detonator";
+    type = "detonator";
+    
+    constructor(initialX, initialY, initialRotation) {
+        super(initialX, initialY, initialRotation);
+    }
+
+    activate() {
+     for (let i of $AVATAR.inventory.explosives) {
+      $CURRENT_MAP.objects[i]?.detonate();
+     }
+    }
+}
+
+export class ProximityExplosive extends _Pickup_ { 
+
+    static _defaultVertices = [-2.1,3.8,1,0,0,2.1,3.8,1,0.65625,0,-2.1,-3.8,1,0,0.59375,2.1,3.8,1,0.65625,0,-2.1,-3.8,1,0,0.59375,2.1,-3.8,1,0.65625,0.59375];
+
+    width = 4.2;
+    height = 7.6;
+    clusterName = "proximity explosive";
+    texture = textures.objects.proximityexplosive;
+    name = "proximity explosive";
+    type = "explosive";
+    obstacle = true;
+    passable = true;
+    armed = false;
+    hideFromMap = true;
+    segments = [[-2.1,-3.8,4.2,7.6]];
+    
+    constructor(initialX, initialY, initialRotation, owner) {
+        super(initialX, initialY, initialRotation);
+        this.owner = owner;
+        this.proximityCheckAnimation = new LoopAnimation(function() {
+          for (let i in $CURRENT_MAP.avatars) {
+            let dist = distance(this.trans.offsetX, this.trans.offsetY, $CURRENT_MAP.avatars[i].trans.offsetX, $CURRENT_MAP.avatars[i].trans.offsetY);
+
+            if (dist < 20) {
+              this.detonate();
+              break;
+            }
+          }
+        }, this, 1);
+        this.activationTimeout = new MultiFrameLinearAnimation([function() {
+           this.armed = true; 
+         }], this, [3]);
+    }
+
+     detonate() {
+      if (this.armed) {
+       const map = this.map;
+      
+       for (let i = 0; i < 40; i++) { 
+       let randomBulletRotation = random(360);
+       let [directionX, directionY] = rotate(0,1,randomBulletRotation);
+       let velocity = random(10)+3;
+
+       map.link(new Bullet(this.trans.offsetX, this.trans.offsetY, randomBulletRotation, directionX * velocity, directionY * velocity, 100, $AVATAR));
+       }
+ 
+      this.delete();
+     }
+    }
+    
+    arm() {
+      this.armed = true;
+    }
+
+    hit() {
+     this.detonate();
+    }
+
+   preRender() {
+    this.activationTimeout.run();
+    if (this.armed) this.proximityCheckAnimation.run();
+   }
+}
+
+export class RemoteExplosive extends _Pickup_ { 
+
+    static _defaultVertices = [-2.1,3.8,1,0,0,2.1,3.8,1,0.65625,0,-2.1,-3.8,1,0,0.59375,2.1,3.8,1,0.65625,0,-2.1,-3.8,1,0,0.59375,2.1,-3.8,1,0.65625,0.59375];
+
+    width = 4.2;
+    height = 7.6;
+    clusterName = "remote explosive";
+    texture = textures.objects.remoteexplosive;
+    name = "remote explosive";
+    type = "explosive";
+    obstacle = true;
+    passable = true;
+    armed = false;
+    hideFromMap = true;
+    segments = [[-2.1,-3.8,4.2,7.6]];
+    
+    constructor(initialX, initialY, initialRotation, owner) {
+        super(initialX, initialY, initialRotation);
+        this.owner = owner;
+    }
+
+     detonate() {
+      if (this.armed) {
+       const map = this.map;
+      
+       for (let i = 0; i < 40; i++) { 
+       let randomBulletRotation = random(360);
+       let [directionX, directionY] = rotate(0,1,randomBulletRotation);
+       let velocity = random(10)+3;
+
+       map.link(new Bullet(this.trans.offsetX, this.trans.offsetY, randomBulletRotation, directionX * velocity, directionY * velocity, 100, $AVATAR));
+       }
+ 
+      this.delete();
+     }
+    }
+    
+    arm() {
+      this.armed = true;
+    }
+
+    hit() {
+     this.detonate();
     }
 }
 
@@ -2396,6 +2551,7 @@ export class KitchenKnife extends _Blade_ {
 
     static _properties = {
         damage: 25,
+        durability: 10,
         useTextures: [14, 15, 16, 17, 18],
     }
 
@@ -2416,6 +2572,7 @@ export class AssassinsKnife extends _Blade_ {
 
     static _properties = {
         damage: 100,
+        durability: 30,
         useTextures: [19, 20, 21, 22, 23],
     }
 
@@ -2433,11 +2590,17 @@ export class AssassinsKnife extends _Blade_ {
 }
 
 export class CombatKnife extends _Blade_ {
+    
+    static _properties = {
+        damage: 50,
+        durability: 50,
+        useTextures: [textures.skins.avatarcombatknife1.id, textures.skins.avatarcombatknife2.id, textures.skins.avatarcombatknife3.id, textures.skins.avatarcombatknifewalking1.id, textures.skins.avatarcombatknifewalking2.id],
+    }
 
-    static _defaultVertices = [-3.4899999999999998, 4.630000000000001, 1, 0, 0, 3.4899999999999998, 4.630000000000001, 1, 0.5453125, 0, -3.4899999999999998, -4.630000000000001, 1, 0, 0.7234375, 3.4899999999999998, 4.630000000000001, 1, 0.5453125, 0, -3.4899999999999998, -4.630000000000001, 1, 0, 0.7234375, 3.4899999999999998, -4.630000000000001, 1, 0.5453125, 0.7234375];
+    static _defaultVertices = [-1.8,6.8,1,0,0,1.8,6.8,1,0.5625,0,-1.8,-6.8,1,0,0.53125,1.8,6.8,1,0.5625,0,-1.8,-6.8,1,0,0.53125,1.8,-6.8,1,0.5625,0.53125];
 
-    width = 6.9799999999999995;
-    height = 9.260000000000002;
+    width = 3.6;
+    height = 13.6;
     clusterName = "combat knife";
     texture = textures.objects.combatknife;
     name = "combat knife";
@@ -2483,7 +2646,7 @@ export class DX_9 extends _Gun_ {
         accuracy: 5,
         nozzelLength: 13,
         capacity: 26,
-        reloadTime: 3,
+        reloadTime: 2.5,
         useTextures: [textures.skins.avatardrawdx9.id, textures.skins.avatardrawdx9pullback.id]
     }
 
@@ -2508,9 +2671,9 @@ export class NOSS_7 extends _Gun_ {
         bulletSpeed: 8,
         damage: 28,
         accuracy: 15,
-        nozzelLength: 13,
+        nozzelLength: 19,
         capacity: 46,
-        reloadTime: 3,
+        reloadTime: 5,
         useTextures: [textures.skins.avatardrawnoss7.id, textures.skins.avatardrawnoss7pullback.id]
     }
 
@@ -2531,13 +2694,13 @@ export class NOSS_7 extends _Gun_ {
 export class FURS_55 extends _Gun_ {
 
     static _properties = {
-        fireRate: 0.8,
+        fireRate: 1.3,
         bulletSpeed: 5,
-        damage: 16,
+        damage: 23,
         accuracy: 5,
         nozzelLength: 13,
-        capacity: 26,
-        reloadTime: 3,
+        capacity: 8,
+        reloadTime: 4,
         useTextures: [textures.skins.avatardrawfurs55.id, textures.skins.avatardrawfurs55pullback.id]
     }
 
@@ -3131,7 +3294,7 @@ export class Avatar {
         return false;
     }
 
-    dropItem(slot) {
+    dropItem(slot, ring = true) {
         if (!this.inventory.items[slot]) return false;
 
         updateInventoryItem(this.inventory.items[slot].slot, this.inventory.items[slot].name, true);
@@ -3139,9 +3302,13 @@ export class Avatar {
 
         let item = this.inventory.ejectItem(slot);
 
-        item.ring.trans.offsetX = item.trans.offsetX = this.trans.offsetX + random(10, true);
-        item.ring.trans.offsetY = item.trans.offsetY = this.trans.offsetY + random(10, true);
-        item.trans.rotation = random(360);
+        if (ring) {
+         item.ring.trans.offsetX = item.trans.offsetX = this.trans.offsetX + random(10, true);
+         item.ring.trans.offsetY = item.trans.offsetY = this.trans.offsetY + random(10, true);
+         item.trans.rotation = random(360);
+        } else {
+         delete item.ring;
+        }
 
         $CURRENT_MAP.link(item);
 
@@ -3163,6 +3330,29 @@ export class Avatar {
 
         if (item) {
             switch (item.type) {
+                case "cash": {
+                 $AVATAR.inventory.cash += item.amount;
+                 this.dropItem(slot);
+                 item.delete();
+
+                 updateMoneyDisplay();
+                };
+                break;
+                case "detonator": {
+                 item.activate();
+                };
+                break;
+                case "explosive": {
+                  if (item.name === "remote explosive") {
+                   item.arm();
+                   $AVATAR.inventory.explosives.push(item.id);
+                  } else {
+                   item.activationTimeout.start();
+                  }
+
+                 this.dropItem(slot, false);
+                };
+                break;
                 case "armour": {
                  if (this.state.equippedItems.armour !== item) {
                    this.state.equippedItems.armour = item;
@@ -3220,6 +3410,7 @@ export class Avatar {
                     this.state.armed = false;
                     this.state.melee = true;
                     this.state.equippedItems.mainTool = item;
+                    this.state.reloadTimeout.end();
                 }
                 break;
                 case "backpack": {
@@ -3422,6 +3613,7 @@ export class Avatar {
 
             if ((Math.abs(x - avatar.trans.offsetX) < (avatar.width / 2 + width / 2)) && (Math.abs(y - avatar.trans.offsetY) < (avatar.height / 2 + height / 2))) {
                 avatar.hit(damage, this);
+                if (this.state.equippedItems.mainTool?.type === "knife") this.state.equippedItems.mainTool.degrade();
             }
         }
     }
@@ -5228,6 +5420,8 @@ export class _Map_ {
         this.GRAPH.blocked = [];
         for (let o in this.obstacles) {
             let obj = this.obstacles[o];
+            if (obj.passable) continue;
+
             for (let i of obj.segments) {
                 this.GRAPH.evalObstacle((i[0] + obj.trans.offsetX) + this.centerX, (i[1] + obj.trans.offsetY) + this.centerY, i[2], i[3]);
             }
@@ -5337,7 +5531,7 @@ export class _Map_ {
         if (this.move) {
             if (!noclip) {
                 for (let i in this.obstacles) {
-                    if (this.obstacles[i] === $AVATAR.state.pickup.current || this.obstacles[i] === $AVATAR) continue;
+                    if (this.obstacles[i] === $AVATAR.state.pickup.current || this.obstacles[i] === $AVATAR || this.obstacles[i].passable) continue;
                     for (let segment of this.obstacles[i].segments) {
 
                         let [ox,
@@ -5553,6 +5747,8 @@ export class Text extends _Object_ {
         this.segments = segments;
         this.name = "text";
         this.type = "text";
+        this.bottomLayer = true;
+        this.subLayer = 1;
     }
 
     update(text) {

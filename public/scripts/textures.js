@@ -114,6 +114,11 @@ await textures.skins.addTexture("avatardrawnoss7", "/public/images/textures/MAIN
 await textures.skins.addTexture("avatardrawnoss7pullback", "/public/images/textures/MAIN_AVATAR_DRAW_NOSS7_2.png");
 await textures.skins.addTexture("avatardrawx691", "/public/images/textures/MAIN_AVATAR_DRAW_X691_1.png");
 await textures.skins.addTexture("avatardrawx691pullback", "/public/images/textures/MAIN_AVATAR_DRAW_X691_2.png");
+await textures.skins.addTexture("avatarcombatknife1", "/public/images/textures/MAIN_AVATAR_MELEE_COMBAT_KNIFE_1.png");
+await textures.skins.addTexture("avatarcombatknife2", "/public/images/textures/MAIN_AVATAR_MELEE_COMBAT_KNIFE_2.png");
+await textures.skins.addTexture("avatarcombatknife3", "/public/images/textures/MAIN_AVATAR_MELEE_COMBAT_KNIFE_3.png");
+await textures.skins.addTexture("avatarcombatknifewalking1", "/public/images/textures/MAIN_AVATAR_MELEE_COMBAT_KNIFE_WALKING_1.png");
+await textures.skins.addTexture("avatarcombatknifewalking2", "/public/images/textures/MAIN_AVATAR_MELEE_COMBAT_KNIFE_WALKING_2.png");
 
 textures.objects = new TextureContainer();
 
@@ -134,6 +139,9 @@ await textures.objects.addTexture("steakandfries", "/public/images/textures/STEA
 await textures.objects.addTexture("greybackpack", "/public/images/textures/GREY_BACKPACK.png");
 await textures.objects.addTexture("whitebackpack", "/public/images/textures/WHITE_BACKPACK.png");
 await textures.objects.addTexture("blackbackpack", "/public/images/textures/BLACK_BACKPACK.png");
+await textures.objects.addTexture("remoteexplosive", "/public/images/textures/REMOTE_EXPLOSIVE.png");
+await textures.objects.addTexture("proximityexplosive", "/public/images/textures/PROXIMITY_EXPLOSIVE.png");
+await textures.objects.addTexture("remotedetonator", "/public/images/textures/REMOTE_DETONATOR.png");
 await textures.objects.addTexture("book1", "/public/images/textures/BOOK_1.png");
 await textures.objects.addTexture("book2", "/public/images/textures/BOOK_2.png");
 await textures.objects.addTexture("syringe", "/public/images/textures/SYRINGE.png");
@@ -180,6 +188,7 @@ await textures.objects.addTexture("woodfloortile", "/public/images/textures/WOOD
 await textures.objects.addTexture("crosstile", "/public/images/textures/CROSS_TILE.png", {repeat: true});
 await textures.objects.addTexture("grasstile", "/public/images/textures/GRASS_TILE.png", {repeat: true, minFilter: gl.NEAREST});
 await textures.objects.addTexture("bench", "/public/images/textures/BENCH.png");
+await textures.objects.addTexture("money", "/public/images/textures/MONEY.png");
 await textures.objects.addTexture("grass1", "/public/images/textures/GRASS_1.png");
 await textures.objects.addTexture("grass2", "/public/images/textures/GRASS_2.png");
 await textures.objects.addTexture("rocks1", "/public/images/textures/ROCKS_1.png");
