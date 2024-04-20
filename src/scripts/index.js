@@ -1,12 +1,12 @@
 import {
     LoopAnimation,
     Transition
-} from "/public/scripts/lib.js";
+} from "/src/scripts/lib.js";
 
 window.onload = async () => {
 
     window.canvas = document.querySelector("#gameArea");
-    window.sharpness = 2;
+    window.sharpness = 1;
 
     canvas.width = window.innerWidth * sharpness;
     canvas.height = window.innerHeight * sharpness;
@@ -395,10 +395,10 @@ window.onload = async () => {
     gl.vertexAttrib3fv(locations.offset, new Float32Array([0, 0, 0.001]));
     gl.vertexAttrib1f(locations.textrUnit, 0);
 
-    await import("/public/scripts/textures.js");
-    await import("/public/scripts/objects.js");
-    await import("/public/scripts/controls.js");
-    await import("/public/scripts/game.js");
+    await import("/src/scripts/textures.js");
+    await import("/src/scripts/objects.js");
+    await import("/src/scripts/controls.js");
+    await import("/src/scripts/game.js");
 
     function renderObjects() {
         $OBJECTS.forEach(v => {

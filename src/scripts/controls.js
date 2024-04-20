@@ -17,7 +17,7 @@
       fromRGB,
       toRGB,
       rotate
-  } from "/public/scripts/lib.js";
+  } from "/src/scripts/lib.js";
 
   import {
       _Map_,
@@ -94,9 +94,9 @@
       ProximityExplosive,
       CombatKnife,
       Money
-  } from "/public/scripts/objects.js";
+  } from "/src/scripts/objects.js";
 
-  import _dialogues from "/public/scripts/dialogue.js";
+  import _dialogues from "/src/scripts/dialogue.js";
 
   /* LOGIC FOR INTERACTION BUTTONS */
 
@@ -1748,6 +1748,7 @@ const itemIcon = document.querySelector(".info-box__icon");
 const itemTotal = document.querySelector("#item-total");
 const infoDescription = document.querySelector(".info-box__description p");
 const itemQuantity = document.querySelector("#item-quantity");
+const purchaseButton = document.querySelector("#item-purchase");
 
 function updateCheckout(storeItem) {
  let {name, title, price, type} = storeItem;
@@ -1760,6 +1761,23 @@ function updateCheckout(storeItem) {
 
  itemQuantity.value = 1;
  currentStoreItem = storeItem;
+}
+
+ purchaseButton.onclick = function() {
+ if (itemQuantity.value > ($AVATAR.inventory.slots - $AVATAR.inventory.count)) {
+ toggleNote("Sorry, we couldn't make this purchase! You dont have enough space in your inventory to hold these items. Try dropping a few things you dont need.");
+  return; 
+ } else if (currentStoreItem.price > $AVATAR.inventory.cash) {
+ toggleNote("You dont have enough money to make this purchase! Try getting a job you bum.");
+  return; 
+}
+
+ for (let i = 0; i < itemQuantity.value; i++) {
+  $AVATAR.addItem(eval(`new ${currentStoreItem.title.replaceAll(" ","")}`));
+ }
+
+ $AVATAR.inventory.cash -= currentStoreItem.price;
+ toggleNote(`Purchase successful! ${itemQuantity.value} ${currentStoreItem.name + ((itemQuantity.value > 1) ? "s were":" was")} added to your inventory.`);
 }
 
 itemQuantity.addEventListener("change",function() {
@@ -1794,4 +1812,29 @@ closeNoteButton.addEventListener("click",() => {
  noteContainer.style.display = "none";
 });
 
-toggleNote("You dont have enough money to purchase this item. Always do what is right. Always persevere and create the blade to slash through obstacles.");
+toggleNote("INSTRUCTIONS:\n\nYou dont have enough money to purchase this item. Always do what is right. Always persevere and create the blade to slash through obstacles.\n\n Make sure to keep it real baby!");
+
+// desktop controls 
+ 
+window.addEventListener("keydown", (e) => {
+ const desktopMovementSpeed = 3*movementMultFactor;
+
+ switch(e.key) {
+  case "w": {
+   $CURRENT_MAP.translate(0,desktopMovementSpeed);
+  };
+  break;
+  case "a": {
+   $CURRENT_MAP.translate(-desktopMovementSpeed, 0);
+  };
+  break;
+  case "s": {
+   $CURRENT_MAP.translate(0,-desktopMovementSpeed);
+  };
+  break;
+  case "d": {
+   $CURRENT_MAP.translate(desktopMovementSpeed, 0);
+  };
+  break;
+ }
+});

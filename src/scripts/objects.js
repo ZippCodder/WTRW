@@ -18,9 +18,9 @@ import {
     rotate,
     lineIntersectsBox,
     normalizeRotation
-} from "/public/scripts/lib.js";
+} from "/src/scripts/lib.js";
 
-const pathfinder = new Worker("/public/scripts/pathfinder.js");
+const pathfinder = new Worker("/src/scripts/pathfinder.js");
 
 pathfinder.registerMap = function(map) {
  pathfinder.postMessage({requestType: 1, mapId: map.id, nodes: map.GRAPH.nodes});

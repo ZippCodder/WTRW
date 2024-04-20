@@ -17,12 +17,12 @@
       toRGB,
       rotate,
       normalizeRotation
-  } from "/public/scripts/lib.js";
+  } from "/src/scripts/lib.js";
 
   import {
       Map1,
       Map2
-  } from "/public/scripts/maps.js";
+  } from "/src/scripts/maps.js";
 
   import {
       _Map_,
@@ -71,7 +71,7 @@
       FURS_55, 
       X6_91, 
       Money
-  } from "/public/scripts/objects.js";
+  } from "/src/scripts/objects.js";
 
   $AVATAR = new Avatar("R O B I N H O O D");
   $AVATAR.postLink();
@@ -323,6 +323,14 @@
   $MAP.link(new Bench(-60,20));
 
   $MAP.link(new BasicArmour);
+
+  for (let i = 0; i < 40; i++) {
+   $MAP.link(new GLOCK_20);
+  }
+
+  $CURRENT_MAP = $MAP.SUB_MAPS[0];
+
+  $CURRENT_MAP.link(new Text("Use <A> to interact/pickup items", 10, 0, 0));
 
   $GAME_LOOP = function() {
       sitLoop.run();

@@ -1,7 +1,7 @@
 import {
     draw,
     random
-} from "/public/scripts/lib.js";
+} from "/src/scripts/lib.js";
 
 // functions for drawing textures for downloading and vertex mapping
 

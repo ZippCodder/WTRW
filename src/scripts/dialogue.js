@@ -1,6 +1,6 @@
 import {
  random
-} from "/public/scripts/lib.js";
+} from "/src/scripts/lib.js";
 
 const _dialogues = {
  defaultOptions: []
