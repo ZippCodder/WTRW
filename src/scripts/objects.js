@@ -5846,6 +5846,8 @@ export class _Joystick_ extends _Object_ {
             gl.disableVertexAttribArray(locations.textrUnit);
 
         }, function() {
+
+            if (this.desktopMovementAnimation.active) this.desktopMovementAnimation.run();
             if (!this.base.anchored && !this.fixed) return;
 
             ext.bindVertexArrayOES(this.vao);
@@ -5867,6 +5869,7 @@ export class _Joystick_ extends _Object_ {
             gl.uniform1f(locations.transparency, 1);
 
             if ($CURRENT_MAP.move) {
+
                 if (left && this.base.anchored) {
                     $CURRENT_MAP.translate((this.distance.x * this.scale) * movementMultFactor, (this.distance.y * this.scale) * movementMultFactor);
 
@@ -5880,11 +5883,14 @@ export class _Joystick_ extends _Object_ {
                     }
                 }
 
-                if (this.base.anchored) $AVATAR.trans.rotation = this.rotation;
+                if (this.base.anchored && !mouseMovementTimeout) $AVATAR.trans.rotation = this.rotation;
                 if ($CURRENT_MAP.move && this.base.anchored && !left) $AVATAR.drawWeapon();
             }
         }, 30, 30);
-        this.position = Object.create(position);
+        this.position = position;
+        this.desktopMovementAnimation = new LoopAnimation(function() { 
+         this.desktopMovementCallback();
+        }, this, 0.01);
         this.base = {
             x: position.x,
             y: position.y,

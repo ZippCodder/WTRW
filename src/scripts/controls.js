@@ -1554,7 +1554,13 @@
 
 
   for (let i = 0; i < quickAccessItems.length; i++) {
-      quickAccessItems.item(i).ontouchstart = function() {
+      quickAccessItems.item(i).ontouchstart = function(e) {
+          e.preventDefault();
+          equipSlot(i);
+      }
+
+      quickAccessItems.item(i).onclick = function(e) {
+          e.preventDefault();
           equipSlot(i);
       }
   }
@@ -1815,26 +1821,95 @@ closeNoteButton.addEventListener("click",() => {
 toggleNote("INSTRUCTIONS:\n\nYou dont have enough money to purchase this item. Always do what is right. Always persevere and create the blade to slash through obstacles.\n\n Make sure to keep it real baby!");
 
 // desktop controls 
- 
-window.addEventListener("keydown", (e) => {
- const desktopMovementSpeed = 3*movementMultFactor;
 
- switch(e.key) {
-  case "w": {
-   $CURRENT_MAP.translate(0,desktopMovementSpeed);
-  };
-  break;
-  case "a": {
-   $CURRENT_MAP.translate(-desktopMovementSpeed, 0);
-  };
-  break;
-  case "s": {
-   $CURRENT_MAP.translate(0,-desktopMovementSpeed);
-  };
-  break;
-  case "d": {
-   $CURRENT_MAP.translate(desktopMovementSpeed, 0);
-  };
-  break;
+const desktopMovementFactor = 1;
+let movementX = 0, movementY = 0;
+let wKeyDown = false, aKeyDown = false, sKeyDown = false, dKeyDown = false, position = {x: $JOYSTICK_L.position.x, y: $JOYSTICK_L.position.y};
+window.mouseMovementTimeout = undefined;
+
+$JOYSTICK_L.desktopMovementCallback = function() {
+ if ($ACTIVE_DIALOGUE_PARTY) return;
+
+          if (wKeyDown && position.y) {
+           position.y += desktopMovementFactor; 
+          }
+          if (aKeyDown) {
+           position.x -= desktopMovementFactor;
+          } 
+          if (sKeyDown) {
+           position.y -= desktopMovementFactor; 
+          }
+          if (dKeyDown) {
+           position.x += desktopMovementFactor; 
+          }
+
+          let {
+              width,
+              height,
+              x,
+              y,
+              radius
+          } = $JOYSTICK_L.base;
+
+          let d = distance(x, y, position.x, position.y),
+              t = radius / d;
+
+          if ($JOYSTICK_L.base.anchored) {
+              if (d > radius) {
+                  position.x = (((1 - t) * x) + (t * position.x));
+                  position.y = (((1 - t) * y) + (t * position.y));
+              }
+          }
+
+          if ((d < radius) || $JOYSTICK_L.base.anchored || $JOYSTICK_L.fixed) $JOYSTICK_L.translate(position.x, position.y);
+}
+
+window.addEventListener("keydown", (e) => {
+ eval(`${e.key}KeyDown = ${true}`);
+ $JOYSTICK_L.desktopMovementAnimation.active = true; 
+});
+
+window.addEventListener("keyup", (e) => {
+ eval(`${e.key}KeyDown = ${false}`);
+
+ if (!wKeyDown && !aKeyDown && !sKeyDown && !dKeyDown) {
+   $AVATAR.state.walking = false;
+   $JOYSTICK_L.desktopMovementAnimation.active = false; 
+   $JOYSTICK_L.unanchor();
+   $JOYSTICK_L.fix();
+   position = {x: $JOYSTICK_L.position.x, y: $JOYSTICK_L.position.y};
  }
 });
+
+      canvas.addEventListener("mousemove", (e) => {
+            if (!mouseMovementTimeout) mouseMovementTimeout = setTimeout(() => {
+             clearTimeout(mouseMovementTimeout);
+             mouseMovementTimeout = undefined; 
+            },2000);
+
+        $AVATAR.trans.rotation = Math.atan2(e.pageX - (window.innerWidth/2), e.pageY - (window.innerHeight/2)) + 3.14159;
+      });
+
+      canvas.addEventListener("mousedown", () => {
+            if (!$AVATAR.state.pickup.current) {
+                if ($AVATAR.state.armed) {
+                    $AVATAR.state.fire = true;
+                } else if ($AVATAR.state.melee) {
+                    $AVATAR.state.stabbing = true;
+                } else {
+                    $AVATAR.state.punching = true;
+                }
+            } else {
+                $AVATAR.state.fire = false;
+                $AVATAR.state.punching = false;
+                $AVATAR.state.stabbing = false;
+            }
+      });
+
+      canvas.addEventListener("mouseup", () => {
+            $AVATAR.state.fire = false;
+            $AVATAR.state.punching = false;
+            $AVATAR.state.stabbing = false;
+            clearTimeout(mouseMovementTimeout);
+            mouseMovementTimeout = undefined; 
+      });

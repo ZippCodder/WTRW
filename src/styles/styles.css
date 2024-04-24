@@ -400,7 +400,7 @@ html,body {
           .controls-container__inv {
             position: absolute;
             top: calc((100% - 7vmax) - 1em - 2px);
-            width: 39vmax;
+            width: 15vmax;
             height: 7vmax;
             left: calc(50% - 19.5vmax);
             display: grid;
@@ -462,7 +462,7 @@ html,body {
           .controls-container__stats {
               user-select: none;
               display: block;
-              width: 30vmax;
+              width: max-content;
               height: 2.4em;
               white-space: nowrap;
               position: absolute;
@@ -532,7 +532,7 @@ html,body {
  
           #console-button:active {
            background: rgba(1,1,1,0.6);  
-          } 
+          }
 
           #console-button img, #action-button img {
             opacity: 0.7;
@@ -579,7 +579,7 @@ html,body {
           
           .controls-container__healthbar {
               display: block;
-              width: 50%;
+              width: 25vmin;
               height: 30%;
               background: rgba(0,0,0,0.5); 
           }
@@ -1329,7 +1329,7 @@ html,body {
             .controls-container__money { 
               left: 0;
               margin: 0;
-              top: calc(5.4em + 4px + 25vmin);
+              top: calc(5.4em + 4px + 6em);
             }
   
             #store {
@@ -1511,4 +1511,54 @@ html,body {
  
           #goto {
             opacity: 0.5;
+          }
+
+
+          @media only screen and (min-width: 900px) and (orientation: portrait) {
+           #main-inventory, #map, #store, #console {
+             width: 30rem;
+             height: 40rem;
+             position: absolute;
+             left: calc(50% - 15rem);
+             top: calc(50% - 20rem);
+           } 
+
+           #note {
+             width: 25rem;
+           } 
+          }
+
+          @media only screen and (min-width: 900px) and (orientation: landscape) {
+           #main-inventory, #map, #store, #console {
+             width: 40rem;
+             height: 25rem;
+             position: absolute;
+             left: calc(50% - 20rem);
+             top: calc(50% - 12.5rem);
+           } 
+
+           #note {
+             width: 25rem;
+           } 
+
+           .controls-container__inv {
+            top: calc(100% - 5em);
+            width: 20em;
+            height: 4em;
+            left: calc(50% - 11em);
+            grid-template-columns: repeat(5, 4em);
+            grid-gap: 0.5em;
+           }
+ 
+           .controls-container__info-boxes {
+              position: absolute;
+              top: calc(100% - 7.5em);
+              left: calc(50% - 11em);
+              display: flex;
+              flex-direction: row;
+              user-select: none;
+              justify-content: flex-end;
+              width: 22em;
+              height: 2em;
+           }
           }
