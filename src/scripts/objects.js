@@ -1592,7 +1592,6 @@ export class Door extends _StaticClusterClient_ {
     segments = [
         [-7.3, -0.2, 14.6, 9.4]
     ];
-    topLayer = false;
     exclude = true;
     interactable = true;
     minDistance = 17;
@@ -1832,8 +1831,9 @@ export class MetalFenceVertical extends _StaticClusterClient_ {
     clusterName = "metal fence vertical";
     texture = textures.objects.metalfencevertical;
     obstacle = true;
+    topLayer = true; 
     segments = [
-        [-0.85, -7.6, 1.7, 36]
+        [-0.85, -18, 1.7, 36]
     ];
 
     constructor(initialX, initialY, initialRotation) {
@@ -2045,11 +2045,8 @@ export class GunStore extends _Building_ {
 
     constructor(initialX, initialY, initialRotation) {
         super(initialX, initialY, initialRotation, [
-            [-26.1, -33, 0, [0, 44.38]],
-            [23, 25, 0, [-50, 44.38]],
-            [23, -57, 1],
-            [-30, -65, 0]
-        ], [new _Map_(150, 100, false, "House 1").init(undefined, undefined, [-26, -41], true), new _Map_(150, 80, false, "House 1").init(), new _Map_(150, 80, false, "House 1").init()], undefined);
+            [-35, -46, 0, [0, 44.38]]
+        ], [new _Map_(150, 100, false, "Gun Store").init(undefined, undefined, [-35, -53], true)], undefined);
 
         let floor = new Floor(0, 0, 150, 100, 0);
         floor.exclude = true;
@@ -2172,6 +2169,9 @@ export class _Pickup_ extends _InstancedClusterClient_ {
         super(initialX, initialY, initialRotation ?? random(360));
 
         this.ring = new PickupRing(this.trans.offsetX, this.trans.offsetY);
+        this.deletionAnimation = new MultiFrameLoopAnimation([function() {
+          this.delete();
+        }],this,[20]); 
     }
 
     pickup = true;
@@ -2179,6 +2179,12 @@ export class _Pickup_ extends _InstancedClusterClient_ {
     minDistance = 5;
     moveable = true;
     subLayer = 1;
+
+    preRender() {
+     if (this.linked && this.dropped && this !== $AVATAR.state.pickup.current) {
+       this.deletionAnimation.run();
+     }
+    }
 
     postLink() {
       if (this.ring) this.map.link(this.ring);
@@ -2998,6 +3004,8 @@ export class Avatar {
             armour: 0,
             invinsible: false,
             kills: 0,
+            deaths: 0, 
+            score: 0, 
             hitboxes: {
                 leftPunch: {
                     x: -4,
@@ -3250,6 +3258,9 @@ export class Avatar {
             if (this.state.vitals.health <= 0 && this.state.armour === 0) {
                 let attacker = $CURRENT_MAP.avatars[owner.id];
                 if (attacker) attacker.state.kills += 1;
+                $AVATAR.state.deaths += 1;
+                
+                updateCombatStats();
 
                 this.purgeItems(5);
 
@@ -3259,6 +3270,7 @@ export class Avatar {
                 if (this.state.pickup.current) this.drop();
                 this.hidden = true;
                 noclip = true;
+                this.respawn();
 
                 return;
             }
@@ -3301,6 +3313,7 @@ export class Avatar {
         this.unequipItem(slot);
 
         let item = this.inventory.ejectItem(slot);
+        item.dropped = true;
 
         if (ring) {
          item.ring.trans.offsetX = item.trans.offsetX = this.trans.offsetX + random(10, true);
@@ -3370,7 +3383,7 @@ export class Avatar {
                        item.used = true;
                        this.dropItem(slot);
                        updateAmmoDisplay();
-                      } else if (item.name === "multi ammo box") {
+                      } else if (item.name === "multi ammo box" && this.state.equippedItems.mainTool?.type === "gun") {
                         for (let w in this.inventory.weapons) {
                           this.inventory.weapons[w].ammo += this.state.equippedItems.mainTool.constructor._properties.capacity * item.constructor._properties.increase;
                         } 
@@ -3571,6 +3584,7 @@ export class Avatar {
         if (this.state.reloadTimeout.reset) this.state.reloadTimeout.run();
 
         if (this.state.pickup.current) this.state.position.body.texture = 24;
+        if (this.state.equippedItems.mainTool && !$IS_MOBILE) this.state.draw = true;
 
         this.movePickup();
     }
@@ -3660,6 +3674,22 @@ export class Avatar {
         if (this.state.pickup.current) {
             this.state.pickup.current = undefined;
         }
+    }
+
+    respawn() {
+     requestTransition((function() {
+      this.state.vitals.health = 100; 
+      updateHealthBar();
+ 
+      $CURRENT_MAP.avatars[this.id] = this;
+      $CURRENT_MAP.obstacles[this.id] = this;
+ 
+      let {x, y} = $CURRENT_MAP.GRAPH.getRandomPoint();
+      let {centerX, centerY} = $CURRENT_MAP;
+      $CURRENT_MAP.move = true;
+      $CURRENT_MAP.translate(x - centerX, y - centerY);
+      noclip = false; 
+     }).bind(this));
     }
 
     clean() {
@@ -4117,6 +4147,7 @@ export class Bot {
             if (this.state.vitals.health <= 0) {
                 let attacker = this.map.avatars[owner.id];
                 if (attacker) attacker.state.kills += 1;
+                if (attacker === $AVATAR) updateCombatStats();
 
                 this.purgeItems(5);
                 if (this === $ACTIVE_DIALOGUE_PARTY) endDialogue();
@@ -4227,6 +4258,7 @@ export class Bot {
         this.unequipItem(slot);
 
         let item = this.inventory.ejectItem(slot);
+        item.dropped = true;
 
         item.ring.trans.offsetX = item.trans.offsetX = this.trans.offsetX + random(10, true);
         item.ring.trans.offsetY = item.trans.offsetY = this.trans.offsetY + random(10, true);
@@ -4739,7 +4771,6 @@ export class Floor extends _Object_ {
 
     constructor(initialX, initialY, width, height, tileType = 0) {
         super([], function() {
-
             let tile = Floor._tileTypes[tileType];
 
             this.vertices = tile.vertices;
@@ -4782,10 +4813,6 @@ export class Floor extends _Object_ {
         this.type = "floor";
         this.bottomLayer = true;
         this.subLayer = 1;
-    }
-
-    delete() {
-        this.map.unlink(this.id);
     }
 }
 
@@ -5136,7 +5163,12 @@ export class _Map_ {
 
     static _recording = {
         isRecording: false,
-        recording: []
+        recording: undefined
+    };
+
+    static spectating = {
+     active: true, 
+     avatar: undefined
     };
 
     static _all = {};
@@ -5187,6 +5219,7 @@ export class _Map_ {
         this.PARENT_MAP = undefined;
         this.mapId = undefined;
         this.pickups = {};
+        this.CARRY = undefined; 
 
         this.barriers = (root) ? [new Barrier(-(width / 2), (height / 2) + 20, width, 20), new Barrier(-(width / 2), -(height / 2), width, 20), new Barrier(-(width / 2) - 20, height / 2, 20, height), new Barrier((width / 2), height / 2, 20, height)] : [new VisibleBarrier((-width / 2) - 125, 0, 250, height + 10), new VisibleBarrier(0, -(height / 2) - 125, width + 500, 250), new VisibleBarrier((width / 2) + 125, 0, 250, height + 10), new VisibleBarrier(0, (height / 2) + 125, width + 500, 250), new VisibleBarrier(0, (height / 2) + 12, width, 24, [70, 70, 70, 1.0])];
 
@@ -5206,6 +5239,18 @@ export class _Map_ {
         this.groundPlate.render();
         gl.uniform1f(locations.scale, scale);
         gl.uniform1f(locations.darkness, this.darkness + globalDarkness);
+
+          if (_Map_.spectating.active) {
+            if (!_Map_.spectating.avatar) _Map_.spectating.avatar = $CURRENT_MAP.avatars[random($CURRENT_MAP.avatarCount)]; 
+             if (_Map_.spectating.avatar) {
+              let {x, y} = _Map_.spectating.avatar.trans;
+               for (let i in this.objects) {
+                if (this.objects[i] === _Map_.spectating.avatar) continue;
+                if (!this.objects[i].managedMovement) this.objects[i].translate(-x, -y);
+                updateCoordsDisplay();
+               }
+             }
+          }
 
         if (_Map_._recording.isRecording) _Map_._recording.recording.push($CURRENT_MAP.centerX, $CURRENT_MAP.centerY, $AVATAR.trans.rotation * 180 / Math.PI, $AVATAR.state.walking);
 
@@ -5353,7 +5398,7 @@ export class _Map_ {
             }
             if (obj.subLayer && !obj.hasCluster) this.subLayers[obj.subLayer].push(obj);
 
-            if (obj.isCluster) obj.linked = true;
+            obj.linked = true;
 
             if (obj.postLink) obj.postLink();
 
@@ -5371,7 +5416,9 @@ export class _Map_ {
 
     unlink(id) {
         if (this.objects[id]) {
-
+            const obj = this.objects[id];
+            obj.linked = false; 
+ 
             if (this.objects[id].clean) this.objects[id].clean();
             if (this.objects[id].hasCluster && !this.objects[id].preserveCluster) {
                 this.objects[id].cluster.unlink(this.objects[id].clusterIndex);
@@ -5379,6 +5426,11 @@ export class _Map_ {
             }
             if (!this.objects[id].pickup) this.objects[id].map = undefined;
             if (this.objects[id].type === "avatar") this.avatarCount--;
+
+            if (obj.subLayer && !obj.hasCluster) {
+             let objSubLayer = this.subLayers[obj.subLayer];
+             objSubLayer.splice(objSubLayer.indexOf(obj), 1);
+            }
 
             delete this.interactables[id];
             delete this.objects[id];
@@ -5573,12 +5625,17 @@ export class _Map_ {
             this.centerX += x;
             this.centerY += y;
 
+            if (this.CARRY) {
+             this.CARRY.translate(x, y, 0, true);
+            }
+
             for (let i in this.objects) {
                 if (!this.objects[i].managedMovement) this.objects[i].translate(-x, -y);
             }
 
             this._lineMatrix.translate(-x, -y);
             this.updateInteractable();
+            updateCoordsDisplay();
         }
     }
 
@@ -5883,8 +5940,8 @@ export class _Joystick_ extends _Object_ {
                     }
                 }
 
-                if (this.base.anchored && !mouseMovementTimeout) $AVATAR.trans.rotation = this.rotation;
-                if ($CURRENT_MAP.move && this.base.anchored && !left) $AVATAR.drawWeapon();
+                if (this.base.anchored && !$AVATAR.state.equippedItems.mainTool && !$AVATAR.state.punching) $AVATAR.trans.rotation = this.rotation;
+                if (($CURRENT_MAP.move && this.base.anchored && !left) || !$IS_MOBILE) $AVATAR.drawWeapon();
             }
         }, 30, 30);
         this.position = position;

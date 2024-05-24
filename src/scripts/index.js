@@ -3,10 +3,16 @@ import {
     Transition
 } from "/src/scripts/lib.js";
 
-window.onload = async () => {
+import isMobile from "/node_modules/ismobilejs/esm/isMobile.js";
 
+window.onload = async () => {
+    if (!localStorage.getItem("game-settings")) {
+      localStorage.setItem("game-settings",JSON.stringify({onscreenMapStyle: 0, zoom: 1.2, graphicsQuality: 0, music: 0, volume: 0.5, joysticks: 0}));
+    }
+
+    window.$SETTINGS = JSON.parse(localStorage.getItem("game-settings"));    
     window.canvas = document.querySelector("#gameArea");
-    window.sharpness = 1;
+    window.sharpness = ($SETTINGS.graphicsQuality == 0) ? 1:($SETTINGS.graphicsQuality == 1) ? 0.5:2;
 
     canvas.width = window.innerWidth * sharpness;
     canvas.height = window.innerHeight * sharpness;
@@ -30,7 +36,8 @@ window.onload = async () => {
     window.$MAP_DISPLAY = null;
     window.$HEALTH_BAR = null;
     window.$GAME_LOOP = function() {};
-    window.scale = 1.2;
+    window.$IS_MOBILE = isMobile(navigator.userAgent).any;
+    window.scale = $SETTINGS.zoom;
     window.bulletResolution = 0.001;
     window.movementMultFactor = 0.05;
     window.globalDarkness = 0;
@@ -41,7 +48,7 @@ window.onload = async () => {
         left: 1.5,
         right: 1.5
     };
-    window.fixedJoysticks = false;
+    window.fixedJoysticks = $SETTINGS.joysticks;
     window.controlTransparency = 1;
     window.ext = gl.getExtension("OES_vertex_array_object");
     window.instExt = gl.getExtension("ANGLE_instanced_arrays");
@@ -59,8 +66,8 @@ window.onload = async () => {
         window.worldHeight = 2 / worldUnitY;
         window.joystickPositions = {
             left: {
-                x: (-worldWidth / 2) + 20,
-                y: (-worldHeight / 2) + 20
+                x: ($IS_MOBILE) ? (-worldWidth / 2) + 20:(-worldWidth / 2) - 50,
+                y: ($IS_MOBILE) ? (-worldHeight / 2) + 20:(-worldHeight / 2) - 50
             },
             right: {
                 x: (worldWidth / 2) - 20,
@@ -418,7 +425,8 @@ window.onload = async () => {
     }
 
     $OBJECTS.push($AVATAR);
-    $CONTROLS.push($JOYSTICK_L, $JOYSTICK_R, $RELOAD_BUTTON, $AVATAR_MODE_BUTTON, $DROP_ITEM_BUTTON);
+    $CONTROLS.push($JOYSTICK_L);
+    if ($IS_MOBILE) $CONTROLS.push($JOYSTICK_R, $RELOAD_BUTTON, $AVATAR_MODE_BUTTON, $DROP_ITEM_BUTTON);
 
     let loadingScreen = document.querySelector("#loading-screen");
     let gameStats = document.querySelector("#game-stats");
@@ -473,3 +481,5 @@ window.onload = async () => {
     loadingScreen.style.display = "none";
     init();
 }
+
+

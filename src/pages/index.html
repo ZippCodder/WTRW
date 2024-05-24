@@ -36,7 +36,20 @@
     <div id="mapInfo">
      <canvas id="mapDisplay"></canvas>
      <div id="mapTime"><i><p>9:36</p> <small>am</small></i></div>
+     <div id="coords-container">
+     <p id="coords">x:0, y:0</p>
+     </div>
     </div>
+             
+                    <table class="onscreen-stats__stats">
+                     <th colspan="3"><h3>"ROBINHOOD"</h3></th>
+                     <tr>
+                      <td>Kills:</td><td class="onscreen-stats__kills">0</td>
+                     </tr>
+                     <tr>
+                      <td>Deaths:</td><td class="onscreen-stats__deaths">0</td>
+                     </tr>
+                    </table>
 
                 <div id="console-button"><img src="/public/images/icons/CHAT_ICON.png" /></div>
            
@@ -123,6 +136,80 @@
                     <canvas id="interactive-map"></canvas>
                   </div>
                 </div>
+
+                <div id="settings">
+                  <h1 class="settings__title">Settings<button id="settings-close">Close</button></h1>
+                  <div class="settings__settings-container">
+                   <h1>General Settings</h1>
+                   <div class="settings-container__setting">
+                     <p class="setting__name">Onscreen Map Style</p>
+                     <select id="onscreen-map-style-setting" class="setting__input">
+                       <option>Default</option> 
+                       <option>Crimson</option> 
+                       <option>Predator</option> 
+                       <option>Night Vision</option> 
+                       <option>Coffee</option> 
+                     </select>
+                   </div>
+                   <div class="settings-container__setting">
+                     <p class="setting__name">Zoom</p>
+                     <input id="zoom-setting" type="number" value="1" min="1" max="2" step="0.1" class="setting__input"></input>
+                   </div>
+                   <div class="settings-container__setting">
+                     <p class="setting__name">Graphics Quality</p>
+                     <select id="graphics-quality-setting" class="setting__input">
+                       <option>Normal</option> 
+                       <option>Low</option> 
+                       <option>High</option> 
+                     </select>
+                     <p class="setting__detail">* This will effect performance. Changes will be applied upon game reload</p>
+                   </div>
+                   <div class="settings-container__setting">
+                     <p class="setting__name">Music</p>
+                     <select id="music-setting" class="setting__input">
+                       <option>On</option> 
+                       <option>Off</option> 
+                     </select>
+                   </div>
+                   <div class="settings-container__setting">
+                     <p class="setting__name">Volume</p>
+                     <input id="volume-setting" type="number" value="5" min="1" max="10" class="setting__input"></input>
+                   </div>
+                   <div class="settings-container__setting">
+                     <p class="setting__name">Joysticks</p>
+                     <select id="joysticks-setting" class="setting__input">
+                       <option>Dynamic</option> 
+                       <option>Fixed</option> 
+                     </select>
+                     <p class="setting__detail">*Changes will be applied upon game reload</p>
+                   </div> 
+                   <h1>Controls</h1>
+                   <div class="settings-container__control">
+                     <p class="setting__name">Move</p>
+                     <p class="setting__detail">Mobile - Joysticks | Desktop - W, A, S, D</p>
+                   </div> 
+                   <div class="settings-container__control">
+                     <p class="setting__name">Interact/Pickup Item</p>
+                     <p class="setting__detail">Mobile - A | Desktop - E</p>
+                   </div> 
+                   <div class="settings-container__control">
+                     <p class="setting__name">Grab Item</p>
+                     <p class="setting__detail">Mobile - G | Desktop - Q</p>
+                   </div>
+                   <div class="settings-container__control">
+                     <p class="setting__name">Reload</p>
+                     <p class="setting__detail">R</p>
+                   </div> 
+                   <div class="settings-container__control">
+                     <p class="setting__name">Drop Weapon</p>
+                     <p class="setting__detail">X</p>
+                   </div> 
+                   <div class="settings-container__control">
+                     <p class="setting__name">Equip Slot</p>
+                     <p class="setting__detail">Number Keys (0-9)</p>
+                   </div> 
+                  </div>
+                </div> 
 
                 <div id="console">
                   <h1 class="console__title">Chat/Console<button id="console-close">Close</button></h1>
@@ -299,7 +386,7 @@ Oh wait, what items? You're a noob lol.
                     <div class="store__checkout">
                       <h2>Checkout</h2>
                       <div class="checkout__balance">
-                       <p>Cash: <mark>$12.50</mark></p><p>Bank: <mark>$12.50</mark></p>
+                       <p>Cash: <mark id="store-cash">$12.50</mark></p><p>Bank: <mark id="store-bank">$12.50</mark></p>
                       </div>
                       <div class="checkout__info-box"> 
                        <div class="info-box__item-info">
@@ -321,6 +408,7 @@ Oh wait, what items? You're a noob lol.
                 <div id="note">
                   <h1 class="note__title">Note<button id="note-close">Close</button></h1>
                   <div class="note__content">
+                   <img class="note__logo" src="/public/images/logo1.png"/>
                    <p></p>
                   </div>
                 </div> 

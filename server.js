@@ -23,6 +23,8 @@ switch (path.extname(req.url)) {
 	break;
         case ".ico": contentType = "image/png";
         break;
+        case ".wav": contentType = "audio/wav";
+        break; 
         default: contentType = "text/javascript"; 
 	}
 

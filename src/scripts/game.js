@@ -63,6 +63,7 @@
       ConvenienceStore,
       Bush,
       GunStore,
+      CombatKnife,
       BasicArmour,
       MercenaryArmour, 
       SwatArmour,
@@ -70,7 +71,11 @@
       NOSS_7,   
       FURS_55, 
       X6_91, 
-      Money
+      Money, 
+      Shed, 
+      SmallPlant, 
+      Door, 
+      Trigger
   } from "/src/scripts/objects.js";
 
   $AVATAR = new Avatar("R O B I N H O O D");
@@ -83,150 +88,31 @@
       return `${firstNames[random(firstNames.length)]} ${lastNames[random(lastNames.length)]}`;
   }
 
-  // Game setup and initialization
-
   $MAP = new _Map_(500, 500, true, "Downtown SmallVille").init();
-/*
-  for (let i = 0; i < $MAP.units.total; i++) {
-    let x = random($MAP.width,true), y = random($MAP.height, true);    
-
-    $MAP.link(((Math.random() < 0.5) ? new Rocks1(x,y):new Rocks2(x,y)));
-  }
-*/
-  //$MAP.parseLayoutScript(Map1);
 
   $CURRENT_MAP = $MAP;
-  //$MAP.showGeometry();
   $MAP.avatars[$AVATAR.id] = $AVATAR;
   $MAP.obstacles[$AVATAR.id] = $AVATAR;
-  $AVATAR.state.targetId = $AVATAR.id;
-  $AVATAR.addItem(new GP_K100(0, 0, 0, 1000));
-  $AVATAR.equipItem(0);
-  $AVATAR.state.fireAnimation.rate = 0.5 / 30;
-
-  //$MAP.parseLayoutScript('{"layout":[["UrbanFence",-16.166106339259798,31.560644915054837,0],["House1",-195.57837280614572,112.60723741422862,0],["Text","Abacrombie",5,[0,0,0,1],-83.40972815963217,41.17754164195108,0,false],["Text","<= Park",5,[0,0,0,1],-35.17687296453943,87.6119316463369,0,false],["Text","efjeifjiej",30,[0,0,0,1],-13.47420046393529,31.128871568979605,0,false],["Chair",-15.619140381875013,31.019264262988287,0],["Table",-15.619140381875013,31.019264262988287,0],["VisibleBarrier",32.84524316811842,47.366277074695745,5,60,[12,132,123]],["VisibleBarrier",32.84524316811842,47.366277074695745,5,60,[12,132,123,1]],["VisibleBarrier",21.42903008064578,1.0190305764656387,30,5,[172,102,12,1]],["VisibleBarrier",8.458547303838287,66.93912826030765,30,5,[172,80,12,1]],["VisibleBarrier",-1.816414064535394,60.15912826030876,5,30,[122,231,142,1]],["PicnicTable",68.467607186999,96.28513345428192,0],["GLOCK_20",-25.619120347952865,58.89857695029468,320],["Table",-23.24157713504096,71.8810526174893,0],["GP_K100",-54.704505624570324,63.46741989755532,272],["GP_K100",-7.999999999999346,-40.9999999999986,72],["GP_K100",22.000000000000817,27.999999999998977,216],["GP_K100",-144.9999999999931,-157.9999999999913,47],["GP_K100",13.999999999999304,-42.99999999999903,345],["GP_K100",46.00000000000248,-4.000000000000227,299],["GP_K100",-106.99999999999639,-2.0000000000002274,193],["GP_K100",-146.99999999999312,0.9999999999998579,191],["GP_K100",17.000000000000057,-8.000000000000028,34],["GP_K100",28.00000000000069,-8.999999999999943,305],["GP_K100",-150.99999999999235,7.9999999999988916,95],["GP_K100",-130.9999999999953,-2.0000000000002274,233],["GP_K100",68.00000000001242,2.9999999999993747,63],["GP_K100",-43.000000000000114,63.999999999999034,60],["GP_K100",-77.99999999999795,-56.99999999999899,5],["GP_K100",-102.66666666666364,-9.99999999999963,170],["GP_K100",-26.999999999999808,-102.99999999999801,292],["GP_K100",-39.0000000000002,55.99999999999912,87],["GP_K100",-11.99999999999973,0.9999999999998579,337],["GP_K100",-80.99999999999798,3.666666666666032,139],["GP_K100",-99.99999999999673,9.99999999999892,299],["GP_K100",-76.99999999999785,-10.99999999999875,20],["GP_K100",-68.99999999999753,-6.000000000000057,269],["GP_K100",-95.99999999999656,40.99999999999804,135],["GP_K100",-108.99999999999616,17.999999999998607,352],["GP_K100",-92.99999999999724,65.99999999999912,356],["GP_K100",-99.66666666666319,58.33333333333229,122],["GP_K100",-169.33333333332584,23.66666666666532,67],["GP_K100",-171.6666666666587,26.333333333332007,29],["GP_K100",-157.99999999999233,5.999999999999233,282],["GP_K100",-166.99999999999238,3.9999999999993463,132],["UrbanFence",-73.45171211783591,-2.5526015924677665,0],["UrbanFenceVertical",-48.11296216815025,15.927398407531484,0],["UrbanFenceVertical",-47.37452880276516,73.15486260298235,0],["UrbanFence",-73.58041093700048,84.53620178363846,0],["UrbanFenceVertical",-100.8971912879862,64.50792622995758,0],["StreetLight",-71.68013014396567,53.7437711116315,0,null],["StreetLight",-9.036236074661879,-9.313254543011283,0,null],["Text","Do",[255,0,0,1],[0,0,0,1],-30.801261056592182,-68.01960069078612,0,false],["Text","Do",10,[255,0,0,1],-30.801261056592182,-68.01960069078612,0,false],["Text","You",10,[0,0,255,1],-19.115177060143715,-67.41992950326198,0,false],["Text","Remember",10,[0,255,255,1],8.782042821910593,-67.4123473634136,0,false],["Text","Now",10,[0,255,0,1],33.509928247353734,-67.40223784361581,0,false],["Floor",-74.17341094048302,42.32377111163055,60,80,0],["Bot","ENEMY [KILL BOT]",-55.666666666666686,45.66666666666657,174.38198328510887],["VisibleBarrier",-60.818572477834536,-53.2182099605693,30,40,[230,12,141,1]],["VisibleBarrier",0.7396572285850596,-78.04967089780673,50,50,[20,122,241,1]],["VisibleBarrier",-133.76074046885964,-18.435263895105635,30,20,[231,212,41,1]],["VisibleBarrier",-178.26121133826265,-54.959838073290946,30,20,[231,212,41,1]],["VisibleBarrier",-118.28256984404874,-53.29386630786929,20,20,[102,21,241,1]],["VisibleBarrier",-156.25139749543305,39.69403541208095,70,20,[102,21,241,1]],["VisibleBarrier",-198.18345237946576,0.030168034528486487,40,40,[102,231,41,1]],["VisibleBarrier",106.24495700670846,58.23185728439185,60,10,[102,231,41,1]],["VisibleBarrier",74.05329624486038,14.905349670332185,60,10,[202,31,41,1]],["VisibleBarrier",70.97070848177606,-35.81475568588729,60,10,[202,31,241,1]],["Bot","Neo",20.000000000000007,-29.999999999999872,0],["AssassinsKnife",39.99999999999991,0,36],["Bot","Neo",20,-30,0],["AssassinsKnife",40,0,0]],"settings":{"groundColor":[255,255,255,1],"lighting":true,"darkness":5},"root":true,"nodes":3,"children":[{"layout":[["GLOCK_20",39.488276047252995,45.52638214311445,-246.96549517830974],["StreetLight",-26.639279762915923,36.096100624342704,0,null],["StreetLight",52.45381206521982,30.130220253659786,0,null],["Table",6.049283909013738,23.323133951137798,0],["Laptop",13.475957357845683,20.701929271135164,-157.60566451974609],["BlackBook",-4.755782155026874,20.725845976825198,344.4132744958508],["WhiteBook",-4.565458225089954,22.21057852132749,38.28255072830086],["USP_45",-12.863352752601836,42.89514890950326,-92.34812999765457],["GLOCK_20",0,0,284],["GLOCK_20",0,0,290],["GLOCK_20",0,0,184],["GLOCK_20",0,0,93],["GLOCK_20",0,0,13],["GLOCK_20",0,0,195],["GLOCK_20",0,0,256],["GLOCK_20",0,0,16],["GLOCK_20",0,0,357],["GLOCK_20",0,0,266],["GLOCK_20",0,0,106],["GLOCK_20",0,0,263],["GLOCK_20",0,0,345],["GLOCK_20",0,0,214],["GLOCK_20",0,0,220],["GLOCK_20",0,0,4],["GLOCK_20",0,0,262],["GLOCK_20",0,0,80],["GLOCK_20",0,0,312],["GLOCK_20",0,0,44],["GLOCK_20",0,0,200],["GLOCK_20",0,0,296],["GLOCK_20",0,0,299],["GLOCK_20",0,0,213],["GLOCK_20",0,0,63],["GLOCK_20",0,0,189],["GLOCK_20",0,0,263],["GLOCK_20",0,0,92],["GLOCK_20",0,0,177],["GLOCK_20",0,0,350]],"settings":{"groundColor":[255,255,255,1],"lighting":true,"darkness":5},"root":false,"nodes":0,"children":[]},{"layout":[],"settings":{"groundColor":[255,255,255,1],"lighting":true,"darkness":5},"root":false,"nodes":0,"children":[]},{"layout":[],"settings":{"groundColor":[255,255,255,1],"lighting":false,"darkness":1},"root":false,"nodes":0,"children":[]}]}');
-
-  // $MAP.link(new Table(-50,0));
-  // $MAP.link(new Table(0,0));
-
-  //$MAP.darkness = 1;
-  //$MAP.lighting = false; 
-
-  let id = genObjectId();
-  //$MAP.link(new Floor(0,0,80,40,0));
-  /*
-    let b = new Avatar("Keanu Reeves", 0, 50);
-    $MAP.link(b);
-    b.exclude = true;
-    b.state.armor = 5000;
-    b.state.aggressive = false;
-    b.addItem(new GP_K100(0, 0, 0, 1000));
-    b.equipItem(0);
-    b.state.targetId = b.id;
-    b.state.baseSpeed = 2;
-    b.state.reloadTimeout.timingConfig[0] = 0.5 / 5;
-    b.state.targetUpdateAnimation.rate = 0.5 / 5;
-    b.state.openCarry = true;
-    //b.state.fireAnimation.rate = 0.5 / 10;
-    //b.killTarget([$AVATAR.id], true, true);
-    b.translate(0, 30);
-   */
-  // $MAP.link(new Table(0,0));
-  // $MAP.link(new StreetLight(50,0));
-  //$MAP.lighting = true;
-  /* 
-   let c = new Avatar("Beatrice", 5, 5);
-   $MAP.link(c);
-   c.state.armor = 3000;
-   c.state.aggressive = false;
-   c.state.follow.settleDistance = 20;
-   c.state.follow.rush = true;
-   c.addItem(new GLOCK_20(0, 0, 0, 1000));
-   c.state.targetId = b.id;
-   c.follow($AVATAR.id);
-   //c.killTarget([id], true);
-
-   let d = new Avatar("Walter", 5, 5);
-   $MAP.link(d);
-   d.state.armor = 3000;
-   d.state.aggressive = false;
-   d.state.follow.settleDistance = 20;
-   d.state.follow.rush = true;
-   d.addItem(new GLOCK_20(0, 0, 0, 1000));
-   d.state.targetId = b.id;
-   d.follow($AVATAR.id);
-   //c.killTarget([id], true);
-
-   let e = new Avatar("Hammy Onion", 5, 5);
-   $MAP.link(e);
-   e.state.armor = 3000;
-   e.state.aggressive = false;
-   e.state.follow.settleDistance = 20;
-   e.state.follow.rush = true;
-   e.addItem(new GLOCK_20(0, 0, 0, 1000));
-   e.state.targetId = b.id;
-   e.follow($AVATAR.id);
-   c.killTarget([id], true); */
-
-  //$MAP.link(new VisibleBarrier(0,0,40,40));
-  //$MAP.link(new VisibleBarrier(-80,0,40,40));
-  //$MAP.link(new VisibleBarrier(80,0,40,40));
-  //$MAP.link(new VisibleBarrier(0,0,40,40));
-  // $MAP.link(new VisibleBarrier(-80,0,40,40));
-  //$MAP.link(new Chair(0,0));
-  //$MAP.link(new VisibleBarrier(80,0,40,40));
-
-  let c = new Bot("Trinity", -20, 0),
-      b = new Bot("Neo", -10, 0);
-//  $MAP.link(c);
-
-  c.state.armour = 0;
-  c.state.aggressive = true;
-//  c.addItem(new GP_K100);
-//  c.equipItem(0);
-  c.state.targetUpdateAnimation.rate = 1 / 5;
-  c.state.targetId = c.id;
-  //      c.wander(-240+5,-240+5);
-//  c.follow($AVATAR.id);
-  //  c.killTarget([$AVATAR.id], true, true);
- // c.rotate(180);
-
-  /*
-        $MAP.link(b);
-
-        b.state.armour = 0;
-        b.state.aggressive = true;
-     //   b.addItem(new KitchenKnife);
-   //     b.equipItem(0);
-        b.state.targetUpdateAnimation.rate = 1/5; 
-        b.state.targetId = b.id;
-   //     c.wander(-240+5,-240+5);
-  //      c.follow($AVATAR.id);
-        b.killTarget([$AVATAR.id], true, true);
-  */
-  let a;
-
-  movementMultFactor = 0.05;
 
   const enemySpawnLoop = new LoopAnimation(function() {
-      if ($MAP.avatarCount < 20) {
+      if ($CURRENT_MAP.avatarCount < 6) {
 
           let {
               x,
               y
-          } = $MAP.GRAPH.getRandomPoint();
+          } = $CURRENT_MAP.GRAPH.getRandomPoint();
 
-          a = new Bot(getName(), (x + 5) - $MAP.centerX, (y - 5) - $MAP.centerY);
-          $MAP.link(a);
+          let a = new Bot(getName(), (x + 5) - $CURRENT_MAP.centerX, (y - 5) - $CURRENT_MAP.centerY);
+          $CURRENT_MAP.link(a);
           a.state.attack.engageDistance = 300;
           a.state.attack.disengageDistance = 500;
           a.state.attack.attackSpeed = 1;
           a.state.armour = 0;
-          //a.state.aggressive = true;
+          a.state.aggressive = true;
           a.state.passive = false;
           a.state.openCarry = false;
           a.state.targetUpdateAnimation.rate = 1 / 5;
-          a.addItem([new GLOCK_20, new GP_K100, new KitchenKnife,new NXR_44_MAG, undefined, new NOSS_7, new X6_91, new FURS_55, new DX_9][random(9)]);
+          a.addItem([new GLOCK_20, new GP_K100, new KitchenKnife, new CombatKnife, new NXR_44_MAG, new X6_91, new FURS_55, new DX_9][random(9)]);
 
           if (Math.random() < 0.5) {
            if (Math.random() < 0.5) a.addItem(new Money);
@@ -236,16 +122,14 @@
 
           a.equipItem(0);
           a.state.targetId = a.id;
-          //   (Math.random() < 0.5) ? a.state.passive = true:a.state.aggressive = true;
           a.state.aggressive = true;
           a.state.baseSpeed = 0.5;
           a.state.attack.attackSpeed = 2;
           a.state.runningSpeed = 3;
           a.wander(x + 5, y + 5);
-          //a.follow($AVATAR.id);
-          // a.killTarget([$AVATAR.id, c.id]);
+          a.killTarget([a.id], true, true);
       }
-  }, window, 1);
+  }, window, 10);
 
   const timeDisplay = document.querySelector("#mapTime p");
   const meridiemDisplay = document.querySelector("#mapTime small");
@@ -301,41 +185,31 @@
 
   $MAP.lighting = false;
   $ACTIVE_DIALOGUE_PARTY = Object.values($CURRENT_MAP.avatars)[5];
-  /*
-  $MAP.SUB_MAPS[0].link(new KitchenKnife(40,0));
-  $MAP.SUB_MAPS[0].link(new KitchenKnife(40,0));
-  $MAP.SUB_MAPS[0].link(new KitchenKnife(40,0));
-  $MAP.SUB_MAPS[0].link(new KitchenKnife(40,0));
-  $MAP.SUB_MAPS[0].link(new KitchenKnife(40,0));
-  */
-
-  //$MAP.link(new VisibleBarrier(50, 50, 40, 40));
-  //$MAP.link(new VisibleBarrier(30, -70, 60, 60));
-  //$MAP.link(new VisibleBarrier(-50, -90, 70, 70));
-  //$MAP.link(new VisibleBarrier(-70, 50, 50, 50));
-
-  //$MAP.link(new Floor(0,0,500,500,0));
-
-  //$AVATAR.state.armour = 1000;
-
-  $MAP.link(new GunStore(-50,-100));
-  $MAP.link(new Bench(0,20));
-  $MAP.link(new Bench(-60,20));
-
-  $MAP.link(new BasicArmour);
-
-  for (let i = 0; i < 40; i++) {
-   $MAP.link(new GLOCK_20);
-  }
-
-  $CURRENT_MAP = $MAP.SUB_MAPS[0];
-
-  $CURRENT_MAP.link(new Text("Use <A> to interact/pickup items", 10, 0, 0));
 
   $GAME_LOOP = function() {
-      sitLoop.run();
-      crimeLoop.run();
+      //sitLoop.run();
+     // crimeLoop.run();
       enemySpawnLoop.run();
       timeUpdateLoop.run();
       dayCycleLoop.run();
   };
+
+  $MAP.addSubMap(new _Map_(200, 300, false).init());
+  
+  $CURRENT_MAP = $MAP.SUB_MAPS[0];
+  $CURRENT_MAP.avatars[$AVATAR.id] = $AVATAR;
+  $CURRENT_MAP.obstacles[$AVATAR.id] = $AVATAR;
+
+  let floor = new Floor(0, 0, 200, 300, 0);
+  floor.exclude = true;
+  $CURRENT_MAP.link(floor);
+
+  let storeTrigger = new Trigger(-41, 32, function() {
+   toggleStore();
+  });
+  storeTrigger.minDistance = 20;
+
+  $CURRENT_MAP.parseLayoutScript('{"layout":[["Stopper",-4.968123754830524,-11.642147200153744,0],["Stopper",5.0068762451693445,-11.642147200153744,0],["Stopper",4.995840685507723,-17.435925800193658,0],["Stopper",-4.970729962474261,-17.48882950041893,0],["Stopper",-64.97338162174306,58.353239167880275,0],["Stopper",-54.998381621742546,58.353239167880275,0],["Stopper",-55.022188260092584,52.53772154738225,0],["Stopper",-64.99718826009315,52.46272154738226,0],["Stopper",54.96323087637594,58.396367018015525,0],["Stopper",64.9856055640258,58.328402661344484,0],["Stopper",54.970839110331006,52.39958741207259,0],["Stopper",64.94583911033098,52.39958741207259,0],["Stopper",-64.96070390198186,-81.62769596459114,0],["Stopper",-55.060703901981334,-81.6276959645912,0],["Stopper",-64.98215012526153,-87.517999801071,0],["Stopper",-55.00715012526107,-87.517999801071,0],["Stopper",54.96061981539591,-81.63124010692164,0],["Stopper",65.01061981539564,-81.63124010692164,0],["Stopper",54.96826133529199,-87.54303469073525,0],["Stopper",65.01826133529167,-87.54303469073525,0],["Stopper",-4.973104590093451,82.45807839879484,0],["Stopper",5.001895409906503,82.45807839879484,0],["Stopper",-5.011922069721644,-107.59234825456933,0],["Stopper",4.96307793027831,-107.59234825456933,0],["Stopper",-25.032974694338726,32.56046841759937,0],["Stopper",24.99202530566076,32.48546841759932,0],["Stopper",-25.01918094897855,-57.55363551846824,0],["Stopper",25.005819051020964,-57.55363551846824,0],["Stopper",75.02981819758477,-11.630013608901265,0],["Stopper",75.0079625300979,-17.546483815455233,0],["Stopper",-74.9987056800858,-11.626991951081038,0],["Stopper",-75.01187154085008,-17.553269159333226,0],["Stopper",39.940378465842606,-14.641126274398374,0],["Stopper",-40.08462153415735,-14.641126274398374,0],["UrbanFence",-76.13178126119027,164.26393170706342,0],["UrbanFence",76.11821873881132,164.26393170706342,0],["UrbanFenceVertical",102.21252223042413,150.28247264565337,0],["UrbanFenceVertical",102.21252223042413,121.93247264565358,0],["UrbanFenceVertical",102.21252223042413,93.80747264565372,0],["UrbanFenceVertical",102.21252223042413,65.53247264565415,0],["UrbanFenceVertical",102.21252223042413,37.332472645654335,0],["UrbanFenceVertical",102.21252223042413,9.057472645654723,0],["UrbanFenceVertical",102.21252223042413,-18.91752735434477,0],["UrbanFenceVertical",102.21252223042413,-47.26752735434559,0],["UrbanFenceVertical",102.21252223042413,-75.6175273543451,0],["UrbanFenceVertical",102.21252223042413,-103.96752735434568,0],["UrbanFenceVertical",102.21252223042413,-132.2425273543459,0],["UrbanFenceVertical",102.21252223042413,-152.26752735434548,0],["UrbanFence",76.23095612274983,-164.27592185565828,0],["UrbanFence",28.192870584778483,-164.24312406153143,0],["UrbanFence",-19.742789587000896,-164.30746388975155,0],["UrbanFence",-47.792789587001145,-164.30746388975155,0],["UrbanFence",-76.05712941522177,-164.31812406153136,0],["UrbanFenceVertical",-102.17701868186583,150.2642388085558,0],["UrbanFenceVertical",-102.14187885694474,121.95899276647052,0],["UrbanFenceVertical",-102.11152457619477,93.6663048667478,0],["UrbanFenceVertical",-102.17585370977582,65.35803048722364,0],["UrbanFenceVertical",-102.20464734651489,37.11561398900649,0],["UrbanFenceVertical",-102.17901582450713,8.795994190687079,0],["UrbanFenceVertical",-102.13892034222482,-19.497864882538863,0],["UrbanFenceVertical",-102.16198233564108,-47.68009800852906,0],["UrbanFenceVertical",-102.13793520444239,-75.90228436071399,0],["UrbanFenceVertical",-102.16243853158988,-104.2303331943106,0],["UrbanFenceVertical",-102.18981590761575,-124.83533117326901,0],["UrbanFenceVertical",-102.17493164306069,-152.22325082013128,0],["VisibleBarrier",-3.025606445059549,-184.38955501562629,250,60,[40,40,40,1]],["GunStore",-0.045680388151311035,147.13182684386135,0]],"settings":{"groundColor":[255,255,255,1],"lighting":false,"darkness":1},"root":false,"nodes":1,"children":[{"layout":[["Chair",-41.21913854872671,43.066218385561534,0],["Bot","Bobby [Store Clerk]",-41.21913854872671,44.066218385561335,180],["SmallTable",-41.42243482697396,30.289206785887103,0],["Laptop",-41.384652167540416,32.47737548989524,179.95445075348283],["Table",39.85619824951602,-9.256090450512133,0],["Table",-39.86880175048298,-9.182786580841835,0],["Table",0.044553865771767676,-9.451090450512197,0],["GLOCK_20",-49.16270744270445,-11.104079559872204,0],["GP_K100",-40.16270744270431,-11.029079559872216,0],["KC_357",-33.18770744270462,-11.404079559872187,0],["USP_45",-5.437719232032016,-10.50407595840828,-360.00005841965395],["NXR_44_MAG",-0.8627074427050165,-11.029079559872216,0],["FURS_55",6.937292557295278,-11.029079559872216,0],["CombatKnife",-0.2585728487757457,-2.6301288936519853,-89.53285307490205],["KitchenKnife",-40.292420818164764,-2.3428783687048735,269.86013818397777],["NOSS_7",33.35764334426089,-11.131669563537983,0],["X6_91",39.507643344261005,-10.906669563537989,0],["DX_9",47.90764334426088,-11.056669563537994,0],["AssassinsKnife",39.606478774349576,-2.9007748391813806,-90.3573288955767],["Table",-39.8380475984305,-34.35371761213173,0],["Table",0.016952401569199083,-34.384402023085386,0],["Table",39.84195240156928,-34.384402023085386,0],["MedKit",-46.330688002606415,-30.561653831551794,359.72319648805075],["Syringe",-46.3073759230603,-37.33770300083924,89.76875261265886],["AmmoBox",-46.24310331718781,-28.056635432225036,359.6935447347863],["MultiAmmoBox",-33.994778339008846,-30.123932930351657,-0.0047768384417725684],["RemoteExplosive",-10.862498874426068,-29.95810276177859,-359.66294535814086],["RemoteDetonator",-8.469191696144108,-37.72484597723701,269.81381348722124],["GreyBackpack",2.6971169851149623,-31.47638864641314,360.23373289320017],["WhiteBackpack",5.009965751377791,-31.425223782375326,-359.97793675455137],["BlackBackpack",7.323258668114738,-31.438831345841663,0.8049284082323425],["ProximityExplosive",-6.080515684631873,-29.980843553945803,360.29936320009006],["BasicArmour",30.920930405084505,-30.61824003659727,360.5257173608089],["SwatArmour",39.981230912170425,-30.647917268281148,0.25755168822556485],["MercenaryArmour",48.8688254850404,-30.603636806837855,359.8276684613199],["Floor",-5.081567451900897,56.60444481129717,200,100,1]],"settings":{"groundColor":[255,255,255,1],"lighting":false,"darkness":1},"root":false,"nodes":0,"children":[]}]}');
+  $MAP_DISPLAY.update();
+
+  $CURRENT_MAP.SUB_MAPS[0].link(storeTrigger);

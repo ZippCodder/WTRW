@@ -93,7 +93,10 @@
       RemoteDetonator, 
       ProximityExplosive,
       CombatKnife,
-      Money
+      Money, 
+      Door, 
+      LightSwitch, 
+      SmallPlant
   } from "/src/scripts/objects.js";
 
   import _dialogues from "/src/scripts/dialogue.js";
@@ -115,8 +118,7 @@
   }
 
   function runAction(e) {
-      e.preventDefault();
-      if (!$CURRENT_MAP.currentInteractable) return;
+      if (!$CURRENT_MAP.currentInteractable || $CURRENT_MAP.currentInteractable === $AVATAR.state.pickup.current) return;
 
       const i = $CURRENT_MAP.interactables[$CURRENT_MAP.currentInteractable.id];
       if (i) i.action();
@@ -125,6 +127,12 @@
 
   grabButton.ontouchstart = toggleGrab;
   grabButton.onclick = toggleGrab;
+
+  if (!$IS_MOBILE) {
+   window.addEventListener("keydown",(e) => {
+     if (e.key === "e") runAction(e);
+   });
+  }
 
   actionButton.ontouchstart = runAction;
   actionButton.onclick = runAction;
@@ -282,6 +290,9 @@
   }
 
   function startDialogue(e) {
+    toggleNote("Sorry, we're working on that! Dialogue will be included in newer versions.");
+    return;
+
       e.preventDefault();
 
       let res = undefined,
@@ -346,6 +357,13 @@
 
   updateOptions();
 
+  /* CRAFTING */
+
+  const openCraftingButton = document.querySelectorAll(".controls-container__button").item(2);
+
+  openCraftingButton.addEventListener("click",() => {
+    toggleNote("Sorry, we're working on that! Crafting will be included in newer versions.");
+  });
 
   /* MAP CONTROLS AND MINIMAP RENDERING */
 
@@ -962,7 +980,10 @@
 
   /* JOYSTICK AND BUTTON CONTROLS LOGIC */
 
+
   $JOYSTICK_L = new _Joystick_(true, joystickSizes.left, fixedJoysticks, joystickPositions.left);
+
+  if ($IS_MOBILE) {
 
   $JOYSTICK_R = new _Joystick_(false, joystickSizes.right, fixedJoysticks, joystickPositions.right);
 
@@ -1128,10 +1149,10 @@
       }
   });
 
-
   window.addEventListener("contextmenu", function(e) {
       e.preventDefault();
   });
+}
 
   /* INVENTORY CONTROLS AND MANAGMENT LOGIC */
 
@@ -1246,6 +1267,12 @@
               }
           };
           break;
+          case "carry": {
+            $CURRENT_MAP.CARRY = $CURRENT_MAP.locateObject(command) || undefined; 
+            result = `Carrying ${command || "nothing"}...`;
+            $MAP_DISPLAY.update();
+          };
+          break; 
           case "add": {
               try {
                   $CURRENT_MAP.link(eval("new " + command.replace("add", "").trim()));
@@ -1386,6 +1413,9 @@
 
   function equipSlot(i) {
       if (!$AVATAR.equipItem(i)) return;
+      if ($IS_MOBILE && $AVATAR.state.equippedItems.mainTool && $AVATAR.state.equippedItems.mainTool.type === "gun") {
+        $AVATAR.drawWeapon();
+      }
 
       if (equippedIndex < 5) {
           quickAccessItems.item(equippedIndex).classList.remove("controls-container__item--equipped");
@@ -1706,11 +1736,17 @@ let currentStoreItem = undefined;
 let highlightedItem = undefined;
 
 closeStoreButton.onclick = function() {
- storeContainer.style.display = "none"; 
+ toggleStore();
 }
 
 window.toggleStore = function(s) {
- storeContainer.style.display = "grid"; 
+if (storeContainer.style.display !== "grid") {
+ document.querySelector("#store-cash").innerHTML = "$"+$AVATAR.inventory.cash;
+ document.querySelector("#store-bank").innerHTML = "$"+$AVATAR.inventory.bank;
+ storeContainer.style.display = "grid";
+ return;  
+} 
+ storeContainer.style.display = "none";
 }
 
 function updateStore(s) {
@@ -1809,23 +1845,28 @@ const noteContainer = document.querySelector(".note-wrapper");
 const closeNoteButton = document.querySelector("#note-close");
 const noteContent = document.querySelector(".note__content p");
 
-function toggleNote(content) {
+let noteCallback;
+
+window.toggleNote = function(content, callback) {
  noteContent.innerText = content;
  noteContainer.style.display = "flex";
+ noteCallback = callback; 
 }
 
 closeNoteButton.addEventListener("click",() => {
  noteContainer.style.display = "none";
+ if (noteCallback) {
+  noteCallback(); 
+  noteCallback = undefined; 
+ }
 });
 
-toggleNote("INSTRUCTIONS:\n\nYou dont have enough money to purchase this item. Always do what is right. Always persevere and create the blade to slash through obstacles.\n\n Make sure to keep it real baby!");
-
 // desktop controls 
+if (!$IS_MOBILE) { 
 
 const desktopMovementFactor = 1;
 let movementX = 0, movementY = 0;
 let wKeyDown = false, aKeyDown = false, sKeyDown = false, dKeyDown = false, position = {x: $JOYSTICK_L.position.x, y: $JOYSTICK_L.position.y};
-window.mouseMovementTimeout = undefined;
 
 $JOYSTICK_L.desktopMovementCallback = function() {
  if ($ACTIVE_DIALOGUE_PARTY) return;
@@ -1864,14 +1905,34 @@ $JOYSTICK_L.desktopMovementCallback = function() {
           if ((d < radius) || $JOYSTICK_L.base.anchored || $JOYSTICK_L.fixed) $JOYSTICK_L.translate(position.x, position.y);
 }
 
+let controlKeys = ["w", "a", "s", "d"];
+let mouseDown = false; 
+
 window.addEventListener("keydown", (e) => {
- eval(`${e.key}KeyDown = ${true}`);
+ if (consoleContainer.style.display === "grid") return; 
+
+ if (e.key === "r" && $AVATAR.state.equippedItems.mainTool) {
+  $AVATAR.reload();
+ }
+ if (e.key === "q") {
+  toggleGrab(e);
+ }
+ if ($AVATAR.state.equippedItems.mainTool && e.key === "x") {
+  $AVATAR.dropItem($AVATAR.state.equippedItems.mainTool.slot);
+ }
+ if (/\d/.test(e.key.toLowerCase())) {
+  equipSlot((Number(e.key)) ? Number(e.key - 1):9);
+ }
+ if (!controlKeys.includes(e.key.toLowerCase())) return; 
+
+ eval(`${e.key.toLowerCase()}KeyDown = ${true}`);
  $JOYSTICK_L.desktopMovementAnimation.active = true; 
 });
 
 window.addEventListener("keyup", (e) => {
- eval(`${e.key}KeyDown = ${false}`);
+ if (!controlKeys.includes(e.key.toLowerCase())) return; 
 
+ eval(`${e.key.toLowerCase()}KeyDown = ${false}`);
  if (!wKeyDown && !aKeyDown && !sKeyDown && !dKeyDown) {
    $AVATAR.state.walking = false;
    $JOYSTICK_L.desktopMovementAnimation.active = false; 
@@ -1882,15 +1943,11 @@ window.addEventListener("keyup", (e) => {
 });
 
       canvas.addEventListener("mousemove", (e) => {
-            if (!mouseMovementTimeout) mouseMovementTimeout = setTimeout(() => {
-             clearTimeout(mouseMovementTimeout);
-             mouseMovementTimeout = undefined; 
-            },2000);
-
-        $AVATAR.trans.rotation = Math.atan2(e.pageX - (window.innerWidth/2), e.pageY - (window.innerHeight/2)) + 3.14159;
+        if ($AVATAR.state.equippedItems.mainTool || $AVATAR.state.punching || $AVATAR.state.sitting || mouseDown) $AVATAR.trans.rotation = Math.atan2(e.pageX - (window.innerWidth/2), e.pageY - (window.innerHeight/2)) + 3.14159;
       });
 
       canvas.addEventListener("mousedown", () => {
+         mouseDown = true; 
             if (!$AVATAR.state.pickup.current) {
                 if ($AVATAR.state.armed) {
                     $AVATAR.state.fire = true;
@@ -1907,9 +1964,106 @@ window.addEventListener("keyup", (e) => {
       });
 
       canvas.addEventListener("mouseup", () => {
+            mouseDown = false; 
             $AVATAR.state.fire = false;
             $AVATAR.state.punching = false;
             $AVATAR.state.stabbing = false;
-            clearTimeout(mouseMovementTimeout);
-            mouseMovementTimeout = undefined; 
       });
+}
+
+window.updateCoordsDisplay = function() {
+ document.querySelector("#coords").innerText = `x:${Math.round($CURRENT_MAP.centerX)}, y:${Math.round($CURRENT_MAP.centerY)}`;
+}
+
+
+const settings = document.querySelector("#settings");
+const openSettingsButton = document.querySelectorAll(".controls-container__button").item(3);
+const closeSettingsButton = document.querySelector("#settings-close");
+
+function openSettings() {
+ settings.style.display = "grid";
+}
+
+function closeSettings() {
+ settings.style.display = "none";
+}
+
+openSettingsButton.onclick = openSettings;
+closeSettingsButton.onclick = closeSettings;
+
+const onscreenMapStyleSetting = document.querySelector("#onscreen-map-style-setting");
+const zoomSetting = document.querySelector("#zoom-setting");
+const graphicsQualitySetting = document.querySelector("#graphics-quality-setting");
+const musicSetting = document.querySelector("#music-setting");
+const volumeSetting = document.querySelector("#volume-setting");
+const joysticksSetting = document.querySelector("#joysticks-setting");
+
+onscreenMapStyleSetting.selectedIndex = $SETTINGS.onscreenMapStyle;
+zoomSetting.value = $SETTINGS.zoom;
+graphicsQualitySetting.selectedIndex = $SETTINGS.graphicsQuality;
+musicSetting.selectedIndex = $SETTINGS.music;
+volumeSetting.value = $SETTINGS.volume*10;
+joysticksSetting.selectedIndex = $SETTINGS.joysticks; 
+
+onscreenMapStyleSetting.onchange = function() {
+ $SETTINGS.onscreenMapStyle = onscreenMapStyleSetting.selectedIndex; 
+ updateOnscreenMapStyle();
+ saveSettings();
+};
+
+musicSetting.onchange = function() {
+ $SETTINGS.music = musicSetting.selectedIndex;
+ 
+ if ($SETTINGS.music) {
+  currentTrack.pause();
+ } else {
+  playNextTrack();
+ }
+
+ saveSettings();
+}
+
+zoomSetting.onchange = function() {
+ $SETTINGS.zoom = zoomSetting.value; 
+ updateZoom();
+ saveSettings();
+}
+
+volumeSetting.onchange = function() {
+ $SETTINGS.volume = volumeSetting.value/10; 
+ currentTrack.volume = $SETTINGS.volume; 
+ saveSettings();
+}
+
+graphicsQualitySetting.onchange = function() {
+ $SETTINGS.graphicsQuality = graphicsQualitySetting.selectedIndex;
+ saveSettings();
+}
+
+joysticksSetting.onchange = function() {
+ $SETTINGS.joysticks = joysticksSetting.selectedIndex;
+ saveSettings();
+}
+
+function saveSettings() {
+ localStorage.setItem("game-settings", JSON.stringify($SETTINGS));
+}
+
+function updateOnscreenMapStyle() {
+ document.querySelector("#mapInfo").style.background = ["none", "red", "#00ff15", "#00fffb", "#ff8800"][$SETTINGS.onscreenMapStyle];
+}
+
+function updateZoom() {
+ scale = zoomSetting.value;  
+}
+
+function applySettings() {
+ updateOnscreenMapStyle();
+}
+
+applySettings();
+
+window.updateCombatStats = function() {
+ document.querySelector(".onscreen-stats__kills").innerText = $AVATAR.state.kills; 
+ document.querySelector(".onscreen-stats__deaths").innerText = $AVATAR.state.deaths; 
+}
