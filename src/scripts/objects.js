@@ -3004,9 +3004,7 @@ export class Avatar {
             armour: 0,
             invinsible: false,
             kills: 0,
-            deaths: 0, 
-            totalDamage: 0, 
-            score: 0, 
+            deaths: 0,
             hitboxes: {
                 leftPunch: {
                     x: -4,
@@ -3244,7 +3242,6 @@ export class Avatar {
             if (this.state.armour > 0) {
                 if (damage > this.state.armour) {
                   this.state.vitals.health = Math.max(0, this.state.vitals.health - Math.abs(this.state.armour - damage));
-                  this.state.totalDamage += Math.abs(this.state.armour - damage);
                 }
                 this.state.armour = Math.max(0, this.state.armour - damage);
                 if (this.state.equippedItems.armour) {
@@ -3255,11 +3252,9 @@ export class Avatar {
                 if (this.state.armour === 0) hideArmourDisplay();
             } else {
                 this.state.vitals.health = Math.max(0, this.state.vitals.health - damage);
-                this.state.totalDamage += damage;
             }
 
             updateHealthBar();
-            updateCombatStats();
 
             if (this.state.vitals.health <= 0 && this.state.armour === 0) {
                 let attacker = $CURRENT_MAP.avatars[owner.id];
@@ -3274,7 +3269,6 @@ export class Avatar {
                 if (this.state.pickup.current) this.drop();
                 this.hidden = true;
                 noclip = true;
-                $SCORE = Math.round((this.state.kills*1000)/(this.state.totalDamage*0.1));
                 returnToTitleScreen();
 
                 return;
@@ -4154,7 +4148,10 @@ export class Bot {
             if (this.state.vitals.health <= 0) {
                 let attacker = this.map.avatars[owner.id];
                 if (attacker) attacker.state.kills += 1;
-                if (attacker === $AVATAR) updateCombatStats();
+                if (attacker === $AVATAR) {
+                  $SCORE += this.state.killValue;
+                  updateCombatStats();
+                }
 
                 this.purgeItems(5);
                 if (this === $ACTIVE_DIALOGUE_PARTY) endDialogue();

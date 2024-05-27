@@ -838,7 +838,7 @@ html,body {
 
           .title-card {
               user-select: none;
-              background: #3C3C3C;
+              background: #222222;
               width: min-content;
               height: max-content;
               font-family: var(--main-font);
@@ -852,7 +852,7 @@ html,body {
               max-height: 100vh;  
               position: relative;
               z-index: 2;
-          }
+          } 
 
           .title-card__play {
               display: flex; 
@@ -861,7 +861,6 @@ html,body {
 
           .title-card__title {
               height: 100%;
-              background: #222222;
               display: flex; 
               align-items: center; 
               flex-direction: column;      
@@ -901,6 +900,7 @@ html,body {
             font-family: var(--main-font);
             border-left: 10px solid #222222;
             border-right: 10px solid #222222;
+            background: #3C3C3C;
           } 
  
           .play__username {
@@ -1819,5 +1819,40 @@ html,body {
           @media only screen and (min-width: 1500px) {
             .title-card, #console, #store, #note, #map, #settings, #main-inventory {
              transform: scale(1.5); 
+            }
+          }
+
+          @media only screen and (max-height: 480px) and (orientation: landscape) {
+            .title-card {
+              flex-direction: row;
+              align-items: center;  
+            } 
+
+            .title-card__content {
+              padding-left: 1em; 
+              padding-right: 1em; 
+              background: #3C3C3C; 
+              border: none;
+            }
+
+            .title-card__title {
+              align-items: center; 
+              height: 100%;
+              padding-left: 10px; 
+              padding-right: 10px; 
+            }
+ 
+            .title-card__socials {
+              flex-direction: column;
+            }
+
+            .title-card__socials i {
+             margin: 0; 
+             margin-top: 0.4em; 
+             margin-bottom: 0.4em; 
+            }
+
+            .title-card__socials p {
+             display: none; 
             }
           }

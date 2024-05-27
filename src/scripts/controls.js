@@ -1834,7 +1834,7 @@ updateStore([
 {name: "kc 357", title: "KC_357", price: 45.50, type: "gun"}, 
 {name: "gp k100", title: "GP_K100", price: 130.15, type: "gun"}, 
 {name: "nxr 44 mag", title: "NXR_44_MAG", price: 233.50, type: "gun"}, 
-{name: "usp 45", title: "USP_45", price: 233.50, type: "gun"}, 
+{name: "usp 45", title: "USP_45", price: 543.50, type: "gun"}, 
 {name: "dx 9", title: "DX_9", price: 385.00, type: "gun"}, 
 {name: "noss 7", title: "NOSS_7", price: 880.50, type: "gun"},
 {name: "x6 91", title: "X6_91", price: 742.30, type: "gun"},
@@ -2107,7 +2107,7 @@ applySettings();
 
 window.updateCombatStats = function() {
  document.querySelector(".onscreen-stats__kills").innerText = $AVATAR.state.kills; 
- document.querySelector(".onscreen-stats__damage").innerText = $AVATAR.state.totalDamage; 
+ document.querySelector(".onscreen-stats__score").innerText = $SCORE; 
 }
 
 // title card
@@ -2122,11 +2122,14 @@ const highscoreDisplay = document.querySelector(".content__highscore");
 highscoreDisplay.innerText = `Your current highscore: ${$HIGHSCORE}`;
 
 titlePlayButton.onclick = function() {
+if ($CONTENT_LOADED && !$TRANSITIONING) {
  titleCard.style.display = "none";
  onScreenPlayerName.innerText = usernameInput.value || "Unnamed Human";
  localStorage.setItem("player-name", usernameInput.value);
- $SPECTATING = false; 
+ $SPECTATING = false;
+ $AVATAR.nameObj.update(usernameInput.value); 
  $AVATAR.respawn();
+}
 }
 
 const titleSettingsButton = document.querySelector(".buttons__settings");
@@ -2136,7 +2139,7 @@ const titleHelpButton = document.querySelector(".buttons__help");
 titleHelpButton.onclick = function() {
   toggleNote("Use 'E' on desktop or the 'A' button to interact with an object. The 'A' button at the right of the screen will light up with an interaction is avaliable when you're close enough to an object. This works when for things like entering doors or adding items to your inventory.", function() {
    toggleNote("Use 'Q' on desktop or the 'G' button to pick up an item to carry it. Use the key a second time to drop the item.", function() {
-      toggleNote("Kill as many enemies as possible without dying to gain the highest score possible.\n\nGo into settings to see more information on controls.", false, "Objective.", "/public/images/combat.png"); 
+      toggleNote("Kill as many enemies as possible while maintaining the lowest damage you can to gain the highest score possible.\n\nGo into settings to see more information on controls.", false, "Objective.", "/public/images/combat.png"); 
    }, "Grabbing", "/public/images/grabbing.png")
 },"Interaction", "/public/images/interaction.png"); 
 }

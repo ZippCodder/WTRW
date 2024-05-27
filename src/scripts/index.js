@@ -29,6 +29,8 @@ window.onload = async () => {
     window.$ACTION_BUTTON = null;
     window.$RELOAD_BUTTON = null;
     window.$SCORE = 0;
+    window.$MAX_ENEMIES = 10;
+    window.$CONTENT_LOADED = false; 
     window.$HIGHSCORE = localStorage.getItem("highscore") || 0; 
     window.$PLAYER_NAME = localStorage.getItem("player-name"); 
     window.$AVATAR_MODE_BUTTON = null;
@@ -40,6 +42,7 @@ window.onload = async () => {
     window.$PAUSED = false; 
     window.$SPECTATING = true; 
     window.$HEALTH_BAR = null;
+    window.$TRANSITIONING = false;
     window.$GAME_LOOP = function() {};
     window.$IS_MOBILE = isMobile(navigator.userAgent).any;
     window.scale = $SETTINGS.zoom;
@@ -112,7 +115,6 @@ window.onload = async () => {
         updateDisplayViewport();
     }
 
-    let transitioning = false;
     let transitionSpeed;
     let phase = 0;
     let points = [50, 0];
@@ -125,7 +127,7 @@ window.onload = async () => {
 
         if (globalDarkness === points[phase] && phase === 1) {
             phase = 0;
-            transitioning = false;
+            $TRANSITIONING = false;
             return;
         }
 
@@ -140,7 +142,7 @@ window.onload = async () => {
     }, undefined, 0.005);
 
     window.requestTransition = function(c, speed = 2) {
-      if (!transitioning) {
+      if (!$TRANSITIONING) {
         $CURRENT_MAP.move = false;
 
         if (!useTransition) {
@@ -150,7 +152,7 @@ window.onload = async () => {
 
         callback = c;
         transitionSpeed = speed;
-        transitioning = true;
+        $TRANSITIONING = true;
       }
     };
 
@@ -461,7 +463,7 @@ window.onload = async () => {
 
         gl.clear(gl.COLOR_BUFFER_BIT);
         gl.uniform1f(locations.scale, scale);
-        if (transitioning) transitionAnimation.run();
+        if ($TRANSITIONING) transitionAnimation.run();
         if (fadeTransition.transitioning) {
             globalDarkness = fadeTransition.run();
         }
@@ -486,6 +488,7 @@ window.onload = async () => {
     }
     loader.style.display = "none"; 
     playButton.innerText = "Play";
+    $CONTENT_LOADED = true; 
     init();
 }
 

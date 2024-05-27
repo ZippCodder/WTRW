@@ -79,7 +79,7 @@
       MedKit
   } from "/src/scripts/objects.js";
 
-  $AVATAR = new Avatar("R O B I N H O O D");
+  $AVATAR = new Avatar("- - - - -");
   $AVATAR.postLink();
   $AVATAR.inventory.cash = parseInt(localStorage.getItem("player-cash")) || 0;
 
@@ -95,7 +95,7 @@
   $CURRENT_MAP = $MAP;
 
   const enemySpawnLoop = new LoopAnimation(function() {
-      if ($MAP.SUB_MAPS[0].avatarCount < 6) {
+      if ($MAP.SUB_MAPS[0].avatarCount < $MAX_ENEMIES) {
 
           let {
               x,
@@ -111,15 +111,33 @@
           a.state.aggressive = true;
           a.state.passive = false;
           a.state.openCarry = false;
+          a.state.killValue = 100;
           a.state.targetUpdateAnimation.rate = 1 / 5;
-          a.addItem([new GLOCK_20, new GP_K100, new KitchenKnife, new CombatKnife, new NXR_44_MAG, new X6_91, new FURS_55, new DX_9][random(9)]);
+
+          let weapon;
+  
+          if (Math.random() < 0.5) {
+            console.log("a");
+            weapon = [new GLOCK_20, new GP_K100, new KC_357, new KitchenKnife][random(4)];
+            a.state.killValue = 125; 
+          } else if (Math.random() <  0.8) {
+            console.log("b");
+            weapon = [new DX_9, new NXR_44_MAG, new FURS_55, new CombatKnife][random(4)];
+            a.state.killValue = 176;
+           } else {
+            console.log("c");
+            weapon = [new NOSS_7, new X6_91, new USP_45][random(4)];
+            a.state.killValue = 208;
+           }
+
+          a.addItem(weapon);
 
           if (Math.random() < 0.5) {
            if (Math.random() < 0.5) a.addItem(new Money);
            if (Math.random() < 0.5) a.addItem(new Money);
            if (Math.random() < 0.5) a.addItem(new Money);
           }
-
+ 
           a.equipItem(0);
           a.state.targetId = a.id;
           a.state.aggressive = true;
