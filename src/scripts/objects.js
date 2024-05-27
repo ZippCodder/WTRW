@@ -3005,6 +3005,7 @@ export class Avatar {
             invinsible: false,
             kills: 0,
             deaths: 0, 
+            totalDamage: 0, 
             score: 0, 
             hitboxes: {
                 leftPunch: {
@@ -3241,7 +3242,10 @@ export class Avatar {
         if (!this.state.invinsible) {
 
             if (this.state.armour > 0) {
-                if (damage > this.state.armour) this.state.vitals.health = Math.max(0, this.state.vitals.health - Math.abs(this.state.armour - damage));
+                if (damage > this.state.armour) {
+                  this.state.vitals.health = Math.max(0, this.state.vitals.health - Math.abs(this.state.armour - damage));
+                  this.state.totalDamage += Math.abs(this.state.armour - damage);
+                }
                 this.state.armour = Math.max(0, this.state.armour - damage);
                 if (this.state.equippedItems.armour) {
                   this.state.equippedItems.armour.integrity = Math.max(0, this.state.equippedItems.armour.integrity - damage);
@@ -3251,17 +3255,17 @@ export class Avatar {
                 if (this.state.armour === 0) hideArmourDisplay();
             } else {
                 this.state.vitals.health = Math.max(0, this.state.vitals.health - damage);
+                this.state.totalDamage += damage;
             }
 
             updateHealthBar();
+            updateCombatStats();
 
             if (this.state.vitals.health <= 0 && this.state.armour === 0) {
                 let attacker = $CURRENT_MAP.avatars[owner.id];
                 if (attacker) attacker.state.kills += 1;
                 $AVATAR.state.deaths += 1;
                 
-                updateCombatStats();
-
                 this.purgeItems(5);
 
                 delete $CURRENT_MAP.avatars[this.id];
@@ -3270,7 +3274,8 @@ export class Avatar {
                 if (this.state.pickup.current) this.drop();
                 this.hidden = true;
                 noclip = true;
-                this.respawn();
+                $SCORE = Math.round((this.state.kills*1000)/(this.state.totalDamage*0.1));
+                returnToTitleScreen();
 
                 return;
             }
@@ -3689,6 +3694,8 @@ export class Avatar {
       $CURRENT_MAP.move = true;
       $CURRENT_MAP.translate(x - centerX, y - centerY);
       noclip = false; 
+   
+      $MAP_DISPLAY.update();
      }).bind(this));
     }
 
@@ -5714,10 +5721,6 @@ export class _Map_ {
     init(spawns = [
         [0, 0]
     ], doorOffset = 0, exitPoint, buildingExit, label) {
-        // attach $AVATAR to map
-
-        this.avatars[$AVATAR.id] = $AVATAR;
-
         // attach any default objects or clusters for all maps, etc.
         this._bulletMatrix = new _BulletCluster_([-0.9, 0.4, 1, 0, 0, 0.9, 0.4, 1, 0.5625, 0, -0.9, -0.4, 1, 0, 0.5, 0.9, 0.4, 1, 0.5625, 0, -0.9, -0.4, 1, 0, 0.5, 0.9, -0.4, 1, 0.5625, 0.5], textures.objects.bullet);
         this.link(this._bulletMatrix);

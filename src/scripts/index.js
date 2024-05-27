@@ -28,12 +28,17 @@ window.onload = async () => {
     window.$CURRENT_MAP = null;
     window.$ACTION_BUTTON = null;
     window.$RELOAD_BUTTON = null;
+    window.$SCORE = 0;
+    window.$HIGHSCORE = localStorage.getItem("highscore") || 0; 
+    window.$PLAYER_NAME = localStorage.getItem("player-name"); 
     window.$AVATAR_MODE_BUTTON = null;
     window.$DROP_ITEM_BUTTON = null;
     window.$AVATAR = null;
     window.$ACTIVE_DIALOGUE_PARTY = null;
     window.$MAP = null;
     window.$MAP_DISPLAY = null;
+    window.$PAUSED = false; 
+    window.$SPECTATING = true; 
     window.$HEALTH_BAR = null;
     window.$GAME_LOOP = function() {};
     window.$IS_MOBILE = isMobile(navigator.userAgent).any;
@@ -428,7 +433,8 @@ window.onload = async () => {
     $CONTROLS.push($JOYSTICK_L);
     if ($IS_MOBILE) $CONTROLS.push($JOYSTICK_R, $RELOAD_BUTTON, $AVATAR_MODE_BUTTON, $DROP_ITEM_BUTTON);
 
-    let loadingScreen = document.querySelector("#loading-screen");
+    let playButton = document.querySelector(".play__button");
+    let loader = document.querySelector(".play__loader");
     let gameStats = document.querySelector("#game-stats");
     let globalFrameRun = 0;
     let frameRate = 0;
@@ -438,7 +444,7 @@ window.onload = async () => {
     let T1, T2;
 
     function init() {
-
+      if (!$PAUSED) {
         if (performance.now() - frameRateMarker >= 1000) {
             frameRate = globalFrameRun;
             globalFrameRun = 0;
@@ -474,11 +480,12 @@ window.onload = async () => {
         gameStats.innerHTML = `FPS: ${frameRate}`;
         globalFrameRun++;
         times.push(T2 - T1);
+      }
 
         requestAnimationFrame(init);
     }
-
-    loadingScreen.style.display = "none";
+    loader.style.display = "none"; 
+    playButton.innerText = "Play";
     init();
 }
 

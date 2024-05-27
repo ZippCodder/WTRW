@@ -911,9 +911,11 @@
   /* MONEY DISPLAY */
 
   const moneyDisplay = document.querySelector("#money");
+  moneyDisplay.innerText = Math.round(localStorage.getItem("player-cash")) || 0;
 
   window.updateMoneyDisplay = function() {
-   moneyDisplay.innerText = $AVATAR.inventory.cash;
+   moneyDisplay.innerText = Math.round($AVATAR.inventory.cash);
+   localStorage.setItem("player-cash", $AVATAR.inventory.cash.toString());
   }
 
   /* AMMO BUTTON AND RELOAD FUNCTIONALITY */
@@ -1741,8 +1743,8 @@ closeStoreButton.onclick = function() {
 
 window.toggleStore = function(s) {
 if (storeContainer.style.display !== "grid") {
- document.querySelector("#store-cash").innerHTML = "$"+$AVATAR.inventory.cash;
- document.querySelector("#store-bank").innerHTML = "$"+$AVATAR.inventory.bank;
+ document.querySelector("#store-cash").innerHTML = "$"+Math.round($AVATAR.inventory.cash);
+ document.querySelector("#store-bank").innerHTML = "$"+Math.round($AVATAR.inventory.bank);
  storeContainer.style.display = "grid";
  return;  
 } 
@@ -1819,6 +1821,7 @@ function updateCheckout(storeItem) {
  }
 
  $AVATAR.inventory.cash -= currentStoreItem.price;
+ updateMoneyDisplay();
  toggleNote(`Purchase successful! ${itemQuantity.value} ${currentStoreItem.name + ((itemQuantity.value > 1) ? "s were":" was")} added to your inventory.`);
 }
 
@@ -1827,16 +1830,30 @@ itemQuantity.addEventListener("change",function() {
 });
 
 updateStore([
-{name: "combat knife", title: "Combat Knife", price: 42.99, type: "knife"}, 
-{name: "kitchen knife", title: "Kitchen Knife", price: 8.50, type: "knife"}, 
-{name: "ammo box", title: "Ammo Box", price: 29.30, type: "ammo"}, 
-{name: "multi ammo box", title: "Multi Ammo Box", price: 42.30, type: "ammo"},
-{name: "syringe", title: "Syringe", price: 9.50, type: "medicine"},
-{name: "med kit", title: "Med Kit", price: 28.50, type: "medicine"},
-{name: "glock 20", title: "GLOCK 20", price: 1423.50, type: "gun"},
-{name: "remote detonator", title: "Remote Detonator", price: 142.20, type: "detonator"}, 
-{name: "proximity explosive", title: "Proximity Explosive", price: 70.10, type: "explosive"},
-{name: "x6 91", title: "X6 91", price: 895.99, type: "gun"}
+{name: "glock 20", title: "GLOCK_20", price: 50.00, type: "gun"}, 
+{name: "kc 357", title: "KC_357", price: 45.50, type: "gun"}, 
+{name: "gp k100", title: "GP_K100", price: 130.15, type: "gun"}, 
+{name: "nxr 44 mag", title: "NXR_44_MAG", price: 233.50, type: "gun"}, 
+{name: "usp 45", title: "USP_45", price: 233.50, type: "gun"}, 
+{name: "dx 9", title: "DX_9", price: 385.00, type: "gun"}, 
+{name: "noss 7", title: "NOSS_7", price: 880.50, type: "gun"},
+{name: "x6 91", title: "X6_91", price: 742.30, type: "gun"},
+{name: "furs 55", title: "FURS_55", price: 190.00, type: "gun"}, 
+{name: "x6 91", title: "X6_91", price: 742.30, type: "gun"},  
+{name: "kitchen knife", title: "KitchenKnife", price: 30.50, type: "knife"},
+{name: "combat knife", title: "CombatKnife", price: 95.00, type: "knife"},
+{name: "assassins knife", title: "AssassinsKnife", price: 420.90, type: "knife"},
+{name: "remote explosive", title: "RemoteExplosive", price: 120.00, type: "explosive"},
+{name: "proximity explosive", title: "ProximityExplosive", price: 185.00, type: "explosive"},
+{name: "remote detonator", title: "RemoteDetonator", price: 342.00, type: "detonator"},
+{name: "basic armour", title: "BasicArmour", price: 480.50, type: "armour"},
+{name: "swat armour", title: "SwatArmour", price: 620.00, type: "armour"},
+{name: "mercenary armour", title: "MercenaryArmour", price: 852.50, type: "armour"},
+{name: "grey backpack", title: "GreyBackpack", price: 240.00, type: "backpack"},
+{name: "white backpack", title: "WhiteBackpack", price: 380.40, type: "backpack"},
+{name: "black backpack", title: "BlackBackpack", price: 520.00, type: "backpack"},
+{name: "syringe", title: "Syringe", price: 42.00, type: "medicine"},
+{name: "med kit", title: "MedKit", price: 120.00, type: "medicine"},
 ]);
 
 // note logic 
@@ -1844,21 +1861,34 @@ updateStore([
 const noteContainer = document.querySelector(".note-wrapper");
 const closeNoteButton = document.querySelector("#note-close");
 const noteContent = document.querySelector(".note__content p");
+const noteTitle = document.querySelector(".note__content-title"); 
+const noteImage = document.querySelector(".note__image");
 
 let noteCallback;
 
-window.toggleNote = function(content, callback) {
+window.toggleNote = function(content, callback, title, image) {
  noteContent.innerText = content;
  noteContainer.style.display = "flex";
  noteCallback = callback; 
+ 
+ if (title) {
+  noteTitle.style.display = "block"; 
+  noteTitle.innerText = title; 
+ } else {
+  noteTitle.style.display = "none";
+ }
+
+ if (image) {
+  noteImage.style.display = "block";  
+  noteImage.src = image;
+ } else {
+  noteImage.style.display = "none";
+ } 
 }
 
 closeNoteButton.addEventListener("click",() => {
  noteContainer.style.display = "none";
- if (noteCallback) {
-  noteCallback(); 
-  noteCallback = undefined; 
- }
+ if (noteCallback) noteCallback(); 
 });
 
 // desktop controls 
@@ -1916,6 +1946,9 @@ window.addEventListener("keydown", (e) => {
  }
  if (e.key === "q") {
   toggleGrab(e);
+ }
+ if (e.key === "p") {
+  $PAUSED = !$PAUSED;
  }
  if ($AVATAR.state.equippedItems.mainTool && e.key === "x") {
   $AVATAR.dropItem($AVATAR.state.equippedItems.mainTool.slot);
@@ -1981,7 +2014,7 @@ const openSettingsButton = document.querySelectorAll(".controls-container__butto
 const closeSettingsButton = document.querySelector("#settings-close");
 
 function openSettings() {
- settings.style.display = "grid";
+ settings.style.display = "grid"; 
 }
 
 function closeSettings() {
@@ -1997,6 +2030,15 @@ const graphicsQualitySetting = document.querySelector("#graphics-quality-setting
 const musicSetting = document.querySelector("#music-setting");
 const volumeSetting = document.querySelector("#volume-setting");
 const joysticksSetting = document.querySelector("#joysticks-setting");
+const fullscreenSetting = document.querySelector("#fullscreen-setting");
+
+fullscreenSetting.onchange = function() {
+ if (fullscreenSetting.checked) {
+  document.body.requestFullscreen(); 
+  return; 
+ }
+ document.exitFullscreen(); 
+}
 
 onscreenMapStyleSetting.selectedIndex = $SETTINGS.onscreenMapStyle;
 zoomSetting.value = $SETTINGS.zoom;
@@ -2065,5 +2107,59 @@ applySettings();
 
 window.updateCombatStats = function() {
  document.querySelector(".onscreen-stats__kills").innerText = $AVATAR.state.kills; 
- document.querySelector(".onscreen-stats__deaths").innerText = $AVATAR.state.deaths; 
+ document.querySelector(".onscreen-stats__damage").innerText = $AVATAR.state.totalDamage; 
 }
+
+// title card
+
+const titleCard = document.querySelector(".title-card-wrapper");
+const titlePlayButton = document.querySelector(".play__button");
+const usernameInput = document.querySelector(".play__username");
+usernameInput.value = $PLAYER_NAME || "";
+const onScreenPlayerName = document.querySelector(".onscreen-stats__player"); 
+const scoreDisplay = document.querySelector(".content__score");
+const highscoreDisplay = document.querySelector(".content__highscore");
+highscoreDisplay.innerText = `Your current highscore: ${$HIGHSCORE}`;
+
+titlePlayButton.onclick = function() {
+ titleCard.style.display = "none";
+ onScreenPlayerName.innerText = usernameInput.value || "Unnamed Human";
+ localStorage.setItem("player-name", usernameInput.value);
+ $SPECTATING = false; 
+ $AVATAR.respawn();
+}
+
+const titleSettingsButton = document.querySelector(".buttons__settings");
+titleSettingsButton.onclick = openSettings;
+
+const titleHelpButton = document.querySelector(".buttons__help");
+titleHelpButton.onclick = function() {
+  toggleNote("Use 'E' on desktop or the 'A' button to interact with an object. The 'A' button at the right of the screen will light up with an interaction is avaliable when you're close enough to an object. This works when for things like entering doors or adding items to your inventory.", function() {
+   toggleNote("Use 'Q' on desktop or the 'G' button to pick up an item to carry it. Use the key a second time to drop the item.", function() {
+      toggleNote("Kill as many enemies as possible without dying to gain the highest score possible.\n\nGo into settings to see more information on controls.", false, "Objective.", "/public/images/combat.png"); 
+   }, "Grabbing", "/public/images/grabbing.png")
+},"Interaction", "/public/images/interaction.png"); 
+}
+
+window.returnToTitleScreen = function() {
+ titleCard.style.display = "flex";
+ onScreenPlayerName.innerText = "- - - - -";
+ $SPECTATING = true; 
+ noclip = true; 
+
+ if ($SCORE > $HIGHSCORE) {
+  $HIGHSCORE = $SCORE;
+  localStorage.setItem("highscore", $HIGHSCORE);
+ }
+
+ scoreDisplay.innerText = `Your score: ${$SCORE}`;
+ scoreDisplay.style.display = "block";
+ highscoreDisplay.innerText = `Your current highscore: ${$HIGHSCORE}`;
+
+ $SCORE = 0;
+
+ $AVATAR.state.kills = 0; 
+ $AVATAR.state.totalDamage = 0;
+ updateCombatStats(); 
+}
+

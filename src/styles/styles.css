@@ -316,11 +316,11 @@ html,body {
         margin: 0;
         width: max-content;  
         height: min-content;
-        background: rgba(0, 0, 0, 0.5); 
-        z-index: 1;
         border-radius: 2px;
+        background: rgba(0, 0, 0, 0.5);
         margin: 0.2em; 
-        grid-area: 1/1/2/2; 
+        grid-area: 1/1/2/2;
+        z-index: 0;
        }
  
        #mapTime i {
@@ -342,71 +342,7 @@ html,body {
         .texture {
             display: none;
         }
-        
-        .loading-img {
-          display: block;
-          position: relative;
-          width: 10vmax;
-          height: 10vmax;
-          margin: auto;
-          transform: scale(1.2);
-          top: calc(40%);
-          animation: pulse 1s infinite;
-        }
-        
-        .loading-title {
-            color: white;
-            text-align: center;
-            font-size: 240%;
-            position: relative;
-            top: 60vh;
-            margin: 0;
-            font-family: var(--main-font);
-        }
-        
-          #loading-screen {
-            width: 100%;
-            height: 100%;
-            z-index: 6;
-            position: absolute;
-            background: #3C3C3C;
-            background-size: cover;
-          }
-          
-          .loader-filter {
-              width: 100%;
-              height: 100%;
-              background: rgba(0,0,0,0.5);
-          }
-        
-        #loader {
-          width: 2vmax;
-          height: 2vmax;
-          margin: 20px;
-          border-radius: 100%;
-          border: 5px solid white;
-          border-color: rgba(0,0,0,0);
-          border-top-color: white;
-          animation: loader-spin 0.3s linear infinite;
-          position: absolute;
-          right: 0;
-          background-image: none;
-          background: none;
-          bottom: 0;
-        }
-        
-        @keyframes pulse {
-            0% {
-                transform: scale(1.2);
-            }
-            50% {
-                transform: scale(1.5);
-            }
-            100% {
-                transform: scale(1.2);
-            }
-        }
-        
+         
         @keyframes fade-in {
             0% {
                 opacity: 0.0;
@@ -882,22 +818,188 @@ html,body {
               outline: 2px solid #111111;  
           }
 
-          .note-wrapper {
+          .note-wrapper, .title-card-wrapper {
            position: absolute;
            top: 0;
            left: 0;
-           z-index: 5;
            width: 100%;
            height: 100%;
+           z-index: 3; 
            background: rgba(0,0,0,0.5);
-           display: flex;
-           justify-content: center; 
+           display: none;
+           justify-content: center;
            align-items: center;
+          }
+
+          .title-card-wrapper {
+           display: flex;
+           z-index: 2; 
+          }
+
+          .title-card {
+              user-select: none;
+              background: #3C3C3C;
+              width: min-content;
+              height: max-content;
+              font-family: var(--main-font);
+              color: white;
+              font-size: 1em;
+              display: flex;
+              flex-direction: column;
+              box-shadow: 0px 0px 10px black;
+              border-bottom: 5px solid #131313;
+              outline: 2px solid #111111; 
+              max-height: 100vh;  
+              position: relative;
+              z-index: 2;
+          }
+
+          .title-card__play {
+              display: flex; 
+              flex-direction: row; 
+          }
+
+          .title-card__title {
+              height: 100%;
+              background: #222222;
+              display: flex; 
+              align-items: center; 
+              flex-direction: column;      
+              padding-top: 1em; 
+              padding-bottom: 1em;             
+          }
+   
+          .title__heading {
+              padding: 0; 
+              margin: 0;
+              border: none; 
+              outline: none; 
+              text-align: center; 
+          }
+ 
+          .title__logo {
+              width: 5em;
+              height: 5em; 
+          }
+
+          .content__play {
+            display: flex;
+            flex-direction: row;
+            width: min-content;
+            height: min-content; 
+          }
+ 
+          .title-card__content {
+            width: 18em;   
+            height: min-content;  
+            display: flex;
+            justify-content: center; 
+            align-items: center; 
+            flex-direction: column; 
+            padding-top: 1em; 
+            padding-bottom: 1em;  
+            font-family: var(--main-font);
+            border-left: 10px solid #222222;
+            border-right: 10px solid #222222;
+          } 
+ 
+          .play__username {
+           font-size: 1em; 
+           font-family: inherit;
+           outline: none; 
+           text-align: center;
+           text-decoration: none;
+           border: none; 
+           border-bottom: 5px solid gray;
+          }
+
+          .title-card__socials {
+           display: flex;
+           flex-direction: row;
+           justify-content: center;
+           align-items: center;
+           padding-left: 10px;
+           padding-right: 10px;
+           background: #222222;
+           padding-top: 1em; 
+           padding-bottom: 1em; 
+          }
+ 
+          .title-card__socials i {
+           color: white; 
+           font-size: 1.5em;
+           margin-left: 0.4em; 
+           margin-right: 0.4em; 
+          }
+  
+          .content__highscore, .content__score {
+            background: #222222;
+            font-family: inherit; 
+            padding: 1em;  
+            text-align: center;  
+            margin: 0;
+            margin-bottom: 0.5em;  
+            margin-top: 0.5em; 
+           }
+
+           .content__score {
+            margin-bottom: 0; 
+            display: none; 
+           }
+        
+        .play__loader {
+          width: 0.4em; 
+          height: 0.4em;
+          margin: 0.2em; 
+          border-radius: 100%;
+          border: 5px solid white;
+          border-color: rgba(0,0,0,0);
+          border-top-color: white;
+          animation: loader-spin 0.3s linear infinite;
+          right: 0;
+          background-image: none;
+          background: none;
+          bottom: 0;
+        }
+ 
+          .play__button {    
+           font-family: inherit;
+           background: dodgerblue;
+           color: inherit;
+           font-size: 2em; 
+           border: none;
+           display: inline-flex; 
+           align-items: center; 
+           justify-content: center; 
+           border-bottom: 5px solid #003366; 
+          }
+
+          .buttons__help {    
+           font-family: inherit;
+           color: inherit;
+           font-size: 1.5em; 
+           border: none;
+           display: inline-block;
+           border: 1px solid white; 
+           border-bottom: 5px solid white; 
+           background: none; 
+          }
+
+          .buttons__settings {    
+           font-family: inherit;
+           color: inherit;
+           font-size: 1.5em; 
+           margin-left: 1em; 
+           border: none;
+           display: inline-block;
+           border: 1px solid white; 
+           border-bottom: 5px solid white; 
+           background: none;  
           }
 
           #note {
               user-select: none;
-              z-index: 1;
+              z-index: 3;
               background: #3C3C3C;
               width: 80vmin;
               height: max-content;
@@ -910,7 +1012,8 @@ html,body {
               display: grid;
               box-shadow: 0px 0px 10px black;
               border-bottom: 5px solid #131313;
-              outline: 2px solid #111111;  
+              outline: 2px solid #111111; 
+              max-height: 100vh;  
           }
 
           .note__logo {
@@ -918,6 +1021,26 @@ html,body {
               height: 5em; 
               display: block;  
               margin: auto; 
+          }
+          
+          .note__content-title {
+              margin: 0; 
+              padding: 0; 
+              display: block; 
+              color: white;
+              padding-top: 0.5em; 
+              padding-bottom: 0.5em; 
+          }
+          
+          .note__image {
+              width: 80%;
+              margin: 0; 
+              padding: 0; 
+              display: block;
+              margin: auto; 
+              aspect-ratio: 1/0.6;
+              object-fit: cover; 
+              padding-bottom: 0.5em;
           }
 
           .note__content {
@@ -930,7 +1053,7 @@ html,body {
               padding: 1em;
               padding-top: 2em;
               padding-bottom: 2em;
-              text-align: center; 
+              text-align: center;  
           }
 
           .main-inventory__description, .main-inventory__stats, .main-inventory__help, .map__key {
@@ -1044,7 +1167,7 @@ html,body {
 
           #console, #settings {
               user-select: auto;
-              z-index: 1;
+              z-index: 2;
               background: #3C3C3C;
               width: 80%;
               height: 90%;
@@ -1096,7 +1219,7 @@ html,body {
               border: 10px solid #222222; 
           }
 
-          .settings-container__setting, .settings-container__control {
+          .settings-container__setting, .settings-container__control, .settings-container__credit {
               width: max-content; 
               display: flex; 
               flex-direction: row; 
@@ -1110,7 +1233,7 @@ html,body {
               margin-bottom: 0.5em;
           }
 
-          .settings-container__control {
+          .settings-container__control, .settings-container__credit {
               justify-content: center; 
           }
  
@@ -1691,4 +1814,10 @@ html,body {
            #mapInfo {
               width: 25vmin;
            }
+          }
+
+          @media only screen and (min-width: 1500px) {
+            .title-card, #console, #store, #note, #map, #settings, #main-inventory {
+             transform: scale(1.5); 
+            }
           }
