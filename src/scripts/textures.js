@@ -173,8 +173,11 @@ await textures.objects.addTexture("door", "/public/images/textures/DOOR.png");
 await textures.objects.addTexture("lightswitch", "/public/images/textures/LIGHT_SWITCH.png");
 await textures.objects.addTexture("bullet", "/public/images/textures/BULLET.png");
 await textures.objects.addTexture("bulletshell", "/public/images/textures/BULLETSHELL.png");
+await textures.objects.addTexture("fences", "/public/images/textures/fences.png");
+/*
 await textures.objects.addTexture("urbanfence", "/public/images/textures/URBAN_FENCE.png");
 await textures.objects.addTexture("urbanfencevertical", "/public/images/textures/URBAN_FENCE_VERTICAL.png");
+*/
 /*
 await textures.objects.addTexture("urbanfencehalf", "/public/images/textures/URBAN_FENCE_HALF.png");
 await textures.objects.addTexture("smallplant", "/public/images/textures/SMALL_PLANT.png");
