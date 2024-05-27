@@ -52,6 +52,10 @@ export default class TextureContainer {
 
 window.textures = {};
 
+textures.controls = new TextureContainer({mipmap: true});
+
+await textures.controls.addTexture("joystick_disc", "/public/images/textures/joystick_disc.png");
+
 textures.misc = new TextureContainer();
 
 await textures.misc.addTexture("font", "/public/images/textures/mainfont.png");
