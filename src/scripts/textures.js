@@ -147,8 +147,9 @@ await textures.objects.addTexture("conveniencestore", "/public/images/textures/C
 */
 await textures.objects.addTexture("gunstore", "/public/images/textures/GUNSTORE.png");
 await textures.objects.addTexture("table", "/public/images/textures/TABLE.png");
-/*
+
 await textures.objects.addTexture("smalltable", "/public/images/textures/SMALL_TABLE.png");
+/*
 await textures.objects.addTexture("whiteboard", "/public/images/textures/WHITEBOARD.png");
 await textures.objects.addTexture("pinboard", "/public/images/textures/PINBOARD.png");
 await textures.objects.addTexture("vendor1", "/public/images/textures/VENDOR_1.png");
