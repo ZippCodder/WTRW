@@ -19,7 +19,7 @@
       rotate
   } from "/src/scripts/lib.js";
 
-  import {
+  const {
       _Map_,
       Avatar,
       House1,
@@ -97,7 +97,7 @@
       Door, 
       LightSwitch, 
       SmallPlant
-  } from "/src/scripts/objects.js";
+  } = await import("/src/scripts/objects.js");
 
   import _dialogues from "/src/scripts/dialogue.js";
 
@@ -1783,7 +1783,7 @@ function updateStore(s) {
   storeItemsContainer.appendChild(content);
  }
 
-updateCheckout(currentStoreItem);
+ updateCheckout(currentStoreItem);
 }
 
 const itemTitle = document.querySelector(".item__title u"); 
@@ -2127,7 +2127,8 @@ if ($CONTENT_LOADED && !$TRANSITIONING) {
  onScreenPlayerName.innerText = usernameInput.value || "Unnamed Human";
  localStorage.setItem("player-name", usernameInput.value);
  $SPECTATING = false;
- $AVATAR.nameObj.update(usernameInput.value); 
+ $AVATAR.nameObj.update(usernameInput.value);
+ $AVATAR.character = usernameInput.value; 
  $AVATAR.respawn();
 }
 }
@@ -2139,7 +2140,7 @@ const titleHelpButton = document.querySelector(".buttons__help");
 titleHelpButton.onclick = function() {
   toggleNote("Use 'E' on desktop or the 'A' button to interact with an object. The 'A' button at the right of the screen will light up with an interaction is avaliable when you're close enough to an object. This works when for things like entering doors or adding items to your inventory.", function() {
    toggleNote("Use 'Q' on desktop or the 'G' button to pick up an item to carry it. Use the key a second time to drop the item.", function() {
-      toggleNote("Kill as many enemies as possible while maintaining the lowest damage you can to gain the highest score possible.\n\nGo into settings to see more information on controls.", false, "Objective.", "/public/images/combat.png"); 
+      toggleNote("Kill as many enemies as you can to gain the highest score possible. Use the gun store at the top of the map to buy and access more weapons.\n\nGo into settings to see more information on controls.", false, "Objective.", "/public/images/combat.png"); 
    }, "Grabbing", "/public/images/grabbing.png")
 },"Interaction", "/public/images/interaction.png"); 
 }

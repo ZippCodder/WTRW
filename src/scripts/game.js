@@ -117,15 +117,12 @@
           let weapon;
   
           if (Math.random() < 0.5) {
-            console.log("a");
             weapon = [new GLOCK_20, new GP_K100, new KC_357, new KitchenKnife][random(4)];
             a.state.killValue = 125; 
           } else if (Math.random() <  0.8) {
-            console.log("b");
             weapon = [new DX_9, new NXR_44_MAG, new FURS_55, new CombatKnife][random(4)];
             a.state.killValue = 176;
            } else {
-            console.log("c");
             weapon = [new NOSS_7, new X6_91, new USP_45][random(4)];
             a.state.killValue = 208;
            }

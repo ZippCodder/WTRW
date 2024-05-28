@@ -5,6 +5,8 @@ import {
 
 import isMobile from "/node_modules/ismobilejs/esm/isMobile.js";
 
+import "../styles/styles.css";
+
 window.onload = async () => {
     if (!localStorage.getItem("game-settings")) {
       localStorage.setItem("game-settings",JSON.stringify({onscreenMapStyle: 0, zoom: 1.2, graphicsQuality: 0, music: 0, volume: 0.5, joysticks: 0}));
@@ -409,10 +411,10 @@ window.onload = async () => {
     gl.vertexAttrib3fv(locations.offset, new Float32Array([0, 0, 0.001]));
     gl.vertexAttrib1f(locations.textrUnit, 0);
 
-    await import("/src/scripts/textures.js");
-    await import("/src/scripts/objects.js");
-    await import("/src/scripts/controls.js");
-    await import("/src/scripts/game.js");
+    await import(/* webpackChunkName: "textures.chunk" */"/src/scripts/textures.js");
+    await import(/* webpackChunkName: "objects.chunk" */"/src/scripts/objects.js");
+    await import(/* webpackChunkName: "controls.chunk" */"/src/scripts/controls.js");
+    await import(/* webpackChunkName: "game.chunk" */"/src/scripts/game.js");
 
     function renderObjects() {
         $OBJECTS.forEach(v => {
