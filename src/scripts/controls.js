@@ -130,7 +130,7 @@
 
   if (!$IS_MOBILE) {
    window.addEventListener("keydown",(e) => {
-     if (e.key === "e") runAction(e);
+     if (e.code === "KeyE") runAction(e);
    });
   }
 
@@ -1941,16 +1941,16 @@ let mouseDown = false;
 window.addEventListener("keydown", (e) => {
  if (consoleContainer.style.display === "grid") return; 
 
- if (e.key === "r" && $AVATAR.state.equippedItems.mainTool) {
+ if (e.code === "KeyR" && $AVATAR.state.equippedItems.mainTool) {
   $AVATAR.reload();
  }
- if (e.key === "q") {
+ if (e.code === "KeyQ") {
   toggleGrab(e);
  }
- if (e.key === "p") {
+ if (e.code === "KeyP") {
   $PAUSED = !$PAUSED;
  }
- if ($AVATAR.state.equippedItems.mainTool && e.key === "x") {
+ if ($AVATAR.state.equippedItems.mainTool && e.code === "KeyX") {
   $AVATAR.dropItem($AVATAR.state.equippedItems.mainTool.slot);
  }
  if (/\d/.test(e.key.toLowerCase())) {
@@ -2031,6 +2031,7 @@ const musicSetting = document.querySelector("#music-setting");
 const volumeSetting = document.querySelector("#volume-setting");
 const joysticksSetting = document.querySelector("#joysticks-setting");
 const fullscreenSetting = document.querySelector("#fullscreen-setting");
+const pauseSetting = document.querySelector("#pause-setting");
 
 fullscreenSetting.onchange = function() {
  if (fullscreenSetting.checked) {
@@ -2038,6 +2039,10 @@ fullscreenSetting.onchange = function() {
   return; 
  }
  document.exitFullscreen(); 
+}
+
+pauseSetting.onchange = function() {
+ $PAUSED = pauseSetting.checked;
 }
 
 onscreenMapStyleSetting.selectedIndex = $SETTINGS.onscreenMapStyle;
