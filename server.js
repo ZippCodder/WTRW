@@ -45,6 +45,6 @@ res.end();
 }
 });
 
-server.listen(5000,() => {
+server.listen(process.env.PORT,() => {
 console.log("listening...");
 });
