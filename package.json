@@ -1,7 +1,7 @@
 {
   "name": "WTRW",
   "version": "1.0.0",
-  "description": "A fast-pace shooting game about squares killing eachother.",
+  "description": "A fast-paced shooting game where you're tasked with becoming the best assassin possible.",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
