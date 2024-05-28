@@ -1808,10 +1808,12 @@ function updateCheckout(storeItem) {
 }
 
  purchaseButton.onclick = function() {
+ let total = (currentStoreItem.price*itemQuantity.value);
+
  if (itemQuantity.value > ($AVATAR.inventory.slots - $AVATAR.inventory.count)) {
  toggleNote("Sorry, we couldn't make this purchase! You dont have enough space in your inventory to hold these items. Try dropping a few things you dont need.");
   return; 
- } else if (currentStoreItem.price > $AVATAR.inventory.cash) {
+ } else if (total > $AVATAR.inventory.cash) {
  toggleNote("You dont have enough money to make this purchase! Try getting a job you bum.");
   return; 
 }
@@ -1820,7 +1822,7 @@ function updateCheckout(storeItem) {
   $AVATAR.addItem(eval(`new ${currentStoreItem.title.replaceAll(" ","")}`));
  }
 
- $AVATAR.inventory.cash -= currentStoreItem.price;
+ $AVATAR.inventory.cash -= total;
  updateMoneyDisplay();
  toggleNote(`Purchase successful! ${itemQuantity.value} ${currentStoreItem.name + ((itemQuantity.value > 1) ? "s were":" was")} added to your inventory.`);
 }
@@ -2172,3 +2174,6 @@ window.returnToTitleScreen = function() {
  updateCombatStats(); 
 }
 
+window.togglePressEDisplay = function(show) {
+ document.querySelector("#press-e").style.display = (show) ? "block":"none"; 
+}

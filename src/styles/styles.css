@@ -25,6 +25,15 @@ html,body {
         #mainControls {
           display: block;
         }
+
+         #press-e {
+          display: block;
+          position: absolute;
+          font-family: var(--main-font); 
+          color: white; 
+          background: #222222; 
+          margin: auto;  
+         }
  
         .controls-container__interaction-buttons {
           position: absolute;
