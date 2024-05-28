@@ -8,6 +8,20 @@ server.on("request", async (req,res) => {
     console.log(req.url);
 	let file, contentType = "text/javascript";
 
+  if (req.url === "/") {
+    try {
+     file = fs.readFileSync(__dirname + "/src/pages/index.html");
+    } catch (err) {
+     console.log(err);
+    }
+
+     res.setHeader("Content-Type", "text/html");
+     res.statusCode = 200;
+     res.end(file);
+ 
+     return; 
+  }
+
 switch (path.extname(req.url)) {
 	case ".js": contentType = "text/javascript";
 	break;
