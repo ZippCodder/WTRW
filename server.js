@@ -1,64 +1,58 @@
 const http = require("http");
+const https = require("https");
 const fs = require("fs");
 const path = require("path");
 
-const server = http.createServer();
+const protocol = (process.env.MODE === "development") ? http:https;
+const server = protocol.createServer((process.env.MODE === "production") ? {key: fs.readFileSync(process.env.KEY_PATH), cert: fs.readFileSync(process.env.CERT_PATH)}:undefined);
 
-server.on("request", async (req,res) => {
-    console.log(req.url);
-	let file, contentType = "text/javascript";
+server.on("request",(req,res) => {
+ let contentType = "text/plain", file;
 
-  if (req.url === "/") {
-    try {
-     file = fs.readFileSync(__dirname + "/src/pages/index.html");
-    } catch (err) {
-     console.log(err);
-    }
+ if (req.url === "/") {
+ try {
+  file = fs.readFileSync(__dirname + "/src/pages/index.html");
+ } catch (err) {
+  console.log(err);
+ }
 
-     res.setHeader("Content-Type", "text/html");
-     res.statusCode = 200;
-     res.end(file);
+ res.setHeader("Content-Type", "text/html");
+ res.statusCode = 200;
+ res.end(file);
  
-     return; 
+ return; 
+ }
+
+ switch (path.parse(req.url).ext) {
+  case ".html": {
+   contentType = "text/html";
+  }; 
+  break;
+  case ".css": {
+   contentType = "text/css";
+  };
+  break;
+  case ".js": {
+   contentType = "text/javascript";
   }
+  break; 
+  default: {
+   contentType = "image/png";
+  }
+ }
 
-switch (path.extname(req.url)) {
-	case ".js": contentType = "text/javascript";
-	break;
-	case ".html": contentType = "text/html";  
-	break;
-	case ".css": contentType = "text/css";
-	break;
-	case ".png": contentType = "image/png";
-	break;
-	case ".jpeg": contentType = "image/jpeg";
-	break
-	case ".jpg": contentType = "image/jpg";
-	break;
-        case ".ico": contentType = "image/png";
-        break;
-        case ".wav": contentType = "audio/wav";
-        break; 
-        default: contentType = "text/javascript"; 
-	}
+ try {
+  file = fs.readFileSync(__dirname + req.url);
+ } catch (err) {
+  console.log(err);
+ }
 
-try {
-file = await fs.readFileSync(path.resolve("./"+req.url));
-} catch (err) {
-file = false;
-}
-
-if (file) {
-if (contentType) res.setHeader("Content-Type",contentType);	
-res.writeHead(200);
-res.end(file);
-} else {
- console.log("not found");
-res.writeHead(404,{});
-res.end();
-}
+ res.setHeader("Content-Type",contentType);
+ res.statusCode = 200;
+ res.end(file);
 });
 
-server.listen(process.env.PORT,() => {
-console.log("listening...");
+server.listen(process.env.PORT,function() {
+ console.log("Server is active...");
 });
+
