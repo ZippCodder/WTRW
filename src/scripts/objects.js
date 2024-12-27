@@ -2263,6 +2263,17 @@ export class _Ammo_ extends _Pickup_ {
     used = false;
 }
 
+export class _Food_ extends _Pickup_ {
+
+    constructor(initialX, initialY, initialRotation) {
+        super(initialX, initialY, initialRotation);
+    }
+
+    type = "food";
+    nutrition = 5;
+    regain = 5; 
+}
+
 export class Syringe extends _Medicine_ {
 
     static _properties = {
@@ -2296,6 +2307,22 @@ export class Money extends _Pickup_ {
     constructor(initialX, initialY, initialRotation, amount) {
         super(initialX, initialY, initialRotation);
         this.amount = amount || (5 + random(100));
+    }
+}
+
+export class CandyBar extends _Food_ {
+
+    static _defaultVertices = [-3.4,1.7,1,0,0,3.4,1.7,1,0.53125,0,-3.4,-1.7,1,0,0.53125,3.4,1.7,1,0.53125,0,-3.4,-1.7,1,0,0.53125,3.4,-1.7,1,0.53125,0.53125];
+
+    width = 6.8;
+    height = 3.4;
+    clusterName = "candy bar";
+    texture = textures.objects.candybar;
+    name = "candy bar";
+
+    constructor(initialX, initialY, initialRotation) {
+        super(initialX, initialY, initialRotation);
+        this.nutrition = 15;
     }
 }
 
@@ -2859,6 +2886,35 @@ export class USP_45 extends _Gun_ {
     }
 }
 
+export class StubbyShotgun extends _Gun_ {
+
+    static _properties = {
+        fireRate: 0.5,
+        bulletSpeed: 10,
+        damage: 20,
+        accuracy: 10,
+        nozzelLength: 21,
+        capacity: 6,
+        reloadTime: 5,  
+        bulletCombo: 5,
+        useTextures: [textures.skins.avatardrawstubbyshotgun.id, textures.skins.avatardrawstubbyshotgunpullback.id]
+    }
+
+    static _defaultVertices = [-8.120000000000001,3.65,1,0,0,8.120000000000001,3.65,1,0.634375,0,-8.120000000000001,-3.65,1,0,0.5703125,8.120000000000001,3.65,1,0.634375,0,-8.120000000000001,-3.65,1,0,0.5703125,8.120000000000001,-3.65,1,0.634375,0.5703125];
+
+    width = 16.240000000000002;
+    height = 7.3;
+    clusterName = "stubby shotgun";
+    texture = textures.objects.stubbyshotgun;
+    name = "stubby shotgun";
+    shotgun = true; 
+
+    constructor(initialX, initialY, initialRotation, bullets) {
+        super(initialX, initialY, initialRotation);
+        this.bullets = bullets ?? 24;
+    }
+}
+
 export class GreyBackpack extends _Pickup_ {
 
     static _properties = {
@@ -3207,8 +3263,12 @@ export class Avatar {
         this.state.fireAnimation = new LoopAnimation(function() {
 
             this.state.recoilAnimation.start();
+            
+            let bulletCombo = (this.state.equippedItems.mainTool.shotgun) ? this.state.equippedItems.mainTool.constructor._properties.bulletCombo:1;
 
             const map = $CURRENT_MAP;
+ 
+          for (let i = 0; i < bulletCombo; i++) {
             const [initialTrajectoryX, initialTrajectoryY] = rotate(0, 1, (this.trans.rotation) * 180 / Math.PI);
 
             let randomBulletRotation = random(this.state.equippedItems.mainTool.constructor._properties.accuracy || 0);
@@ -3218,7 +3278,7 @@ export class Avatar {
             let [initialPointX, initialPointY] = rotate(0, this.state.equippedItems.mainTool.constructor._properties.nozzelLength, (this.trans.rotation) * 180 / Math.PI);
 
             map.link(new Bullet(initialPointX + this.trans.offsetX, initialPointY + this.trans.offsetY, ((this.trans.rotation) * 180 / Math.PI) + 90, finalTrajectoryX * this.state.equippedItems.mainTool.constructor._properties.bulletSpeed, finalTrajectoryY * this.state.equippedItems.mainTool.constructor._properties.bulletSpeed, this.state.equippedItems.mainTool.constructor._properties.damage, this));
-
+          }
 
             let [shellDirectionX, shellDirectionY] = rotate(20, 0, (this.trans.rotation) * 180 / Math.PI), randomShellRotation = random(10);
             let [randomShellDirectionX, randomShellDirectionY] = rotate(shellDirectionX, shellDirectionY, (Math.random() < 0.5) ? -randomShellRotation : randomShellRotation);
@@ -3259,6 +3319,19 @@ export class Avatar {
             if (this.state.vitals.health <= 0 && this.state.armour === 0) {
                 let attacker = $CURRENT_MAP.avatars[owner.id];
                 if (attacker) attacker.state.kills += 1;
+                this.die();
+            }
+        }
+    }
+
+      harm(damage) {
+        if (!this.state.invinsible) {
+           this.state.vitals.health = Math.max(this.state.vitals.health-damage, 0);
+           updateHealthBar();
+        }
+      }
+
+     die() {
                 $AVATAR.state.deaths += 1;
                 
                 this.purgeItems(5);
@@ -3272,9 +3345,7 @@ export class Avatar {
                 returnToTitleScreen();
 
                 return;
-            }
-        }
-    }
+     }
 
     drawWeapon() {
         if (this.state.equippedItems.mainTool && !this.state.stabbing && (this.state.armed || this.state.melee)) {
@@ -3342,6 +3413,17 @@ export class Avatar {
 
         if (item) {
             switch (item.type) {
+                case "food": {
+                  
+                if (this.state.vitals.health < 100) this.state.vitals.health += item.regain; 
+                if (this.state.vitals.hunger < 100) this.state.vitals.hunger += item.nutrition;
+                 this.dropItem(slot);
+                 item.delete(); 
+
+                 updateHungerDisplay();
+                 updateHealthBar();
+                }; 
+                break; 
                 case "cash": {
                  $AVATAR.inventory.cash += item.amount;
                  this.dropItem(slot);
@@ -3677,8 +3759,11 @@ export class Avatar {
 
     respawn() {
      requestTransition((function() {
+      $SPECTATING = false;
       this.state.vitals.health = 100; 
+      this.state.vitals.hunger = 100; 
       updateHealthBar();
+      updateHungerDisplay();
  
       $CURRENT_MAP.avatars[this.id] = this;
       $CURRENT_MAP.obstacles[this.id] = this;
@@ -4116,6 +4201,9 @@ export class Bot {
             this.state.recoilAnimation.start();
 
             const map = this.map;
+            let bulletCombo = (this.state.equippedItems.mainTool.shotgun) ? this.state.equippedItems.mainTool.constructor._properties.bulletCombo:1;
+ 
+          for (let i = 0; i < bulletCombo; i++) {
             const [initialTrajectoryX, initialTrajectoryY] = rotate(0, 1, (this.trans.rotation) * 180 / Math.PI);
 
             let randomBulletRotation = random(this.state.equippedItems.mainTool.constructor._properties.accuracy || 0);
@@ -4125,7 +4213,7 @@ export class Bot {
             let [initialPointX, initialPointY] = rotate(0, this.state.equippedItems.mainTool.constructor._properties.nozzelLength, (this.trans.rotation) * 180 / Math.PI);
 
             map.link(new Bullet(initialPointX + this.trans.offsetX, initialPointY + this.trans.offsetY, ((this.trans.rotation) * 180 / Math.PI) + 90, finalTrajectoryX * this.state.equippedItems.mainTool.constructor._properties.bulletSpeed, finalTrajectoryY * this.state.equippedItems.mainTool.constructor._properties.bulletSpeed, this.state.equippedItems.mainTool.constructor._properties.damage, this));
-
+          }
 
             let [shellDirectionX, shellDirectionY] = rotate(20, 0, (this.trans.rotation) * 180 / Math.PI), randomShellRotation = random(10);
             let [randomShellDirectionX, randomShellDirectionY] = rotate(shellDirectionX, shellDirectionY, (Math.random() < 0.5) ? -randomShellRotation : randomShellRotation);
@@ -4150,7 +4238,6 @@ export class Bot {
                 if (attacker) attacker.state.kills += 1;
                 if (attacker === $AVATAR) {
                   $SCORE += this.state.killValue;
-                  updateCombatStats();
                 }
 
                 this.purgeItems(5);

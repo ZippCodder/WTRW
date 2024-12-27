@@ -72,16 +72,6 @@
      </div>
     </div>
              
-                    <table class="onscreen-stats__stats">
-                     <th colspan="3"><h3 class="onscreen-stats__player">- - - - -</h3></th>
-                     <tr>
-                      <td>Kills:</td><td class="onscreen-stats__kills">0</td>
-                     </tr>
-                     <tr>
-                      <td>Score:</td><td class="onscreen-stats__score">0</td>
-                     </tr>
-                    </table>
-
                 <div id="console-button"><img src="/public/images/icons/CHAT_ICON.png" /></div>
            
             <div class="controls-container__inv">
@@ -97,9 +87,10 @@
                 <div class="controls-container__buttons">
                   <img class="controls-container__button" src="/public/images/icons/BAG_ICON.png" />
                   <img class="controls-container__button" src="/public/images/icons/MAP_ICON.png" />
+                  <img class="controls-container__button" src="/public/images/icons/PHONE_ICON.png" />
                   <img class="controls-container__button" src="/public/images/icons/TOOL_ICON.png" />
-                  <img class="controls-container__button" src="/public/images/icons/GEAR_ICON.png" />
                 </div>
+                  <img class="settings-icon" src="/public/images/icons/GEAR_ICON.png" />
 
                 <div class="controls-container__interaction-buttons">
                   <button class="interaction-buttons__button grab-button"><p>G</p></button>
@@ -284,7 +275,7 @@
                 <div id="main-inventory">
                     <h1 class="main-inventory__title">Inventory<button class="main-inventory__close">Close</button><button class="main-inventory__view-stats">View Stats</button></h1>
 
-                    <div class="main-inventory__description"><h2>Description</h2><p class="main-inventory__description-content">
+                    <div class="main-inventory__description"><h2>Description</h2><img class="description__image" src="/public/images/logo1.png"/><p class="main-inventory__description-content"> 
 <strong>Pro tip:</strong> Click an item to select it and see a full description of its properties and usage.
 </br>
 </br>
@@ -292,18 +283,7 @@ Oh wait, what items? You're a noob lol.
 </p>
 </div>
 
-<div class="main-inventory__help"><h2>Help</h2><p class="main-inventory__help-content">Click to select an item and see a full description of its use. Use <strong>View Stats</strong> to view character statistics and money.</br></br>Press <strong>Equip</strong> to equip the selected item, and <strong>Drop</strong> to drop it. Press <strong>Switch</strong> and then click another slot to switch the selected item with another.</p>
-  </br>
-  <small><strong>Note:</strong> The highlight color of an item when equipped represents one of the following types</small>
-  </br>
-  </br>
-  <div class="main-inventory__help-reference">
-   <p class="main-inventory__type-tool">Tool</p>
-   <p class="main-inventory__type-shirt">Shirt</p>
-   <p class="main-inventory__type-hat">Hat</p>
-   <p class="main-inventory__type-pants">Pants</p>
-   <p class="main-inventory__type-shoes">Shoes</p>
-  </div>
+<div class="main-inventory__help"><h2>Help</h2><p class="main-inventory__help-content">Click to select an item and see a full description of its use. Use <strong>View Stats</strong> to view character statistics and money.</br></br>Press <strong>Equip</strong> to equip the selected item, and <strong>Drop</strong> to drop it. Press <strong>Switch</strong> and then click another slot to switch the selected item with another.</p></br>Use the <strong>highlighted slots</strong> to gain quick access to certain items using the in-game access slots.
 </div>
 
                     <div class="main-inventory__stats">
@@ -451,7 +431,7 @@ Oh wait, what items? You're a noob lol.
                        </div>
                       </div>
                       <div class="checkout__controls">
-                       <p class="controls__buy">Buy <input id="item-quantity" type="number" value="1"></input> for <b id="item-total">$12.50</b></p><button id="item-purchase">Purchase</button>
+                       <p class="controls__buy">Buy <input id="item-quantity" type="number" value="1" min="1" max="50"></input> for <b id="item-total">$12.50</b></p><button id="item-purchase">Purchase</button>
                       </div>
                        <details class="info-box__description"><summary>View item details</summary></br><p>The whatever and the thing is that I dont know if the also thing is you are in lorem Ipsum and whatever else for the needed thingy.</p></details>
                       </div>

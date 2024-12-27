@@ -10,6 +10,7 @@
     "build": "webpack --mode=production --node-env=production",
     "build:dev": "webpack --mode=development",
     "build:prod": "webpack --mode=production --node-env=production",
+    "update": "webpack --mode=development && PORT=5000 MODE=development node server.js",
     "watch": "webpack --watch",
     "serve": "webpack serve"
   },
@@ -27,10 +28,11 @@
     "postcss-loader": "^8.1.1",
     "style-loader": "^3.3.4",
     "webpack": "^5.90.3",
-    "webpack-cli": "^5.1.4"
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.1.0"
   },
   "dependencies": {
-    "ismobilejs": "^1.1.1",
-    "core-js": "^3.36.0"
+    "core-js": "^3.36.0",
+    "ismobilejs": "^1.1.1"
   }
 }

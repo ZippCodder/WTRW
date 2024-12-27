@@ -96,7 +96,9 @@
       Money, 
       Door, 
       LightSwitch, 
-      SmallPlant
+      SmallPlant, 
+      CandyBar, 
+      StubbyShotgun
   } = await import("/src/scripts/objects.js");
 
   import _dialogues from "/src/scripts/dialogue.js";
@@ -134,7 +136,6 @@
    });
   }
 
-  actionButton.ontouchstart = runAction;
   actionButton.onclick = runAction;
 
   /* LOGIC FOR DIALOG CONTROLS AND PROCESS */
@@ -290,8 +291,8 @@
   }
 
   function startDialogue(e) {
-    toggleNote("Sorry, we're working on that! Dialogue will be included in newer versions.");
-    return;
+    //toggleNote("Sorry, we're working on that! Dialogue will be included in newer versions.");
+    //return;
 
       e.preventDefault();
 
@@ -351,6 +352,12 @@
           }, 10);
       }
   }
+
+  window.addEventListener("keydown", function({key}) {
+    if (key === "Escape" && $ACTIVE_DIALOGUE_PARTY) {
+       endDialogue();
+    }
+  });
 
   speakButton.ontouchstart = startDialogue;
   speakButton.onclick = startDialogue;
@@ -908,6 +915,13 @@
   mapZoomOutButton.ontouchstart = mapZoomOut;
   mapZoomOutButton.onmousedown = mapZoomOut;
 
+  /* HUNGER DISPLAY */
+
+  window.updateHungerDisplay = function() {
+   document.querySelector("#hunger").innerText = $AVATAR.state.vitals.hunger;
+   document.querySelector("#hunger").style.color = ($AVATAR.state.vitals.hunger) ? "white":"#e30f00";
+  }
+
   /* MONEY DISPLAY */
 
   const moneyDisplay = document.querySelector("#money");
@@ -1405,7 +1419,9 @@
       "remote explosive": "<h3><u>Remote Explosive</u></h3> A powerful nitroglycerin based explosive, used for building traps and taking out a large number of enemies.</br></br> Use <i>\"Equip\"</i> to arm and place the explosive. You'll need a <i>Remote Detonator</i> to detonate it.</br></br>Careful, you'll want to stand way back.",
       "proximity explosive": "<h3><u>Proximity Explosive</u></h3> A powerful C-4 based explosive rigged to a motion sensor.</br></br> Use <i>\"Equip\"</i> to arm and place the explosive. Any enemy within close proximity will cause the explosive to detonate, no remote needed. </br></br>The sensor will be active 3 seconds after being armed.",
       "combat knife": "<h3><u>Combat Knife</u></h3> A common choice of melee used by hunters to mercy-kill deer, and by soldiers to get the job done. Features good durabilty, and good damage.",
-      "money": "<h3><u>Money</u></h3> It's money. If you need me to explain any further you probably shouldn't have it. Use <i>\"Equip\"</i> to add the specified amount into your cash balance."
+      "money": "<h3><u>Money</u></h3> It's money. If you need me to explain any further you probably shouldn't have it. Use <i>\"Equip\"</i> to add the specified amount into your cash balance.", 
+      "candy bar": "<h3><u>Candy Bar</u></h3> A milk-chocolate bar..pretty self explanitory I feel. If you get feel the need to use this description, you honestly have brain-rot. Eat the candy bar and shut up.", 
+      "stubby shotgun": "<h3><u>Stubby Shotgun</u></h3> High powered shotgun with reliable aim and minimal recoil. A common and effective weapon for defending against intruders in homes and small-businesses."
   }
 
   let equippedIndex = Infinity,
@@ -1413,8 +1429,8 @@
       lastIndex = undefined,
       switchMode = false;
 
-  function equipSlot(i) {
-      if (!$AVATAR.equipItem(i)) return;
+  function equipSlot(i, markSlot) {
+      if (!markSlot && !$AVATAR.equipItem(i)) return;
       if ($IS_MOBILE && $AVATAR.state.equippedItems.mainTool && $AVATAR.state.equippedItems.mainTool.type === "gun") {
         $AVATAR.drawWeapon();
       }
@@ -1443,6 +1459,7 @@
   let inventoryItems = document.querySelectorAll(".main-inventory__item");
   const controlButtonsContainer = document.querySelector(".main-inventory__buttons");
   const itemDescription = document.querySelector(".main-inventory__description-content");
+  const descriptionImage = document.querySelector(".description__image");
   let controlSwitchButton;
 
   window.updateDescription = function(getDescription, itemData) {
@@ -1519,21 +1536,26 @@
                   capacity
               } = item.constructor._properties;
 
-              d = d + `</br></br><strong>Damage _____ ${damage}</strong></br><strong>Fire Rate _____ ${fireRate}</strong></br><strong>Accuracy _____ ${accuracy}</strong></br><strong>Capacity _____ ${capacity}</strong>`;
+              d = d + `</br></br><strong>Damage _____ ${(item.shotgun) ? damage*item.constructor._properties.bulletCombo:damage}</strong></br><strong>Fire Rate _____ ${fireRate}</strong></br><strong>Accuracy _____ ${accuracy}</strong></br><strong>Capacity _____ ${capacity}</strong>`;
 
               if (getDescription) return d;
 
               d = d.concat((item === $AVATAR.state.equippedItems.mainTool || item === $AVATAR.state.equippedItems.accessory1) ? "<br><br><i>Equipped</i>" : "<br><br><i>Not Equipped</i>");
+          } else if (item.type === "food") {
+              d = d + `</br></br><strong>Nutrition _____ ${item.nutrition}</strong></br><strong>Regain _____ ${item.regain}</strong>`;
+              if (getDescription) return d;
           }
       }
 
       if (getDescription) return d;
 
       itemDescription.innerHTML = d;
+      descriptionImage.src = (itemName) ? `/public/images/icons/${itemName.replaceAll(" ","_")}_icon.png`:"/public/images/logo1.png";
+      showDescription();
   }
 
   function selectSlot(i) {
-      if (!$AVATAR.inventory.items[i] && !switchMode) return;
+      if ((!$AVATAR.inventory.items[i] && !switchMode) || selectedIndex === i) return;
 
       controlButtonsContainer.style.opacity = 1;
       inventoryItems.item(selectedIndex).style.backgroundColor = "rgba(0,0,0,0.2)";
@@ -1545,9 +1567,9 @@
           updateInventoryItem(i, $AVATAR.inventory.items[i]?.name);
 
           if (equippedIndex === i) {
-              equipSlot(selectedIndex);
+              equipSlot(selectedIndex, true);
           } else if (equippedIndex === selectedIndex) {
-              equipSlot(i);
+              equipSlot(i, true);
           }
 
           controlSwitchButton.style.opacity = 1;
@@ -1827,9 +1849,11 @@ function updateCheckout(storeItem) {
  toggleNote(`Purchase successful! ${itemQuantity.value} ${currentStoreItem.name + ((itemQuantity.value > 1) ? "s were":" was")} added to your inventory.`);
 }
 
-itemQuantity.addEventListener("change",function() {
+function updatePurchaseTotal() {
  itemTotal.innerText = "$" + Math.round(itemQuantity.value * currentStoreItem.price);
-});
+}
+itemQuantity.addEventListener("change", updatePurchaseTotal);
+itemQuantity.addEventListener("keydown", updatePurchaseTotal);
 
 updateStore([
 {name: "glock 20", title: "GLOCK_20", price: 50.00, type: "gun"}, 
@@ -2112,18 +2136,12 @@ function applySettings() {
 
 applySettings();
 
-window.updateCombatStats = function() {
- document.querySelector(".onscreen-stats__kills").innerText = $AVATAR.state.kills; 
- document.querySelector(".onscreen-stats__score").innerText = $SCORE; 
-}
-
 // title card
 
 const titleCard = document.querySelector(".title-card-wrapper");
 const titlePlayButton = document.querySelector(".play__button");
 const usernameInput = document.querySelector(".play__username");
 usernameInput.value = $PLAYER_NAME || "";
-const onScreenPlayerName = document.querySelector(".onscreen-stats__player"); 
 const scoreDisplay = document.querySelector(".content__score");
 const highscoreDisplay = document.querySelector(".content__highscore");
 highscoreDisplay.innerText = `Your current highscore: ${$HIGHSCORE}`;
@@ -2131,9 +2149,7 @@ highscoreDisplay.innerText = `Your current highscore: ${$HIGHSCORE}`;
 titlePlayButton.onclick = function() {
 if ($CONTENT_LOADED && !$TRANSITIONING) {
  titleCard.style.display = "none";
- onScreenPlayerName.innerText = usernameInput.value || "Unnamed Human";
  localStorage.setItem("player-name", usernameInput.value);
- $SPECTATING = false;
  $AVATAR.nameObj.update(usernameInput.value);
  $AVATAR.character = usernameInput.value; 
  $AVATAR.respawn();
@@ -2154,7 +2170,6 @@ titleHelpButton.onclick = function() {
 
 window.returnToTitleScreen = function() {
  titleCard.style.display = "flex";
- onScreenPlayerName.innerText = "- - - - -";
  $SPECTATING = true; 
  noclip = true; 
 
@@ -2171,7 +2186,6 @@ window.returnToTitleScreen = function() {
 
  $AVATAR.state.kills = 0; 
  $AVATAR.state.totalDamage = 0;
- updateCombatStats(); 
 }
 
 window.togglePressEDisplay = function(show) {

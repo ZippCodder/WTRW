@@ -76,7 +76,9 @@
       SmallPlant, 
       Door, 
       Trigger, 
-      MedKit
+      MedKit, 
+      CandyBar, 
+      StubbyShotgun
   } from "/src/scripts/objects.js";
 
   $AVATAR = new Avatar("- - - - -");
@@ -110,6 +112,7 @@
           a.state.armour = 0;
           a.state.aggressive = true;
           a.state.passive = false;
+
           a.state.openCarry = false;
           a.state.killValue = 100;
           a.state.targetUpdateAnimation.rate = 1 / 5;
@@ -117,7 +120,7 @@
           let weapon;
   
           if (Math.random() < 0.5) {
-            weapon = [new GLOCK_20, new GP_K100, new KC_357, new KitchenKnife][random(4)];
+            weapon = [new StubbyShotgun, new GLOCK_20, new GP_K100, new KC_357, new KitchenKnife][random(4)];
             a.state.killValue = 125; 
           } else if (Math.random() <  0.8) {
             weapon = [new DX_9, new NXR_44_MAG, new FURS_55, new CombatKnife][random(4)];
@@ -136,13 +139,13 @@
           }
  
           a.equipItem(0);
-          a.state.targetId = a.id;
+         // a.state.targetId = a.id;
           a.state.aggressive = true;
           a.state.baseSpeed = 0.5;
-          a.state.attack.attackSpeed = 2;
-          a.state.runningSpeed = 3;
-          a.wander(x + 5, y + 5);
-          a.killTarget([a.id], true, true);
+         // a.state.attack.attackSpeed = 2;
+         // a.state.runningSpeed = 3;
+          //a.wander(x + 5, y + 5);
+         a.killTarget([a.id], true, true);
       }
   }, window, 10);
 
@@ -181,12 +184,14 @@
 
   }, window, 2.5);
 
+ let spectatingDriftDirection;
  const spectatingLoop = new LoopAnimation(function() {
      requestTransition((function() {
       $CURRENT_MAP.move = true;
       let {x, y} = $CURRENT_MAP.GRAPH.getRandomPoint();
       let {centerX, centerY} = $CURRENT_MAP;
       $CURRENT_MAP.translate(x - centerX, y - centerY);
+      spectatingDriftDirection = random(4);
      }).bind(this));
  }, window, 5);
 
@@ -207,13 +212,41 @@
   }
  }, window, 60);
 
+ const starveLoop = new LoopAnimation(function() {
+   $AVATAR.harm(5);
+   if (!$AVATAR.state.vitals.health) $AVATAR.die();
+ }, window, 2);
+
+ const hungerLoop = new LoopAnimation(function() {
+  if ($AVATAR.state.vitals.hunger > 0 && $AVATAR.state.vitals.health > 0) {
+   $AVATAR.state.vitals.hunger -= 5;
+   updateHungerDisplay();
+  }
+ }, window, 30);
+
   $MAP.lighting = false;
   $ACTIVE_DIALOGUE_PARTY = Object.values($CURRENT_MAP.avatars)[5];
 
   $GAME_LOOP = function() {
       //sitLoop.run();
      // crimeLoop.run();
-      if ($SPECTATING) spectatingLoop.run();
+      if ($SPECTATING) {
+        spectatingLoop.run();
+        switch(spectatingDriftDirection) {
+          case 0: $CURRENT_MAP.translate(-0.2, 0);
+          break; 
+          case 1: $CURRENT_MAP.translate(0.2, 0);
+          break; 
+          case 2: $CURRENT_MAP.translate(0, 0.2);
+          break; 
+          case 3: $CURRENT_MAP.translate(0, -0.2);
+          break;
+        } 
+      }
+     if (!$SPECTATING && !$TRANSITIONING) {
+      hungerLoop.run();
+      if ($AVATAR.state.vitals.health > 0 && !$AVATAR.state.vitals.hunger) starveLoop.run();
+     }
       enemySpawnLoop.run();
       timeUpdateLoop.run();
       dayCycleLoop.run();

@@ -45,150 +45,22 @@
     
         import {
             draw
-        } from "/public/scripts/lib.js";
+        } from "/src/scripts/lib.js";
         import {
-            KC_357,
-            GLOCK_20,
-            GLOCK_20_TOP,
-            NXR_44_MAG,
-            GP_K100,
-            USP_45,
-            JOYSTICK_DISC_TEXTURE,
-            ACTION_BUTTON_ICON,
-            GENERIC_APARTMENT,
-            SUPERMARKET,
-            CAFE,
+            MONEY, 
+            BUGGY, 
+            TOOL_ICON, 
+            PHONE_ICON, 
+            BAG_ICON, 
+            GEAR_ICON, 
             MAIN_AVATAR_DEFAULT,
-            MAIN_AVATAR_BLINKING,
-            MAIN_AVATAR_WALKING_1,
-            MAIN_AVATAR_WALKING_2,
-            TABLE,
-            BOOK_1,
-            BOOK_2,
-            KITCHEN_KNIFE,
-            ASSASSINS_KNIFE,
-            COMBAT_KNIFE,
-            LAPTOP,
-            ROAD,
-            ROAD_CORNER,
-            ROAD_TRICORNER,
-            ROAD_QUADCORNER,
-            ROAD_DOUBLE,
-            BULLET,
-            BULLETSHELL,
-            ROAD_SIGN,
-            PICNIC_TABLE,
-            DOUBLE_CROSS_TILE,
-            URBAN_FENCE,
-            URBAN_FENCE_VERTICAL,
-            URBAN_FENCE_HALF,
-            SMALL_PLANT,
-            TILE,
-            BENCH,
-            STREET_LIGHT,
-            GRASS_1,
-            GRASS_2,
-            ROCKS_1,
-            ROCKS_2,
-            ROAD_RAIL,
-            ROAD_RAIL_VERTICAL,
-            ICONS,
-            PICKUP_RING,
-            CHAIR,
-            DOOR,
-            LIGHT_SWITCH,
-            MAIN_AVATAR_DRAW_WEAPON,
-            GLOCK_20_TOP_2, 
-            LUXURY_APARTMENT,
-            HOUSE_1,
-            RELOAD_BUTTON_TEXTURE,
-            AVATAR_MODE_BUTTON_TEXTURE,
-            DROP_ITEM_BUTTON_TEXTURE,
-            OFF_ROADER,
-            PLUS_100,
-            GP_K100_TOP,
-            GP_K100_TOP_2,
-            FLOOR_TILE,
-            GEAR_ICON,
-            BAG_ICON,
-            MAP_ICON,
-            DOWNWARD_LIGHT,
-            WOOD_FLOOR_TILE, 
-            MAIN_AVATAR_LEFT_PUNCH_1,
-            MAIN_AVATAR_LEFT_PUNCH_2,
-            MAIN_AVATAR_RIGHT_PUNCH_1,
-            MAIN_AVATAR_RIGHT_PUNCH_2,
-            MAIN_AVATAR_DRAW_MELEE,
-            MAIN_AVATAR_DRAW_MELEE_STRIKE,
-            MAIN_AVATAR_DRAW_MELEE_WALKING_1,
-            MAIN_AVATAR_DRAW_MELEE_WALKING_2,
-            GRASS_TILE, 
-            TREE,
-            CONVENIENCE_STORE,
-            ATM,
-            Sheet,
-            BUSH,
-            LIGHT_BUSH,
-            MIXED_BUSH,
-            STOPPER,
-            METAL_FENCE,
-            GAZEBO,
-            METAL_FENCE_VERTICAL,
-            MAIN_AVATAR_DRAW_NXR44MAG_1,
-            MAIN_AVATAR_DRAW_NXR44MAG_2,
-            NXR_44_MAG_TOP,
-            NXR_44_MAG_TOP_2,
-            CROSS_TILE,
-            SYRINGE,
-            SHED,
-            STORE_SHELF_1,
-            MAIN_AVATAR_GRAB,
-            TOOL_ICON,
-            HOUSE_2,
-            GREY_BACKPACK_ACC,
-            WHITE_BACKPACK_ACC,
-            BLACK_BACKPACK_ACC,
-            GUNSTORE,
-            GREY_BACKPACK,
-            WHITE_BACKPACK,
-            BLACK_BACKPACK,
-            WHITEBOARD,
-            PINBOARD,
-            POLICE_HAT_ACC, 
-            SMALL_TABLE,
-            MAIN_AVATAR_DRAW_USP45_1,
-            MAIN_AVATAR_DRAW_USP45_2,
-            MAIN_AVATAR_DRAW_KC357_1,
-            MAIN_AVATAR_DRAW_KC357_2,
-            AMMO_BOX,
-            MULTI_AMMO_BOX,
-            MED_KIT,
-            BASIC_ARMOUR,
-            MERCENARY_ARMOUR,
-            SWAT_ARMOUR,
-            BOOTS,
-            SOLDIER_BOOTS, 
-            HIKING_BOOTS,
-            STEAK_AND_FRIES,
-            WORLD_MAP,
-            DX_9,
-            MAIN_AVATAR_DRAW_DX9_1,
-            MAIN_AVATAR_DRAW_DX9_2,
-            FURS_55,
-            MAIN_AVATAR_DRAW_FURS55_1,
-            MAIN_AVATAR_DRAW_FURS55_2,
-            NOSS_7,
-            MAIN_AVATAR_DRAW_NOSS7_1,
-            MAIN_AVATAR_DRAW_NOSS7_2,
-            X6_91,
-            MAIN_AVATAR_DRAW_X691_1,
-            MAIN_AVATAR_DRAW_X691_2,
-            PINPOINT_ICON,
-            PROXIMITY_EXPLOSIVE,
-            REMOTE_EXPLOSIVE,
-            REMOTE_DETONATOR,
-            MONEY
-        } from "/public/scripts/models.js";
+            CANDY_BAR, 
+            NOSS_7, 
+            STUBBY_SHOTGUN,
+            STUBBY_SHOTGUN_TOP_2,  
+            MAIN_AVATAR_DRAW_STUBBYSHOTGUN_1,
+            MAIN_AVATAR_DRAW_STUBBYSHOTGUN_2
+        } from "/src/scripts/models.js";
 
         // Import texture for editing and downloading...
 
@@ -236,7 +108,7 @@
         //MAIN_AVATAR_DEFAULT(-5, -5, 0.2);
         resize(200, 200);
         // export function draw(a, w, h, iw, ih, s, lw, attribs=[],canvas) {
-        let texture = MONEY;
+        let texture = STUBBY_SHOTGUN;
 //new Sheet([ROAD_RAIL,ROAD_SIGN,URBAN_FENCE_HALF,URBAN_FENCE,URBAN_FENCE_VERTICAL], 1024, 1024);
 
         //ACTION_BUTTON_TEXTURE.render(ctx);
@@ -249,6 +121,7 @@
          //MULTI_AMMO_BOX.render(ctx);
          //REMOTE_EXPLOSIVE.render(ctx);
          texture.render(ctx);
+         //MAIN_AVATAR_DEFAULT.render(ctx);
          //AMMO_BOX.render(ctx);
          //MED_KIT.render(ctx);
          //BLACK_BACKPACK_ACC.render(ctx);
@@ -264,6 +137,6 @@
        // log(texture.getData());
           log(texture.getData());
           console.log(texture.textureDimensions);
-          setSource(`money_icon.png`);
+          setSource(`stubby_shotgun_icon.png`);
     </script>
 </html>

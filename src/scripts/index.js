@@ -447,7 +447,7 @@ window.onload = async () => {
         average, total = 0;
     let T1, T2;
 
-    function init() {
+    window.init = function() {
       if (!$PAUSED) {
         if (performance.now() - frameRateMarker >= 1000) {
             frameRate = globalFrameRun;
@@ -489,6 +489,7 @@ window.onload = async () => {
         requestAnimationFrame(init);
     }
     loader.style.display = "none"; 
+    canvas.style.background = "white"; 
     playButton.innerText = "Play";
     $CONTENT_LOADED = true; 
     init();

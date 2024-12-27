@@ -108,9 +108,12 @@ await textures.skins.addTexture("avatarcombatknife2", "/public/images/textures/M
 await textures.skins.addTexture("avatarcombatknife3", "/public/images/textures/MAIN_AVATAR_MELEE_COMBAT_KNIFE_3.png");
 await textures.skins.addTexture("avatarcombatknifewalking1", "/public/images/textures/MAIN_AVATAR_MELEE_COMBAT_KNIFE_WALKING_1.png");
 await textures.skins.addTexture("avatarcombatknifewalking2", "/public/images/textures/MAIN_AVATAR_MELEE_COMBAT_KNIFE_WALKING_2.png");
+await textures.skins.addTexture("avatardrawstubbyshotgun", "/public/images/textures/MAIN_AVATAR_DRAW_STUBBYSHOTGUN_1.png");
+await textures.skins.addTexture("avatardrawstubbyshotgunpullback", "/public/images/textures/MAIN_AVATAR_DRAW_STUBBYSHOTGUN_2.png");
 
 textures.objects = new TextureContainer();
 
+await textures.objects.addTexture("stubbyshotgun", "/public/images/textures/STUBBY_SHOTGUN.png");
 await textures.objects.addTexture("nxr44mag", "/public/images/textures/NXR_44_MAG.png");
 await textures.objects.addTexture("gpk100", "/public/images/textures/GP_K100.png");
 await textures.objects.addTexture("usp45", "/public/images/textures/USP_45.png");
@@ -124,15 +127,15 @@ await textures.objects.addTexture("kitchenknife", "/public/images/textures/KITCH
 await textures.objects.addTexture("assassinsknife", "/public/images/textures/ASSASSINS_KNIFE.png");
 await textures.objects.addTexture("combatknife", "/public/images/textures/COMBAT_KNIFE.png");
 await textures.objects.addTexture("laptop", "/public/images/textures/LAPTOP.png");
-//await textures.objects.addTexture("steakandfries", "/public/images/textures/STEAK_AND_FRIES.png");
+await textures.objects.addTexture("steakandfries", "/public/images/textures/STEAK_AND_FRIES.png");
 await textures.objects.addTexture("greybackpack", "/public/images/textures/GREY_BACKPACK.png");
 await textures.objects.addTexture("whitebackpack", "/public/images/textures/WHITE_BACKPACK.png");
 await textures.objects.addTexture("blackbackpack", "/public/images/textures/BLACK_BACKPACK.png");
 await textures.objects.addTexture("remoteexplosive", "/public/images/textures/REMOTE_EXPLOSIVE.png");
 await textures.objects.addTexture("proximityexplosive", "/public/images/textures/PROXIMITY_EXPLOSIVE.png");
 await textures.objects.addTexture("remotedetonator", "/public/images/textures/REMOTE_DETONATOR.png");
-//await textures.objects.addTexture("book1", "/public/images/textures/BOOK_1.png");
-//await textures.objects.addTexture("book2", "/public/images/textures/BOOK_2.png");
+await textures.objects.addTexture("book1", "/public/images/textures/BOOK_1.png");
+await textures.objects.addTexture("book2", "/public/images/textures/BOOK_2.png");
 await textures.objects.addTexture("syringe", "/public/images/textures/SYRINGE.png");
 await textures.objects.addTexture("medkit", "/public/images/textures/MED_KIT.png");
 await textures.objects.addTexture("basicarmour", "/public/images/textures/BASIC_ARMOUR.png");
@@ -140,16 +143,12 @@ await textures.objects.addTexture("mercenaryarmour", "/public/images/textures/ME
 await textures.objects.addTexture("swatarmour", "/public/images/textures/SWAT_ARMOUR.png");
 await textures.objects.addTexture("ammobox", "/public/images/textures/AMMO_BOX.png");
 await textures.objects.addTexture("multiammobox", "/public/images/textures/MULTI_AMMO_BOX.png");
-/*
 await textures.objects.addTexture("house1", "/public/images/textures/HOUSE_1.png");
 await textures.objects.addTexture("house2", "/public/images/textures/HOUSE_2.png");
 await textures.objects.addTexture("conveniencestore", "/public/images/textures/CONVENIENCE_STORE.png");
-*/
 await textures.objects.addTexture("gunstore", "/public/images/textures/GUNSTORE.png");
 await textures.objects.addTexture("table", "/public/images/textures/TABLE.png");
-
 await textures.objects.addTexture("smalltable", "/public/images/textures/SMALL_TABLE.png");
-/*
 await textures.objects.addTexture("whiteboard", "/public/images/textures/WHITEBOARD.png");
 await textures.objects.addTexture("pinboard", "/public/images/textures/PINBOARD.png");
 await textures.objects.addTexture("vendor1", "/public/images/textures/VENDOR_1.png");
@@ -159,38 +158,30 @@ await textures.objects.addTexture("bush", "/public/images/textures/BUSH.png");
 await textures.objects.addTexture("metalfence", "/public/images/textures/METAL_FENCE.png");
 await textures.objects.addTexture("metalfencevertical", "/public/images/textures/METAL_FENCE_VERTICAL.png");
 await textures.objects.addTexture("atm", "/public/images/textures/ATM.png");
-*/
 await textures.objects.addTexture("stopper", "/public/images/textures/STOPPER.png");
-/*
 await textures.objects.addTexture("lightbush", "/public/images/textures/LIGHT_BUSH.png");
 await textures.objects.addTexture("mixedbush", "/public/images/textures/MIXED_BUSH.png");
-*/
 await textures.objects.addTexture("chair", "/public/images/textures/CHAIR.png");
-
-//await textures.objects.addTexture("picnictable", "/public/images/textures/PICNIC_TABLE.png");
+await textures.objects.addTexture("picnictable", "/public/images/textures/PICNIC_TABLE.png");
 await textures.objects.addTexture("door", "/public/images/textures/DOOR.png");
-
-//await textures.objects.addTexture("streetlight", "/public/images/textures/STREET_LIGHT.png");
+await textures.objects.addTexture("streetlight", "/public/images/textures/STREET_LIGHT.png");
 await textures.objects.addTexture("lightswitch", "/public/images/textures/LIGHT_SWITCH.png");
 await textures.objects.addTexture("bullet", "/public/images/textures/BULLET.png");
 await textures.objects.addTexture("bulletshell", "/public/images/textures/BULLETSHELL.png");
 await textures.objects.addTexture("fences", "/public/images/textures/fences.png");
-/*
 await textures.objects.addTexture("urbanfence", "/public/images/textures/URBAN_FENCE.png");
 await textures.objects.addTexture("urbanfencevertical", "/public/images/textures/URBAN_FENCE_VERTICAL.png");
-*/
-/*
 await textures.objects.addTexture("urbanfencehalf", "/public/images/textures/URBAN_FENCE_HALF.png");
 await textures.objects.addTexture("smallplant", "/public/images/textures/SMALL_PLANT.png");
 await textures.objects.addTexture("tile", "/public/images/textures/TILE.png");
-*/
 await textures.objects.addTexture("floortile", "/public/images/textures/FLOOR_TILE.png", {repeat: true});
 await textures.objects.addTexture("woodfloortile", "/public/images/textures/WOOD_FLOOR_TILE.png", {repeat: true});
 await textures.objects.addTexture("crosstile", "/public/images/textures/CROSS_TILE.png", {repeat: true});
-//await textures.objects.addTexture("grasstile", "/public/images/textures/GRASS_TILE.png", {repeat: true, minFilter: gl.NEAREST});
-//await textures.objects.addTexture("bench", "/public/images/textures/BENCH.png");
+await textures.objects.addTexture("grasstile", "/public/images/textures/GRASS_TILE.png", {repeat: true, minFilter: gl.NEAREST});
+await textures.objects.addTexture("candybar", "/public/images/textures/CANDY_BAR.png", {repeat: true, minFilter: gl.NEAREST});
+await textures.objects.addTexture("bench", "/public/images/textures/BENCH.png");
 await textures.objects.addTexture("money", "/public/images/textures/MONEY.png");
-/*await textures.objects.addTexture("grass1", "/public/images/textures/GRASS_1.png");
+await textures.objects.addTexture("grass1", "/public/images/textures/GRASS_1.png");
 await textures.objects.addTexture("grass2", "/public/images/textures/GRASS_2.png");
 await textures.objects.addTexture("rocks1", "/public/images/textures/ROCKS_1.png");
 await textures.objects.addTexture("rocks2", "/public/images/textures/ROCKS_2.png");
@@ -198,4 +189,4 @@ await textures.objects.addTexture("roadrail", "/public/images/textures/ROAD_RAIL
 await textures.objects.addTexture("roadrailvertical", "/public/images/textures/ROAD_RAIL_VERTICAL.png");
 await textures.objects.addTexture("downwardlight", "/public/images/textures/DOWNWARD_LIGHT.png");
 await textures.objects.addTexture("roads", "/public/images/textures/roads.png");
-*/
+

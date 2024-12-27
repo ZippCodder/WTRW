@@ -17,7 +17,7 @@ html,body {
         #gameArea {
           width: 100%;
           height: 100%;
-          background: white;
+          background: black;
           z-index: 0;
           cursor: crosshair;
         }
@@ -235,7 +235,7 @@ html,body {
         #mapInfo {
          display: grid; 
          position: absolute;
-         width: 6em;
+         width: 2em;
          height: min-content;
          pointer-events: none;
          left: 2px;
@@ -351,7 +351,16 @@ html,body {
         .texture {
             display: none;
         }
-         
+
+        .settings-icon {
+           display: block;
+           position: absolute;  
+           bottom: 0;
+           right: 3.5em;
+           height: 2.8rem;
+           margin: 1em; 
+        }
+        
         @keyframes fade-in {
             0% {
                 opacity: 0.0;
@@ -1032,6 +1041,14 @@ html,body {
               margin: auto; 
           }
           
+          .description__image {
+              width: 6em; 
+              height: 6em; 
+              display: block;  
+              margin: auto;
+              background-color: gray; 
+          }
+          
           .note__content-title {
               margin: 0; 
               padding: 0; 
@@ -1074,47 +1091,6 @@ html,body {
               display: block;
               overflow: scroll;
               text-align: center;
-          }
-
-          .main-inventory__help-reference {
-            width: 80%;
-            margin: auto;
-            text-align: center;
-          }
-
-          .main-inventory__help-reference p {
-            font-family: inherit;
-            font-size: inherit;
-            display: inline;
-            margin-right: 2em;
-          }
-
-          .main-inventory__help-reference p::before {
-            content: "";
-            width: 0.5em;
-            height: 0.5em;
-            display: inline-block;
-            transform: translateX(-100%);
-          }
-
-          .main-inventory__type-tool::before {
-           background-color: white;
-          }
-
-          .main-inventory__type-shirt::before {
-           background-color: #79c9db;
-          }
-
-          .main-inventory__type-hat::before {
-           background-color: #edff63;
-          }
-
-          .main-inventory__type-pants::before {
-           background-color: #ffcb63;
-          }
-
-          .main-inventory__type-shoes::before {
-           background-color: #be7ad6;
           }
 
           .main-inventory__stats {
@@ -1259,8 +1235,46 @@ html,body {
               margin-right: 1em; 
           }
 
+          #fullscreen-setting, #pause-setting {
+            content: " ";  
+            display: block;
+            width: 1.2em; 
+            height: 1.2em;
+            accent-color: #222222;
+            border: none;
+            outline: none; 
+          }
+
+          #pause-setting::after {
+            content: "";
+            display: block; 
+            width: 100%; 
+            height: 100%; 
+            background: red; 
+            background: #222222; 
+            pointer-events: none;  
+          }
+
+          #pause-setting:checked::after {
+            display: none; 
+          }
+
+          #fullscreen-setting::after {
+            content: "";
+            display: block; 
+            width: 100%; 
+            height: 100%; 
+            background: red; 
+            background: #222222; 
+            pointer-events: none;  
+          }
+
+          #fullscreen-setting:checked::after {
+            display: none; 
+          }
+
           .setting__detail {
-              font-size: 0.9em;
+            font-size: 0.9em;
           }
 
           .store__items {
@@ -1384,6 +1398,11 @@ html,body {
 
           #item-quantity {
            width: 4em;
+           font-family: var(--main-font);
+           padding: 0.2em; 
+           color: white;
+           border: none;  
+           background: rgba(0, 0, 0, 0.2);
           }
 
           .controls__buy {
@@ -1451,8 +1470,8 @@ html,body {
           #console-send {
             margin-right: 0;
             color: white;
-            background-color: gray; 
-            border-color: #444444; 
+            background: dodgerblue;
+            border-bottom: 5px solid #003366; 
           }
     
           #console-input {
@@ -1771,6 +1790,11 @@ html,body {
             opacity: 0.5;
           }
 
+          @media only screen and (min-width: 900px) {
+           #mapInfo {
+            width: 10em; 
+           } 
+          }
 
           @media only screen and (min-width: 900px) and (orientation: portrait) {
            #main-inventory, #map, #store, #console, #settings {
@@ -1783,7 +1807,7 @@ html,body {
 
            #note {
              width: 25rem;
-           } 
+           }  
           }
 
           @media only screen and (min-width: 900px) and (orientation: landscape) {
@@ -1819,16 +1843,6 @@ html,body {
               width: 22em;
               height: 2em;
            }
-
-           #mapInfo {
-              width: 25vmin;
-           }
-          }
-
-          @media only screen and (min-width: 1500px) {
-            .title-card, #console, #store, #note, #map, #settings, #main-inventory {
-             transform: scale(1.5); 
-            }
           }
 
           @media only screen and (max-height: 480px) and (orientation: landscape) {
