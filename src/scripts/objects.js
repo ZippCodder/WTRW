@@ -23,7 +23,11 @@ import {
 const pathfinder = new Worker("/src/scripts/pathfinder.js");
 
 pathfinder.registerMap = function(map) {
- pathfinder.postMessage({requestType: 1, mapId: map.id, nodes: map.GRAPH.nodes});
+    pathfinder.postMessage({
+        requestType: 1,
+        mapId: map.id,
+        nodes: map.GRAPH.nodes
+    });
 }
 
 pathfinder.requestPath = function(avatar, start, end) {
@@ -224,8 +228,24 @@ export class _BulletCluster_ {
                             oy += oh / 2;
 
                             if ((Math.abs(ox - b.trans.offsetX) < (b.width / 2 + ow / 2)) && (Math.abs(oy - b.trans.offsetY) < (b.height / 2 + oh / 2))) {
+                                if (this.map.obstacles[o] !== $AVATAR && !(this.map.obstacles[o] instanceof Bot)) {
+                                    if (distance(this.trans.offsetX, this.trans.offsetY, $AVATAR.trans.offsetX, $AVATAR.trans.offsetY) < 200) $AUDIO.playSound((Math.random() < 0.5) ? "bullet-impact-1" : "bullet-impact-2")
+                                } else {
+                                    if (distance(this.trans.offsetX, this.trans.offsetY, $AVATAR.trans.offsetX, $AVATAR.trans.offsetY) < 200) $AUDIO.playSound("bullet-body-impact");
+                                }
                                 b.delete();
                                 if (this.map.obstacles[o].hit) this.map.obstacles[o].hit(b.damage, b.owner, b);
+                                if (b.explosive) {
+                                    for (let i = 0; i < 40; i++) {
+                                        let randomBulletRotation = random(360);
+                                        let [directionX, directionY] = rotate(0, 1, randomBulletRotation);
+                                        let velocity = random(10) + 3;
+
+                                        this.map.link(new Bullet(b.trans.offsetX, b.trans.offsetY, randomBulletRotation, directionX * velocity, directionY * velocity, 100, b.owner));
+                                    }
+                                    $AUDIO.playSound("explosion");
+                                }
+
                                 break outer;
                             }
 
@@ -1236,7 +1256,7 @@ class _Seat_ extends _StaticClusterClient_ {
 
 export class Bench extends _Seat_ {
 
-    static _defaultVertices = [-13.7,10.7,1,0,0,13.7,10.7,1,0.53515625,0,-13.7,-10.7,1,0,0.8359375,13.7,10.7,1,0.53515625,0,-13.7,-10.7,1,0,0.8359375,13.7,-10.7,1,0.53515625,0.8359375];
+    static _defaultVertices = [-13.7, 10.7, 1, 0, 0, 13.7, 10.7, 1, 0.53515625, 0, -13.7, -10.7, 1, 0, 0.8359375, 13.7, 10.7, 1, 0.53515625, 0, -13.7, -10.7, 1, 0, 0.8359375, 13.7, -10.7, 1, 0.53515625, 0.8359375];
 
     width = 27.4;
     height = 21.4;
@@ -1245,7 +1265,7 @@ export class Bench extends _Seat_ {
     texture = textures.objects.bench;
     obstacle = true;
     segments = [
-       [-13.7,-7.3,27.4,18]
+        [-13.7, -7.3, 27.4, 18]
     ];
 
     constructor(initialX, initialY, initialRotation) {
@@ -1289,6 +1309,7 @@ export class LightSwitch extends _StaticClusterClient_ {
     }
 
     action() {
+        $AUDIO.playSound("light-switch");
         if (this.map.darkness <= 1) {
             this.map.lighting = true;
             this.map.darkness = 5;
@@ -1318,7 +1339,7 @@ export class Chair extends _Seat_ {
 
     constructor(initialX, initialY, initialRotation) {
         super(initialX, initialY, initialRotation, [
-          [0, 1, 180, [0, -16]]
+            [0, 1, 180, [0, -16]]
         ]);
     }
 }
@@ -1382,7 +1403,7 @@ export class Laptop extends _StaticClusterClient_ {
 
 export class SteakAndFries extends _StaticClusterClient_ {
 
-    static _defaultVertices = [-5.2,5.2,1,0,0,5.2,5.2,1,0.8125,0,-5.2,-5.2,1,0,0.8125,5.2,5.2,1,0.8125,0,-5.2,-5.2,1,0,0.8125,5.2,-5.2,1,0.8125,0.8125];
+    static _defaultVertices = [-5.2, 5.2, 1, 0, 0, 5.2, 5.2, 1, 0.8125, 0, -5.2, -5.2, 1, 0, 0.8125, 5.2, 5.2, 1, 0.8125, 0, -5.2, -5.2, 1, 0, 0.8125, 5.2, -5.2, 1, 0.8125, 0.8125];
 
     width = 10.4;
     clusterName = "steak and fries";
@@ -1651,6 +1672,7 @@ export class Door extends _StaticClusterClient_ {
                 $CURRENT_MAP.avatars[$AVATAR.id] = $AVATAR;
                 $CURRENT_MAP.obstacles[$AVATAR.id] = $AVATAR;
                 $MAP_DISPLAY.update();
+                $AUDIO.playSound("door-close");
             }).bind(this));
         }
     }
@@ -1692,7 +1714,7 @@ export class Table extends _StaticClusterClient_ {
 
 export class SmallTable extends _StaticClusterClient_ {
 
-    static _defaultVertices = [-8.2,8.7,1,0,0,8.2,8.7,1,0.640625,0,-8.2,-8.7,1,0,0.6796875,8.2,8.7,1,0.640625,0,-8.2,-8.7,1,0,0.6796875,8.2,-8.7,1,0.640625,0.6796875];
+    static _defaultVertices = [-8.2, 8.7, 1, 0, 0, 8.2, 8.7, 1, 0.640625, 0, -8.2, -8.7, 1, 0, 0.6796875, 8.2, 8.7, 1, 0.640625, 0, -8.2, -8.7, 1, 0, 0.6796875, 8.2, -8.7, 1, 0.640625, 0.6796875];
 
     width = 16.4;
     height = 17.4;
@@ -1701,7 +1723,7 @@ export class SmallTable extends _StaticClusterClient_ {
     texture = textures.objects.smalltable;
     obstacle = true;
     segments = [
-        [-8.2,-5.7,16.4,14.4]
+        [-8.2, -5.7, 16.4, 14.4]
     ];
 
     constructor(initialX, initialY, initialRotation) {
@@ -1831,7 +1853,7 @@ export class MetalFenceVertical extends _StaticClusterClient_ {
     clusterName = "metal fence vertical";
     texture = textures.objects.metalfencevertical;
     obstacle = true;
-    topLayer = true; 
+    topLayer = true;
     segments = [
         [-0.85, -18, 1.7, 36]
     ];
@@ -1958,6 +1980,7 @@ export class _Building_ extends _StaticClusterClient_ {
                     $CURRENT_MAP.avatars[$AVATAR.id] = $AVATAR;
                     $CURRENT_MAP.obstacles[$AVATAR.id] = $AVATAR;
                     $MAP_DISPLAY.update();
+                    $AUDIO.playSound("door-close");
                 }).bind(this));
             }).bind(this), true);
             t.outPoint = i[3];
@@ -2170,8 +2193,8 @@ export class _Pickup_ extends _InstancedClusterClient_ {
 
         this.ring = new PickupRing(this.trans.offsetX, this.trans.offsetY);
         this.deletionAnimation = new MultiFrameLoopAnimation([function() {
-          this.delete();
-        }],this,[20]); 
+            if (this.type !== "explosive") this.delete();
+        }], this, [60]);
     }
 
     pickup = true;
@@ -2181,21 +2204,23 @@ export class _Pickup_ extends _InstancedClusterClient_ {
     subLayer = 1;
 
     preRender() {
-     if (this.linked && this.dropped && this !== $AVATAR.state.pickup.current) {
-       this.deletionAnimation.run();
-     }
+        if (this.linked && this.dropped && this !== $AVATAR.state.pickup.current) {
+            this.deletionAnimation.run();
+        }
     }
 
     postLink() {
-      if (this.ring) this.map.link(this.ring);
+        if (this.ring) this.map.link(this.ring);
     }
 
     clean() {
-      if (this.ring) this.ring.delete();
+        if (this.ring) this.ring.delete();
     }
 
     action() {
         $AVATAR.addItem(this);
+        this.deletionAnimation.end();
+        $AUDIO.playSound("equip");
     }
 
     translate(x, y, rotation = false, translateVertices) {
@@ -2203,7 +2228,7 @@ export class _Pickup_ extends _InstancedClusterClient_ {
         this.trans.offsetX += x;
         this.trans.offsetY += y;
         if (this.ring) {
-         this.ring.translate(this.trans.offsetX - this.ring.trans.offsetX, this.trans.offsetY - this.ring.trans.offsetY, false, translateVertices);
+            this.ring.translate(this.trans.offsetX - this.ring.trans.offsetX, this.trans.offsetY - this.ring.trans.offsetY, false, translateVertices);
         }
 
         if (rotation) {
@@ -2232,11 +2257,11 @@ export class _Blade_ extends _Pickup_ {
     }
 
     degrade() {
-     this.integrity -= aofb(100 - this.constructor._properties.durability,5);
-     if (this.integrity <= 0 && this === $AVATAR.state.equippedItems.mainTool) {
-      $AVATAR.dropItem(this.slot);
-      this.delete();
-     } 
+        this.integrity -= aofb(100 - this.constructor._properties.durability, 5);
+        if (this.integrity <= 0 && this === $AVATAR.state.equippedItems.mainTool) {
+            $AVATAR.dropItem(this.slot);
+            this.delete();
+        }
     }
 
     type = "knife";
@@ -2271,7 +2296,7 @@ export class _Food_ extends _Pickup_ {
 
     type = "food";
     nutrition = 5;
-    regain = 5; 
+    regain = 5;
 }
 
 export class Syringe extends _Medicine_ {
@@ -2295,7 +2320,7 @@ export class Syringe extends _Medicine_ {
 
 export class Money extends _Pickup_ {
 
-    static _defaultVertices = [-3.7,1.9,1,0,0,3.7,1.9,1,0.578125,0,-3.7,-1.9,1,0,0.59375,3.7,1.9,1,0.578125,0,-3.7,-1.9,1,0,0.59375,3.7,-1.9,1,0.578125,0.59375];
+    static _defaultVertices = [-3.7, 1.9, 1, 0, 0, 3.7, 1.9, 1, 0.578125, 0, -3.7, -1.9, 1, 0, 0.59375, 3.7, 1.9, 1, 0.578125, 0, -3.7, -1.9, 1, 0, 0.59375, 3.7, -1.9, 1, 0.578125, 0.59375];
 
     width = 7.4;
     height = 3.8;
@@ -2312,7 +2337,7 @@ export class Money extends _Pickup_ {
 
 export class CandyBar extends _Food_ {
 
-    static _defaultVertices = [-3.4,1.7,1,0,0,3.4,1.7,1,0.53125,0,-3.4,-1.7,1,0,0.53125,3.4,1.7,1,0.53125,0,-3.4,-1.7,1,0,0.53125,3.4,-1.7,1,0.53125,0.53125];
+    static _defaultVertices = [-3.4, 1.7, 1, 0, 0, 3.4, 1.7, 1, 0.53125, 0, -3.4, -1.7, 1, 0, 0.53125, 3.4, 1.7, 1, 0.53125, 0, -3.4, -1.7, 1, 0, 0.53125, 3.4, -1.7, 1, 0.53125, 0.53125];
 
     width = 6.8;
     height = 3.4;
@@ -2332,7 +2357,7 @@ export class MedKit extends _Medicine_ {
         regain: 75
     };
 
-    static _defaultVertices = [-5.7,3.8,1,0,0,5.7,3.8,1,0.890625,0,-5.7,-3.8,1,0,0.59375,5.7,3.8,1,0.890625,0,-5.7,-3.8,1,0,0.59375,5.7,-3.8,1,0.890625,0.59375];
+    static _defaultVertices = [-5.7, 3.8, 1, 0, 0, 5.7, 3.8, 1, 0.890625, 0, -5.7, -3.8, 1, 0, 0.59375, 5.7, 3.8, 1, 0.890625, 0, -5.7, -3.8, 1, 0, 0.59375, 5.7, -3.8, 1, 0.890625, 0.59375];
 
     width = 11.4;
     height = 7.6;
@@ -2346,12 +2371,12 @@ export class MedKit extends _Medicine_ {
 }
 
 export class BasicArmour extends _Pickup_ {
-    
+
     static _properties = {
-     strength: 50
+        strength: 50
     };
 
-    static _defaultVertices = [-3.7,5.1,1,0,0,3.7,5.1,1,0.578125,0,-3.7,-5.1,1,0,0.796875,3.7,5.1,1,0.578125,0,-3.7,-5.1,1,0,0.796875,3.7,-5.1,1,0.578125,0.796875];
+    static _defaultVertices = [-3.7, 5.1, 1, 0, 0, 3.7, 5.1, 1, 0.578125, 0, -3.7, -5.1, 1, 0, 0.796875, 3.7, 5.1, 1, 0.578125, 0, -3.7, -5.1, 1, 0, 0.796875, 3.7, -5.1, 1, 0.578125, 0.796875];
 
     width = 7.4;
     height = 10.2;
@@ -2359,16 +2384,16 @@ export class BasicArmour extends _Pickup_ {
     texture = textures.objects.basicarmour;
     name = "basic armour";
     type = "armour";
-    
+
     constructor(initialX, initialY, initialRotation) {
-        super(initialX, initialY, initialRotation); 
+        super(initialX, initialY, initialRotation);
         this.integrity = 50;
     }
 }
 
-export class RemoteDetonator extends _Pickup_ { 
+export class RemoteDetonator extends _Pickup_ {
 
-    static _defaultVertices = [-1.2,3,1,0,0,1.2,3,1,0.75,0,-1.2,-3,1,0,0.9375,1.2,3,1,0.75,0,-1.2,-3,1,0,0.9375,1.2,-3,1,0.75,0.9375];
+    static _defaultVertices = [-1.2, 3, 1, 0, 0, 1.2, 3, 1, 0.75, 0, -1.2, -3, 1, 0, 0.9375, 1.2, 3, 1, 0.75, 0, -1.2, -3, 1, 0, 0.9375, 1.2, -3, 1, 0.75, 0.9375];
 
     width = 2.4;
     height = 6;
@@ -2376,21 +2401,21 @@ export class RemoteDetonator extends _Pickup_ {
     texture = textures.objects.remotedetonator;
     name = "remote detonator";
     type = "detonator";
-    
+
     constructor(initialX, initialY, initialRotation) {
         super(initialX, initialY, initialRotation);
     }
 
     activate() {
-     for (let i of $AVATAR.inventory.explosives) {
-      $CURRENT_MAP.objects[i]?.detonate();
-     }
+        for (let i of $AVATAR.inventory.explosives) {
+            $CURRENT_MAP.objects[i]?.detonate();
+        }
     }
 }
 
-export class ProximityExplosive extends _Pickup_ { 
+export class ProximityExplosive extends _Pickup_ {
 
-    static _defaultVertices = [-2.1,3.8,1,0,0,2.1,3.8,1,0.65625,0,-2.1,-3.8,1,0,0.59375,2.1,3.8,1,0.65625,0,-2.1,-3.8,1,0,0.59375,2.1,-3.8,1,0.65625,0.59375];
+    static _defaultVertices = [-2.1, 3.8, 1, 0, 0, 2.1, 3.8, 1, 0.65625, 0, -2.1, -3.8, 1, 0, 0.59375, 2.1, 3.8, 1, 0.65625, 0, -2.1, -3.8, 1, 0, 0.59375, 2.1, -3.8, 1, 0.65625, 0.59375];
 
     width = 4.2;
     height = 7.6;
@@ -2402,59 +2427,62 @@ export class ProximityExplosive extends _Pickup_ {
     passable = true;
     armed = false;
     hideFromMap = true;
-    segments = [[-2.1,-3.8,4.2,7.6]];
-    
+    segments = [
+        [-2.1, -3.8, 4.2, 7.6]
+    ];
+
     constructor(initialX, initialY, initialRotation, owner) {
         super(initialX, initialY, initialRotation);
         this.owner = owner;
         this.proximityCheckAnimation = new LoopAnimation(function() {
-          for (let i in $CURRENT_MAP.avatars) {
-            let dist = distance(this.trans.offsetX, this.trans.offsetY, $CURRENT_MAP.avatars[i].trans.offsetX, $CURRENT_MAP.avatars[i].trans.offsetY);
+            for (let i in $CURRENT_MAP.avatars) {
+                let dist = distance(this.trans.offsetX, this.trans.offsetY, $CURRENT_MAP.avatars[i].trans.offsetX, $CURRENT_MAP.avatars[i].trans.offsetY);
 
-            if (dist < 20) {
-              this.detonate();
-              break;
+                if (dist < 20) {
+                    this.detonate();
+                    break;
+                }
             }
-          }
         }, this, 1);
         this.activationTimeout = new MultiFrameLinearAnimation([function() {
-           this.armed = true; 
-         }], this, [3]);
+            this.armed = true;
+        }], this, [3]);
     }
 
-     detonate() {
-      if (this.armed) {
-       const map = this.map;
-      
-       for (let i = 0; i < 40; i++) { 
-       let randomBulletRotation = random(360);
-       let [directionX, directionY] = rotate(0,1,randomBulletRotation);
-       let velocity = random(10)+3;
+    detonate() {
+        if (this.armed) {
+            const map = this.map;
 
-       map.link(new Bullet(this.trans.offsetX, this.trans.offsetY, randomBulletRotation, directionX * velocity, directionY * velocity, 100, $AVATAR));
-       }
- 
-      this.delete();
-     }
+            for (let i = 0; i < 40; i++) {
+                let randomBulletRotation = random(360);
+                let [directionX, directionY] = rotate(0, 1, randomBulletRotation);
+                let velocity = random(10) + 3;
+
+                map.link(new Bullet(this.trans.offsetX, this.trans.offsetY, randomBulletRotation, directionX * velocity, directionY * velocity, 100, $AVATAR));
+            }
+
+            $AUDIO.playSound("explosion");
+            this.delete();
+        }
     }
-    
+
     arm() {
-      this.armed = true;
+        this.armed = true;
     }
 
     hit() {
-     this.detonate();
+        this.detonate();
     }
 
-   preRender() {
-    this.activationTimeout.run();
-    if (this.armed) this.proximityCheckAnimation.run();
-   }
+    preRender() {
+        this.activationTimeout.run();
+        if (this.armed) this.proximityCheckAnimation.run();
+    }
 }
 
-export class RemoteExplosive extends _Pickup_ { 
+export class RemoteExplosive extends _Pickup_ {
 
-    static _defaultVertices = [-2.1,3.8,1,0,0,2.1,3.8,1,0.65625,0,-2.1,-3.8,1,0,0.59375,2.1,3.8,1,0.65625,0,-2.1,-3.8,1,0,0.59375,2.1,-3.8,1,0.65625,0.59375];
+    static _defaultVertices = [-2.1, 3.8, 1, 0, 0, 2.1, 3.8, 1, 0.65625, 0, -2.1, -3.8, 1, 0, 0.59375, 2.1, 3.8, 1, 0.65625, 0, -2.1, -3.8, 1, 0, 0.59375, 2.1, -3.8, 1, 0.65625, 0.59375];
 
     width = 4.2;
     height = 7.6;
@@ -2466,45 +2494,48 @@ export class RemoteExplosive extends _Pickup_ {
     passable = true;
     armed = false;
     hideFromMap = true;
-    segments = [[-2.1,-3.8,4.2,7.6]];
-    
+    segments = [
+        [-2.1, -3.8, 4.2, 7.6]
+    ];
+
     constructor(initialX, initialY, initialRotation, owner) {
         super(initialX, initialY, initialRotation);
         this.owner = owner;
     }
 
-     detonate() {
-      if (this.armed) {
-       const map = this.map;
-      
-       for (let i = 0; i < 40; i++) { 
-       let randomBulletRotation = random(360);
-       let [directionX, directionY] = rotate(0,1,randomBulletRotation);
-       let velocity = random(10)+3;
+    detonate() {
+        if (this.armed) {
+            const map = this.map;
 
-       map.link(new Bullet(this.trans.offsetX, this.trans.offsetY, randomBulletRotation, directionX * velocity, directionY * velocity, 100, $AVATAR));
-       }
- 
-      this.delete();
-     }
+            for (let i = 0; i < 40; i++) {
+                let randomBulletRotation = random(360);
+                let [directionX, directionY] = rotate(0, 1, randomBulletRotation);
+                let velocity = random(10) + 3;
+
+                map.link(new Bullet(this.trans.offsetX, this.trans.offsetY, randomBulletRotation, directionX * velocity, directionY * velocity, 100, $AVATAR));
+            }
+
+            $AUDIO.playSound("explosion");
+            this.delete();
+        }
     }
-    
+
     arm() {
-      this.armed = true;
+        this.armed = true;
     }
 
     hit() {
-     this.detonate();
+        this.detonate();
     }
 }
 
 export class MercenaryArmour extends _Pickup_ {
-    
+
     static _properties = {
-     strength: 150
+        strength: 150
     };
 
-    static _defaultVertices = [-3.7,5.1,1,0,0,3.7,5.1,1,0.578125,0,-3.7,-5.1,1,0,0.796875,3.7,5.1,1,0.578125,0,-3.7,-5.1,1,0,0.796875,3.7,-5.1,1,0.578125,0.796875];
+    static _defaultVertices = [-3.7, 5.1, 1, 0, 0, 3.7, 5.1, 1, 0.578125, 0, -3.7, -5.1, 1, 0, 0.796875, 3.7, 5.1, 1, 0.578125, 0, -3.7, -5.1, 1, 0, 0.796875, 3.7, -5.1, 1, 0.578125, 0.796875];
 
     width = 7.4;
     height = 10.2;
@@ -2512,20 +2543,20 @@ export class MercenaryArmour extends _Pickup_ {
     texture = textures.objects.mercenaryarmour;
     name = "mercenary armour";
     type = "armour";
-    
+
     constructor(initialX, initialY, initialRotation) {
-        super(initialX, initialY, initialRotation); 
+        super(initialX, initialY, initialRotation);
         this.integrity = 150;
     }
 }
 
 export class SwatArmour extends _Pickup_ {
-    
+
     static _properties = {
-     strength: 100
+        strength: 100
     };
 
-    static _defaultVertices = [-3.7,5.1,1,0,0,3.7,5.1,1,0.578125,0,-3.7,-5.1,1,0,0.796875,3.7,5.1,1,0.578125,0,-3.7,-5.1,1,0,0.796875,3.7,-5.1,1,0.578125,0.796875];
+    static _defaultVertices = [-3.7, 5.1, 1, 0, 0, 3.7, 5.1, 1, 0.578125, 0, -3.7, -5.1, 1, 0, 0.796875, 3.7, 5.1, 1, 0.578125, 0, -3.7, -5.1, 1, 0, 0.796875, 3.7, -5.1, 1, 0.578125, 0.796875];
 
     width = 7.4;
     height = 10.2;
@@ -2533,9 +2564,9 @@ export class SwatArmour extends _Pickup_ {
     texture = textures.objects.swatarmour;
     name = "swat armour";
     type = "armour";
-    
+
     constructor(initialX, initialY, initialRotation) {
-        super(initialX, initialY, initialRotation); 
+        super(initialX, initialY, initialRotation);
         this.integrity = 100;
     }
 }
@@ -2543,10 +2574,10 @@ export class SwatArmour extends _Pickup_ {
 export class AmmoBox extends _Ammo_ {
 
     static _properties = {
-     increase: 5
+        increase: 5
     };
 
-    static _defaultVertices = [-3.2,4.3,1,0,0,3.2,4.3,1,0.5,0,-3.2,-4.3,1,0,0.671875,3.2,4.3,1,0.5,0,-3.2,-4.3,1,0,0.671875,3.2,-4.3,1,0.5,0.671875];
+    static _defaultVertices = [-3.2, 4.3, 1, 0, 0, 3.2, 4.3, 1, 0.5, 0, -3.2, -4.3, 1, 0, 0.671875, 3.2, 4.3, 1, 0.5, 0, -3.2, -4.3, 1, 0, 0.671875, 3.2, -4.3, 1, 0.5, 0.671875];
 
     width = 6.4;
     height = 8.6;
@@ -2563,10 +2594,10 @@ export class AmmoBox extends _Ammo_ {
 export class MultiAmmoBox extends _Ammo_ {
 
     static _properties = {
-     increase: 3
+        increase: 3
     };
 
-    static _defaultVertices = [-6.2,4.3,1,0,0,6.2,4.3,1,0.96875,0,-6.2,-4.3,1,0,0.671875,6.2,4.3,1,0.96875,0,-6.2,-4.3,1,0,0.671875,6.2,-4.3,1,0.96875,0.671875];
+    static _defaultVertices = [-6.2, 4.3, 1, 0, 0, 6.2, 4.3, 1, 0.96875, 0, -6.2, -4.3, 1, 0, 0.671875, 6.2, 4.3, 1, 0.96875, 0, -6.2, -4.3, 1, 0, 0.671875, 6.2, -4.3, 1, 0.96875, 0.671875];
 
     width = 12.4;
     height = 8.6;
@@ -2623,14 +2654,14 @@ export class AssassinsKnife extends _Blade_ {
 }
 
 export class CombatKnife extends _Blade_ {
-    
+
     static _properties = {
         damage: 50,
         durability: 50,
         useTextures: [textures.skins.avatarcombatknife1.id, textures.skins.avatarcombatknife2.id, textures.skins.avatarcombatknife3.id, textures.skins.avatarcombatknifewalking1.id, textures.skins.avatarcombatknifewalking2.id],
     }
 
-    static _defaultVertices = [-1.8,6.8,1,0,0,1.8,6.8,1,0.5625,0,-1.8,-6.8,1,0,0.53125,1.8,6.8,1,0.5625,0,-1.8,-6.8,1,0,0.53125,1.8,-6.8,1,0.5625,0.53125];
+    static _defaultVertices = [-1.8, 6.8, 1, 0, 0, 1.8, 6.8, 1, 0.5625, 0, -1.8, -6.8, 1, 0, 0.53125, 1.8, 6.8, 1, 0.5625, 0, -1.8, -6.8, 1, 0, 0.53125, 1.8, -6.8, 1, 0.5625, 0.53125];
 
     width = 3.6;
     height = 13.6;
@@ -2653,7 +2684,8 @@ export class GLOCK_20 extends _Gun_ {
         nozzelLength: 13,
         capacity: 18,
         reloadTime: 3,
-        useTextures: [4, 5]
+        useTextures: [4, 5],
+        shotSoundEffect: "pistol-shot"
     }
 
     static _defaultVertices = [-4.390000000000001, 3.0900000000000003, 1, 0, 0, 4.390000000000001, 3.0900000000000003, 1, 0.6859375000000001, 0, -4.390000000000001, -3.0900000000000003, 1, 0, 0.965625, 4.390000000000001, 3.0900000000000003, 1, 0.6859375000000001, 0, -4.390000000000001, -3.0900000000000003, 1, 0, 0.965625, 4.390000000000001, -3.0900000000000003, 1, 0.6859375000000001, 0.965625];
@@ -2680,10 +2712,11 @@ export class DX_9 extends _Gun_ {
         nozzelLength: 13,
         capacity: 26,
         reloadTime: 2.5,
-        useTextures: [textures.skins.avatardrawdx9.id, textures.skins.avatardrawdx9pullback.id]
+        useTextures: [textures.skins.avatardrawdx9.id, textures.skins.avatardrawdx9pullback.id],
+        shotSoundEffect: "pistol-shot-4"
     }
 
-    static _defaultVertices = [-4.55,3.2,1,0,0,4.55,3.2,1,0.7109375,0,-4.55,-3.2,1,0,0.5,4.55,3.2,1,0.7109375,0,-4.55,-3.2,1,0,0.5,4.55,-3.2,1,0.7109375,0.5];
+    static _defaultVertices = [-4.55, 3.2, 1, 0, 0, 4.55, 3.2, 1, 0.7109375, 0, -4.55, -3.2, 1, 0, 0.5, 4.55, 3.2, 1, 0.7109375, 0, -4.55, -3.2, 1, 0, 0.5, 4.55, -3.2, 1, 0.7109375, 0.5];
 
     width = 9.1;
     height = 6.4;
@@ -2702,15 +2735,16 @@ export class NOSS_7 extends _Gun_ {
     static _properties = {
         fireRate: 12,
         bulletSpeed: 8,
-        damage: 28,
+        damage: 18,
         accuracy: 15,
         nozzelLength: 19,
         capacity: 46,
         reloadTime: 5,
-        useTextures: [textures.skins.avatardrawnoss7.id, textures.skins.avatardrawnoss7pullback.id]
+        useTextures: [textures.skins.avatardrawnoss7.id, textures.skins.avatardrawnoss7pullback.id],
+        shotSoundEffect: "pistol-shot"
     }
 
-    static _defaultVertices = [-7.2,3.3,1,0,0,7.2,3.3,1,0.5625,0,-7.2,-3.3,1,0,0.515625,7.2,3.3,1,0.5625,0,-7.2,-3.3,1,0,0.515625,7.2,-3.3,1,0.5625,0.515625];
+    static _defaultVertices = [-7.2, 3.3, 1, 0, 0, 7.2, 3.3, 1, 0.5625, 0, -7.2, -3.3, 1, 0, 0.515625, 7.2, 3.3, 1, 0.5625, 0, -7.2, -3.3, 1, 0, 0.515625, 7.2, -3.3, 1, 0.5625, 0.515625];
 
     width = 14.4;
     height = 6.6;
@@ -2734,10 +2768,12 @@ export class FURS_55 extends _Gun_ {
         nozzelLength: 13,
         capacity: 8,
         reloadTime: 4,
-        useTextures: [textures.skins.avatardrawfurs55.id, textures.skins.avatardrawfurs55pullback.id]
+        useTextures: [textures.skins.avatardrawfurs55.id, textures.skins.avatardrawfurs55pullback.id],
+        shotSoundEffect: "pistol-shot-2",
+        reloadSoundEffect: "revolver-reload"
     }
 
-    static _defaultVertices = [-6.3,3.7,1,0,0,6.3,3.7,1,0.984375,0,-6.3,-3.7,1,0,0.578125,6.3,3.7,1,0.984375,0,-6.3,-3.7,1,0,0.578125,6.3,-3.7,1,0.984375,0.578125];
+    static _defaultVertices = [-6.3, 3.7, 1, 0, 0, 6.3, 3.7, 1, 0.984375, 0, -6.3, -3.7, 1, 0, 0.578125, 6.3, 3.7, 1, 0.984375, 0, -6.3, -3.7, 1, 0, 0.578125, 6.3, -3.7, 1, 0.984375, 0.578125];
 
     width = 12.6;
     height = 7.4;
@@ -2761,7 +2797,8 @@ export class GP_K100 extends _Gun_ {
         nozzelLength: 21,
         capacity: 12,
         reloadTime: 2,
-        useTextures: [6, 7]
+        useTextures: [6, 7],
+        shotSoundEffect: "pistol-shot-5"
     }
 
     static _defaultVertices = [-7.4, 3.0900000000000003, 1, 0, 0, 7.4, 3.0900000000000003, 1, 0.578125, 0, -7.4, -3.0900000000000003, 1, 0, 0.965625, 7.4, 3.0900000000000003, 1, 0.578125, 0, -7.4, -3.0900000000000003, 1, 0, 0.965625, 7.4, -3.0900000000000003, 1, 0.578125, 0.965625];
@@ -2788,7 +2825,9 @@ export class NXR_44_MAG extends _Gun_ {
         nozzelLength: 21,
         capacity: 6,
         reloadTime: 5,
-        useTextures: [8, 9]
+        useTextures: [8, 9],
+        shotSoundEffect: "pistol-shot-6",
+        reloadSoundEffect: "revolver-reload"
     }
 
     static _defaultVertices = [-6.910000000000001, 3.44, 1, 0, 0, 6.910000000000001, 3.44, 1, 0.5398437500000001, 0, -6.910000000000001, -3.44, 1, 0, 0.5375, 6.910000000000001, 3.44, 1, 0.5398437500000001, 0, -6.910000000000001, -3.44, 1, 0, 0.5375, 6.910000000000001, -3.44, 1, 0.5398437500000001, 0.5375];
@@ -2806,7 +2845,7 @@ export class NXR_44_MAG extends _Gun_ {
 }
 
 export class KC_357 extends _Gun_ {
-    
+
     static _properties = {
         fireRate: 2.5,
         bulletSpeed: 5,
@@ -2815,7 +2854,9 @@ export class KC_357 extends _Gun_ {
         nozzelLength: 15,
         capacity: 6,
         reloadTime: 3,
-        useTextures: [textures.skins.avatardrawkc357.id, textures.skins.avatardrawkc357pullback.id]
+        useTextures: [textures.skins.avatardrawkc357.id, textures.skins.avatardrawkc357pullback.id],
+        shotSoundEffect: "pistol-shot-2",
+        reloadSoundEffect: "revolver-reload"
     }
 
     static _defaultVertices = [-4.26, 2.8, 1, 0, 0, 4.26, 2.8, 1, 0.665625, 0, -4.26, -2.8, 1, 0, 0.875, 4.26, 2.8, 1, 0.665625, 0, -4.26, -2.8, 1, 0, 0.875, 4.26, -2.8, 1, 0.665625, 0.875];
@@ -2833,7 +2874,7 @@ export class KC_357 extends _Gun_ {
 }
 
 export class X6_91 extends _Gun_ {
-    
+
     static _properties = {
         fireRate: 2.2,
         bulletSpeed: 4,
@@ -2842,10 +2883,11 @@ export class X6_91 extends _Gun_ {
         nozzelLength: 21,
         capacity: 7,
         reloadTime: 4,
-        useTextures: [textures.skins.avatardrawx691.id, textures.skins.avatardrawx691pullback.id]
+        useTextures: [textures.skins.avatardrawx691.id, textures.skins.avatardrawx691pullback.id],
+        shotSoundEffect: "pistol-shot-3"
     }
 
-    static _defaultVertices = [-4.6,3.4,1,0,0,4.6,3.4,1,0.71875,0,-4.6,-3.4,1,0,0.53125,4.6,3.4,1,0.71875,0,-4.6,-3.4,1,0,0.53125,4.6,-3.4,1,0.71875,0.53125];
+    static _defaultVertices = [-4.6, 3.4, 1, 0, 0, 4.6, 3.4, 1, 0.71875, 0, -4.6, -3.4, 1, 0, 0.53125, 4.6, 3.4, 1, 0.71875, 0, -4.6, -3.4, 1, 0, 0.53125, 4.6, -3.4, 1, 0.71875, 0.53125];
 
     width = 9.2;
     height = 6.8;
@@ -2860,7 +2902,7 @@ export class X6_91 extends _Gun_ {
 }
 
 export class USP_45 extends _Gun_ {
-    
+
     static _properties = {
         fireRate: 2,
         bulletSpeed: 7,
@@ -2869,7 +2911,8 @@ export class USP_45 extends _Gun_ {
         nozzelLength: 21,
         capacity: 8,
         reloadTime: 4,
-        useTextures: [textures.skins.avatardrawusp45.id, textures.skins.avatardrawusp45pullback.id]
+        useTextures: [textures.skins.avatardrawusp45.id, textures.skins.avatardrawusp45pullback.id],
+        shotSoundEffect: "pistol-shot-7"
     }
 
     static _defaultVertices = [-8.15, 3.9300000000000006, 1, 0, 0, 8.15, 3.9300000000000006, 1, 0.63671875, 0, -8.15, -3.9300000000000006, 1, 0, 0.6140625000000001, 8.15, 3.9300000000000006, 1, 0.63671875, 0, -8.15, -3.9300000000000006, 1, 0, 0.6140625000000001, 8.15, -3.9300000000000006, 1, 0.63671875, 0.6140625000000001];
@@ -2889,29 +2932,124 @@ export class USP_45 extends _Gun_ {
 export class StubbyShotgun extends _Gun_ {
 
     static _properties = {
-        fireRate: 0.5,
+        fireRate: 1,
         bulletSpeed: 10,
-        damage: 20,
+        damage: 15,
         accuracy: 10,
         nozzelLength: 21,
         capacity: 6,
-        reloadTime: 5,  
-        bulletCombo: 5,
-        useTextures: [textures.skins.avatardrawstubbyshotgun.id, textures.skins.avatardrawstubbyshotgunpullback.id]
+        reloadTime: 5,
+        bulletCombo: 6,
+        useTextures: [textures.skins.avatardrawstubbyshotgun.id, textures.skins.avatardrawstubbyshotgunpullback.id],
+        shotSoundEffect: "shotgun-shot-1",
+        reloadSoundEffect: "shotgun-reload"
     }
 
-    static _defaultVertices = [-8.120000000000001,3.65,1,0,0,8.120000000000001,3.65,1,0.634375,0,-8.120000000000001,-3.65,1,0,0.5703125,8.120000000000001,3.65,1,0.634375,0,-8.120000000000001,-3.65,1,0,0.5703125,8.120000000000001,-3.65,1,0.634375,0.5703125];
+    static _defaultVertices = [-8.120000000000001, 3.65, 1, 0, 0, 8.120000000000001, 3.65, 1, 0.634375, 0, -8.120000000000001, -3.65, 1, 0, 0.5703125, 8.120000000000001, 3.65, 1, 0.634375, 0, -8.120000000000001, -3.65, 1, 0, 0.5703125, 8.120000000000001, -3.65, 1, 0.634375, 0.5703125];
 
     width = 16.240000000000002;
     height = 7.3;
     clusterName = "stubby shotgun";
     texture = textures.objects.stubbyshotgun;
     name = "stubby shotgun";
-    shotgun = true; 
+    shotgun = true;
 
     constructor(initialX, initialY, initialRotation, bullets) {
         super(initialX, initialY, initialRotation);
         this.bullets = bullets ?? 24;
+    }
+}
+
+export class RobberShotgun extends _Gun_ {
+
+    static _properties = {
+        fireRate: 2,
+        bulletSpeed: 7,
+        damage: 25,
+        accuracy: 3,
+        nozzelLength: 21,
+        capacity: 2,
+        reloadTime: 3,
+        bulletCombo: 6,
+        useTextures: [textures.skins.avatardrawrobbershotgun.id, textures.skins.avatardrawrobbershotgunpullback.id],
+        shotSoundEffect: "shotgun-shot-2",
+        reloadSoundEffect: "shotgun-reload"
+    }
+
+    static _defaultVertices = [-9.6, 3.2, 1, 0, 0, 9.6, 3.2, 1, 0.75, 0, -9.6, -3.2, 1, 0, 0.5, 9.6, 3.2, 1, 0.75, 0, -9.6, -3.2, 1, 0, 0.5, 9.6, -3.2, 1, 0.75, 0.5];
+
+    width = 19.2;
+    height = 6.4;
+    clusterName = "robber shotgun";
+    texture = textures.objects.robbershotgun;
+    name = "robber shotgun";
+    shotgun = true;
+
+    constructor(initialX, initialY, initialRotation, bullets) {
+        super(initialX, initialY, initialRotation);
+        this.bullets = bullets ?? 35;
+    }
+}
+
+export class ClassicShotgun extends _Gun_ {
+
+    static _properties = {
+        fireRate: 1.8,
+        bulletSpeed: 12,
+        damage: 13,
+        accuracy: 7,
+        nozzelLength: 21,
+        capacity: 8,
+        reloadTime: 4,
+        bulletCombo: 5,
+        useTextures: [textures.skins.avatardrawclassicshotgun.id, textures.skins.avatardrawclassicshotgunpullback.id],
+        shotSoundEffect: "shotgun-shot-3",
+        reloadSoundEffect: "shotgun-reload"
+    }
+
+    static _defaultVertices = [-8.120000000000001, 3.65, 1, 0, 0, 8.120000000000001, 3.65, 1, 0.634375, 0, -8.120000000000001, -3.65, 1, 0, 0.5703125, 8.120000000000001, 3.65, 1, 0.634375, 0, -8.120000000000001, -3.65, 1, 0, 0.5703125, 8.120000000000001, -3.65, 1, 0.634375, 0.5703125];
+
+    width = 16.240000000000002;
+    height = 7.3;
+    clusterName = "classic shotgun";
+    texture = textures.objects.classicshotgun;
+    name = "classic shotgun";
+    shotgun = true;
+
+    constructor(initialX, initialY, initialRotation, bullets) {
+        super(initialX, initialY, initialRotation);
+        this.bullets = bullets ?? 42;
+    }
+}
+
+export class HeavyShotgun extends _Gun_ {
+
+    static _properties = {
+        fireRate: 0.5,
+        bulletSpeed: 12,
+        damage: 30,
+        accuracy: 13,
+        nozzelLength: 21,
+        capacity: 8,
+        reloadTime: 6,
+        bulletCombo: 10,
+        useTextures: [textures.skins.avatardrawheavyshotgun.id, textures.skins.avatardrawheavyshotgunpullback.id],
+        shotSoundEffect: "shotgun-shot-4",
+        reloadSoundEffect: "shotgun-reload"
+    }
+
+    static _defaultVertices = [-10.1,3.2,1,0,0,10.1,3.2,1,0.7890625,0,-10.1,-3.2,1,0,0.5,10.1,3.2,1,0.7890625,0,-10.1,-3.2,1,0,0.5,10.1,-3.2,1,0.7890625,0.5];
+
+    width = 20.2;
+    height = 6.4;
+    clusterName = "heavy shotgun";
+    texture = textures.objects.heavyshotgun;
+    name = "heavy shotgun";
+    shotgun = true;
+
+    constructor(initialX, initialY, initialRotation, bullets) {
+        super(initialX, initialY, initialRotation);
+        this.bullets = bullets ?? 54;
     }
 }
 
@@ -3173,6 +3311,7 @@ export class Avatar {
             }, function() {
                 this.state.position.body.texture = 11;
                 this.meleeAttack(this.state.strength, this.state.hitboxes.leftPunch);
+                $AUDIO.playSound((Math.random() < 0.5) ? "swing-1" : "swing-2");
             }, function() {
                 this.state.position.body.texture = 0;
             }], this, [0.08, 0.08, 0.08, 0.15], function() {
@@ -3185,6 +3324,7 @@ export class Avatar {
             }, function() {
                 this.state.position.body.texture = 13;
                 this.meleeAttack(this.state.strength, this.state.hitboxes.rightPunch);
+                $AUDIO.playSound((Math.random() < 0.5) ? "swing-1" : "swing-2");
             }, function() {
                 this.state.position.body.texture = 0;
             }], this, [0.08, 0.08, 0.08, 0.15], function() {
@@ -3195,6 +3335,7 @@ export class Avatar {
             }, function() {
                 this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[2];
                 this.meleeAttack(this.state.equippedItems.mainTool.constructor._properties.damage + this.state.strength, this.state.hitboxes.knife);
+                $AUDIO.playSound((Math.random() < 0.5) ? "knife-1" : "knife-2");
             }, function() {
                 this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[1];
             }, function() {
@@ -3263,22 +3404,24 @@ export class Avatar {
         this.state.fireAnimation = new LoopAnimation(function() {
 
             this.state.recoilAnimation.start();
-            
-            let bulletCombo = (this.state.equippedItems.mainTool.shotgun) ? this.state.equippedItems.mainTool.constructor._properties.bulletCombo:1;
+
+            let bulletCombo = (this.state.equippedItems.mainTool.shotgun) ? this.state.equippedItems.mainTool.constructor._properties.bulletCombo : 1;
 
             const map = $CURRENT_MAP;
- 
-          for (let i = 0; i < bulletCombo; i++) {
-            const [initialTrajectoryX, initialTrajectoryY] = rotate(0, 1, (this.trans.rotation) * 180 / Math.PI);
 
-            let randomBulletRotation = random(this.state.equippedItems.mainTool.constructor._properties.accuracy || 0);
-            randomBulletRotation = (Math.random() < 0.5) ? -randomBulletRotation : randomBulletRotation;
+            for (let i = 0; i < bulletCombo; i++) {
+                const [initialTrajectoryX, initialTrajectoryY] = rotate(0, 1, (this.trans.rotation) * 180 / Math.PI);
 
-            let [finalTrajectoryX, finalTrajectoryY] = rotate(initialTrajectoryX, initialTrajectoryY, randomBulletRotation);
-            let [initialPointX, initialPointY] = rotate(0, this.state.equippedItems.mainTool.constructor._properties.nozzelLength, (this.trans.rotation) * 180 / Math.PI);
+                let randomBulletRotation = random(this.state.equippedItems.mainTool.constructor._properties.accuracy || 0);
+                randomBulletRotation = (Math.random() < 0.5) ? -randomBulletRotation : randomBulletRotation;
 
-            map.link(new Bullet(initialPointX + this.trans.offsetX, initialPointY + this.trans.offsetY, ((this.trans.rotation) * 180 / Math.PI) + 90, finalTrajectoryX * this.state.equippedItems.mainTool.constructor._properties.bulletSpeed, finalTrajectoryY * this.state.equippedItems.mainTool.constructor._properties.bulletSpeed, this.state.equippedItems.mainTool.constructor._properties.damage, this));
-          }
+                let [finalTrajectoryX, finalTrajectoryY] = rotate(initialTrajectoryX, initialTrajectoryY, randomBulletRotation);
+                let [initialPointX, initialPointY] = rotate(0, this.state.equippedItems.mainTool.constructor._properties.nozzelLength, (this.trans.rotation) * 180 / Math.PI);
+
+                let bullet = new Bullet(initialPointX + this.trans.offsetX, initialPointY + this.trans.offsetY, ((this.trans.rotation) * 180 / Math.PI) + 90, finalTrajectoryX * this.state.equippedItems.mainTool.constructor._properties.bulletSpeed, finalTrajectoryY * this.state.equippedItems.mainTool.constructor._properties.bulletSpeed, this.state.equippedItems.mainTool.constructor._properties.damage, this);
+                if (this.state.equippedItems.mainTool.constructor._properties.explosive) bullet.explosive = true;
+                map.link(bullet);
+            }
 
             let [shellDirectionX, shellDirectionY] = rotate(20, 0, (this.trans.rotation) * 180 / Math.PI), randomShellRotation = random(10);
             let [randomShellDirectionX, randomShellDirectionY] = rotate(shellDirectionX, shellDirectionY, (Math.random() < 0.5) ? -randomShellRotation : randomShellRotation);
@@ -3292,7 +3435,8 @@ export class Avatar {
             if (this.state.equippedItems.mainTool.reloadProgress === this.state.equippedItems.mainTool.constructor._properties.capacity) this.state.equippedItems.mainTool.loaded = false;
 
             updateAmmoDisplay();
-
+            if (this.state.equippedItems.mainTool) $AUDIO.playSound(this.state.equippedItems.mainTool?.constructor._properties.shotSoundEffect);
+            $AUDIO.playSound("bulletshell");
         }, this, 0);
     }
 
@@ -3301,12 +3445,12 @@ export class Avatar {
 
             if (this.state.armour > 0) {
                 if (damage > this.state.armour) {
-                  this.state.vitals.health = Math.max(0, this.state.vitals.health - Math.abs(this.state.armour - damage));
+                    this.state.vitals.health = Math.max(0, this.state.vitals.health - Math.abs(this.state.armour - damage));
                 }
                 this.state.armour = Math.max(0, this.state.armour - damage);
                 if (this.state.equippedItems.armour) {
-                  this.state.equippedItems.armour.integrity = Math.max(0, this.state.equippedItems.armour.integrity - damage);
-                  updateArmourDisplay();
+                    this.state.equippedItems.armour.integrity = Math.max(0, this.state.equippedItems.armour.integrity - damage);
+                    updateArmourDisplay();
                 }
 
                 if (this.state.armour === 0) hideArmourDisplay();
@@ -3324,28 +3468,28 @@ export class Avatar {
         }
     }
 
-      harm(damage) {
+    harm(damage) {
         if (!this.state.invinsible) {
-           this.state.vitals.health = Math.max(this.state.vitals.health-damage, 0);
-           updateHealthBar();
+            this.state.vitals.health = Math.max(this.state.vitals.health - damage, 0);
+            updateHealthBar();
         }
-      }
+    }
 
-     die() {
-                $AVATAR.state.deaths += 1;
-                
-                this.purgeItems(5);
+    die() {
+        $AVATAR.state.deaths += 1;
 
-                delete $CURRENT_MAP.avatars[this.id];
-                delete $CURRENT_MAP.obstacles[this.id];
-                endDialogue();
-                if (this.state.pickup.current) this.drop();
-                this.hidden = true;
-                noclip = true;
-                returnToTitleScreen();
+        this.purgeItems(5);
 
-                return;
-     }
+        delete $CURRENT_MAP.avatars[this.id];
+        delete $CURRENT_MAP.obstacles[this.id];
+        endDialogue();
+        if (this.state.pickup.current) this.drop();
+        this.hidden = true;
+        noclip = true;
+        returnToTitleScreen();
+
+        return;
+    }
 
     drawWeapon() {
         if (this.state.equippedItems.mainTool && !this.state.stabbing && (this.state.armed || this.state.melee)) {
@@ -3365,6 +3509,7 @@ export class Avatar {
         if (this.state.equippedItems.mainTool.reloadProgress) {
             this.state.reloadTimeout.start();
             disableReloadDisplay();
+            if (this.state.equippedItems.mainTool) $AUDIO.playSound($AVATAR.state.equippedItems.mainTool?.constructor._properties.reloadSoundEffect || "pistol-reload");
         }
     }
 
@@ -3386,14 +3531,15 @@ export class Avatar {
         item.dropped = true;
 
         if (ring) {
-         item.ring.trans.offsetX = item.trans.offsetX = this.trans.offsetX + random(10, true);
-         item.ring.trans.offsetY = item.trans.offsetY = this.trans.offsetY + random(10, true);
-         item.trans.rotation = random(360);
+            item.ring.trans.offsetX = item.trans.offsetX = this.trans.offsetX + random(10, true);
+            item.ring.trans.offsetY = item.trans.offsetY = this.trans.offsetY + random(10, true);
+            item.trans.rotation = random(360);
         } else {
-         delete item.ring;
+            delete item.ring;
         }
 
         $CURRENT_MAP.link(item);
+        $AUDIO.playSound("equip");
 
         return true;
     }
@@ -3414,76 +3560,76 @@ export class Avatar {
         if (item) {
             switch (item.type) {
                 case "food": {
-                  
-                if (this.state.vitals.health < 100) this.state.vitals.health += item.regain; 
-                if (this.state.vitals.hunger < 100) this.state.vitals.hunger += item.nutrition;
-                 this.dropItem(slot);
-                 item.delete(); 
 
-                 updateHungerDisplay();
-                 updateHealthBar();
-                }; 
-                break; 
+                    if (this.state.vitals.health < 100) this.state.vitals.health += item.regain;
+                    if (this.state.vitals.hunger < 100) this.state.vitals.hunger += item.nutrition;
+                    this.dropItem(slot);
+                    item.delete();
+
+                    updateHungerDisplay();
+                    updateHealthBar();
+                };
+                break;
                 case "cash": {
-                 $AVATAR.inventory.cash += item.amount;
-                 this.dropItem(slot);
-                 item.delete();
+                    $AVATAR.inventory.cash += item.amount;
+                    this.dropItem(slot);
+                    item.delete();
 
-                 updateMoneyDisplay();
+                    updateMoneyDisplay();
                 };
                 break;
                 case "detonator": {
-                 item.activate();
+                    item.activate();
                 };
                 break;
                 case "explosive": {
-                  if (item.name === "remote explosive") {
-                   item.arm();
-                   $AVATAR.inventory.explosives.push(item.id);
-                  } else {
-                   item.activationTimeout.start();
-                  }
+                    if (item.name === "remote explosive") {
+                        item.arm();
+                        $AVATAR.inventory.explosives.push(item.id);
+                    } else {
+                        item.activationTimeout.start();
+                    }
 
-                 this.dropItem(slot, false);
+                    this.dropItem(slot, false);
                 };
                 break;
                 case "armour": {
-                 if (this.state.equippedItems.armour !== item) {
-                   this.state.equippedItems.armour = item;
-                   this.state.armour = item.integrity;
-                   updateArmourDisplay();
-                   showArmourDisplay();
-                 }
+                    if (this.state.equippedItems.armour !== item) {
+                        this.state.equippedItems.armour = item;
+                        this.state.armour = item.integrity;
+                        updateArmourDisplay();
+                        showArmourDisplay();
+                    }
                 };
                 break;
                 case "ammo": {
                     if (!item.used) {
-                     if (item.name === "ammo box" && this.state.equippedItems.mainTool?.type === "gun") {
-                       this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo += this.state.equippedItems.mainTool.constructor._properties.capacity * item.constructor._properties.increase;
+                        if (item.name === "ammo box" && this.state.equippedItems.mainTool?.type === "gun") {
+                            this.inventory.weapons[this.state.equippedItems.mainTool.name].ammo += this.state.equippedItems.mainTool.constructor._properties.capacity * item.constructor._properties.increase;
 
-                       item.used = true;
-                       this.dropItem(slot);
-                       updateAmmoDisplay();
-                      } else if (item.name === "multi ammo box" && this.state.equippedItems.mainTool?.type === "gun") {
-                        for (let w in this.inventory.weapons) {
-                          this.inventory.weapons[w].ammo += this.state.equippedItems.mainTool.constructor._properties.capacity * item.constructor._properties.increase;
-                        } 
-                        item.used = true;
-                        this.dropItem(slot);
-                        updateAmmoDisplay();
-                      }
-                     }
+                            item.used = true;
+                            this.dropItem(slot);
+                            updateAmmoDisplay();
+                        } else if (item.name === "multi ammo box" && this.state.equippedItems.mainTool?.type === "gun") {
+                            for (let w in this.inventory.weapons) {
+                                this.inventory.weapons[w].ammo += this.state.equippedItems.mainTool.constructor._properties.capacity * item.constructor._properties.increase;
+                            }
+                            item.used = true;
+                            this.dropItem(slot);
+                            updateAmmoDisplay();
+                        }
+                    }
                 }
                 break;
                 case "medicine": {
                     this.state.armed = false;
                     if (!item.used && this.state.vitals.health < 100) {
-                       this.state.vitals.health += Math.min(item.constructor._properties.regain, 100 - this.state.vitals.health);
-                       item.used = true;
-                       updateDescription();
-                       this.dropItem(slot);
-                       updateHealthBar();
-                     }
+                        this.state.vitals.health += Math.min(item.constructor._properties.regain, 100 - this.state.vitals.health);
+                        item.used = true;
+                        updateDescription();
+                        this.dropItem(slot);
+                        updateHealthBar();
+                    }
                 }
                 break;
                 case "gun": {
@@ -3551,6 +3697,7 @@ export class Avatar {
                 gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(buf), gl.STATIC_DRAW);
             }
 
+            $AUDIO.playSound("equip");
 
             return true;
         }
@@ -3566,9 +3713,9 @@ export class Avatar {
 
         switch (item.type) {
             case "armour": {
-               this.state.equippedItems.armour = undefined;
-               this.state.armour = 0;
-               hideArmourDisplay();
+                this.state.equippedItems.armour = undefined;
+                this.state.armour = 0;
+                hideArmourDisplay();
             };
             break;
             case "gun": {
@@ -3708,6 +3855,7 @@ export class Avatar {
 
             if ((Math.abs(x - avatar.trans.offsetX) < (avatar.width / 2 + width / 2)) && (Math.abs(y - avatar.trans.offsetY) < (avatar.height / 2 + height / 2))) {
                 avatar.hit(damage, this);
+                $AUDIO.playSound("punch");
                 if (this.state.equippedItems.mainTool?.type === "knife") this.state.equippedItems.mainTool.degrade();
             }
         }
@@ -3734,6 +3882,7 @@ export class Avatar {
                 this.state.pickup.offset.bRotation = obj.trans.rotation;
                 this.state.pickup.current = obj;
 
+                $AUDIO.playSound("equip");
                 return true;
             }
         }
@@ -3754,28 +3903,35 @@ export class Avatar {
     drop() {
         if (this.state.pickup.current) {
             this.state.pickup.current = undefined;
+            $AUDIO.playSound("equip");
         }
     }
 
     respawn() {
-     requestTransition((function() {
-      $SPECTATING = false;
-      this.state.vitals.health = 100; 
-      this.state.vitals.hunger = 100; 
-      updateHealthBar();
-      updateHungerDisplay();
- 
-      $CURRENT_MAP.avatars[this.id] = this;
-      $CURRENT_MAP.obstacles[this.id] = this;
- 
-      let {x, y} = $CURRENT_MAP.GRAPH.getRandomPoint();
-      let {centerX, centerY} = $CURRENT_MAP;
-      $CURRENT_MAP.move = true;
-      $CURRENT_MAP.translate(x - centerX, y - centerY);
-      noclip = false; 
-   
-      $MAP_DISPLAY.update();
-     }).bind(this));
+        requestTransition((function() {
+            $SPECTATING = false;
+            this.state.vitals.health = 100;
+            this.state.vitals.hunger = 100;
+            updateHealthBar();
+            updateHungerDisplay();
+
+            $CURRENT_MAP.avatars[this.id] = this;
+            $CURRENT_MAP.obstacles[this.id] = this;
+
+            let {
+                x,
+                y
+            } = $CURRENT_MAP.GRAPH.getRandomPoint();
+            let {
+                centerX,
+                centerY
+            } = $CURRENT_MAP;
+            $CURRENT_MAP.move = true;
+            $CURRENT_MAP.translate(x - centerX, y - centerY);
+            noclip = false;
+
+            $MAP_DISPLAY.update();
+        }).bind(this));
     }
 
     clean() {
@@ -4111,6 +4267,7 @@ export class Bot {
             }, function() {
                 this.state.position.body.texture = 11;
                 this.meleeAttack(this.state.strength, this.state.hitboxes.leftPunch);
+                if (distance(this.trans.offsetX, this.trans.offsetY, $AVATAR.trans.offsetX, $AVATAR.trans.offsetY) < 200) $AUDIO.playSound((Math.random() < 0.5) ? "swing-1" : "swing-2");
             }, function() {
                 this.state.position.body.texture = 0;
             }], this, [0.08, 0.08, 0.08, 0.15], function() {
@@ -4123,6 +4280,7 @@ export class Bot {
             }, function() {
                 this.state.position.body.texture = 13;
                 this.meleeAttack(this.state.strength, this.state.hitboxes.rightPunch);
+                if (distance(this.trans.offsetX, this.trans.offsetY, $AVATAR.trans.offsetX, $AVATAR.trans.offsetY) < 200) $AUDIO.playSound((Math.random() < 0.5) ? "swing-1" : "swing-2");
             }, function() {
                 this.state.position.body.texture = 0;
             }], this, [0.08, 0.08, 0.08, 0.15], function() {
@@ -4133,6 +4291,7 @@ export class Bot {
             }, function() {
                 this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[2];
                 this.meleeAttack(this.state.equippedItems.mainTool.constructor._properties.damage + this.state.strength, this.state.hitboxes.knife);
+                if (distance(this.trans.offsetX, this.trans.offsetY, $AVATAR.trans.offsetX, $AVATAR.trans.offsetY) < 200) $AUDIO.playSound((Math.random() < 0.5) ? "knife-1" : "knife-2");
             }, function() {
                 this.state.position.body.texture = this.state.equippedItems.mainTool.constructor._properties.useTextures[1];
             }, function() {
@@ -4201,19 +4360,21 @@ export class Bot {
             this.state.recoilAnimation.start();
 
             const map = this.map;
-            let bulletCombo = (this.state.equippedItems.mainTool.shotgun) ? this.state.equippedItems.mainTool.constructor._properties.bulletCombo:1;
- 
-          for (let i = 0; i < bulletCombo; i++) {
-            const [initialTrajectoryX, initialTrajectoryY] = rotate(0, 1, (this.trans.rotation) * 180 / Math.PI);
+            let bulletCombo = (this.state.equippedItems.mainTool.shotgun) ? this.state.equippedItems.mainTool.constructor._properties.bulletCombo : 1;
 
-            let randomBulletRotation = random(this.state.equippedItems.mainTool.constructor._properties.accuracy || 0);
-            randomBulletRotation = (Math.random() < 0.5) ? -randomBulletRotation : randomBulletRotation;
+            for (let i = 0; i < bulletCombo; i++) {
+                const [initialTrajectoryX, initialTrajectoryY] = rotate(0, 1, (this.trans.rotation) * 180 / Math.PI);
 
-            let [finalTrajectoryX, finalTrajectoryY] = rotate(initialTrajectoryX, initialTrajectoryY, randomBulletRotation);
-            let [initialPointX, initialPointY] = rotate(0, this.state.equippedItems.mainTool.constructor._properties.nozzelLength, (this.trans.rotation) * 180 / Math.PI);
+                let randomBulletRotation = random(this.state.equippedItems.mainTool.constructor._properties.accuracy || 0);
+                randomBulletRotation = (Math.random() < 0.5) ? -randomBulletRotation : randomBulletRotation;
 
-            map.link(new Bullet(initialPointX + this.trans.offsetX, initialPointY + this.trans.offsetY, ((this.trans.rotation) * 180 / Math.PI) + 90, finalTrajectoryX * this.state.equippedItems.mainTool.constructor._properties.bulletSpeed, finalTrajectoryY * this.state.equippedItems.mainTool.constructor._properties.bulletSpeed, this.state.equippedItems.mainTool.constructor._properties.damage, this));
-          }
+                let [finalTrajectoryX, finalTrajectoryY] = rotate(initialTrajectoryX, initialTrajectoryY, randomBulletRotation);
+                let [initialPointX, initialPointY] = rotate(0, this.state.equippedItems.mainTool.constructor._properties.nozzelLength, (this.trans.rotation) * 180 / Math.PI);
+
+                let bullet = new Bullet(initialPointX + this.trans.offsetX, initialPointY + this.trans.offsetY, ((this.trans.rotation) * 180 / Math.PI) + 90, finalTrajectoryX * this.state.equippedItems.mainTool.constructor._properties.bulletSpeed, finalTrajectoryY * this.state.equippedItems.mainTool.constructor._properties.bulletSpeed, this.state.equippedItems.mainTool.constructor._properties.damage, this);
+                if (this.state.equippedItems.mainTool.constructor._properties.explosive) bullet.explosive = true;
+                map.link(bullet);
+            }
 
             let [shellDirectionX, shellDirectionY] = rotate(20, 0, (this.trans.rotation) * 180 / Math.PI), randomShellRotation = random(10);
             let [randomShellDirectionX, randomShellDirectionY] = rotate(shellDirectionX, shellDirectionY, (Math.random() < 0.5) ? -randomShellRotation : randomShellRotation);
@@ -4226,6 +4387,11 @@ export class Bot {
 
             if (this.state.equippedItems.mainTool.reloadProgress === this.state.equippedItems.mainTool.constructor._properties.capacity) this.state.equippedItems.mainTool.loaded = false;
 
+            if (distance(this.trans.offsetX, this.trans.offsetY, $AVATAR.trans.offsetX, $AVATAR.trans.offsetY) < 200) {
+                if (this.state.equippedItems.mainTool) $AUDIO.playSound(this.state.equippedItems.mainTool?.constructor._properties.shotSoundEffect);
+                $AUDIO.playSound("bulletshell");
+            }
+
         }, this, 0);
     }
 
@@ -4237,7 +4403,7 @@ export class Bot {
                 let attacker = this.map.avatars[owner.id];
                 if (attacker) attacker.state.kills += 1;
                 if (attacker === $AVATAR) {
-                  $SCORE += this.state.killValue;
+                    $SCORE += this.state.killValue;
                 }
 
                 this.purgeItems(5);
@@ -4277,6 +4443,7 @@ export class Bot {
 
     reload() {
         this.state.reloadTimeout.start();
+        if (this.state.equippedItems.mainTool && distance(this.trans.offsetX, this.trans.offsetY, $AVATAR.trans.offsetX, $AVATAR.trans.offsetY) < 200) $AUDIO.playSound(this.state.equippedItems.mainTool?.constructor._properties.reloadSoundEffect || "pistol-reload");
     }
 
     wander(anchorX, anchorY) {
@@ -4716,7 +4883,7 @@ export class Bot {
 
         this.state.attack.multiple = multiple;
         this.state.attack.invertTargets = invert;
-        if (ids.includes($AVATAR.id)) this.state.hostile = true;
+        if (ids.includes($AVATAR.state.targetId) && !invert) this.state.hostile = true;
 
         if (target && !this.state.attack.multiple) {
             this.state.target.current = target;
@@ -4780,6 +4947,7 @@ export class Bot {
 
             if ((Math.abs(x - avatar.trans.offsetX) < (avatar.width / 2 + width / 2)) && (Math.abs(y - avatar.trans.offsetY) < (avatar.height / 2 + height / 2))) {
                 avatar.hit(damage, this);
+                if (distance(this.trans.offsetX, this.trans.offsetY, $AVATAR.trans.offsetX, $AVATAR.trans.offsetY) < 200) $AUDIO.playSound("punch");
             }
         }
     }
@@ -5258,8 +5426,8 @@ export class _Map_ {
     };
 
     static spectating = {
-     active: true, 
-     avatar: undefined
+        active: true,
+        avatar: undefined
     };
 
     static _all = {};
@@ -5310,7 +5478,7 @@ export class _Map_ {
         this.PARENT_MAP = undefined;
         this.mapId = undefined;
         this.pickups = {};
-        this.CARRY = undefined; 
+        this.CARRY = undefined;
 
         this.barriers = (root) ? [new Barrier(-(width / 2), (height / 2) + 20, width, 20), new Barrier(-(width / 2), -(height / 2), width, 20), new Barrier(-(width / 2) - 20, height / 2, 20, height), new Barrier((width / 2), height / 2, 20, height)] : [new VisibleBarrier((-width / 2) - 125, 0, 250, height + 10), new VisibleBarrier(0, -(height / 2) - 125, width + 500, 250), new VisibleBarrier((width / 2) + 125, 0, 250, height + 10), new VisibleBarrier(0, (height / 2) + 125, width + 500, 250), new VisibleBarrier(0, (height / 2) + 12, width, 24, [70, 70, 70, 1.0])];
 
@@ -5331,17 +5499,20 @@ export class _Map_ {
         gl.uniform1f(locations.scale, scale);
         gl.uniform1f(locations.darkness, this.darkness + globalDarkness);
 
-          if (_Map_.spectating.active) {
-            if (!_Map_.spectating.avatar) _Map_.spectating.avatar = $CURRENT_MAP.avatars[random($CURRENT_MAP.avatarCount)]; 
-             if (_Map_.spectating.avatar) {
-              let {x, y} = _Map_.spectating.avatar.trans;
-               for (let i in this.objects) {
-                if (this.objects[i] === _Map_.spectating.avatar) continue;
-                if (!this.objects[i].managedMovement) this.objects[i].translate(-x, -y);
-                updateCoordsDisplay();
-               }
-             }
-          }
+        if (_Map_.spectating.active) {
+            if (!_Map_.spectating.avatar) _Map_.spectating.avatar = $CURRENT_MAP.avatars[random($CURRENT_MAP.avatarCount)];
+            if (_Map_.spectating.avatar) {
+                let {
+                    x,
+                    y
+                } = _Map_.spectating.avatar.trans;
+                for (let i in this.objects) {
+                    if (this.objects[i] === _Map_.spectating.avatar) continue;
+                    if (!this.objects[i].managedMovement) this.objects[i].translate(-x, -y);
+                    updateCoordsDisplay();
+                }
+            }
+        }
 
         if (_Map_._recording.isRecording) _Map_._recording.recording.push($CURRENT_MAP.centerX, $CURRENT_MAP.centerY, $AVATAR.trans.rotation * 180 / Math.PI, $AVATAR.state.walking);
 
@@ -5500,6 +5671,7 @@ export class _Map_ {
             }
 
             this.objectCount++;
+            if (obj.type !== "avatar" && !obj instanceof PickupRing && AUDIO.themePlaying) $AUDIO.playSound("equip");
         } else {
             return "invalid object.";
         }
@@ -5508,8 +5680,8 @@ export class _Map_ {
     unlink(id) {
         if (this.objects[id]) {
             const obj = this.objects[id];
-            obj.linked = false; 
- 
+            obj.linked = false;
+
             if (this.objects[id].clean) this.objects[id].clean();
             if (this.objects[id].hasCluster && !this.objects[id].preserveCluster) {
                 this.objects[id].cluster.unlink(this.objects[id].clusterIndex);
@@ -5519,8 +5691,8 @@ export class _Map_ {
             if (this.objects[id].type === "avatar") this.avatarCount--;
 
             if (obj.subLayer && !obj.hasCluster) {
-             let objSubLayer = this.subLayers[obj.subLayer];
-             objSubLayer.splice(objSubLayer.indexOf(obj), 1);
+                let objSubLayer = this.subLayers[obj.subLayer];
+                objSubLayer.splice(objSubLayer.indexOf(obj), 1);
             }
 
             delete this.interactables[id];
@@ -5717,7 +5889,7 @@ export class _Map_ {
             this.centerY += y;
 
             if (this.CARRY) {
-             this.CARRY.translate(x, y, 0, true);
+                this.CARRY.translate(x, y, 0, true);
             }
 
             for (let i in this.objects) {
@@ -6032,8 +6204,8 @@ export class _Joystick_ extends _Object_ {
             }
         }, 30, 30);
         this.position = position;
-        this.desktopMovementAnimation = new LoopAnimation(function() { 
-         this.desktopMovementCallback();
+        this.desktopMovementAnimation = new LoopAnimation(function() {
+            this.desktopMovementCallback();
         }, this, 0.01);
         this.base = {
             x: position.x,

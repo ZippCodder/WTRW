@@ -80,25 +80,28 @@
       SmallTable,
       MedKit,
       AmmoBox,
-      MultiAmmoBox, 
+      MultiAmmoBox,
       BasicArmour,
-      MercenaryArmour, 
+      MercenaryArmour,
       SwatArmour,
-      SteakAndFries, 
+      SteakAndFries,
       DX_9,
       FURS_55,
       NOSS_7,
       X6_91,
       RemoteExplosive,
-      RemoteDetonator, 
+      RemoteDetonator,
       ProximityExplosive,
       CombatKnife,
-      Money, 
-      Door, 
-      LightSwitch, 
-      SmallPlant, 
-      CandyBar, 
-      StubbyShotgun
+      Money,
+      Door,
+      LightSwitch,
+      SmallPlant,
+      CandyBar,
+      StubbyShotgun,
+      RobberShotgun,
+      ClassicShotgun, 
+      HeavyShotgun
   } = await import("/src/scripts/objects.js");
 
   import _dialogues from "/src/scripts/dialogue.js";
@@ -131,9 +134,9 @@
   grabButton.onclick = toggleGrab;
 
   if (!$IS_MOBILE) {
-   window.addEventListener("keydown",(e) => {
-     if (e.code === "KeyE") runAction(e);
-   });
+      window.addEventListener("keydown", (e) => {
+          if (e.code === "KeyE") runAction(e);
+      });
   }
 
   actionButton.onclick = runAction;
@@ -291,8 +294,8 @@
   }
 
   function startDialogue(e) {
-    //toggleNote("Sorry, we're working on that! Dialogue will be included in newer versions.");
-    //return;
+      //toggleNote("Sorry, we're working on that! Dialogue will be included in newer versions.");
+      //return;
 
       e.preventDefault();
 
@@ -353,10 +356,12 @@
       }
   }
 
-  window.addEventListener("keydown", function({key}) {
-    if (key === "Escape" && $ACTIVE_DIALOGUE_PARTY) {
-       endDialogue();
-    }
+  window.addEventListener("keydown", function({
+      key
+  }) {
+      if (key === "Escape" && $ACTIVE_DIALOGUE_PARTY) {
+          endDialogue();
+      }
   });
 
   speakButton.ontouchstart = startDialogue;
@@ -368,8 +373,8 @@
 
   const openCraftingButton = document.querySelectorAll(".controls-container__button").item(2);
 
-  openCraftingButton.addEventListener("click",() => {
-    toggleNote("Sorry, we're working on that! Crafting will be included in newer versions.");
+  openCraftingButton.addEventListener("click", () => {
+      toggleNote("Sorry, we're working on that! Crafting will be included in newer versions.");
   });
 
   /* MAP CONTROLS AND MINIMAP RENDERING */
@@ -429,13 +434,13 @@
   function startDisplayMovement(e) {
       e.preventDefault();
       move = true;
-   
+
       if (!$MAP_DISPLAY.useWorldMap) {
-      offsetAnchor.x = ((e.touches) ? e.touches[0].clientX : e.clientX) + $MAP_DISPLAY.displayOffset.x;
-      offsetAnchor.y = ((e.touches) ? e.touches[0].clientY : e.clientY) + $MAP_DISPLAY.displayOffset.y;
+          offsetAnchor.x = ((e.touches) ? e.touches[0].clientX : e.clientX) + $MAP_DISPLAY.displayOffset.x;
+          offsetAnchor.y = ((e.touches) ? e.touches[0].clientY : e.clientY) + $MAP_DISPLAY.displayOffset.y;
       } else {
-      offsetAnchor.x = ((e.touches) ? e.touches[0].clientX : e.clientX) + $MAP_DISPLAY.worldMapOffset.x;
-      offsetAnchor.y = ((e.touches) ? e.touches[0].clientY : e.clientY) + $MAP_DISPLAY.worldMapOffset.y;
+          offsetAnchor.x = ((e.touches) ? e.touches[0].clientX : e.clientX) + $MAP_DISPLAY.worldMapOffset.x;
+          offsetAnchor.y = ((e.touches) ? e.touches[0].clientY : e.clientY) + $MAP_DISPLAY.worldMapOffset.y;
       }
   }
 
@@ -443,17 +448,17 @@
       e.preventDefault();
 
       if (move) {
-       if (!$MAP_DISPLAY.useWorldMap) {
-          $MAP_DISPLAY.displayOffset.x = offsetAnchor.x - ((e.touches) ? e.touches[0].clientX : e.clientX);
-          $MAP_DISPLAY.displayOffset.y = offsetAnchor.y - ((e.touches) ? e.touches[0].clientY : e.clientY);
+          if (!$MAP_DISPLAY.useWorldMap) {
+              $MAP_DISPLAY.displayOffset.x = offsetAnchor.x - ((e.touches) ? e.touches[0].clientX : e.clientX);
+              $MAP_DISPLAY.displayOffset.y = offsetAnchor.y - ((e.touches) ? e.touches[0].clientY : e.clientY);
 
-          updateCoordinates($CURRENT_MAP.centerX + $MAP_DISPLAY.displayOffset.x, $CURRENT_MAP.centerY - $MAP_DISPLAY.displayOffset.y);
-       } else {
-          $MAP_DISPLAY.worldMapOffset.x = offsetAnchor.x - ((e.touches) ? e.touches[0].clientX : e.clientX);
-          $MAP_DISPLAY.worldMapOffset.y = offsetAnchor.y - ((e.touches) ? e.touches[0].clientY : e.clientY);
+              updateCoordinates($CURRENT_MAP.centerX + $MAP_DISPLAY.displayOffset.x, $CURRENT_MAP.centerY - $MAP_DISPLAY.displayOffset.y);
+          } else {
+              $MAP_DISPLAY.worldMapOffset.x = offsetAnchor.x - ((e.touches) ? e.touches[0].clientX : e.clientX);
+              $MAP_DISPLAY.worldMapOffset.y = offsetAnchor.y - ((e.touches) ? e.touches[0].clientY : e.clientY);
 
-          updateCoordinates($MAP_DISPLAY.worldMapOffset.x, $MAP_DISPLAY.worldMapOffset.y);
-       }
+              updateCoordinates($MAP_DISPLAY.worldMapOffset.x, $MAP_DISPLAY.worldMapOffset.y);
+          }
       }
   }
 
@@ -634,25 +639,25 @@
       mdgl.uniform4fv(mdLocations.color6, fromRGB([204, 44, 219, 1]));
       mdgl.uniform1f(mdLocations.worldUnitX, (worldUnitX / 4) + (worldUnitY / 4));
       mdgl.uniform1f(mdLocations.worldUnitY, (worldUnitX / 4) + (worldUnitY / 4));
-      mdgl.vertexAttrib2fv(mdLocations.point, [0.01,0.01]);
+      mdgl.vertexAttrib2fv(mdLocations.point, [0.01, 0.01]);
 
-                let t = mdgl.createTexture();
+      let t = mdgl.createTexture();
 
-                mdgl.bindTexture(mdgl.TEXTURE_2D, t);
-                mdgl.texImage2D(mdgl.TEXTURE_2D, 0, mdgl.RGBA, mdgl.RGBA, mdgl.UNSIGNED_BYTE, document.querySelector("#world-map"));
-                mdgl.texParameteri(mdgl.TEXTURE_2D, mdgl.TEXTURE_MAG_FILTER, mdgl.LINEAR);
-                mdgl.texParameteri(mdgl.TEXTURE_2D, mdgl.TEXTURE_MIN_FILTER, mdgl.LINEAR);
-                mdgl.texParameteri(mdgl.TEXTURE_2D, mdgl.TEXTURE_WRAP_S, mdgl.CLAMP_TO_EDGE);
-                mdgl.texParameteri(mdgl.TEXTURE_2D, mdgl.TEXTURE_WRAP_T, mdgl.CLAMP_TO_EDGE);
+      mdgl.bindTexture(mdgl.TEXTURE_2D, t);
+      mdgl.texImage2D(mdgl.TEXTURE_2D, 0, mdgl.RGBA, mdgl.RGBA, mdgl.UNSIGNED_BYTE, document.querySelector("#world-map"));
+      mdgl.texParameteri(mdgl.TEXTURE_2D, mdgl.TEXTURE_MAG_FILTER, mdgl.LINEAR);
+      mdgl.texParameteri(mdgl.TEXTURE_2D, mdgl.TEXTURE_MIN_FILTER, mdgl.LINEAR);
+      mdgl.texParameteri(mdgl.TEXTURE_2D, mdgl.TEXTURE_WRAP_S, mdgl.CLAMP_TO_EDGE);
+      mdgl.texParameteri(mdgl.TEXTURE_2D, mdgl.TEXTURE_WRAP_T, mdgl.CLAMP_TO_EDGE);
 
-                let t2 = mdgl.createTexture();
+      let t2 = mdgl.createTexture();
 
-                mdgl.bindTexture(mdgl.TEXTURE_2D, t2);
-                mdgl.texImage2D(mdgl.TEXTURE_2D, 0, mdgl.RGBA, mdgl.RGBA, mdgl.UNSIGNED_BYTE, document.querySelector("#pinpoint"));
-                mdgl.texParameteri(mdgl.TEXTURE_2D, mdgl.TEXTURE_MAG_FILTER, mdgl.LINEAR);
-                mdgl.texParameteri(mdgl.TEXTURE_2D, mdgl.TEXTURE_MIN_FILTER, mdgl.LINEAR);
-                mdgl.texParameteri(mdgl.TEXTURE_2D, mdgl.TEXTURE_WRAP_S, mdgl.CLAMP_TO_EDGE);
-                mdgl.texParameteri(mdgl.TEXTURE_2D, mdgl.TEXTURE_WRAP_T, mdgl.CLAMP_TO_EDGE);
+      mdgl.bindTexture(mdgl.TEXTURE_2D, t2);
+      mdgl.texImage2D(mdgl.TEXTURE_2D, 0, mdgl.RGBA, mdgl.RGBA, mdgl.UNSIGNED_BYTE, document.querySelector("#pinpoint"));
+      mdgl.texParameteri(mdgl.TEXTURE_2D, mdgl.TEXTURE_MAG_FILTER, mdgl.LINEAR);
+      mdgl.texParameteri(mdgl.TEXTURE_2D, mdgl.TEXTURE_MIN_FILTER, mdgl.LINEAR);
+      mdgl.texParameteri(mdgl.TEXTURE_2D, mdgl.TEXTURE_WRAP_S, mdgl.CLAMP_TO_EDGE);
+      mdgl.texParameteri(mdgl.TEXTURE_2D, mdgl.TEXTURE_WRAP_T, mdgl.CLAMP_TO_EDGE);
 
       return {
           buffer: mdgl.createBuffer(),
@@ -668,8 +673,8 @@
       ctx.clear(ctx.COLOR_BUFFER_BIT);
       props.ext.bindVertexArrayOES(props.vao);
 
-      ctx.uniform1f(props.locations.scale, ($MAP_DISPLAY.useInteractiveDisplay) ? (!$MAP_DISPLAY.useWorldMap) ? $MAP_DISPLAY.interactiveScale:$MAP_DISPLAY.worldMapScale : $MAP_DISPLAY.scale);
-      ctx.uniform2fv(props.locations.translation, [($MAP_DISPLAY.useWorldMap) ? -$MAP_DISPLAY.worldMapOffset.x:(-$CURRENT_MAP.centerX - $MAP_DISPLAY.displayOffset.x), ($MAP_DISPLAY.useWorldMap) ? $MAP_DISPLAY.worldMapOffset.y:(-$CURRENT_MAP.centerY + $MAP_DISPLAY.displayOffset.y)]);
+      ctx.uniform1f(props.locations.scale, ($MAP_DISPLAY.useInteractiveDisplay) ? (!$MAP_DISPLAY.useWorldMap) ? $MAP_DISPLAY.interactiveScale : $MAP_DISPLAY.worldMapScale : $MAP_DISPLAY.scale);
+      ctx.uniform2fv(props.locations.translation, [($MAP_DISPLAY.useWorldMap) ? -$MAP_DISPLAY.worldMapOffset.x : (-$CURRENT_MAP.centerX - $MAP_DISPLAY.displayOffset.x), ($MAP_DISPLAY.useWorldMap) ? $MAP_DISPLAY.worldMapOffset.y : (-$CURRENT_MAP.centerY + $MAP_DISPLAY.displayOffset.y)]);
 
       ctx.activeTexture(ctx.TEXTURE0);
       ctx.bindTexture(ctx.TEXTURE_2D, props.texture);
@@ -693,19 +698,19 @@
       ctx.enableVertexAttribArray(3);
 
       if (!$MAP_DISPLAY.useWorldMap) {
-       ctx.disableVertexAttribArray(2);
-       ctx.disableVertexAttribArray(3);
-      }   
+          ctx.disableVertexAttribArray(2);
+          ctx.disableVertexAttribArray(3);
+      }
 
       ctx.drawArrays(ctx.TRIANGLES, 0, bufferData.length / 8);
 
       if ($MAP_DISPLAY.useWorldMap) {
-       bufferData = [...$MAP_DISPLAY.pinpointVertices];
+          bufferData = [...$MAP_DISPLAY.pinpointVertices];
 
-       ctx.bindBuffer(ctx.ARRAY_BUFFER, props.buffer);
-       ctx.bufferData(ctx.ARRAY_BUFFER, new Float32Array(bufferData), ctx.DYNAMIC_DRAW);
-      
-       ctx.drawArrays(ctx.TRIANGLES, 0, bufferData.length / 8);
+          ctx.bindBuffer(ctx.ARRAY_BUFFER, props.buffer);
+          ctx.bufferData(ctx.ARRAY_BUFFER, new Float32Array(bufferData), ctx.DYNAMIC_DRAW);
+
+          ctx.drawArrays(ctx.TRIANGLES, 0, bufferData.length / 8);
       }
 
       if ($MAP_DISPLAY.waypoint.set && $CURRENT_MAP.id === $MAP_DISPLAY.waypoint.map && !$MAP_DISPLAY.useWorldMap) {
@@ -735,14 +740,14 @@
           y: 0
       },
       worldMapOffset: {
-          x: 0, 
+          x: 0,
           y: 0
       },
       objectsVertices: [],
       avatarsVertices: [],
       waypointVertices: [],
       pinpointVertices: [],
-      mapVertices: [-600,300,1,0,0.01,0.01,0,0,600,300,1,0,0.01,0.01,1,0,-600,-300,1,0,0.01,0.01,0,1,600,300,1,0,0.01,0.01,1,0,-600,-300,1,0,0.01,0.01,0,1,600,-300,1,0,0.01,0.01,1,1],
+      mapVertices: [-600, 300, 1, 0, 0.01, 0.01, 0, 0, 600, 300, 1, 0, 0.01, 0.01, 1, 0, -600, -300, 1, 0, 0.01, 0.01, 0, 1, 600, 300, 1, 0, 0.01, 0.01, 1, 0, -600, -300, 1, 0, 0.01, 0.01, 0, 1, 600, -300, 1, 0, 0.01, 0.01, 1, 1],
       waypoint: {
           x: 0,
           y: 0,
@@ -798,9 +803,9 @@
 
           if (this.waypoint.set) this.updateWaypoint($CURRENT_MAP.centerX, $CURRENT_MAP.centerY, this.waypoint.x, this.waypoint.y);
       },
-      addPinpoint: function(x,y) {
-        this.pinpointVertices.push(-8,16,1,0.5,x,y,0,0,8,16,1,0.5,x,y,1,0,-8,-16,1,0.5,x,y,0,1,8,16,1,0.5,x,y,1,0,-8,-16,1,0.5,x,y,0,1,8,-16,1,0.5,x,y,1,1);
-      }, 
+      addPinpoint: function(x, y) {
+          this.pinpointVertices.push(-8, 16, 1, 0.5, x, y, 0, 0, 8, 16, 1, 0.5, x, y, 1, 0, -8, -16, 1, 0.5, x, y, 0, 1, 8, 16, 1, 0.5, x, y, 1, 0, -8, -16, 1, 0.5, x, y, 0, 1, 8, -16, 1, 0.5, x, y, 1, 1);
+      },
       render: function() {
           if (this.useInteractiveDisplay) {
               renderDisplayContext(mdContext2, mdContextProperties2);
@@ -810,31 +815,31 @@
       }
   }
 
-  $MAP_DISPLAY.addPinpoint(0,0);
-  $MAP_DISPLAY.addPinpoint(-377,80);
-  $MAP_DISPLAY.addPinpoint(-190,240);
-  $MAP_DISPLAY.addPinpoint(-159,220);
-  $MAP_DISPLAY.addPinpoint(61,172);
-  $MAP_DISPLAY.addPinpoint(-412,55);
-  $MAP_DISPLAY.addPinpoint(-313,39);
-  $MAP_DISPLAY.addPinpoint(-297,8);
-  $MAP_DISPLAY.addPinpoint(-268,75);
-  $MAP_DISPLAY.addPinpoint(-292,-51);
-  $MAP_DISPLAY.addPinpoint(-327,-19);
-  $MAP_DISPLAY.addPinpoint(-544,-184);
-  $MAP_DISPLAY.addPinpoint(-480,136);
-  $MAP_DISPLAY.addPinpoint(-416,170);
-  $MAP_DISPLAY.addPinpoint(-304,177);
-  $MAP_DISPLAY.addPinpoint(-340,192);
-  $MAP_DISPLAY.addPinpoint(-409,114);
-  $MAP_DISPLAY.addPinpoint(-253,-192);
-  $MAP_DISPLAY.addPinpoint(-220,-178);
-  $MAP_DISPLAY.addPinpoint(-49,54);
-  $MAP_DISPLAY.addPinpoint(338,144);
-  $MAP_DISPLAY.addPinpoint(408,86);
-  $MAP_DISPLAY.addPinpoint(398,-151);
-  $MAP_DISPLAY.addPinpoint(451,-172);
-  $MAP_DISPLAY.addPinpoint(543,167);
+  $MAP_DISPLAY.addPinpoint(0, 0);
+  $MAP_DISPLAY.addPinpoint(-377, 80);
+  $MAP_DISPLAY.addPinpoint(-190, 240);
+  $MAP_DISPLAY.addPinpoint(-159, 220);
+  $MAP_DISPLAY.addPinpoint(61, 172);
+  $MAP_DISPLAY.addPinpoint(-412, 55);
+  $MAP_DISPLAY.addPinpoint(-313, 39);
+  $MAP_DISPLAY.addPinpoint(-297, 8);
+  $MAP_DISPLAY.addPinpoint(-268, 75);
+  $MAP_DISPLAY.addPinpoint(-292, -51);
+  $MAP_DISPLAY.addPinpoint(-327, -19);
+  $MAP_DISPLAY.addPinpoint(-544, -184);
+  $MAP_DISPLAY.addPinpoint(-480, 136);
+  $MAP_DISPLAY.addPinpoint(-416, 170);
+  $MAP_DISPLAY.addPinpoint(-304, 177);
+  $MAP_DISPLAY.addPinpoint(-340, 192);
+  $MAP_DISPLAY.addPinpoint(-409, 114);
+  $MAP_DISPLAY.addPinpoint(-253, -192);
+  $MAP_DISPLAY.addPinpoint(-220, -178);
+  $MAP_DISPLAY.addPinpoint(-49, 54);
+  $MAP_DISPLAY.addPinpoint(338, 144);
+  $MAP_DISPLAY.addPinpoint(408, 86);
+  $MAP_DISPLAY.addPinpoint(398, -151);
+  $MAP_DISPLAY.addPinpoint(451, -172);
+  $MAP_DISPLAY.addPinpoint(543, 167);
 
   const mdContextProperties1 = setDisplayContext(mdContext1);
   const mdContextProperties2 = setDisplayContext(mdContext2);
@@ -892,21 +897,21 @@
   function mapZoomIn(e) {
       e.preventDefault();
 
-    if (!$MAP_DISPLAY.useWorldMap) {
-      if ($MAP_DISPLAY.interactiveScale - 0.5 > 1) $MAP_DISPLAY.interactiveScale -= 0.5;
-    } else {
-      if ($MAP_DISPLAY.worldMapScale - 0.5 > 1) $MAP_DISPLAY.worldMapScale -= 0.5;
-    }
+      if (!$MAP_DISPLAY.useWorldMap) {
+          if ($MAP_DISPLAY.interactiveScale - 0.5 > 1) $MAP_DISPLAY.interactiveScale -= 0.5;
+      } else {
+          if ($MAP_DISPLAY.worldMapScale - 0.5 > 1) $MAP_DISPLAY.worldMapScale -= 0.5;
+      }
   }
 
   function mapZoomOut(e) {
       e.preventDefault();
 
-    if (!$MAP_DISPLAY.useWorldMap) {
-      if ($MAP_DISPLAY.interactiveScale + 0.5 < 15) $MAP_DISPLAY.interactiveScale += 0.5;
-    } else {
-      if ($MAP_DISPLAY.worldMapScale + 0.5 < 15) $MAP_DISPLAY.worldMapScale += 0.5;
-    }
+      if (!$MAP_DISPLAY.useWorldMap) {
+          if ($MAP_DISPLAY.interactiveScale + 0.5 < 15) $MAP_DISPLAY.interactiveScale += 0.5;
+      } else {
+          if ($MAP_DISPLAY.worldMapScale + 0.5 < 15) $MAP_DISPLAY.worldMapScale += 0.5;
+      }
   }
 
   mapZoomInButton.ontouchstart = mapZoomIn;
@@ -918,8 +923,8 @@
   /* HUNGER DISPLAY */
 
   window.updateHungerDisplay = function() {
-   document.querySelector("#hunger").innerText = $AVATAR.state.vitals.hunger;
-   document.querySelector("#hunger").style.color = ($AVATAR.state.vitals.hunger) ? "white":"#e30f00";
+      document.querySelector("#hunger").innerText = $AVATAR.state.vitals.hunger;
+      document.querySelector("#hunger").style.color = ($AVATAR.state.vitals.hunger) ? "white" : "#e30f00";
   }
 
   /* MONEY DISPLAY */
@@ -928,8 +933,8 @@
   moneyDisplay.innerText = Math.round(localStorage.getItem("player-cash")) || 0;
 
   window.updateMoneyDisplay = function() {
-   moneyDisplay.innerText = Math.round($AVATAR.inventory.cash);
-   localStorage.setItem("player-cash", $AVATAR.inventory.cash.toString());
+      moneyDisplay.innerText = Math.round($AVATAR.inventory.cash);
+      localStorage.setItem("player-cash", $AVATAR.inventory.cash.toString());
   }
 
   /* AMMO BUTTON AND RELOAD FUNCTIONALITY */
@@ -982,7 +987,7 @@
   }
 
   window.updateArmourDisplay = function() {
-    armourDisplay.querySelector("p").innerText = `${$AVATAR.state.armour}`;
+      armourDisplay.querySelector("p").innerText = `${$AVATAR.state.armour}`;
   }
 
 
@@ -1001,174 +1006,174 @@
 
   if ($IS_MOBILE) {
 
-  $JOYSTICK_R = new _Joystick_(false, joystickSizes.right, fixedJoysticks, joystickPositions.right);
+      $JOYSTICK_R = new _Joystick_(false, joystickSizes.right, fixedJoysticks, joystickPositions.right);
 
-  $RELOAD_BUTTON = new _Button_(textures.controls.reloadbutton, textures.controls.reloadbuttonactive, (worldWidth / 2) - 38, -(worldHeight / 2) + 20, function(pX, pY) {
-      if (this.enabled) {
-          $AVATAR.reload();
-          this.enabled = false;
-      }
-  }, 8.5, 1.4, false, [-6, 6, 1, 0, 0, 6, 6, 1, 0.9375, 0, -6, -6, 1, 0, 0.9375, 6, 6, 1, 0.9375, 0, -6, -6, 1, 0, 0.9375, 6, -6, 1, 0.9375, 0.9375]);
-  $RELOAD_BUTTON.hidden = true;
-
-  $AVATAR_MODE_BUTTON = new _Button_(textures.controls.avatarmode2, textures.controls.avatarmode1, (worldWidth / 2) - 10, (worldHeight / 2) - 15, function(pX, pY) {
-      this.on = !this.on;
-      $AVATAR.state.hostile = !$AVATAR.state.hostile;
-  }, 9, 1.5, true, [-4.5, 4.5, 1, 0, 0, 4.5, 4.5, 1, 0.703125, 0, -4.5, -4.5, 1, 0, 0.703125, 4.5, 4.5, 1, 0.703125, 0, -4.5, -4.5, 1, 0, 0.703125, 4.5, -4.5, 1, 0.703125, 0.703125]);
-  $AVATAR_MODE_BUTTON.hidden = true;
-
-  $DROP_ITEM_BUTTON = new _Button_(textures.controls.dropitem1, textures.controls.dropitem2, (worldWidth / 2) - 35, -(worldHeight / 2) + 30, function(pX, pY) {
-      $AVATAR.drop();
-  }, 8.5, 1.4, false, [-6, 6, 1, 0, 0, 6, 6, 1, 0.9375, 0, -6, -6, 1, 0, 0.9375, 6, 6, 1, 0.9375, 0, -6, -6, 1, 0, 0.9375, 6, -6, 1, 0.9375, 0.9375]);
-  $DROP_ITEM_BUTTON.hidden = true;
-
-
-  function moveJoystick(e, m = true) {
-      e.preventDefault();
-
-      let coords0 = e.touches[0],
-          coords1 = e.touches[1];
-
-      if ($JOYSTICK_L.base.anchored) {
-          configure($JOYSTICK_L);
-      } else if (m) {
-          for (let i = 0; i < 2; i++) {
-              if (e.touches[i]?.clientX < window.innerWidth / 2 && (e.touches[i]?.identifier !== $JOYSTICK_R.id)) {
-
-                  $JOYSTICK_L.id = e.touches[i].identifier;
-                  configure($JOYSTICK_L);
-                  break;
-              }
+      $RELOAD_BUTTON = new _Button_(textures.controls.reloadbutton, textures.controls.reloadbuttonactive, (worldWidth / 2) - 38, -(worldHeight / 2) + 20, function(pX, pY) {
+          if (this.enabled) {
+              $AVATAR.reload();
+              this.enabled = false;
           }
-      }
+      }, 8.5, 1.4, false, [-6, 6, 1, 0, 0, 6, 6, 1, 0.9375, 0, -6, -6, 1, 0, 0.9375, 6, 6, 1, 0.9375, 0, -6, -6, 1, 0, 0.9375, 6, -6, 1, 0.9375, 0.9375]);
+      $RELOAD_BUTTON.hidden = true;
 
-      if ($JOYSTICK_R.base.anchored) {
-          configure($JOYSTICK_R);
-      } else if (m) {
-          for (let i = 0; i < 2; i++) {
-              if (e.touches[i]?.clientX > window.innerWidth / 2 && (e.touches[i]?.identifier !== $JOYSTICK_L.id)) {
-                  $JOYSTICK_R.id = e.touches[i].identifier;
-                  configure($JOYSTICK_R);
-                  break;
-              }
-          }
-      }
+      $AVATAR_MODE_BUTTON = new _Button_(textures.controls.avatarmode2, textures.controls.avatarmode1, (worldWidth / 2) - 10, (worldHeight / 2) - 15, function(pX, pY) {
+          this.on = !this.on;
+          $AVATAR.state.hostile = !$AVATAR.state.hostile;
+      }, 9, 1.5, true, [-4.5, 4.5, 1, 0, 0, 4.5, 4.5, 1, 0.703125, 0, -4.5, -4.5, 1, 0, 0.703125, 4.5, 4.5, 1, 0.703125, 0, -4.5, -4.5, 1, 0, 0.703125, 4.5, -4.5, 1, 0.703125, 0.703125]);
+      $AVATAR_MODE_BUTTON.hidden = true;
 
-      function configure(stick) {
+      $DROP_ITEM_BUTTON = new _Button_(textures.controls.dropitem1, textures.controls.dropitem2, (worldWidth / 2) - 35, -(worldHeight / 2) + 30, function(pX, pY) {
+          $AVATAR.drop();
+      }, 8.5, 1.4, false, [-6, 6, 1, 0, 0, 6, 6, 1, 0.9375, 0, -6, -6, 1, 0, 0.9375, 6, 6, 1, 0.9375, 0, -6, -6, 1, 0, 0.9375, 6, -6, 1, 0.9375, 0.9375]);
+      $DROP_ITEM_BUTTON.hidden = true;
 
-          let touch;
 
-          for (let i = 0; i < 2; i++) {
-              if (e.touches[i]?.identifier === stick.id) {
-                  touch = e.touches[i];
-                  break;
+      function moveJoystick(e, m = true) {
+          e.preventDefault();
+
+          let coords0 = e.touches[0],
+              coords1 = e.touches[1];
+
+          if ($JOYSTICK_L.base.anchored) {
+              configure($JOYSTICK_L);
+          } else if (m) {
+              for (let i = 0; i < 2; i++) {
+                  if (e.touches[i]?.clientX < window.innerWidth / 2 && (e.touches[i]?.identifier !== $JOYSTICK_R.id)) {
+
+                      $JOYSTICK_L.id = e.touches[i].identifier;
+                      configure($JOYSTICK_L);
+                      break;
+                  }
               }
           }
 
-          if (!touch) return;
+          if ($JOYSTICK_R.base.anchored) {
+              configure($JOYSTICK_R);
+          } else if (m) {
+              for (let i = 0; i < 2; i++) {
+                  if (e.touches[i]?.clientX > window.innerWidth / 2 && (e.touches[i]?.identifier !== $JOYSTICK_L.id)) {
+                      $JOYSTICK_R.id = e.touches[i].identifier;
+                      configure($JOYSTICK_R);
+                      break;
+                  }
+              }
+          }
+
+          function configure(stick) {
+
+              let touch;
+
+              for (let i = 0; i < 2; i++) {
+                  if (e.touches[i]?.identifier === stick.id) {
+                      touch = e.touches[i];
+                      break;
+                  }
+              }
+
+              if (!touch) return;
+
+              let pageX = touch.clientX;
+              let pageY = touch.clientY;
+              let pX = aofb(aisofb(pageX, window.innerWidth), worldWidth) - (worldWidth / 2);
+              let pY = aofb(100 - aisofb(pageY, window.innerHeight), worldHeight) - (worldHeight / 2);
+
+              let {
+                  width,
+                  height,
+                  x,
+                  y,
+                  radius
+              } = stick.base;
+
+              let d = distance(x, y, pX, pY),
+                  t = radius / d;
+
+              if (stick.base.anchored) {
+                  if (d > radius) {
+                      pX = (((1 - t) * x) + (t * pX));
+                      pY = (((1 - t) * y) + (t * pY));
+                  }
+              }
+
+              if ((d < radius) || stick.base.anchored || !stick.fixed) stick.translate(pX, pY);
+          }
+      }
+
+      canvas.addEventListener("touchstart", function(e) {
+          e.preventDefault();
+          let touch = e.touches[e.touches.length - 1];
 
           let pageX = touch.clientX;
           let pageY = touch.clientY;
           let pX = aofb(aisofb(pageX, window.innerWidth), worldWidth) - (worldWidth / 2);
           let pY = aofb(100 - aisofb(pageY, window.innerHeight), worldHeight) - (worldHeight / 2);
 
-          let {
-              width,
-              height,
-              x,
-              y,
-              radius
-          } = stick.base;
+          let buttonPress = false;
 
-          let d = distance(x, y, pX, pY),
-              t = radius / d;
+          for (let i of $CONTROLS) {
+              if (i instanceof _Button_ && !i.hidden && i.enabled && distance(pX, pY, i.trans.offsetX, i.trans.offsetY) < i.radius) {
 
-          if (stick.base.anchored) {
-              if (d > radius) {
-                  pX = (((1 - t) * x) + (t * pX));
-                  pY = (((1 - t) * y) + (t * pY));
+                  i.active = true;
+                  i.touch = touch.identifier;
+                  i.action(pX, pY);
+                  buttonPress = true;
               }
           }
 
-          if ((d < radius) || stick.base.anchored || !stick.fixed) stick.translate(pX, pY);
-      }
+          if (!buttonPress && !$ACTIVE_DIALOGUE_PARTY) moveJoystick(e);
+      });
+
+      canvas.addEventListener("touchmove", (e) => {
+          moveJoystick(e, false);
+      });
+
+      canvas.addEventListener("touchend", (e) => {
+          e.preventDefault();
+
+          let ids = Object.values(e.touches).reduce((a, v) => {
+              a.push(v.identifier)
+          }, []);
+
+          for (let i of $CONTROLS) {
+              if (i instanceof _Button_ && i.active && !i.hidden && !ids?.includes(i.touch)) {
+
+                  i.active = false;
+                  if (i.postAction) i.postAction();
+              }
+          }
+
+          let uL = false,
+              uR = false;
+
+          for (let i = 0; i < 2; i++) {
+              if (e.touches[i]?.identifier === $JOYSTICK_L.id) {
+                  uL = true;
+              }
+              if (e.touches[i]?.identifier === $JOYSTICK_R.id) {
+                  uR = true;
+              }
+          }
+
+          if (!uL) {
+              $AVATAR.state.walking = false;
+              $JOYSTICK_L.unanchor();
+              $JOYSTICK_L.fix();
+              $JOYSTICK_L.id = undefined;
+          }
+
+          if (!uR) {
+              if ($CURRENT_MAP.move) $AVATAR.holsterWeapon();
+
+              $JOYSTICK_R.unanchor();
+              $JOYSTICK_R.fix();
+              $JOYSTICK_R.id = undefined;
+          }
+      });
+
+      window.addEventListener("contextmenu", function(e) {
+          e.preventDefault();
+      });
   }
-
-  canvas.addEventListener("touchstart", function(e) {
-      e.preventDefault();
-      let touch = e.touches[e.touches.length - 1];
-
-      let pageX = touch.clientX;
-      let pageY = touch.clientY;
-      let pX = aofb(aisofb(pageX, window.innerWidth), worldWidth) - (worldWidth / 2);
-      let pY = aofb(100 - aisofb(pageY, window.innerHeight), worldHeight) - (worldHeight / 2);
-
-      let buttonPress = false;
-
-      for (let i of $CONTROLS) {
-          if (i instanceof _Button_ && !i.hidden && i.enabled && distance(pX, pY, i.trans.offsetX, i.trans.offsetY) < i.radius) {
-
-              i.active = true;
-              i.touch = touch.identifier;
-              i.action(pX, pY);
-              buttonPress = true;
-          }
-      }
-
-      if (!buttonPress && !$ACTIVE_DIALOGUE_PARTY) moveJoystick(e);
-  });
-
-  canvas.addEventListener("touchmove", (e) => {
-      moveJoystick(e, false);
-  });
-
-  canvas.addEventListener("touchend", (e) => {
-      e.preventDefault();
-
-      let ids = Object.values(e.touches).reduce((a, v) => {
-          a.push(v.identifier)
-      }, []);
-
-      for (let i of $CONTROLS) {
-          if (i instanceof _Button_ && i.active && !i.hidden && !ids?.includes(i.touch)) {
-
-              i.active = false;
-              if (i.postAction) i.postAction();
-          }
-      }
-
-      let uL = false,
-          uR = false;
-
-      for (let i = 0; i < 2; i++) {
-          if (e.touches[i]?.identifier === $JOYSTICK_L.id) {
-              uL = true;
-          }
-          if (e.touches[i]?.identifier === $JOYSTICK_R.id) {
-              uR = true;
-          }
-      }
-
-      if (!uL) {
-          $AVATAR.state.walking = false;
-          $JOYSTICK_L.unanchor();
-          $JOYSTICK_L.fix();
-          $JOYSTICK_L.id = undefined;
-      }
-
-      if (!uR) {
-          if ($CURRENT_MAP.move) $AVATAR.holsterWeapon();
-
-          $JOYSTICK_R.unanchor();
-          $JOYSTICK_R.fix();
-          $JOYSTICK_R.id = undefined;
-      }
-  });
-
-  window.addEventListener("contextmenu", function(e) {
-      e.preventDefault();
-  });
-}
 
   /* INVENTORY CONTROLS AND MANAGMENT LOGIC */
 
@@ -1284,11 +1289,11 @@
           };
           break;
           case "carry": {
-            $CURRENT_MAP.CARRY = $CURRENT_MAP.locateObject(command) || undefined; 
-            result = `Carrying ${command || "nothing"}...`;
-            $MAP_DISPLAY.update();
+              $CURRENT_MAP.CARRY = $CURRENT_MAP.locateObject(command) || undefined;
+              result = `Carrying ${command || "nothing"}...`;
+              $MAP_DISPLAY.update();
           };
-          break; 
+          break;
           case "add": {
               try {
                   $CURRENT_MAP.link(eval("new " + command.replace("add", "").trim()));
@@ -1419,9 +1424,12 @@
       "remote explosive": "<h3><u>Remote Explosive</u></h3> A powerful nitroglycerin based explosive, used for building traps and taking out a large number of enemies.</br></br> Use <i>\"Equip\"</i> to arm and place the explosive. You'll need a <i>Remote Detonator</i> to detonate it.</br></br>Careful, you'll want to stand way back.",
       "proximity explosive": "<h3><u>Proximity Explosive</u></h3> A powerful C-4 based explosive rigged to a motion sensor.</br></br> Use <i>\"Equip\"</i> to arm and place the explosive. Any enemy within close proximity will cause the explosive to detonate, no remote needed. </br></br>The sensor will be active 3 seconds after being armed.",
       "combat knife": "<h3><u>Combat Knife</u></h3> A common choice of melee used by hunters to mercy-kill deer, and by soldiers to get the job done. Features good durabilty, and good damage.",
-      "money": "<h3><u>Money</u></h3> It's money. If you need me to explain any further you probably shouldn't have it. Use <i>\"Equip\"</i> to add the specified amount into your cash balance.", 
-      "candy bar": "<h3><u>Candy Bar</u></h3> A milk-chocolate bar..pretty self explanitory I feel. If you get feel the need to use this description, you honestly have brain-rot. Eat the candy bar and shut up.", 
-      "stubby shotgun": "<h3><u>Stubby Shotgun</u></h3> High powered shotgun with reliable aim and minimal recoil. A common and effective weapon for defending against intruders in homes and small-businesses."
+      "money": "<h3><u>Money</u></h3> It's money. If you need me to explain any further you probably shouldn't have it. Use <i>\"Equip\"</i> to add the specified amount into your cash balance.",
+      "candy bar": "<h3><u>Candy Bar</u></h3> A milk-chocolate bar..pretty self explanitory I feel. If you get feel the need to use this description, you honestly have brain-rot. Eat the candy bar and shut up.",
+      "stubby shotgun": "<h3><u>Stubby Shotgun</u></h3> A heavy-duty shotgun with decent damage and good capacity, making it an excelent choice for a main arm durring a close-quarters gun fight.",
+      "robber shotgun": "<h3><u>Robber Shotgun</u></h3> High powered shotgun with reliable aim and minimal recoil. A common and effective weapon for defending against intruders in homes and small-businesse.",
+      "classic shotgun": "<h3><u>Classic Shotgun</u></h3> A quick paced high capacity shotgun ideal for intimidating your opponent into submittion. Dont get a black eye, the recoil is crazy.",
+      "heavy shotgun": "<h3><u>Heavy Shotgun</u></h3> Revolver shotgun made for maximum fire power in the hands of someone who knows what they're doing. Good capacity, great damage..A bit on the slow side though."
   }
 
   let equippedIndex = Infinity,
@@ -1432,7 +1440,7 @@
   function equipSlot(i, markSlot) {
       if (!markSlot && !$AVATAR.equipItem(i)) return;
       if ($IS_MOBILE && $AVATAR.state.equippedItems.mainTool && $AVATAR.state.equippedItems.mainTool.type === "gun") {
-        $AVATAR.drawWeapon();
+          $AVATAR.drawWeapon();
       }
 
       if (equippedIndex < 5) {
@@ -1470,11 +1478,11 @@
       let d = itemDescriptions[itemName] || itemDescriptions["default"];
 
       if (item && d) {
-         if (item.type === "cash") {
+          if (item.type === "cash") {
               d = d + `</br></br><strong>Amount _____ ${item.amount}$</strong>`;
-         } else if (item.type === "armour") {
+          } else if (item.type === "armour") {
               let {
-                integrity
+                  integrity
               } = item.constructor._properties;
 
               d = d + `</br></br><strong>Strength _____ ${item.constructor._properties.strength}</strong>`;
@@ -1484,9 +1492,9 @@
               d = d.concat((item === $AVATAR.state.equippedItems.armour) ? "<br><br><i>Equipped</i>" : "<br><br><i>Not Equipped</i>");
 
               d = d.concat(`</br><i>Integrity ${Math.round(aisofb(item.integrity,item.constructor._properties.strength))}%</i>`);
-         } else if (item.type === "ammo") {
+          } else if (item.type === "ammo") {
               let {
-                increase
+                  increase
               } = item.constructor._properties;
 
               d = d + `</br></br><strong>Increase _____ capacity x${increase}</strong>`;
@@ -1494,7 +1502,7 @@
               if (getDescription) return d;
 
               d = d.concat((item.used) ? "<br><br><i>Empty</i>" : "<br><br><i>Full</i>");
-         } else if (item.type === "medicine") {
+          } else if (item.type === "medicine") {
               let {
                   regain
               } = item.constructor._properties;
@@ -1517,7 +1525,7 @@
 
           } else if (item.type === "knife") {
               let {
-                  damage, 
+                  damage,
                   durability
               } = item.constructor._properties;
 
@@ -1550,7 +1558,7 @@
       if (getDescription) return d;
 
       itemDescription.innerHTML = d;
-      descriptionImage.src = (itemName) ? `/public/images/icons/${itemName.replaceAll(" ","_")}_icon.png`:"/public/images/logo1.png";
+      descriptionImage.src = (itemName) ? `/public/images/icons/${itemName.replaceAll(" ","_")}_icon.png` : "/public/images/logo1.png";
       showDescription();
   }
 
@@ -1731,213 +1739,349 @@
   const goTo = document.querySelector("#goto");
 
   switchMap.onclick = function() {
-       if (!$MAP_DISPLAY.useWorldMap) {
-        $MAP_DISPLAY.useWorldMap = true;
-        goTo.style.opacity = 1;
-        setWaypointButton.style.opacity = 0.5; 
-        switchMap.innerText = "Local Map"; 
-          
-        updateCoordinates($MAP_DISPLAY.worldMapOffset.x, $MAP_DISPLAY.worldMapOffset.y);
-        return;
-       }
-  
-       $MAP_DISPLAY.useWorldMap = false; 
-       goTo.style.opacity = 0.5;
-       setWaypointButton.style.opacity = 1; 
-       switchMap.innerText = "World Map";
- 
-       updateCoordinates($MAP_DISPLAY.displayOffset.x, $MAP_DISPLAY.displayOffset.y);
+      if (!$MAP_DISPLAY.useWorldMap) {
+          $MAP_DISPLAY.useWorldMap = true;
+          goTo.style.opacity = 1;
+          setWaypointButton.style.opacity = 0.5;
+          switchMap.innerText = "Local Map";
+
+          updateCoordinates($MAP_DISPLAY.worldMapOffset.x, $MAP_DISPLAY.worldMapOffset.y);
+          return;
+      }
+
+      $MAP_DISPLAY.useWorldMap = false;
+      goTo.style.opacity = 0.5;
+      setWaypointButton.style.opacity = 1;
+      switchMap.innerText = "World Map";
+
+      updateCoordinates($MAP_DISPLAY.displayOffset.x, $MAP_DISPLAY.displayOffset.y);
   }
 
-// Store controls
+  // Store controls
 
-const storeContainer = document.querySelector("#store");
-const closeStoreButton = document.querySelector("#store-close");
-const storeItemsContainer = document.querySelector(".store__items");
-const storeItemTemplate = document.querySelector("#store-item-template");
+  const storeContainer = document.querySelector("#store");
+  const closeStoreButton = document.querySelector("#store-close");
+  const storeItemsContainer = document.querySelector(".store__items");
+  const storeItemTemplate = document.querySelector("#store-item-template");
 
-let currentStoreItem = undefined;
-let highlightedItem = undefined;
+  let currentStoreItem = undefined;
+  let highlightedItem = undefined;
 
-closeStoreButton.onclick = function() {
- toggleStore();
-}
+  closeStoreButton.onclick = function() {
+      toggleStore();
+  }
 
-window.toggleStore = function(s) {
-if (storeContainer.style.display !== "grid") {
- document.querySelector("#store-cash").innerHTML = "$"+Math.round($AVATAR.inventory.cash);
- document.querySelector("#store-bank").innerHTML = "$"+Math.round($AVATAR.inventory.bank);
- storeContainer.style.display = "grid";
- return;  
-} 
- storeContainer.style.display = "none";
-}
+  window.toggleStore = function(s) {
+      if (storeContainer.style.display !== "grid") {
+          document.querySelector("#store-cash").innerHTML = "$" + Math.round($AVATAR.inventory.cash);
+          document.querySelector("#store-bank").innerHTML = "$" + Math.round($AVATAR.inventory.bank);
+          storeContainer.style.display = "grid";
+          return;
+      }
+      storeContainer.style.display = "none";
+  }
 
-function updateStore(s) {
- let items = storeItemsContainer.querySelectorAll(".store__item");
- 
- currentStoreItem = s[0];
+  function updateStore(s) {
+      let items = storeItemsContainer.querySelectorAll(".store__item");
 
- items.forEach((item) => {
-  item.remove();
- });
+      currentStoreItem = s[0];
 
- for (let i of s) {
-  let content = storeItemTemplate.content.cloneNode(true);
-  let storeItem = content.querySelector(".store__item");
+      items.forEach((item) => {
+          item.remove();
+      });
 
-   if (i === s[0]) {
-    highlightedItem = storeItem;
-    highlightedItem.style.background = "#555555";
-   }
-  
-  storeItem.addEventListener("click",function() {
-   updateCheckout(i);
+      for (let i of s) {
+          let content = storeItemTemplate.content.cloneNode(true);
+          let storeItem = content.querySelector(".store__item");
 
-   highlightedItem.style.background = "rgba(0,0,0,0.2)";
-   highlightedItem = storeItem;
-   highlightedItem.style.background = "#555555";
+          if (i === s[0]) {
+              highlightedItem = storeItem;
+              highlightedItem.style.background = "#555555";
+          }
+
+          storeItem.addEventListener("click", function() {
+              updateCheckout(i);
+
+              highlightedItem.style.background = "rgba(0,0,0,0.2)";
+              highlightedItem = storeItem;
+              highlightedItem.style.background = "#555555";
+          });
+
+          content.querySelector(".item__icon").setAttribute("src", `/public/images/icons/${i.name.replaceAll(" ","_")}_icon.png`);
+          content.querySelector(".item__name").innerText = i.title;
+
+          storeItemsContainer.appendChild(content);
+      }
+
+      updateCheckout(currentStoreItem);
+  }
+
+  const itemTitle = document.querySelector(".item__title u");
+  const itemPrice = document.querySelector(".item__price");
+  const itemIcon = document.querySelector(".info-box__icon");
+  const itemTotal = document.querySelector("#item-total");
+  const infoDescription = document.querySelector(".info-box__description p");
+  const itemQuantity = document.querySelector("#item-quantity");
+  const purchaseButton = document.querySelector("#item-purchase");
+
+  function updateCheckout(storeItem) {
+      let {
+          name,
+          title,
+          price,
+          type
+      } = storeItem;
+
+      itemTitle.innerText = title;
+      itemPrice.innerText = "Price: $" + price;
+      itemIcon.src = `/public/images/icons/${name.replaceAll(" ","_")}_icon.png`;
+      itemTotal.innerText = "$" + price;
+      infoDescription.innerHTML = updateDescription(true, {
+          name: name,
+          type: type,
+          constructor: (type === "gun") ? eval(title.replaceAll(" ", "_")) : eval(title.replaceAll(" ", ""))
+      });
+
+      itemQuantity.value = 1;
+      currentStoreItem = storeItem;
+  }
+
+  purchaseButton.onclick = function() {
+      let total = (currentStoreItem.price * itemQuantity.value);
+
+      if (itemQuantity.value > ($AVATAR.inventory.slots - $AVATAR.inventory.count)) {
+          toggleNote("Sorry, we couldn't make this purchase! You dont have enough space in your inventory to hold these items. Try dropping a few things you dont need.");
+          return;
+      } else if (total > $AVATAR.inventory.cash) {
+          toggleNote("You dont have enough money to make this purchase! Try getting a job you bum.");
+          return;
+      }
+
+      for (let i = 0; i < itemQuantity.value; i++) {
+          $AVATAR.addItem(eval(`new ${currentStoreItem.title.replaceAll(" ","")}`));
+      }
+
+      $AVATAR.inventory.cash -= total;
+      updateMoneyDisplay();
+      toggleNote(`Purchase successful! ${itemQuantity.value} ${currentStoreItem.name + ((itemQuantity.value > 1) ? "s were":" was")} added to your inventory.`);
+  }
+
+  function updatePurchaseTotal() {
+      itemTotal.innerText = "$" + Math.round(itemQuantity.value * currentStoreItem.price);
+  }
+  itemQuantity.addEventListener("change", updatePurchaseTotal);
+  itemQuantity.addEventListener("keydown", updatePurchaseTotal);
+
+  updateStore([{
+          name: "glock 20",
+          title: "GLOCK_20",
+          price: 50.00,
+          type: "gun"
+      },
+      {
+          name: "kc 357",
+          title: "KC_357",
+          price: 45.50,
+          type: "gun"
+      },
+      {
+          name: "gp k100",
+          title: "GP_K100",
+          price: 130.15,
+          type: "gun"
+      },
+      {
+          name: "nxr 44 mag",
+          title: "NXR_44_MAG",
+          price: 233.50,
+          type: "gun"
+      },
+      {
+          name: "usp 45",
+          title: "USP_45",
+          price: 543.50,
+          type: "gun"
+      },
+      {
+          name: "dx 9",
+          title: "DX_9",
+          price: 385.00,
+          type: "gun"
+      },
+      {
+          name: "noss 7",
+          title: "NOSS_7",
+          price: 880.50,
+          type: "gun"
+      },
+      {
+          name: "x6 91",
+          title: "X6_91",
+          price: 742.30,
+          type: "gun"
+      },
+      {
+          name: "furs 55",
+          title: "FURS_55",
+          price: 190.00,
+          type: "gun"
+      },
+      {
+          name: "x6 91",
+          title: "X6_91",
+          price: 742.30,
+          type: "gun"
+      },
+      {
+          name: "kitchen knife",
+          title: "KitchenKnife",
+          price: 30.50,
+          type: "knife"
+      },
+      {
+          name: "combat knife",
+          title: "CombatKnife",
+          price: 95.00,
+          type: "knife"
+      },
+      {
+          name: "assassins knife",
+          title: "AssassinsKnife",
+          price: 420.90,
+          type: "knife"
+      },
+      {
+          name: "remote explosive",
+          title: "RemoteExplosive",
+          price: 120.00,
+          type: "explosive"
+      },
+      {
+          name: "proximity explosive",
+          title: "ProximityExplosive",
+          price: 185.00,
+          type: "explosive"
+      },
+      {
+          name: "remote detonator",
+          title: "RemoteDetonator",
+          price: 342.00,
+          type: "detonator"
+      },
+      {
+          name: "basic armour",
+          title: "BasicArmour",
+          price: 480.50,
+          type: "armour"
+      },
+      {
+          name: "swat armour",
+          title: "SwatArmour",
+          price: 620.00,
+          type: "armour"
+      },
+      {
+          name: "mercenary armour",
+          title: "MercenaryArmour",
+          price: 852.50,
+          type: "armour"
+      },
+      {
+          name: "grey backpack",
+          title: "GreyBackpack",
+          price: 240.00,
+          type: "backpack"
+      },
+      {
+          name: "white backpack",
+          title: "WhiteBackpack",
+          price: 380.40,
+          type: "backpack"
+      },
+      {
+          name: "black backpack",
+          title: "BlackBackpack",
+          price: 520.00,
+          type: "backpack"
+      },
+      {
+          name: "syringe",
+          title: "Syringe",
+          price: 42.00,
+          type: "medicine"
+      },
+      {
+          name: "med kit",
+          title: "MedKit",
+          price: 120.00,
+          type: "medicine"
+      },
+  ]);
+
+  // note logic 
+
+  const noteContainer = document.querySelector(".note-wrapper");
+  const closeNoteButton = document.querySelector("#note-close");
+  const noteContent = document.querySelector(".note__content p");
+  const noteTitle = document.querySelector(".note__content-title");
+  const noteImage = document.querySelector(".note__image");
+
+  let noteCallback;
+
+  window.toggleNote = function(content, callback, title, image) {
+      noteContent.innerText = content;
+      noteContainer.style.display = "flex";
+      noteCallback = callback;
+
+      if (title) {
+          noteTitle.style.display = "block";
+          noteTitle.innerText = title;
+      } else {
+          noteTitle.style.display = "none";
+      }
+
+      if (image) {
+          noteImage.style.display = "block";
+          noteImage.src = image;
+      } else {
+          noteImage.style.display = "none";
+      }
+  }
+
+  closeNoteButton.addEventListener("click", () => {
+      noteContainer.style.display = "none";
+      if (noteCallback) noteCallback();
   });
 
-  content.querySelector(".item__icon").setAttribute("src",`/public/images/icons/${i.name.replaceAll(" ","_")}_icon.png`);
-  content.querySelector(".item__name").innerText = i.title;
+  // desktop controls 
+  if (!$IS_MOBILE) {
 
-  storeItemsContainer.appendChild(content);
- }
+      const desktopMovementFactor = 1;
+      let movementX = 0,
+          movementY = 0;
+      let wKeyDown = false,
+          aKeyDown = false,
+          sKeyDown = false,
+          dKeyDown = false,
+          position = {
+              x: $JOYSTICK_L.position.x,
+              y: $JOYSTICK_L.position.y
+          };
 
- updateCheckout(currentStoreItem);
-}
-
-const itemTitle = document.querySelector(".item__title u"); 
-const itemPrice = document.querySelector(".item__price"); 
-const itemIcon = document.querySelector(".info-box__icon");
-const itemTotal = document.querySelector("#item-total");
-const infoDescription = document.querySelector(".info-box__description p");
-const itemQuantity = document.querySelector("#item-quantity");
-const purchaseButton = document.querySelector("#item-purchase");
-
-function updateCheckout(storeItem) {
- let {name, title, price, type} = storeItem;
-
- itemTitle.innerText = title;
- itemPrice.innerText = "Price: $" + price;
- itemIcon.src = `/public/images/icons/${name.replaceAll(" ","_")}_icon.png`;
- itemTotal.innerText = "$" + price;
- infoDescription.innerHTML = updateDescription(true, {name: name, type: type, constructor: (type === "gun") ? eval(title.replaceAll(" ","_")):eval(title.replaceAll(" ",""))});
-
- itemQuantity.value = 1;
- currentStoreItem = storeItem;
-}
-
- purchaseButton.onclick = function() {
- let total = (currentStoreItem.price*itemQuantity.value);
-
- if (itemQuantity.value > ($AVATAR.inventory.slots - $AVATAR.inventory.count)) {
- toggleNote("Sorry, we couldn't make this purchase! You dont have enough space in your inventory to hold these items. Try dropping a few things you dont need.");
-  return; 
- } else if (total > $AVATAR.inventory.cash) {
- toggleNote("You dont have enough money to make this purchase! Try getting a job you bum.");
-  return; 
-}
-
- for (let i = 0; i < itemQuantity.value; i++) {
-  $AVATAR.addItem(eval(`new ${currentStoreItem.title.replaceAll(" ","")}`));
- }
-
- $AVATAR.inventory.cash -= total;
- updateMoneyDisplay();
- toggleNote(`Purchase successful! ${itemQuantity.value} ${currentStoreItem.name + ((itemQuantity.value > 1) ? "s were":" was")} added to your inventory.`);
-}
-
-function updatePurchaseTotal() {
- itemTotal.innerText = "$" + Math.round(itemQuantity.value * currentStoreItem.price);
-}
-itemQuantity.addEventListener("change", updatePurchaseTotal);
-itemQuantity.addEventListener("keydown", updatePurchaseTotal);
-
-updateStore([
-{name: "glock 20", title: "GLOCK_20", price: 50.00, type: "gun"}, 
-{name: "kc 357", title: "KC_357", price: 45.50, type: "gun"}, 
-{name: "gp k100", title: "GP_K100", price: 130.15, type: "gun"}, 
-{name: "nxr 44 mag", title: "NXR_44_MAG", price: 233.50, type: "gun"}, 
-{name: "usp 45", title: "USP_45", price: 543.50, type: "gun"}, 
-{name: "dx 9", title: "DX_9", price: 385.00, type: "gun"}, 
-{name: "noss 7", title: "NOSS_7", price: 880.50, type: "gun"},
-{name: "x6 91", title: "X6_91", price: 742.30, type: "gun"},
-{name: "furs 55", title: "FURS_55", price: 190.00, type: "gun"}, 
-{name: "x6 91", title: "X6_91", price: 742.30, type: "gun"},  
-{name: "kitchen knife", title: "KitchenKnife", price: 30.50, type: "knife"},
-{name: "combat knife", title: "CombatKnife", price: 95.00, type: "knife"},
-{name: "assassins knife", title: "AssassinsKnife", price: 420.90, type: "knife"},
-{name: "remote explosive", title: "RemoteExplosive", price: 120.00, type: "explosive"},
-{name: "proximity explosive", title: "ProximityExplosive", price: 185.00, type: "explosive"},
-{name: "remote detonator", title: "RemoteDetonator", price: 342.00, type: "detonator"},
-{name: "basic armour", title: "BasicArmour", price: 480.50, type: "armour"},
-{name: "swat armour", title: "SwatArmour", price: 620.00, type: "armour"},
-{name: "mercenary armour", title: "MercenaryArmour", price: 852.50, type: "armour"},
-{name: "grey backpack", title: "GreyBackpack", price: 240.00, type: "backpack"},
-{name: "white backpack", title: "WhiteBackpack", price: 380.40, type: "backpack"},
-{name: "black backpack", title: "BlackBackpack", price: 520.00, type: "backpack"},
-{name: "syringe", title: "Syringe", price: 42.00, type: "medicine"},
-{name: "med kit", title: "MedKit", price: 120.00, type: "medicine"},
-]);
-
-// note logic 
-
-const noteContainer = document.querySelector(".note-wrapper");
-const closeNoteButton = document.querySelector("#note-close");
-const noteContent = document.querySelector(".note__content p");
-const noteTitle = document.querySelector(".note__content-title"); 
-const noteImage = document.querySelector(".note__image");
-
-let noteCallback;
-
-window.toggleNote = function(content, callback, title, image) {
- noteContent.innerText = content;
- noteContainer.style.display = "flex";
- noteCallback = callback; 
- 
- if (title) {
-  noteTitle.style.display = "block"; 
-  noteTitle.innerText = title; 
- } else {
-  noteTitle.style.display = "none";
- }
-
- if (image) {
-  noteImage.style.display = "block";  
-  noteImage.src = image;
- } else {
-  noteImage.style.display = "none";
- } 
-}
-
-closeNoteButton.addEventListener("click",() => {
- noteContainer.style.display = "none";
- if (noteCallback) noteCallback(); 
-});
-
-// desktop controls 
-if (!$IS_MOBILE) { 
-
-const desktopMovementFactor = 1;
-let movementX = 0, movementY = 0;
-let wKeyDown = false, aKeyDown = false, sKeyDown = false, dKeyDown = false, position = {x: $JOYSTICK_L.position.x, y: $JOYSTICK_L.position.y};
-
-$JOYSTICK_L.desktopMovementCallback = function() {
- if ($ACTIVE_DIALOGUE_PARTY) return;
+      $JOYSTICK_L.desktopMovementCallback = function() {
+          if ($ACTIVE_DIALOGUE_PARTY) return;
 
           if (wKeyDown && position.y) {
-           position.y += desktopMovementFactor; 
+              position.y += desktopMovementFactor;
           }
           if (aKeyDown) {
-           position.x -= desktopMovementFactor;
-          } 
+              position.x -= desktopMovementFactor;
+          }
           if (sKeyDown) {
-           position.y -= desktopMovementFactor; 
+              position.y -= desktopMovementFactor;
           }
           if (dKeyDown) {
-           position.x += desktopMovementFactor; 
+              position.x += desktopMovementFactor;
           }
 
           let {
@@ -1959,235 +2103,248 @@ $JOYSTICK_L.desktopMovementCallback = function() {
           }
 
           if ((d < radius) || $JOYSTICK_L.base.anchored || $JOYSTICK_L.fixed) $JOYSTICK_L.translate(position.x, position.y);
-}
+      }
 
-let controlKeys = ["w", "a", "s", "d"];
-let mouseDown = false; 
+      let controlKeys = ["w", "a", "s", "d"];
+      let mouseDown = false;
 
-window.addEventListener("keydown", (e) => {
- if (consoleContainer.style.display === "grid") return; 
+      window.addEventListener("keydown", (e) => {
+          if (consoleContainer.style.display === "grid") return;
 
- if (e.code === "KeyR" && $AVATAR.state.equippedItems.mainTool) {
-  $AVATAR.reload();
- }
- if (e.code === "KeyQ") {
-  toggleGrab(e);
- }
- if (e.code === "KeyP") {
-  $PAUSED = !$PAUSED;
- }
- if ($AVATAR.state.equippedItems.mainTool && e.code === "KeyX") {
-  $AVATAR.dropItem($AVATAR.state.equippedItems.mainTool.slot);
- }
- if (/\d/.test(e.key.toLowerCase())) {
-  equipSlot((Number(e.key)) ? Number(e.key - 1):9);
- }
- if (!controlKeys.includes(e.key.toLowerCase())) return; 
+          if (e.code === "KeyR" && $AVATAR.state.equippedItems.mainTool) {
+              $AVATAR.reload();
+          }
+          if (e.code === "KeyQ") {
+              toggleGrab(e);
+          }
+          if (e.code === "KeyP") {
+              $PAUSED = !$PAUSED;
+          }
+          if ($AVATAR.state.equippedItems.mainTool && e.code === "KeyX") {
+              $AVATAR.dropItem($AVATAR.state.equippedItems.mainTool.slot);
+          }
+          if (/\d/.test(e.key.toLowerCase())) {
+              equipSlot((Number(e.key)) ? Number(e.key - 1) : 9);
+          }
+          if (!controlKeys.includes(e.key.toLowerCase())) return;
 
- eval(`${e.key.toLowerCase()}KeyDown = ${true}`);
- $JOYSTICK_L.desktopMovementAnimation.active = true; 
-});
+          eval(`${e.key.toLowerCase()}KeyDown = ${true}`);
+          $JOYSTICK_L.desktopMovementAnimation.active = true;
+      });
 
-window.addEventListener("keyup", (e) => {
- if (!controlKeys.includes(e.key.toLowerCase())) return; 
+      window.addEventListener("keyup", (e) => {
+          if (!controlKeys.includes(e.key.toLowerCase())) return;
 
- eval(`${e.key.toLowerCase()}KeyDown = ${false}`);
- if (!wKeyDown && !aKeyDown && !sKeyDown && !dKeyDown) {
-   $AVATAR.state.walking = false;
-   $JOYSTICK_L.desktopMovementAnimation.active = false; 
-   $JOYSTICK_L.unanchor();
-   $JOYSTICK_L.fix();
-   position = {x: $JOYSTICK_L.position.x, y: $JOYSTICK_L.position.y};
- }
-});
+          eval(`${e.key.toLowerCase()}KeyDown = ${false}`);
+          if (!wKeyDown && !aKeyDown && !sKeyDown && !dKeyDown) {
+              $AVATAR.state.walking = false;
+              $JOYSTICK_L.desktopMovementAnimation.active = false;
+              $JOYSTICK_L.unanchor();
+              $JOYSTICK_L.fix();
+              position = {
+                  x: $JOYSTICK_L.position.x,
+                  y: $JOYSTICK_L.position.y
+              };
+          }
+      });
 
       canvas.addEventListener("mousemove", (e) => {
-        if ($AVATAR.state.equippedItems.mainTool || $AVATAR.state.punching || $AVATAR.state.sitting || mouseDown) $AVATAR.trans.rotation = Math.atan2(e.pageX - (window.innerWidth/2), e.pageY - (window.innerHeight/2)) + 3.14159;
+          if ($AVATAR.state.equippedItems.mainTool || $AVATAR.state.punching || $AVATAR.state.sitting || mouseDown) $AVATAR.trans.rotation = Math.atan2(e.pageX - (window.innerWidth / 2), e.pageY - (window.innerHeight / 2)) + 3.14159;
       });
 
       canvas.addEventListener("mousedown", () => {
-         mouseDown = true; 
-            if (!$AVATAR.state.pickup.current) {
-                if ($AVATAR.state.armed) {
-                    $AVATAR.state.fire = true;
-                } else if ($AVATAR.state.melee) {
-                    $AVATAR.state.stabbing = true;
-                } else {
-                    $AVATAR.state.punching = true;
-                }
-            } else {
-                $AVATAR.state.fire = false;
-                $AVATAR.state.punching = false;
-                $AVATAR.state.stabbing = false;
-            }
+          mouseDown = true;
+          if (!$AVATAR.state.pickup.current) {
+              if ($AVATAR.state.armed) {
+                  $AVATAR.state.fire = true;
+              } else if ($AVATAR.state.melee) {
+                  $AVATAR.state.stabbing = true;
+              } else {
+                  $AVATAR.state.punching = true;
+              }
+          } else {
+              $AVATAR.state.fire = false;
+              $AVATAR.state.punching = false;
+              $AVATAR.state.stabbing = false;
+          }
       });
 
       canvas.addEventListener("mouseup", () => {
-            mouseDown = false; 
-            $AVATAR.state.fire = false;
-            $AVATAR.state.punching = false;
-            $AVATAR.state.stabbing = false;
+          mouseDown = false;
+          $AVATAR.state.fire = false;
+          $AVATAR.state.punching = false;
+          $AVATAR.state.stabbing = false;
       });
-}
+  }
 
-window.updateCoordsDisplay = function() {
- document.querySelector("#coords").innerText = `x:${Math.round($CURRENT_MAP.centerX)}, y:${Math.round($CURRENT_MAP.centerY)}`;
-}
+  window.updateCoordsDisplay = function() {
+      document.querySelector("#coords").innerText = `x:${Math.round($CURRENT_MAP.centerX)}, y:${Math.round($CURRENT_MAP.centerY)}`;
+  }
 
 
-const settings = document.querySelector("#settings");
-const openSettingsButton = document.querySelectorAll(".controls-container__button").item(3);
-const closeSettingsButton = document.querySelector("#settings-close");
+  const settings = document.querySelector("#settings");
+  const openSettingsButton = document.querySelector(".settings-icon");
+  const closeSettingsButton = document.querySelector("#settings-close");
 
-function openSettings() {
- settings.style.display = "grid"; 
-}
+  function openSettings() {
+      settings.style.display = "grid";
+  }
 
-function closeSettings() {
- settings.style.display = "none";
-}
+  function closeSettings() {
+      settings.style.display = "none";
+  }
 
-openSettingsButton.onclick = openSettings;
-closeSettingsButton.onclick = closeSettings;
+  openSettingsButton.onclick = openSettings;
+  closeSettingsButton.onclick = closeSettings;
 
-const onscreenMapStyleSetting = document.querySelector("#onscreen-map-style-setting");
-const zoomSetting = document.querySelector("#zoom-setting");
-const graphicsQualitySetting = document.querySelector("#graphics-quality-setting");
-const musicSetting = document.querySelector("#music-setting");
-const volumeSetting = document.querySelector("#volume-setting");
-const joysticksSetting = document.querySelector("#joysticks-setting");
-const fullscreenSetting = document.querySelector("#fullscreen-setting");
-const pauseSetting = document.querySelector("#pause-setting");
+  const onscreenMapStyleSetting = document.querySelector("#onscreen-map-style-setting");
+  const zoomSetting = document.querySelector("#zoom-setting");
+  const graphicsQualitySetting = document.querySelector("#graphics-quality-setting");
+  const musicSetting = document.querySelector("#music-setting");
+  const volumeSetting = document.querySelector("#volume-setting");
+  const joysticksSetting = document.querySelector("#joysticks-setting");
+  const fullscreenSetting = document.querySelector("#fullscreen-setting");
+  const pauseSetting = document.querySelector("#pause-setting");
 
-fullscreenSetting.onchange = function() {
- if (fullscreenSetting.checked) {
-  document.body.requestFullscreen(); 
-  return; 
- }
- document.exitFullscreen(); 
-}
+  fullscreenSetting.onchange = function() {
+      if (fullscreenSetting.checked) {
+          document.body.requestFullscreen();
+          return;
+      }
+      document.exitFullscreen();
+  }
 
-pauseSetting.onchange = function() {
- $PAUSED = pauseSetting.checked;
-}
+  pauseSetting.onchange = function() {
+      $PAUSED = pauseSetting.checked;
+  }
 
-onscreenMapStyleSetting.selectedIndex = $SETTINGS.onscreenMapStyle;
-zoomSetting.value = $SETTINGS.zoom;
-graphicsQualitySetting.selectedIndex = $SETTINGS.graphicsQuality;
-musicSetting.selectedIndex = $SETTINGS.music;
-volumeSetting.value = $SETTINGS.volume*10;
-joysticksSetting.selectedIndex = $SETTINGS.joysticks; 
+  onscreenMapStyleSetting.selectedIndex = $SETTINGS.onscreenMapStyle;
+  zoomSetting.value = $SETTINGS.zoom;
+  graphicsQualitySetting.selectedIndex = $SETTINGS.graphicsQuality;
+  musicSetting.selectedIndex = $SETTINGS.music;
+  volumeSetting.value = $SETTINGS.volume * 10;
+  joysticksSetting.selectedIndex = $SETTINGS.joysticks;
 
-onscreenMapStyleSetting.onchange = function() {
- $SETTINGS.onscreenMapStyle = onscreenMapStyleSetting.selectedIndex; 
- updateOnscreenMapStyle();
- saveSettings();
-};
+  onscreenMapStyleSetting.onchange = function() {
+      $SETTINGS.onscreenMapStyle = onscreenMapStyleSetting.selectedIndex;
+      updateOnscreenMapStyle();
+      saveSettings();
+  };
 
-musicSetting.onchange = function() {
- $SETTINGS.music = musicSetting.selectedIndex;
- 
- if ($SETTINGS.music) {
-  currentTrack.pause();
- } else {
-  playNextTrack();
- }
+  musicSetting.onchange = function() {
+      $SETTINGS.music = musicSetting.selectedIndex;
 
- saveSettings();
-}
+      if ($SETTINGS.music) {
+          if ($AUDIO.lastTrackPlayed) $AUDIO.lastTrackPlayed.pause();
+          $AUDIO.lastTrackPlayed.currentTime = 0.0;
+          $AUDIO.themePlaying = false;
+      } else {
+          $AUDIO.lastTrackPlayed = undefined;
+          $AUDIO.playNextTrack();
+          $AUDIO.themePlaying = true;
+      }
 
-zoomSetting.onchange = function() {
- $SETTINGS.zoom = zoomSetting.value; 
- updateZoom();
- saveSettings();
-}
+      saveSettings();
+  }
 
-volumeSetting.onchange = function() {
- $SETTINGS.volume = volumeSetting.value/10; 
- currentTrack.volume = $SETTINGS.volume; 
- saveSettings();
-}
+  zoomSetting.onchange = function() {
+      $SETTINGS.zoom = zoomSetting.value;
+      updateZoom();
+      saveSettings();
+  }
 
-graphicsQualitySetting.onchange = function() {
- $SETTINGS.graphicsQuality = graphicsQualitySetting.selectedIndex;
- saveSettings();
-}
+  volumeSetting.onchange = function() {
+      $SETTINGS.volume = volumeSetting.value / 10;
+      $AUDIO.gainNode.gain.setValueAtTime($SETTINGS.volume, $AUDIO.audioContext.currentTime);
+      if ($AUDIO.lastTrackPlayed) $AUDIO.lastTrackPlayed.volume = $SETTINGS.volume;
+      saveSettings();
+  }
 
-joysticksSetting.onchange = function() {
- $SETTINGS.joysticks = joysticksSetting.selectedIndex;
- saveSettings();
-}
+  graphicsQualitySetting.onchange = function() {
+      $SETTINGS.graphicsQuality = graphicsQualitySetting.selectedIndex;
+      saveSettings();
+  }
 
-function saveSettings() {
- localStorage.setItem("game-settings", JSON.stringify($SETTINGS));
-}
+  joysticksSetting.onchange = function() {
+      $SETTINGS.joysticks = joysticksSetting.selectedIndex;
+      saveSettings();
+  }
 
-function updateOnscreenMapStyle() {
- document.querySelector("#mapInfo").style.background = ["none", "red", "#00ff15", "#00fffb", "#ff8800"][$SETTINGS.onscreenMapStyle];
-}
+  function saveSettings() {
+      localStorage.setItem("game-settings", JSON.stringify($SETTINGS));
+  }
 
-function updateZoom() {
- scale = zoomSetting.value;  
-}
+  function updateOnscreenMapStyle() {
+      document.querySelector("#mapInfo").style.background = ["none", "red", "#00ff15", "#00fffb", "#ff8800"][$SETTINGS.onscreenMapStyle];
+  }
 
-function applySettings() {
- updateOnscreenMapStyle();
-}
+  function updateZoom() {
+      scale = zoomSetting.value;
+  }
 
-applySettings();
+  function applySettings() {
+      updateOnscreenMapStyle();
+  }
 
-// title card
+  applySettings();
 
-const titleCard = document.querySelector(".title-card-wrapper");
-const titlePlayButton = document.querySelector(".play__button");
-const usernameInput = document.querySelector(".play__username");
-usernameInput.value = $PLAYER_NAME || "";
-const scoreDisplay = document.querySelector(".content__score");
-const highscoreDisplay = document.querySelector(".content__highscore");
-highscoreDisplay.innerText = `Your current highscore: ${$HIGHSCORE}`;
+  // title card
 
-titlePlayButton.onclick = function() {
-if ($CONTENT_LOADED && !$TRANSITIONING) {
- titleCard.style.display = "none";
- localStorage.setItem("player-name", usernameInput.value);
- $AVATAR.nameObj.update(usernameInput.value);
- $AVATAR.character = usernameInput.value; 
- $AVATAR.respawn();
-}
-}
+  const titleCard = document.querySelector(".title-card-wrapper");
+  const titlePlayButton = document.querySelector(".play__button");
+  const usernameInput = document.querySelector(".play__username");
+  usernameInput.value = $PLAYER_NAME || "";
+  const scoreDisplay = document.querySelector(".content__score");
+  const highscoreDisplay = document.querySelector(".content__highscore");
+  highscoreDisplay.innerText = `Your current highscore: ${$HIGHSCORE}`;
 
-const titleSettingsButton = document.querySelector(".buttons__settings");
-titleSettingsButton.onclick = openSettings;
+  titlePlayButton.onclick = function() {
+      if ($CONTENT_LOADED && !$TRANSITIONING) {
+          titleCard.style.display = "none";
+          localStorage.setItem("player-name", usernameInput.value);
+          $AVATAR.nameObj.update(usernameInput.value);
+          $AVATAR.character = usernameInput.value;
+          $AVATAR.respawn();
 
-const titleHelpButton = document.querySelector(".buttons__help");
-titleHelpButton.onclick = function() {
-  toggleNote("Use 'E' on desktop or the 'A' button to interact with an object. The 'A' button at the right of the screen will light up with an interaction is avaliable when you're close enough to an object. This works when for things like entering doors or adding items to your inventory.", function() {
-   toggleNote("Use 'Q' on desktop or the 'G' button to pick up an item to carry it. Use the key a second time to drop the item.", function() {
-      toggleNote("Kill as many enemies as you can to gain the highest score possible. Use the gun store at the top of the map to buy and access more weapons.\n\nGo into settings to see more information on controls.", false, "Objective.", "/public/images/combat.png"); 
-   }, "Grabbing", "/public/images/grabbing.png")
-},"Interaction", "/public/images/interaction.png"); 
-}
+          if (!$AUDIO.themePlaying && !$SETTINGS.music) {
+              $AUDIO.playNextTrack();
+              $AUDIO.themePlaying = true;
+          }
+      }
+  }
 
-window.returnToTitleScreen = function() {
- titleCard.style.display = "flex";
- $SPECTATING = true; 
- noclip = true; 
+  const titleSettingsButton = document.querySelector(".buttons__settings");
+  titleSettingsButton.onclick = openSettings;
 
- if ($SCORE > $HIGHSCORE) {
-  $HIGHSCORE = $SCORE;
-  localStorage.setItem("highscore", $HIGHSCORE);
- }
+  const titleHelpButton = document.querySelector(".buttons__help");
+  titleHelpButton.onclick = function() {
+      toggleNote("Use 'E' on desktop or the 'A' button to interact with an object. The 'A' button at the right of the screen will light up with an interaction is avaliable when you're close enough to an object. This works when for things like entering doors or adding items to your inventory.", function() {
+          toggleNote("Use 'Q' on desktop or the 'G' button to pick up an item to carry it. Use the key a second time to drop the item.", function() {
+              toggleNote("Kill as many enemies as you can to gain the highest score possible. Use the gun store at the top of the map to buy and access more weapons.\n\nGo into settings to see more information on controls.", false, "Objective.", "/public/images/combat.png");
+          }, "Grabbing", "/public/images/grabbing.png")
+      }, "Interaction", "/public/images/interaction.png");
+  }
 
- scoreDisplay.innerText = `Your score: ${$SCORE}`;
- scoreDisplay.style.display = "block";
- highscoreDisplay.innerText = `Your current highscore: ${$HIGHSCORE}`;
+  window.returnToTitleScreen = function() {
+      titleCard.style.display = "flex";
+      $SPECTATING = true;
+      noclip = true;
 
- $SCORE = 0;
+      if ($SCORE > $HIGHSCORE) {
+          $HIGHSCORE = $SCORE;
+          localStorage.setItem("highscore", $HIGHSCORE);
+      }
 
- $AVATAR.state.kills = 0; 
- $AVATAR.state.totalDamage = 0;
-}
+      scoreDisplay.innerText = `Your score: ${$SCORE}`;
+      scoreDisplay.style.display = "block";
+      highscoreDisplay.innerText = `Your current highscore: ${$HIGHSCORE}`;
 
-window.togglePressEDisplay = function(show) {
- document.querySelector("#press-e").style.display = (show) ? "block":"none"; 
-}
+      $SCORE = 0;
+
+      $AVATAR.state.kills = 0;
+      $AVATAR.state.totalDamage = 0;
+  }
+
+  window.togglePressEDisplay = function(show) {
+      document.querySelector("#press-e").style.display = (show) ? "block" : "none";
+  }

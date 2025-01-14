@@ -47,6 +47,7 @@
             draw
         } from "/src/scripts/lib.js";
         import {
+            BULLETSHELL,
             MONEY, 
             BUGGY, 
             TOOL_ICON, 
@@ -59,7 +60,21 @@
             STUBBY_SHOTGUN,
             STUBBY_SHOTGUN_TOP_2,  
             MAIN_AVATAR_DRAW_STUBBYSHOTGUN_1,
-            MAIN_AVATAR_DRAW_STUBBYSHOTGUN_2
+            MAIN_AVATAR_DRAW_STUBBYSHOTGUN_2, 
+            ROBBER_SHOTGUN, 
+            MAIN_AVATAR_DRAW_ROBBERSHOTGUN_1,
+            MAIN_AVATAR_DRAW_ROBBERSHOTGUN_2, 
+            CLASSIC_SHOTGUN,
+            MAIN_AVATAR_DRAW_CLASSICSHOTGUN_1,
+            MAIN_AVATAR_DRAW_CLASSICSHOTGUN_2,
+            GLOCK_20, 
+            M4_DSS, 
+            HEAVY_SHOTGUN, 
+            HEAVY_SHOTGUN_TOP, 
+            MAIN_AVATAR_DRAW_HEAVYSHOTGUN_1,
+            MAIN_AVATAR_DRAW_HEAVYSHOTGUN_2,
+            FIVE_9,
+            MAG
         } from "/src/scripts/models.js";
 
         // Import texture for editing and downloading...
@@ -106,11 +121,12 @@
         //SUPERMARKET(-98, -338, 0.2);
         //CAFE(-18, -18, 0.2);
         //MAIN_AVATAR_DEFAULT(-5, -5, 0.2);
-        resize(200, 200);
-        // export function draw(a, w, h, iw, ih, s, lw, attribs=[],canvas) {
-        let texture = STUBBY_SHOTGUN;
-//new Sheet([ROAD_RAIL,ROAD_SIGN,URBAN_FENCE_HALF,URBAN_FENCE,URBAN_FENCE_VERTICAL], 1024, 1024);
 
+        resize(64, 64);
+
+        // export function draw(a, w, h, iw, ih, s, lw, attribs=[],canvas) {
+        let texture = MAG;
+//new Sheet([ROAD_RAIL,ROAD_SIGN,URBAN_FENCE_HALF,URBAN_FENCE,URBAN_FENCE_VERTICAL], 1024, 1024);
         //ACTION_BUTTON_TEXTURE.render(ctx);
         //URBAN_FENCE.render(ctx);
         //PICNIC_TABLE.render(ctx);
@@ -137,6 +153,6 @@
        // log(texture.getData());
           log(texture.getData());
           console.log(texture.textureDimensions);
-          setSource(`stubby_shotgun_icon.png`);
+          setSource(`MAG.png`);
     </script>
 </html>

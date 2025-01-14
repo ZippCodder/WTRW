@@ -1,34 +1,42 @@
 // Texture managment
 
 export default class TextureContainer {
-    constructor(settings = {mipmap: false, repeat: false}) {
+    constructor(settings = {
+        mipmap: false,
+        repeat: false
+    }) {
         this.count = 0;
         this.index = [];
         this.settings = settings;
     }
 
-    addTexture(name, src, settings = {mipmap: undefined, repeat: undefined, context: undefined}) {
-        let container = this, gl = settings.context || window.gl;
+    addTexture(name, src, settings = {
+        mipmap: undefined,
+        repeat: undefined,
+        context: undefined
+    }) {
+        let container = this,
+            gl = settings.context || window.gl;
 
         return new Promise((res, rej) => {
             let img = new Image();
             img.src = src;
 
-            let textureWrapS = ((settings.repeat || this.settings.repeat) && settings.repeat !== false) ? gl.REPEAT:(settings.textureWrapS || this.settings.textureWrapS || gl.CLAMP_TO_EDGE);
+            let textureWrapS = ((settings.repeat || this.settings.repeat) && settings.repeat !== false) ? gl.REPEAT : (settings.textureWrapS || this.settings.textureWrapS || gl.CLAMP_TO_EDGE);
 
-            let textureWrapT = ((settings.repeat || this.settings.repeat) && settings.repeat !== false) ? gl.REPEAT:(settings.textureWrapT || this.settings.textureWrapT || gl.CLAMP_TO_EDGE);
+            let textureWrapT = ((settings.repeat || this.settings.repeat) && settings.repeat !== false) ? gl.REPEAT : (settings.textureWrapT || this.settings.textureWrapT || gl.CLAMP_TO_EDGE);
 
             let minFilter = settings.minFilter || this.settings.minFilter || gl.LINEAR;
-            minFilter = ((settings.mipmap || this.settings.mipmap) && settings.mipmap !== false) ? settings.minFilter || this.settings.minFilter || gl.LINEAR_MIPMAP_NEAREST:minFilter;
+            minFilter = ((settings.mipmap || this.settings.mipmap) && settings.mipmap !== false) ? settings.minFilter || this.settings.minFilter || gl.LINEAR_MIPMAP_NEAREST : minFilter;
 
-            let magFilter = settings.magFilter || this.settings.magFilter || gl.LINEAR; 
+            let magFilter = settings.magFilter || this.settings.magFilter || gl.LINEAR;
 
             img.onload = function() {
                 container[name] = gl.createTexture();
 
                 gl.bindTexture(gl.TEXTURE_2D, container[name]);
                 gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
-          
+
                 if ((settings.mipmap || container.settings.mipmap) && settings.mipmap !== false) gl.generateMipmap(gl.TEXTURE_2D);
 
                 gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, magFilter);
@@ -52,7 +60,9 @@ export default class TextureContainer {
 
 window.textures = {};
 
-textures.controls = new TextureContainer({mipmap: true});
+textures.controls = new TextureContainer({
+    mipmap: true
+});
 
 await textures.controls.addTexture("joystick_disc", "/public/images/textures/joystick_disc.png");
 
@@ -110,9 +120,16 @@ await textures.skins.addTexture("avatarcombatknifewalking1", "/public/images/tex
 await textures.skins.addTexture("avatarcombatknifewalking2", "/public/images/textures/MAIN_AVATAR_MELEE_COMBAT_KNIFE_WALKING_2.png");
 await textures.skins.addTexture("avatardrawstubbyshotgun", "/public/images/textures/MAIN_AVATAR_DRAW_STUBBYSHOTGUN_1.png");
 await textures.skins.addTexture("avatardrawstubbyshotgunpullback", "/public/images/textures/MAIN_AVATAR_DRAW_STUBBYSHOTGUN_2.png");
+await textures.skins.addTexture("avatardrawrobbershotgun", "/public/images/textures/MAIN_AVATAR_DRAW_ROBBERSHOTGUN_1.png");
+await textures.skins.addTexture("avatardrawrobbershotgunpullback", "/public/images/textures/MAIN_AVATAR_DRAW_ROBBERSHOTGUN_2.png");
+await textures.skins.addTexture("avatardrawclassicshotgun", "/public/images/textures/MAIN_AVATAR_DRAW_CLASSICSHOTGUN_1.png");
+await textures.skins.addTexture("avatardrawclassicshotgunpullback", "/public/images/textures/MAIN_AVATAR_DRAW_CLASSICSHOTGUN_2.png");
+await textures.skins.addTexture("avatardrawheavyshotgun", "/public/images/textures/MAIN_AVATAR_DRAW_HEAVYSHOTGUN_1.png");
+await textures.skins.addTexture("avatardrawheavyshotgunpullback", "/public/images/textures/MAIN_AVATAR_DRAW_HEAVYSHOTGUN_2.png");
 
 textures.objects = new TextureContainer();
 
+await textures.objects.addTexture("robbershotgun", "/public/images/textures/ROBBER_SHOTGUN.png");
 await textures.objects.addTexture("stubbyshotgun", "/public/images/textures/STUBBY_SHOTGUN.png");
 await textures.objects.addTexture("nxr44mag", "/public/images/textures/NXR_44_MAG.png");
 await textures.objects.addTexture("gpk100", "/public/images/textures/GP_K100.png");
@@ -123,6 +140,8 @@ await textures.objects.addTexture("furs55", "/public/images/textures/FURS_55.png
 await textures.objects.addTexture("noss7", "/public/images/textures/NOSS_7.png");
 await textures.objects.addTexture("x691", "/public/images/textures/X6_91.png");
 await textures.objects.addTexture("kc357", "/public/images/textures/KC_357.png");
+await textures.objects.addTexture("classicshotgun", "/public/images/textures/CLASSIC_SHOTGUN.png");
+await textures.objects.addTexture("heavyshotgun", "/public/images/textures/HEAVY_SHOTGUN.png");
 await textures.objects.addTexture("kitchenknife", "/public/images/textures/KITCHEN_KNIFE.png");
 await textures.objects.addTexture("assassinsknife", "/public/images/textures/ASSASSINS_KNIFE.png");
 await textures.objects.addTexture("combatknife", "/public/images/textures/COMBAT_KNIFE.png");
@@ -174,11 +193,23 @@ await textures.objects.addTexture("urbanfencevertical", "/public/images/textures
 await textures.objects.addTexture("urbanfencehalf", "/public/images/textures/URBAN_FENCE_HALF.png");
 await textures.objects.addTexture("smallplant", "/public/images/textures/SMALL_PLANT.png");
 await textures.objects.addTexture("tile", "/public/images/textures/TILE.png");
-await textures.objects.addTexture("floortile", "/public/images/textures/FLOOR_TILE.png", {repeat: true});
-await textures.objects.addTexture("woodfloortile", "/public/images/textures/WOOD_FLOOR_TILE.png", {repeat: true});
-await textures.objects.addTexture("crosstile", "/public/images/textures/CROSS_TILE.png", {repeat: true});
-await textures.objects.addTexture("grasstile", "/public/images/textures/GRASS_TILE.png", {repeat: true, minFilter: gl.NEAREST});
-await textures.objects.addTexture("candybar", "/public/images/textures/CANDY_BAR.png", {repeat: true, minFilter: gl.NEAREST});
+await textures.objects.addTexture("floortile", "/public/images/textures/FLOOR_TILE.png", {
+    repeat: true
+});
+await textures.objects.addTexture("woodfloortile", "/public/images/textures/WOOD_FLOOR_TILE.png", {
+    repeat: true
+});
+await textures.objects.addTexture("crosstile", "/public/images/textures/CROSS_TILE.png", {
+    repeat: true
+});
+await textures.objects.addTexture("grasstile", "/public/images/textures/GRASS_TILE.png", {
+    repeat: true,
+    minFilter: gl.NEAREST
+});
+await textures.objects.addTexture("candybar", "/public/images/textures/CANDY_BAR.png", {
+    repeat: true,
+    minFilter: gl.NEAREST
+});
 await textures.objects.addTexture("bench", "/public/images/textures/BENCH.png");
 await textures.objects.addTexture("money", "/public/images/textures/MONEY.png");
 await textures.objects.addTexture("grass1", "/public/images/textures/GRASS_1.png");
@@ -189,4 +220,3 @@ await textures.objects.addTexture("roadrail", "/public/images/textures/ROAD_RAIL
 await textures.objects.addTexture("roadrailvertical", "/public/images/textures/ROAD_RAIL_VERTICAL.png");
 await textures.objects.addTexture("downwardlight", "/public/images/textures/DOWNWARD_LIGHT.png");
 await textures.objects.addTexture("roads", "/public/images/textures/roads.png");
-

@@ -80,18 +80,18 @@
  self.onmessage = function({
      data
  }) {
-   switch (data.requestType) {
-     case 0: {
-        postMessage({
-         result: getPath.call(data, data.path.start, data.path.end),
-         mapId: data.mapId,
-         avatarId: data.avatarId
-        });
-     };
-     break;
-     case 1: {
-        $GRAPHS[data.mapId] = data.nodes;
-     };
-     break;
-   }
+     switch (data.requestType) {
+         case 0: {
+             postMessage({
+                 result: getPath.call(data, data.path.start, data.path.end),
+                 mapId: data.mapId,
+                 avatarId: data.avatarId
+             });
+         };
+         break;
+         case 1: {
+             $GRAPHS[data.mapId] = data.nodes;
+         };
+         break;
+     }
  }

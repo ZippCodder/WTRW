@@ -34,8 +34,14 @@ server.on("request",(req,res) => {
   break;
   case ".js": {
    contentType = "text/javascript";
-  }
-  break; 
+  };
+  break;
+  case ".wav": {
+   contentType = "audio/wav";
+  };
+  case ".mp3": {
+   contentType = "audio/mpeg";
+  }; 
   default: {
    contentType = "image/png";
   }

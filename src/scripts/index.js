@@ -9,12 +9,19 @@ import "../styles/styles.css";
 
 window.onload = async () => {
     if (!localStorage.getItem("game-settings")) {
-      localStorage.setItem("game-settings",JSON.stringify({onscreenMapStyle: 0, zoom: 1.2, graphicsQuality: 0, music: 0, volume: 0.5, joysticks: 0}));
+        localStorage.setItem("game-settings", JSON.stringify({
+            onscreenMapStyle: 0,
+            zoom: 1.2,
+            graphicsQuality: 0,
+            music: 0,
+            volume: 0.5,
+            joysticks: 0
+        }));
     }
 
-    window.$SETTINGS = JSON.parse(localStorage.getItem("game-settings"));    
+    window.$SETTINGS = JSON.parse(localStorage.getItem("game-settings"));
     window.canvas = document.querySelector("#gameArea");
-    window.sharpness = ($SETTINGS.graphicsQuality == 0) ? 1:($SETTINGS.graphicsQuality == 1) ? 0.5:2;
+    window.sharpness = ($SETTINGS.graphicsQuality == 0) ? 1 : ($SETTINGS.graphicsQuality == 1) ? 0.5 : 2;
 
     canvas.width = window.innerWidth * sharpness;
     canvas.height = window.innerHeight * sharpness;
@@ -32,17 +39,17 @@ window.onload = async () => {
     window.$RELOAD_BUTTON = null;
     window.$SCORE = 0;
     window.$MAX_ENEMIES = 10;
-    window.$CONTENT_LOADED = false; 
-    window.$HIGHSCORE = localStorage.getItem("highscore") || 0; 
-    window.$PLAYER_NAME = localStorage.getItem("player-name"); 
+    window.$CONTENT_LOADED = false;
+    window.$HIGHSCORE = localStorage.getItem("highscore") || 0;
+    window.$PLAYER_NAME = localStorage.getItem("player-name");
     window.$AVATAR_MODE_BUTTON = null;
     window.$DROP_ITEM_BUTTON = null;
     window.$AVATAR = null;
     window.$ACTIVE_DIALOGUE_PARTY = null;
     window.$MAP = null;
     window.$MAP_DISPLAY = null;
-    window.$PAUSED = false; 
-    window.$SPECTATING = true; 
+    window.$PAUSED = false;
+    window.$SPECTATING = true;
     window.$HEALTH_BAR = null;
     window.$TRANSITIONING = false;
     window.$GAME_LOOP = function() {};
@@ -76,8 +83,8 @@ window.onload = async () => {
         window.worldHeight = 2 / worldUnitY;
         window.joystickPositions = {
             left: {
-                x: ($IS_MOBILE) ? (-worldWidth / 2) + 20:(-worldWidth / 2) - 50,
-                y: ($IS_MOBILE) ? (-worldHeight / 2) + 20:(-worldHeight / 2) - 50
+                x: ($IS_MOBILE) ? (-worldWidth / 2) + 20 : (-worldWidth / 2) - 50,
+                y: ($IS_MOBILE) ? (-worldHeight / 2) + 20 : (-worldHeight / 2) - 50
             },
             right: {
                 x: (worldWidth / 2) - 20,
@@ -144,18 +151,18 @@ window.onload = async () => {
     }, undefined, 0.005);
 
     window.requestTransition = function(c, speed = 2) {
-      if (!$TRANSITIONING) {
-        $CURRENT_MAP.move = false;
+        if (!$TRANSITIONING) {
+            $CURRENT_MAP.move = false;
 
-        if (!useTransition) {
-            c();
-            return;
+            if (!useTransition) {
+                c();
+                return;
+            }
+
+            callback = c;
+            transitionSpeed = speed;
+            $TRANSITIONING = true;
         }
-
-        callback = c;
-        transitionSpeed = speed;
-        $TRANSITIONING = true;
-      }
     };
 
     gl.enable(gl.BLEND);
@@ -411,10 +418,11 @@ window.onload = async () => {
     gl.vertexAttrib3fv(locations.offset, new Float32Array([0, 0, 0.001]));
     gl.vertexAttrib1f(locations.textrUnit, 0);
 
-    await import(/* webpackChunkName: "textures.chunk" */"/src/scripts/textures.js");
-    await import(/* webpackChunkName: "objects.chunk" */"/src/scripts/objects.js");
-    await import(/* webpackChunkName: "controls.chunk" */"/src/scripts/controls.js");
-    await import(/* webpackChunkName: "game.chunk" */"/src/scripts/game.js");
+    await import( /* webpackChunkName: "textures.chunk" */ "/src/scripts/textures.js");
+    await import( /* webpackChunkName: "objects.chunk" */ "/src/scripts/objects.js");
+    await import( /* webpackChunkName: "sounds.chunk" */ "/src/scripts/sounds.js");
+    await import( /* webpackChunkName: "controls.chunk" */ "/src/scripts/controls.js");
+    await import( /* webpackChunkName: "game.chunk" */ "/src/scripts/game.js");
 
     function renderObjects() {
         $OBJECTS.forEach(v => {
@@ -448,51 +456,49 @@ window.onload = async () => {
     let T1, T2;
 
     window.init = function() {
-      if (!$PAUSED) {
-        if (performance.now() - frameRateMarker >= 1000) {
-            frameRate = globalFrameRun;
-            globalFrameRun = 0;
-            frameRateMarker = performance.now();
+        if (!$PAUSED) {
+            if (performance.now() - frameRateMarker >= 1000) {
+                frameRate = globalFrameRun;
+                globalFrameRun = 0;
+                frameRateMarker = performance.now();
 
-            average = times.reduce((a, b) => {
-                return a + b;
-            }, 0) / times.length;
-            times = [];
-            total = 0;
+                average = times.reduce((a, b) => {
+                    return a + b;
+                }, 0) / times.length;
+                times = [];
+                total = 0;
+            }
+
+            T1 = performance.now();
+
+            gl.clear(gl.COLOR_BUFFER_BIT);
+            gl.uniform1f(locations.scale, scale);
+            if ($TRANSITIONING) transitionAnimation.run();
+            if (fadeTransition.transitioning) {
+                globalDarkness = fadeTransition.run();
+            }
+            $CURRENT_MAP?.render();
+            renderObjects();
+            $CURRENT_MAP?.renderTopLayer();
+            renderControls();
+
+            $GAME_LOOP();
+
+            $MAP_DISPLAY.update(true);
+            $MAP_DISPLAY.render();
+
+            T2 = performance.now();
+
+            gameStats.innerHTML = `FPS: ${frameRate}`;
+            globalFrameRun++;
+            times.push(T2 - T1);
         }
-
-        T1 = performance.now();
-
-        gl.clear(gl.COLOR_BUFFER_BIT);
-        gl.uniform1f(locations.scale, scale);
-        if ($TRANSITIONING) transitionAnimation.run();
-        if (fadeTransition.transitioning) {
-            globalDarkness = fadeTransition.run();
-        }
-        $CURRENT_MAP?.render();
-        renderObjects();
-        $CURRENT_MAP?.renderTopLayer();
-        renderControls();
-
-        $GAME_LOOP();
-
-        $MAP_DISPLAY.update(true);
-        $MAP_DISPLAY.render();
-
-        T2 = performance.now();
-
-        gameStats.innerHTML = `FPS: ${frameRate}`;
-        globalFrameRun++;
-        times.push(T2 - T1);
-      }
 
         requestAnimationFrame(init);
     }
-    loader.style.display = "none"; 
-    canvas.style.background = "white"; 
+    loader.style.display = "none";
+    canvas.style.background = "white";
     playButton.innerText = "Play";
-    $CONTENT_LOADED = true; 
+    $CONTENT_LOADED = true;
     init();
 }
-
-

@@ -23,7 +23,7 @@ export function cut(ar, lw = 0, atrbs = [], vertices = false) {
             [x + w, y, ...atrbs],
             [x, y + h, ...atrbs],
             [x + w, y + h, ...atrbs]
-        ]); 
+        ]);
     }
 
     return (vertices) ? res.flat(1) : res;
@@ -299,13 +299,13 @@ export function toRGB(color) {
 }
 
 export function normalizeRotation(rotation) {
-  if (rotation < 0) {
-    rotation = 360 + rotation;
-  } else if (rotation > 360) {
-    rotation = rotation - 360;
-  }
+    if (rotation < 0) {
+        rotation = 360 + rotation;
+    } else if (rotation > 360) {
+        rotation = rotation - 360;
+    }
 
-  return rotation;
+    return rotation;
 }
 
 export function genObjectId(length = 10) {
@@ -393,51 +393,51 @@ export function lineIntersectsBox(p1, p2, p3, p4, bx, by, bw, bh) {
 // Animation creation objects
 
 export class Transition {
- constructor(value, points, speed = 1, callback, reference, property, executionPoint = 1) {
-  this.value = value;
-  this.points = points;
-  this.speed = speed;
-  this.callback = callback?.bind(reference);
-  this.reference = reference;
-  this.executionPoint = executionPoint;
-  this.property = property;
-  this.transitioning = false;
-  this.phase = 0;
-  this.animation = new LoopAnimation(function() {
-    let difference = Math.abs(this.points[this.phase] - this.value);   
- 
-    this.value += (this.points[this.phase] > this.value) ? (difference/2)*this.speed:-(difference/2)*this.speed;
-    
-    if (this.property) this.reference[property] = value;
-
-    if (difference < 1) this.value = this.points[this.phase]; 
-
-    if (this.value === this.points[this.phase]) {
-      this.phase++;
-      if (this.phase === this.executionPoint) this.callback();
-      if (this.phase === this.points.length) {
+    constructor(value, points, speed = 1, callback, reference, property, executionPoint = 1) {
+        this.value = value;
+        this.points = points;
+        this.speed = speed;
+        this.callback = callback?.bind(reference);
+        this.reference = reference;
+        this.executionPoint = executionPoint;
+        this.property = property;
         this.transitioning = false;
         this.phase = 0;
-      }
+        this.animation = new LoopAnimation(function() {
+            let difference = Math.abs(this.points[this.phase] - this.value);
+
+            this.value += (this.points[this.phase] > this.value) ? (difference / 2) * this.speed : -(difference / 2) * this.speed;
+
+            if (this.property) this.reference[property] = value;
+
+            if (difference < 1) this.value = this.points[this.phase];
+
+            if (this.value === this.points[this.phase]) {
+                this.phase++;
+                if (this.phase === this.executionPoint) this.callback();
+                if (this.phase === this.points.length) {
+                    this.transitioning = false;
+                    this.phase = 0;
+                }
+            }
+        }, this, 0.005);
     }
-  }, this, 0.005);
- }
 
- run() {
-  if (this.transitioning) this.animation.run();
-  return this.value;
- }
+    run() {
+        if (this.transitioning) this.animation.run();
+        return this.value;
+    }
 
- requestTransition(value, callback, reference, points, speed, property) {
-   this.value = value ?? this.value;
-   this.points = points ?? this.points;
-   this.speed = speed ?? this.speed;
-   this.callback = callback?.bind(reference) ?? this.callback;
-   this.reference = reference ?? this.reference;
-   this.property = property ?? this.property;
-   this.transitioning = true;
-   this.phase = 0;
- }
+    requestTransition(value, callback, reference, points, speed, property) {
+        this.value = value ?? this.value;
+        this.points = points ?? this.points;
+        this.speed = speed ?? this.speed;
+        this.callback = callback?.bind(reference) ?? this.callback;
+        this.reference = reference ?? this.reference;
+        this.property = property ?? this.property;
+        this.transitioning = true;
+        this.phase = 0;
+    }
 }
 
 export class LoopAnimation {
@@ -490,7 +490,7 @@ export class MultiFrameLoopAnimation {
             this.running = true;
             this.lastFrameDraw = Date.now();
         }
- 
+
         this.active = true;
 
         this.lapsedTime = (Date.now() - this.lastFrameDraw) / 1000;
@@ -500,13 +500,13 @@ export class MultiFrameLoopAnimation {
             this.nextFrame++;
         }
         if (this.nextFrame === this.frames.length) {
-          this.nextFrame = 0;
-          this.active = false;
+            this.nextFrame = 0;
+            this.active = false;
         }
     }
 
     end() {
-        this.endFunc();
+        if (this.endFunc) this.endFunc();
         this.running = false;
     }
 }
@@ -585,36 +585,36 @@ export class Inventory {
 
         if (!item || !item.pickup || this.count === this.slots) return false;
 
-        if (slot && !this.items[slot] && slot < this.slots-1) {
-           item.slot = slot;
-           this.items[slot] = item;
+        if (slot && !this.items[slot] && slot < this.slots - 1) {
+            item.slot = slot;
+            this.items[slot] = item;
         } else if (this.count < this.slots) {
             for (let i = 0; i < this.slots; i++) {
-              if (this.items[i] === undefined) {
-                item.slot = i;
-                this.items[i] = item;
-                break;
-              }
+                if (this.items[i] === undefined) {
+                    item.slot = i;
+                    this.items[i] = item;
+                    break;
+                }
             }
         }
-        
-        if (item.slot === undefined) return false; 
+
+        if (item.slot === undefined) return false;
 
         if (item.map) item.map.unlink(item.id);
         this.count++;
 
         switch (item.type) {
             case "gun": {
-               if (!this.weapons[item.name]) this.weapons[item.name] = {
-                  ammo: 0,
-                  count: 0
-               };
-               this.weapons[item.name].ammo += item.bullets;
-               this.weapons[item.name].count++;
+                if (!this.weapons[item.name]) this.weapons[item.name] = {
+                    ammo: 0,
+                    count: 0
+                };
+                this.weapons[item.name].ammo += item.bullets;
+                this.weapons[item.name].count++;
 
-               if ($AVATAR.state.equippedItems.mainTool?.name === item.name) {
-                 updateAmmoDisplay();
-               }
+                if ($AVATAR.state.equippedItems.mainTool?.name === item.name) {
+                    updateAmmoDisplay();
+                }
             };
             break;
         }
@@ -632,32 +632,33 @@ export class Inventory {
     }
 
     ejectItem(slot, newItem) {
-        let item = this.items[slot], object;
+        let item = this.items[slot],
+            object;
 
         if (item) {
-        switch (item.type) {
-            case "gun": {
-                if (--this.weapons[this.items[slot].name].count === 0) {
-                    item.bullets = Math.min(item.constructor._properties.capacity, this.weapons[item.name].ammo);
-                    this.weapons[item.name].ammo = 0;
-                } else {
-                    item.bullets = 0;
-                }
+            switch (item.type) {
+                case "gun": {
+                    if (--this.weapons[this.items[slot].name].count === 0) {
+                        item.bullets = Math.min(item.constructor._properties.capacity, this.weapons[item.name].ammo);
+                        this.weapons[item.name].ammo = 0;
+                    } else {
+                        item.bullets = 0;
+                    }
 
-                item.ring.trans.offsetX = 0;
-                item.ring.trans.offsetY = 0;
-            };
-            break;
+                    item.ring.trans.offsetX = 0;
+                    item.ring.trans.offsetY = 0;
+                };
+                break;
+            }
+
+            item.slot = undefined;
+            item.trans.offsetX = 0;
+            item.trans.offsetY = 0;
+
+            object = item;
+            this.items[slot] = undefined;
+            this.count--;
         }
-
-        item.slot = undefined;
-        item.trans.offsetX = 0;
-        item.trans.offsetY = 0;
-
-        object = item;
-        this.items[slot] = undefined;
-        this.count--;
-       }
 
         if (newItem) this.addItem(newItem, slot);
 

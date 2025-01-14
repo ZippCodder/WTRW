@@ -415,9 +415,9 @@ html,body {
           .controls-container__item {
             width: auto;
             height: auto;
-            background-color: #898989;
-            border-bottom: 6px solid #676767;
-            outline: 2px solid #111111;
+            background-color: rgba(60,60,60,0.6);
+            border-bottom: 6px solid rgba(44,44,44,0.6);
+            outline: 2px solid rgba(17,17,17,0.6);
             background-repeat: no-repeat;
             background-size: contain;
             background-position: bottom right;
@@ -426,6 +426,7 @@ html,body {
           .controls-container__item--equipped {
             background-color: #666666;
             border-bottom: 6px solid #444444;
+            outline: 2px solid #111111;
           }
           
           .controls-container__item::before {
@@ -1042,11 +1043,14 @@ html,body {
           }
           
           .description__image {
-              width: 6em; 
-              height: 6em; 
+              width: 8em; 
+              height: 8em; 
               display: block;  
               margin: auto;
-              background-color: gray; 
+              background: radial-gradient(#777777, #555555, #3C3C3C, #3C3C3C);
+              background-position: center center;
+              background-size: 100% 80%;
+              background-repeat: no-repeat;
           }
           
           .note__content-title {
@@ -1153,6 +1157,7 @@ html,body {
           #console, #settings {
               user-select: auto;
               z-index: 2;
+              font-size: 1em; 
               background: #3C3C3C;
               width: 80%;
               height: 90%;
