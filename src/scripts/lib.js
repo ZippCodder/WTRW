@@ -298,6 +298,10 @@ export function toRGB(color) {
     return [aofb(aisofb(color[0], 1), 255), aofb(aisofb(color[1], 1), 255), aofb(aisofb(color[2], 1), 255), color[3]];
 }
 
+export function HexToRGB(color) {
+    return [parseInt(color.slice(1, 3), 16), parseInt(color.slice(3, 5), 16), parseInt(color.slice(5, 7), 16), 1];
+}
+
 export function normalizeRotation(rotation) {
     if (rotation < 0) {
         rotation = 360 + rotation;

@@ -80,8 +80,8 @@
       CandyBar,
       StubbyShotgun,
       RobberShotgun,
-      ClassicShotgun, 
-      HeavyShotgun, 
+      ClassicShotgun,
+      HeavyShotgun,
       Mag
   } from "/src/scripts/objects.js";
 
@@ -89,8 +89,8 @@
   $AVATAR.postLink();
   $AVATAR.inventory.cash = parseInt(localStorage.getItem("player-cash")) || 0;
 
-  const firstNames = ["Dave", "Richee", "Brenda", "Stacy", "Skylar", "Malcom", "Steven", "Brandon", "Halee", "Kaylee", "Peter", "Kate", "Hannah", "Joy", "Lenny", "Leon", "Teddy", "Amanda", "Pablo", "Emma", "Chloe", "Harry", "Mia", "Larry", "Lisa", "Camela", "Lacey", "Daniel", "Danny", "Riley", "Jacob", "Jane", "Lilly", "Rebecca", "Beatrice", "Brandy", "Bianca", "Lauren", "Grace", "Andie"];
-  const lastNames = ["Davidson", "Jackson", "Olvedo", "Cabello", "Kabrick", "Rich", "Dotson", "Latins", "Emmit", "James", "Havana", "York", "Ross", "Jean", "Masons", "Umada", "Gerannd", "Roberts", "Robby", "Lane", "Shery", "Munick", "Lamoss", "Price", "Ross", "Gaines", "Holmes", "Hanes", "Ommis"];
+  const firstNames = ["Dave", "Richee", "Brenda", "Stacy", "Skylar", "Malcom", "Steven", "Brandon", "Halee", "Kaylee", "Peter", "Kate", "Hannah", "Joy", "Lenny", "Leon", "Teddy", "Amanda", "Pablo", "Emma", "Chloe", "Harry", "Mia", "Larry", "Lisa", "Camela", "Lacey", "Daniel", "Danny", "Riley", "Jacob", "Jane", "Lilly", "Rebecca", "Beatrice", "Brandy", "Bianca", "Lauren", "Grace", "Andie", "Matt", "Carol", "Donny", "Eddie"];
+  const lastNames = ["Davidson", "Jackson", "Olvedo", "Cabello", "Kabrick", "Rich", "Dotson", "Latins", "Emmit", "James", "Havana", "York", "Ross", "Jean", "Masons", "Umada", "Gerannd", "Roberts", "Robby", "Lane", "Shery", "Munick", "Lamoss", "Price", "Ross", "Gaines", "Holmes", "Hanes", "Ommis", "Wha", "Wong", "Dami", "Person"];
 
   function getName() {
       return `${firstNames[random(firstNames.length)]} ${lastNames[random(lastNames.length)]}`;
@@ -235,13 +235,6 @@
       if (!$AVATAR.state.vitals.health) $AVATAR.die();
   }, window, 2);
 
-  const hungerLoop = new LoopAnimation(function() {
-      if ($AVATAR.state.vitals.hunger > 0 && $AVATAR.state.vitals.health > 0) {
-          $AVATAR.state.vitals.hunger -= 5;
-          updateHungerDisplay();
-      }
-  }, window, 30);
-
   $MAP.lighting = false;
   $ACTIVE_DIALOGUE_PARTY = Object.values($CURRENT_MAP.avatars)[5];
 
@@ -264,10 +257,6 @@
                   $CURRENT_MAP.translate(0, -0.2);
                   break;
           }
-      }
-      if (!$SPECTATING && !$TRANSITIONING) {
-          hungerLoop.run();
-          if ($AVATAR.state.vitals.health > 0 && !$AVATAR.state.vitals.hunger) starveLoop.run();
       }
       enemySpawnLoop.run();
       timeUpdateLoop.run();

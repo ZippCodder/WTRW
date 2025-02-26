@@ -23,7 +23,7 @@ html,body {
         }
 
         #mainControls {
-          display: block;
+          display: none;
         }
 
          #press-e {
@@ -36,6 +36,7 @@ html,body {
          }
  
         .controls-container__interaction-buttons {
+          display: none; 
           position: absolute;
           width: min-content;
           height: 8em;
@@ -45,7 +46,7 @@ html,body {
           user-select: none; 
         } 
 
-        .interaction-buttons__button {
+        .interaction-buttons__button, .settings-container__control-key {
           width: 2em;
           height: 2em;
           background: #555555;
@@ -62,7 +63,7 @@ html,body {
           padding: 0;
         }
 
-        .interaction-buttons__button p {
+        :is(.interaction-buttons__button, .settings-container__control-key) p {
           display: block; 
           width: 100%;
           height: 100%;
@@ -405,11 +406,12 @@ html,body {
             height: 7vmax;
             left: calc(50% - 19.5vmax);
             display: grid;
-            grid-template-columns: repeat(5, 7vmax);
+            grid-template-columns: repeat(6, 7vmax);
             grid-template-rows: 100%;
             grid-gap: 1vmax;
             font-family: var(--main-font);
             counter-set: active-item 0;
+            white-space: nowrap; 
           }
           
           .controls-container__item {
@@ -437,6 +439,20 @@ html,body {
               height: 100%;
               background: none;
               margin-left: 5px;
+          }
+
+          .inv__buttons {
+           width: 100%; 
+           height: 100%;  
+           display: inline-flex; 
+           align-items: center; 
+          }
+
+          #drop-button {
+           display: block; 
+           width: 1.7em; 
+           height: 2em;
+           font-size: 0.6em; 
           }
 
           .controls-container__buttons {
@@ -516,7 +532,39 @@ html,body {
             margin: 0;
             margin-bottom: 0.5em;  
           }
- 
+
+          .settings-container__controls {
+           border-spacing: 0.5em;
+           width: 100%; 
+          }
+
+          .settings-container__controls td {
+            width: 50%;
+            height: 2em; 
+            text-align: center; 
+            font-size: 1.2em;
+          }
+
+          .settings-container__controls th {
+            height: 2em;
+            padding: 0; 
+          }
+
+          .settings-container__control-key {
+            display: block; 
+            margin: auto; 
+            margin-left: 0.5em; 
+            margin-right: 0.5em;
+            user-select: none;  
+          }
+
+          .settings-container__key-container {
+            display: flex; 
+            width: 100%; 
+            height: 100%; 
+            justify-content: center; 
+          }
+  
           #console-button, #action-button {
             position: absolute;
             background: #3C3C3C;
@@ -602,7 +650,7 @@ html,body {
               display: inline-block;
               opacity: 0.7;
               transform: scale(0.5);
-          } 
+          }
 
           #ammo-display div {
            height: 100%;
@@ -627,24 +675,28 @@ html,body {
               font-family: var(--main-font);
           }
 
-          #map {
+          .container-window{
               user-select: none;
+              z-index: 1;
+              background: #3C3C3C;
               width: 80%;
               height: 90%;
               position: absolute;
-              background: none;
               left: 10%;
               top: calc(5% - 2.5px);
               font-family: var(--main-font);
               color: white;
               font-size: 1em;
-              grid-template-columns: 50% 50%;
-              grid-template-rows: 2.5em calc(100% - 2.5em);
               display: none;
               box-shadow: 0px 0px 10px black;
               border-bottom: 5px solid #131313;
-              z-index: 1;
               outline: 2px solid #111111;    
+          }
+
+          #map {
+              background: none;
+              grid-template-columns: 50% 50%;
+              grid-template-rows: 2.5em calc(100% - 2.5em);
           }
  
           .map__key {
@@ -795,46 +847,16 @@ html,body {
             height: 100%;
             z-index: 1;
             transform: translate(0,calc(-50% - 1px)) scale(1.1);
-          } 
+          }
  
           #main-inventory {
-              user-select: none;
-              z-index: 1;
-              background: #3C3C3C;
-              width: 80%;
-              height: 90%;
-              position: absolute;
-              left: 10%;
-              top: calc(5% - 2.5px);
-              font-family: var(--main-font);
-              color: white;
-              font-size: 1em;
               grid-template-columns: 40% 60%;
               grid-template-rows: 2.5em calc(100% - 6em) 3.5em;
-              display: none;
-              box-shadow: 0px 0px 10px black;
-              border-bottom: 5px solid #131313;
-              outline: 2px solid #111111;    
           }
 
           #store {
-              user-select: none;
-              z-index: 1;
-              background: #3C3C3C;
-              width: 80%;
-              height: 90%;
-              position: absolute;
-              left: 10%;
-              top: calc(5% - 2.5px);
-              font-family: var(--main-font);
-              color: white;
-              font-size: 1em;
               grid-template-columns: 40% 60%;
               grid-template-rows: 2.5em calc(100% - 2.5em);
-              display: none;
-              box-shadow: 0px 0px 10px black;
-              border-bottom: 5px solid #131313;
-              outline: 2px solid #111111;  
           }
 
           .note-wrapper, .title-card-wrapper {
@@ -1154,28 +1176,17 @@ html,body {
             box-sizing: border-box;
           }
 
-          #console, #settings {
-              user-select: auto;
+          #console, #settings, #creative-mode {
               z-index: 2;
-              font-size: 1em; 
-              background: #3C3C3C;
-              width: 80%;
-              height: 90%;
-              position: absolute;
-              left: 10%;
-              top: calc(5% - 2.5px);
-              font-family: var(--main-font);
-              color: white;
-              display: none;
-              font-size: 1em;
               grid-template-columns: 100%;
               grid-template-rows: 2.5em calc(100% - 5.5em) 3em;
-              box-shadow: 0px 0px 10px black;
-              border-bottom: 5px solid #131313;
-              outline: 2px solid #111111;    
           }
 
-          .console__title, .settings__title {
+          #console {
+           user-select: auto; 
+          }
+
+          .console__title, .settings__title, .creative-mode__title {
               background: #222222;
               width: 100%;
               height: 100%;
@@ -1187,6 +1198,7 @@ html,body {
               padding: 0.3em;
               padding-left: 10px;
               padding-right: 10px;
+              white-space: nowrap;  
           }
           
           .console__messages, .settings__settings-container {
@@ -1205,7 +1217,96 @@ html,body {
               grid-template-rows: 2.5em calc(100% - 2.5em);
           }
 
-          .settings__settings-container {
+          #creative-mode {
+           display: none; 
+           grid-template-rows: 2.5em calc(100% - 2.5em);
+          }
+
+          .creative-mode__editing-mode {
+            font-family: inherit;
+            font-size: 0.7em;
+            background: none;
+            float: right;
+            color: inherit;
+            border: 1px solid white;
+            border-bottom: 4px solid white;
+            margin-right: 1em;
+            margin-left: 0.5em; 
+          }
+
+          .creative-mode__title span {
+            float: right;
+            display: inline-flex; 
+            align-items: center; 
+            height: 100%; 
+          }
+
+          .creative-mode__title p {
+            font-size: 0.7em;
+            height: 1.5rem;
+            font-weight: normal;
+          }
+
+          option {
+            background-color: #3C3C3C;
+          }
+
+          .creative-mode__options-container {
+            display: grid; 
+            grid-template-columns: 100%; 
+            grid-template-rows: 2em auto; 
+          }
+
+          .options-container__categories {
+            width: 100%; 
+            height: 2em;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 1fr; 
+            z-index: 2;
+          }
+
+          .categories__category {
+            width: 100%; 
+            height: 100%; 
+            border: none; 
+            color: white; 
+            font-family: var(--main-font);
+            background: #3C3C3C;
+            outline: 2px solid #111111;
+            border-bottom: 4px solid #2C2C2C;
+            opacity: 0.4;
+          }
+
+          .categories__category:nth-child(1) {
+            opacity: 1;
+          }
+
+          .categories__category:nth-child(2) {
+            border-left: none; 
+            border-right: none; 
+          }
+
+          .asset-library__search-bar {
+            height: calc(2em+5px); 
+            box-sizing: border-box;
+            display: flex; 
+          }
+
+          .search-bar__input {
+            margin: auto;
+            background: white;
+            border: none;
+            border-bottom: 5px solid gray;
+            height: 2em; 
+            width: 100%;
+            font-size: 1.1em; 
+            font-family: var(--main-font);
+            text-align: center; 
+            display: block; 
+          }
+
+          .settings__settings-container, .creative-mode__options-container {
               border: 10px solid #222222; 
           }
 
@@ -1231,18 +1332,161 @@ html,body {
               margin-right: 2em; 
           }
 
-          .setting__input {
+          .setting__input, .creative-mode__input {
               font-family: var(--main-font);
               padding: 0.2em;
               background: rgba(0, 0, 0, 0.2);
               color: white;
-              border: none; 
-              margin-right: 1em; 
+              border: none;
+              min-width: 3em; 
           }
 
-          #fullscreen-setting, #pause-setting {
+          .setting__select {
+            margin-right: 1em;
+          }
+
+          .setting__button {
+            font-family: var(--main-font);
+            color: white;
+            display: block;
+            background: rgba(0, 0, 0, 0.2);
+            height: fit-content;
+            width: fit-content;
+            border: none;
+            margin-left: 0.5em; 
+            margin-right: 0.5em; 
+            padding: 0.4em; 
+          }
+
+          .asset-library__library {
+            display: block; 
+            overflow-y: scroll; 
+            width: 100%;
+            height: calc(100% - 2em - 5px);
+            box-sizing: border-box;
+            padding: 0.2em; 
+          }
+
+          .options-container__asset-library {
+           display: block; 
+           width: 100%; 
+           height: 100%;
+           overflow: hidden;
+          }
+
+          .options-container__configure {
+           display: none; 
+          }
+
+          .configure__configure-title, .configure-bot__title {
+           height: 2em;
+           width: 100%;
+           display: flex; 
+           justify-content: space-between;
+           align-items: center;
+           flex-direction: row;
+           padding-left: 1em; 
+           padding-right: 1em;
+           box-sizing: border-box; 
+           background: #222222;
+          }
+
+          .configure__configure-settings, .configure-bot__bot-settings {
+           width: 100%; 
+           height: calc(100% - 2em);
+           padding: 0.2em;
+           box-sizing: border-box; 
+          }
+
+          .configure-settings__configure-setting, .configure-bot__bot-setting {
+           width: 100%; 
+           height: 2em;
+           display: flex; 
+           flex-direction: row; 
+           white-space: nowrap;
+           background: rgba(0, 0, 0, 0.2);
+           padding-left: 0.5em; 
+           padding-right: 0.5em;
+           box-sizing: border-box; 
+           justify-content: space-between; 
+           align-items: center;
+           margin-bottom: 0.2em; 
+          }
+
+          :is(.configure-settings__configure-setting, .configure-bot__bot-setting) input[type="number"], input[type="color"] {
+            font-family: var(--main-font);
+            padding: 0.2em;
+            background: rgba(0, 0, 0, 0.2);
+            color: white;
+            border: none;
+            width: 3em; 
+          }
+
+          :is(.configure-settings__configure-setting, .configure-bot__bot-setting) input[type="text"], :is(.configure-settings__configure-setting, .configure-bot__bot-setting) select {
+            background: rgba(0, 0, 0, 0.2);
+            border: none; 
+            color: white;
+            font-family: var(--main-font);
+            text-align: center; 
+          }
+
+          .configure-title__title, .configure-bot-title__title {
+           font-size: 1em; 
+          }
+
+          .configure-title__back {
+           margin: 0; 
+          }
+
+          .library__result {
+            width: auto; 
+            height: 2em; 
+            background: rgba(0, 0, 0, 0.2);
+            padding-left: 1em;
+            padding-right: 1em; 
+            line-height: 2em; 
+            color: white;
+            text-align: left;
+            margin-bottom: 0.2em;
+            display: flex; 
+            align-items: center;
+            justify-content: space-between;
+            white-space: wrap; 
+          }
+
+          .library__result p {
+            margin: 0; 
+            padding: 0;
+            line-height: 1em; 
+          }
+
+          .library__result button, .configure-title__back, .configure-bot-title__insert {
+            color: white; 
+            font-family: var(--main-font);
+            background: #3C3C3C;
+            outline: 2px solid #111111;
+            border: none; 
+            border-bottom: 4px solid #2C2C2C;
+            float: right;
+            vertical-align: middle;
+            margin: 0;
+            margin-right: 1em; 
+          }
+
+          .options-container__configure-bot {
+           position: relative;
+           display: none; 
+           width: 100%; 
+           height: 100%;
+           grid-template-columns: 100%; 
+           grid-template-rows: 2em auto;
+           overflow-y: scroll;
+          }
+
+          #pause-setting {
             content: " ";  
             display: block;
+            appearance: none; 
             width: 1.2em; 
             height: 1.2em;
             accent-color: #222222;
@@ -1255,13 +1499,13 @@ html,body {
             display: block; 
             width: 100%; 
             height: 100%; 
-            background: red; 
-            background: #222222; 
-            pointer-events: none;  
+            background: rgba(0, 0, 0, 0.2);
+            pointer-events: none;
+            clip-path: polygon(5% 5%, 30% 0%, 30% 100%, 5% 100%, 5% 0%, 50% 0%, 75% 0%, 75% 100%, 50% 100%, 50% 0%);
           }
 
           #pause-setting:checked::after {
-            display: none; 
+            clip-path: polygon(20% 0%, 20% 100%, 90% 50%, 20% 0%);
           }
 
           #fullscreen-setting::after {
@@ -1269,9 +1513,8 @@ html,body {
             display: block; 
             width: 100%; 
             height: 100%; 
-            background: red; 
-            background: #222222; 
-            pointer-events: none;  
+            pointer-events: none; 
+            cursor: none; 
           }
 
           #fullscreen-setting:checked::after {
@@ -1422,7 +1665,7 @@ html,body {
            font-size: 1rem;
            border: none;
            display: inline-block;
-           border-bottom: 5px solid #003366; 
+           border-bottom: 5px solid #003366;
           }
 
           .checkout__balance {
@@ -1480,8 +1723,8 @@ html,body {
           }
     
           #console-input {
-              width: 80%;
-              height: 90%;
+              width: calc(100% - 4.5em);
+              height: 100%;
               resize: none;
               position: relative;
               font-family: var(--main-font);
@@ -1540,6 +1783,7 @@ html,body {
         } 
 
           @media screen and (orientation: portrait) {
+           
             #main-inventory {
               grid-template-columns: 100%;
               grid-template-rows: 2.5em calc(60% - 6em) 40% 3.5em;
@@ -1627,6 +1871,11 @@ html,body {
               grid-area: 2/1/3/2;
               border-bottom: none;
             }
+
+
+            .creative-mode__title p {
+              display: none; 
+            }
           }
 
           .main-inventory__controls-help {
@@ -1656,7 +1905,7 @@ html,body {
             border-bottom: 4px solid white;
           }
                     
-          .main-inventory__close, #console-close, #map-close, #store-close, #note-close, #settings-close {
+          .close-button {
             font-family: inherit;
             font-size: 0.7em;
             background: var(--light-red);
@@ -1664,6 +1913,17 @@ html,body {
             color: inherit;
             border: none;
             border-bottom: 5px solid var(--dark-red);
+          }
+
+          .settings__exit-game {
+            font-family: inherit;
+            font-size: 0.7em;
+            float: right;
+            border: none;
+            margin-right: 1em;
+            color: white;
+            background: dodgerblue;
+            border-bottom: 5px solid #003366; 
           }
      
          .main-inventory__buttons {
@@ -1802,7 +2062,7 @@ html,body {
           }
 
           @media only screen and (min-width: 900px) and (orientation: portrait) {
-           #main-inventory, #map, #store, #console, #settings {
+           #main-inventory, #map, #store, #console, #settings, #creative-mode{
              width: 30rem;
              height: 40rem;
              position: absolute;
@@ -1816,7 +2076,7 @@ html,body {
           }
 
           @media only screen and (min-width: 900px) and (orientation: landscape) {
-           #main-inventory, #map, #store, #console, #settings {
+           #main-inventory, #map, #store, #console, #settings, #creative-mode {
              width: 40rem;
              height: 25rem;
              position: absolute;
@@ -1833,7 +2093,7 @@ html,body {
             width: 20em;
             height: 4em;
             left: calc(50% - 11em);
-            grid-template-columns: repeat(5, 4em);
+            grid-template-columns: repeat(6, 4em);
             grid-gap: 0.5em;
            }
  

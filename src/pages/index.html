@@ -1,457 +1,791 @@
 <!DOCTYPE HTML>
 <html>
+
 <head>
-       <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0" />
-       <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0" />
+    <meta charset="UTF-8" />
     <link rel="icon" href="/public/images/favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<script src="https://kit.fontawesome.com/52e3142fe2.js" crossorigin="anonymous"></script>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geo&display=swap" rel="stylesheet">
-<link rel="preload" href="/public/images/interaction.png" as="image">
-<link rel="preload" href="/public/images/grabbing.png" as="image">
-<link rel="preload" href="/public/images/combat.png" as="image">
-<link rel="stylesheet" href="/src/styles/styles.css">
+    <script src="https://kit.fontawesome.com/52e3142fe2.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geo&display=swap" rel="stylesheet">
+    <link rel="preload" href="/public/images/interaction.png" as="image">
+    <link rel="preload" href="/public/images/grabbing.png" as="image">
+    <link rel="preload" href="/public/images/combat.png" as="image">
+    <link rel="stylesheet" href="/src/styles/styles.css">
     <title>WTRW</title>
 </head>
+
 <body>
     <!-- screen loader -->
-     
-               <div class="title-card-wrapper">
-                <div class="title-card">
-                  <div class="title-card__title">
-                   <img class="title__logo" src="/public/images/logo1.png"/>
-                   <h1 class="title__heading">WTRW</h1>
-                  </div>
-                   <div class="title-card__content">
-                   <div class="content__play">
-                     <input class="play__username" placeholder="Unnamed Human"></input>
-                     <button class="play__button"><div class="play__loader"></div></button>
-                   </div> 
-                   <p class="content__score">Your Score: ---</p>
-                   <p class="content__highscore">Your current highscore: ---</p>
-                   <div class="content__buttons">
-                    <button class="buttons__help">Help</button> 
+
+    <div class="title-card-wrapper">
+        <div class="title-card">
+            <div class="title-card__title">
+                <img class="title__logo" src="/public/images/logo1.png" />
+                <h1 class="title__heading">WTRW</h1>
+            </div>
+            <div class="title-card__content">
+                <div class="content__play">
+                    <input class="play__username" placeholder="Unnamed Human"></input>
+                    <button class="play__button">
+                        <div class="play__loader"></div>
+                    </button>
+                </div>
+                <p class="content__score">Your Score: ---</p>
+                <p class="content__highscore">Your current highscore: ---</p>
+                <div class="content__buttons">
+                    <button class="buttons__help">Help</button>
                     <button class="buttons__settings">Settings</button>
-                   </div>
-                  </div>
-                  <div class="title-card__socials"> 
-                   <p>Created by Deon Rich</p>
-                   <a target="_blank" href="https://github.com/ZippCodder/WTRW"><i class="fab fa-github-square"></i></a>
-                   <a target="_blank" href="https://dev.to/zippcodder"><i class="fab fa-dev"></i></a>
-                   <a target="_blank" href="https://codepen.io/ZippCodder"><i class="fab fa-codepen"></i></a>
-                  </div>
-                  </div>
-                </div> 
+                </div>
+            </div>
+            <div class="title-card__socials">
+                <p>Created by Deon Rich</p>
+                <a target="_blank" href="https://github.com/ZippCodder/WTRW"><i class="fab fa-github-square"></i></a>
+                <a target="_blank" href="https://dev.to/zippcodder"><i class="fab fa-dev"></i></a>
+                <a target="_blank" href="https://codepen.io/ZippCodder"><i class="fab fa-codepen"></i></a>
+            </div>
+        </div>
+    </div>
 
     <canvas id="gameArea"></canvas>
-          
+
     <!-- onscreen content and controls -->
-   <div id="dialogue">
-    <div class="top-panel panel"><p class="subtitles"><strong class="subtitles__name">ROBINHOOD:</strong> ...</p></div>
-    <div class="bottom-panel panel">
-    <div class="bottom-panel__dialogue">
-     <div class="bottom-panel__nav">
-      <div class="nav-up"><div></div></div><div class="nav-down"><div></div></div>
-     </div><div class="bottom-panel__options">
-      <p class="option-1 option"></p>
-      <p class="option-2 option"></p>
-     </div>
-    </div>
-    </div>
-   </div> 
-
-   <div id="mainControls">
-    <p id="press-e">Use "E"</p> 
-
-    <div id="mapInfo">
-     <canvas id="mapDisplay"></canvas>
-     <div id="mapTime"><i><p>9:36</p> <small>am</small></i></div>
-     <div id="coords-container">
-     <p id="coords">x:0, y:0</p>
-     </div>
-    </div>
-             
-                <div id="console-button"><img src="/public/images/icons/CHAT_ICON.png" /></div>
-           
-            <div class="controls-container__inv">
-                <div class="controls-container__item item-1"></div>
-                <div class="controls-container__item item-2"></div>
-                <div class="controls-container__item item-3"></div>
-                <div class="controls-container__item item-4"></div>
-                <div class="controls-container__item item-5"></div>
-            </div>
-                
-                <p id="game-stats">FPS: 0</p>
-                
-                <div class="controls-container__buttons">
-                  <img class="controls-container__button" src="/public/images/icons/BAG_ICON.png" />
-                  <img class="controls-container__button" src="/public/images/icons/MAP_ICON.png" />
-                  <img class="controls-container__button" src="/public/images/icons/PHONE_ICON.png" />
-                  <img class="controls-container__button" src="/public/images/icons/TOOL_ICON.png" />
+    <div id="dialogue">
+        <div class="top-panel panel">
+            <p class="subtitles"><strong class="subtitles__name">ROBINHOOD:</strong> ...</p>
+        </div>
+        <div class="bottom-panel panel">
+            <div class="bottom-panel__dialogue">
+                <div class="bottom-panel__nav">
+                    <div class="nav-up">
+                        <div></div>
+                    </div>
+                    <div class="nav-down">
+                        <div></div>
+                    </div>
                 </div>
-                  <img class="settings-icon" src="/public/images/icons/GEAR_ICON.png" />
-
-                <div class="controls-container__interaction-buttons">
-                  <button class="interaction-buttons__button grab-button"><p>G</p></button>
-                  <button class="interaction-buttons__button action-button"><p>A</p></button>
-                  <button class="interaction-buttons__button speak-button"><p>T</p></button>
-                </div>
-
-             <div class="controls-container__info-boxes">
-             <div class="info-box" id="armour-display"><img class="icon" src="/public/images/icons/SHLD_ICON.png" /><p id="armour">100</p></div>
-             <div class="info-box" id="ammo-display"><div><div></div></div><img class="icon" src="/public/images/icons/AMMO_ICON.png" /><p id="ammo">0/0</p></div>
-             </div>
-                
-                <div class="controls-container__stats">
-                  <div class="controls-container__health"><img src="/public/images/icons/HLT_ICON.png" class="icon" /><div class="controls-container__healthbar"><div id="healthbar"></div></div><img src="/public/images/icons/FOD_ICON.png" class="icon" /><p id="hunger">100</p><img src="/public/images/icons/WTR_ICON.png" class="icon" /><p id="thirst">100</p></div>
-                  <div class="controls-container__money"><img class="icon" src="/public/images/icons/MON_ICON.png" /><p id="money">0</p></div>
+                <div class="bottom-panel__options">
+                    <p class="option-1 option"></p>
+                    <p class="option-2 option"></p>
                 </div>
             </div>
+        </div>
+    </div>
 
-   <!-- onscreen content and controls -->
+    <div id="mainControls">
+        <p id="press-e">Use "E"</p>
 
-                <div id="map">
-                  <small class="map__coordinates">x:0, y:0</small>
-                  <div class="map__zoom"><p id="map-zoom-in">+</p><p id="map-zoom-out">-</p></div> 
-                  <h1 class="map__title">Map<button id="map-close">Close</button><button id="set-waypoint">Set Waypoint</button><button id="place-item">+</button></h1>
-                  <div class="map__key">
-                    <h2>Details</h2>
-                    <table class="stats__money">
-                     <th colspan="2"><h3 id="map-name">"Downtown SmallVille"</h3></th>
-                     <tr>
-                      <td>Dimensions:</td><td id="map-dimensions">500x500</td>
-                     </tr>
-                     <tr>
-                      <td>Population:</td><td id="map-population">153</td>
-                     </tr>
-                     <tr>
-                      <td>Rooms:</td><td id="map-rooms">34</td>
-                     </tr>
-                     <tr>
-                      <td>Pickups:</td><td id="map-pickups">132</td>
-                     </tr>
-                     <tr>
-                      <td>Objects:</td><td id="map-objects">132</td>
-                     </tr>
-                    </table>
+        <div id="mapInfo">
+            <canvas id="mapDisplay"></canvas>
+            <div id="mapTime"><i>
+                    <p>9:36</p> <small>am</small>
+                </i></div>
+            <div id="coords-container">
+                <p id="coords">x:0, y:0</p>
+            </div>
+        </div>
 
-                    <div class="map__buttons">
-                     <button id="switch-map" class="styled-btn">World Map</button><button id="goto" class="styled-btn">Go</button>
-                    </div>                    
+        <div id="console-button"><img src="/public/images/icons/CHAT_ICON.png" /></div>
 
-                    <table class="map__keys">
-                    <th colspan="2"><h3>Key</h3></th>
-                    <tr><td><div class="map__key-info"><p>Player - Non-hostile characters</p></div></td></tr>
-                    <tr><td><div class="map__key-info"><p>Enemy - Hostile characters</p></div></td></tr>
-                    <tr><td><div class="map__key-info"><p>Partner - Cooperative characters</p></div></td></tr>
-                    <tr><td><div class="map__key-info"><p>Waypoint - Direction to set destination</p></div></td></tr>
-                    </br>
-                    <tr><td><div class="map__key-info"><p>Obstacle - Furniture, large miscellaneous objects</p></div></td></tr> 
-                    <tr><td><div class="map__key-info"><p>Building/Door - Enterable structures</p></div></td></tr>
-                    <tr><td><div class="map__key-info"><p>Wall - Large inpenetrable obstacles</p></div></td></tr>
-                    </table>
-                    </br>
-                    <p><strong>Note:</strong> Move the display to view and navigate the full game area. Use <strong>"Set Waypoint"</strong> to set a marker for help navigating to the selected coordinates.</p>
-                  </div>
-                  <div class="map__canvas">
-                    <canvas id="interactive-map"></canvas>
-                  </div>
-                </div>
+        <div class="controls-container__inv">
+            <div class="controls-container__item item-1"></div>
+            <div class="controls-container__item item-2"></div>
+            <div class="controls-container__item item-3"></div>
+            <div class="controls-container__item item-4"></div>
+            <div class="controls-container__item item-5"></div>
+            <div class="inv__buttons">
+                <button class="interaction-buttons__button" id="drop-button">
+                    <p>▼</p>
+                </button>
+            </div>
+        </div>
 
-                <div id="settings">
-                  <h1 class="settings__title">Settings<button id="settings-close">Close</button></h1>
-                  <div class="settings__settings-container">
-                   <h1>General Settings</h1>
-                   <div class="settings-container__setting">
-                     <p class="setting__name">Onscreen Map Style</p>
-                     <select id="onscreen-map-style-setting" class="setting__input">
-                       <option>Default</option> 
-                       <option>Crimson</option> 
-                       <option>Predator</option> 
-                       <option>Night Vision</option> 
-                       <option>Coffee</option> 
-                     </select>
-                   </div>
-                   <div class="settings-container__setting">
-                     <p class="setting__name">Fullscreen</p>
-                     <input type="checkbox" value="false" id="fullscreen-setting"></input>
-                   </div>
-                   <div class="settings-container__setting">
-                     <p class="setting__name">Pause</p>
-                     <input type="checkbox" value="false" id="pause-setting"></input>
-                   </div>
-                   <div class="settings-container__setting">
-                     <p class="setting__name">Zoom</p>
-                     <input id="zoom-setting" type="number" value="1" min="1" max="2" step="0.1" class="setting__input"></input>
-                   </div>
-                   <div class="settings-container__setting">
-                     <p class="setting__name">Graphics Quality</p>
-                     <select id="graphics-quality-setting" class="setting__input">
-                       <option>Normal</option> 
-                       <option>Low</option> 
-                       <option>High</option> 
-                     </select>
-                     <p class="setting__detail">* This will effect performance. Changes will be applied upon game reload</p>
-                   </div>
-                   <div class="settings-container__setting">
-                     <p class="setting__name">Music</p>
-                     <select id="music-setting" class="setting__input">
-                       <option>On</option> 
-                       <option>Off</option> 
-                     </select>
-                   </div>
-                   <div class="settings-container__setting">
-                     <p class="setting__name">Volume</p>
-                     <input id="volume-setting" type="number" value="5" min="0" max="10" class="setting__input"></input>
-                   </div>
-                   <div class="settings-container__setting">
-                     <p class="setting__name">Joysticks</p>
-                     <select id="joysticks-setting" class="setting__input">
-                       <option>Dynamic</option> 
-                       <option>Fixed</option> 
-                     </select>
-                     <p class="setting__detail">*Changes will be applied upon game reload</p>
-                   </div> 
-                   <h1>Controls</h1>
-                   <div class="settings-container__control">
-                     <p class="setting__name">Move</p>
-                     <p class="setting__detail">Mobile - Joysticks | Desktop - W, A, S, D</p>
-                   </div> 
-                   <div class="settings-container__control">
-                     <p class="setting__name">Interact/Pickup Item</p>
-                     <p class="setting__detail">Mobile - A | Desktop - E</p>
-                   </div> 
-                   <div class="settings-container__control">
-                     <p class="setting__name">Grab Item</p>
-                     <p class="setting__detail">Mobile - G | Desktop - Q</p>
-                   </div>
-                   <div class="settings-container__control">
-                     <p class="setting__name">Attack/Use Weapon</p>
-                     <p class="setting__detail">Mobile - Point joystick in desired direction | Desktop - Click</p>
-                   </div> 
-                   <div class="settings-container__control">
-                     <p class="setting__name">Reload</p>
-                     <p class="setting__detail">R</p>
-                   </div> 
-                   <div class="settings-container__control">
-                     <p class="setting__name">Drop Weapon</p>
-                     <p class="setting__detail">X</p>
-                   </div> 
-                   <div class="settings-container__control">
-                     <p class="setting__name">Equip Slot</p>
-                     <p class="setting__detail">Number Keys (0-9)</p>
-                   </div> 
-                   <div class="settings-container__control">
-                     <p class="setting__name">Pause</p>
-                     <p class="setting__detail">P</p>
-                   </div> 
-                   <h1>Credits</h1>
-                   <div class="settings-container__control">
-                     <p class="setting__name">Created by Deon Rich</p>
-                   </div> 
-                   <div class="settings-container__control">
-                     <p class="setting__name">Music by Alejandro Borje</p>
-                   </div> 
-                  </div>
-                </div> 
+        <p id="game-stats">FPS: 0</p>
 
-                <div id="console">
-                  <h1 class="console__title">Chat/Console<button id="console-close">Close</button></h1>
-                  <div class="console__messages">
+        <div class="controls-container__buttons">
+            <img class="controls-container__button" src="/public/images/icons/BAG_ICON.png" />
+            <img class="controls-container__button" src="/public/images/icons/MAP_ICON.png" />
+            <img class="controls-container__button" src="/public/images/icons/PHONE_ICON.png" />
+            <img class="controls-container__button" src="/public/images/icons/TOOL_ICON.png" />
+        </div>
+        <img class="settings-icon" src="/public/images/icons/GEAR_ICON.png" />
 
-                  <template id="message-template">
-                   <div class="console__message--user"><p><strong></strong><i></i></p></div>
-                  </div>
-                  </template>
+        <div class="controls-container__interaction-buttons">
+            <button class="interaction-buttons__button grab-button">
+                <p>G</p>
+            </button>
+            <button class="interaction-buttons__button action-button">
+                <p>A</p>
+            </button>
+            <button class="interaction-buttons__button speak-button">
+                <p>T</p>
+            </button>
+        </div>
 
-                   <div class="console__message--system"><p><strong>WTRW@System: </strong><i>Welcome to the local game console. Here you can use special cheats and send messages to other players.</i></p></div>
-                  </div>
-                  <div class="console__compose">
-                    <textarea id="console-input" spellcheck="false" placeholder="Enter a message or cheat command."></textarea><button id="console-send" class="styled-btn">Send</button>
-                  </div>
-                </div> 
-                
-                <div id="main-inventory">
-                    <h1 class="main-inventory__title">Inventory<button class="main-inventory__close">Close</button><button class="main-inventory__view-stats">View Stats</button></h1>
+        <div class="controls-container__info-boxes">
+            <div class="info-box" id="armour-display"><img class="icon" src="/public/images/icons/SHLD_ICON.png" />
+                <p id="armour">100</p>
+            </div>
+            <div class="info-box" id="ammo-display">
+                <div>
+                    <div></div>
+                </div><img class="icon" src="/public/images/icons/AMMO_ICON.png" />
+                <p id="ammo">0/0</p>
+            </div>
+        </div>
 
-                    <div class="main-inventory__description"><h2>Description</h2><img class="description__image" src="/public/images/logo1.png"/><p class="main-inventory__description-content"> 
-<strong>Pro tip:</strong> Click an item to select it and see a full description of its properties and usage.
-</br>
-</br>
-Oh wait, what items? You're a noob lol.
-</p>
-</div>
+        <div class="controls-container__stats">
+            <div class="controls-container__health"><img src="/public/images/icons/HLT_ICON.png" class="icon" />
+                <div class="controls-container__healthbar">
+                    <div id="healthbar"></div>
+                </div><img src="/public/images/icons/FOD_ICON.png" class="icon food-icon" />
+                <p id="hunger">100</p><img src="/public/images/icons/WTR_ICON.png" class="icon water-icon" />
+                <p id="thirst">100</p>
+            </div>
+            <div class="controls-container__money"><img class="icon" src="/public/images/icons/MON_ICON.png" />
+                <p id="money">0</p>
+            </div>
+        </div>
+    </div>
 
-<div class="main-inventory__help"><h2>Help</h2><p class="main-inventory__help-content">Click to select an item and see a full description of its use. Use <strong>View Stats</strong> to view character statistics and money.</br></br>Press <strong>Equip</strong> to equip the selected item, and <strong>Drop</strong> to drop it. Press <strong>Switch</strong> and then click another slot to switch the selected item with another.</p></br>Use the <strong>highlighted slots</strong> to gain quick access to certain items using the in-game access slots.
-</div>
+    <!-- onscreen content and controls -->
 
-                    <div class="main-inventory__stats">
-                      <h2>Stats</h2>
-                      <table class="stats__money">
-                       <th colspan="2"><h3>Money</h3></th>
-                       <tr>
-                        <td>Cash:</td><td>$0</td>
-                       </tr>
-                       <tr>
-                        <td>Bank:</td><td>$0</td>
-                       </tr>
-                      </table>
-                      </br>
-                      <table class="stats__vitals">
-                       <th colspan="2"><h3>Vitals</h3></th>
-                       <tr>
-                        <td>Health:</td><td>0</td>
-                       </tr>
-                       <tr>
-                        <td>Armour:</td><td>0</td>
-                       </tr>
-                       <tr>
-                        <td>Water:</td><td>0</td>
-                       </tr>
-                       <tr>
-                        <td>Food:</td><td>0</td>
-                       </tr>
-                      </table>
-                      </br>
-                      <table class="stats__characteristics">
-                       <th colspan="2"><h3>Characteristics</h3></th>
-                       <tr>
-                        <td>Strength:</td><td>0</td>
-                       </tr>
-                       <tr>
-                        <td>Speed:</td><td>0</td>
-                       </tr>
-                       <tr>
-                        <td>Agility:</td><td>0</td>
-                       </tr>
-                      </table>
-                      </br>
-                      <table class="stats__personality">
-                       <th colspan="2"><h3>Personality</h3></th>
-                       <tr>
-                        <td>Confidence:</td><td>0</td>
-                       </tr>
-                       <tr>
-                        <td>Reputation:</td><td>0</td>
-                       </tr>
-                      </table>
-                      </br>
-                      <table class="stats__intelligence">
-                       <th colspan="2"><h3>Intelligence</h3></th>
-                       <tr>
-                        <td>English:</td><td>0</td>
-                       </tr>
-                       <tr>
-                        <td>History:</td><td>0</td>
-                       </tr>
-                       <tr>
-                        <td>Science:</td><td>0</td>
-                       </tr>
-                       <tr>
-                        <td>Math:</td><td>0</td>
-                       </tr>
-                       <tr>
-                        <td>Art:</td><td>0</td>
-                       </tr>
-                      </table>
-                    </div> 
+    <div id="map" class="container-window">
+        <small class="map__coordinates">x:0, y:0</small>
+        <div class="map__zoom">
+            <p id="map-zoom-in">+</p>
+            <p id="map-zoom-out">-</p>
+        </div>
+        <h1 class="map__title">Map<button id="map-close" class="close-button">Close</button><button id="set-waypoint">Set Waypoint</button><button id="place-item">+</button></h1>
+        <div class="map__key">
+            <h2>Details</h2>
+            <table class="stats__money">
+                <th colspan="2">
+                    <h3 id="map-name">"Downtown SmallVille"</h3>
+                </th>
+                <tr>
+                    <td>Dimensions:</td>
+                    <td id="map-dimensions">500x500</td>
+                </tr>
+                <tr>
+                    <td>Population:</td>
+                    <td id="map-population">153</td>
+                </tr>
+                <tr>
+                    <td>Rooms:</td>
+                    <td id="map-rooms">34</td>
+                </tr>
+                <tr>
+                    <td>Pickups:</td>
+                    <td id="map-pickups">132</td>
+                </tr>
+                <tr>
+                    <td>Objects:</td>
+                    <td id="map-objects">132</td>
+                </tr>
+            </table>
 
-                    <div class="main-inventory__items">
-                        <h2>Items</h2>
-                        <div id="main-items-container" class="main-inventory__items-container">
-                        <div id="inv-item-1" class="main-inventory__item"></div>
-                        <div id="inv-item-2" class="main-inventory__item"></div>
-                        <div id="inv-item-3" class="main-inventory__item"></div>
-                        <div id="inv-item-4" class="main-inventory__item"></div>
-                        <div id="inv-item-5" class="main-inventory__item"></div>
-                        <div id="inv-item-6" class="main-inventory__item"></div>
-                        <div id="inv-item-7" class="main-inventory__item"></div>
-                        <div id="inv-item-8" class="main-inventory__item"></div>
-                        <div id="inv-item-9" class="main-inventory__item"></div>
-                        <div id="inv-item-10" class="main-inventory__item"></div>
-                        <div id="inv-item-11" class="main-inventory__item"></div>
-                        <div id="inv-item-12" class="main-inventory__item"></div>
-                        <div id="inv-item-13" class="main-inventory__item"></div>
-                        <div id="inv-item-14" class="main-inventory__item"></div>
-                        <div id="inv-item-15" class="main-inventory__item"></div>
+            <div class="map__buttons">
+                <button id="switch-map" class="styled-btn">World Map</button><button id="goto" class="styled-btn">Go</button>
+            </div>
+
+            <table class="map__keys">
+                <th colspan="2">
+                    <h3>Key</h3>
+                </th>
+                <tr>
+                    <td>
+                        <div class="map__key-info">
+                            <p>Player - Non-hostile characters</p>
                         </div>
-                      </div>
-                      <div class="main-inventory__controls">
-                       <div class="main-inventory__buttons">
-                          <button class="main-inventory__controls-equip styled-btn">Equip</button>
-                          <button class="main-inventory__controls-switch styled-btn">Switch</button>
-                          <button class="main-inventory__controls-drop styled-btn">Drop</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="map__key-info">
+                            <p>Enemy - Hostile characters</p>
                         </div>
-                          <button class="main-inventory__controls-help">?</button>
-                      </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="map__key-info">
+                            <p>Partner - Cooperative characters</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="map__key-info">
+                            <p>Waypoint - Direction to set destination</p>
+                        </div>
+                    </td>
+                </tr>
+                </br>
+                <tr>
+                    <td>
+                        <div class="map__key-info">
+                            <p>Obstacle - Furniture, large miscellaneous objects</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="map__key-info">
+                            <p>Building/Door - Enterable structures</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="map__key-info">
+                            <p>Wall - Large inpenetrable obstacles</p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            </br>
+            <p><strong>Note:</strong> Move the display to view and navigate the full game area. Use <strong>"Set Waypoint"</strong> to set a marker for help navigating to the selected coordinates.</p>
+        </div>
+        <div class="map__canvas">
+            <canvas id="interactive-map"></canvas>
+        </div>
+    </div>
+
+    <div id="settings" class="container-window">
+        <h1 class="settings__title">Settings<button id="settings-close" class="close-button">Close</button><button class="settings__exit-game">Exit Game</button></h1>
+        <div class="settings__settings-container">
+            <h1>General Settings</h1>
+            <div class="settings-container__setting">
+                <p class="setting__name">Onscreen Map Style</p>
+                <select id="onscreen-map-style-setting" class="setting__input setting__select">
+                    <option>Default</option>
+                    <option>Crimson</option>
+                    <option>Predator</option>
+                    <option>Night Vision</option>
+                    <option>Coffee</option>
+                </select>
+            </div>
+            <div class="settings-container__setting">
+                <p class="setting__name">Fullscreen</p>
+                <button id="fullscreen-setting" class="setting__button">Enable Fullscreen</button>
+            </div>
+            <div class="settings-container__setting">
+                <p class="setting__name">Pause</p>
+                <input type="checkbox" value="false" id="pause-setting"></input>
+            </div>
+            <div class="settings-container__setting">
+                <p class="setting__name">Zoom</p>
+                <button id="zoom-down" class="setting__button">-</button><input id="zoom-setting" type="number" value="1" min="1" max="2" class="setting__input"></input><button id="zoom-up" class="setting__button">+</button>
+            </div>
+            <div class="settings-container__setting">
+                <p class="setting__name">Graphics Quality</p>
+                <select id="graphics-quality-setting" class="setting__input setting__select">
+                    <option>Normal</option>
+                    <option>Low</option>
+                    <option>High</option>
+                </select>
+                <p class="setting__detail">* This will effect performance. Changes will be applied upon game reload</p>
+            </div>
+            <div class="settings-container__setting">
+                <p class="setting__name">Music</p>
+                <select id="music-setting" class="setting__input setting__select">
+                    <option>On</option>
+                    <option>Off</option>
+                </select>
+            </div>
+            <div class="settings-container__setting">
+                <p class="setting__name">Volume</p>
+                <button id="volume-down" class="setting__button">-</button><input id="volume-setting" type="number" value="5" min="0" max="10" class="setting__input"></input><button id="volume-up" class="setting__button">+</button>
+            </div>
+            <div class="settings-container__setting">
+                <p class="setting__name">Joysticks</p>
+                <select id="joysticks-setting" class="setting__input setting__select">
+                    <option>Dynamic</option>
+                    <option>Fixed</option>
+                </select>
+                <p class="setting__detail">*Changes will be applied upon game reload</p>
+            </div>
+            <h1>Controls</h1>
+            <table class="settings-container__controls">
+                <th colspan="2">
+                    <h2>Desktop Controls<h2>
+                </th>
+                <tr>
+                    <td>Interact/Pickup Item</td>
+                    <td>
+                        <div class="settings-container__key-container"><button class="settings-container__control-key">
+                                <p>E</p>
+                            </button></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Move</td>
+                    <td>
+                        <div class="settings-container__key-container"><button class="settings-container__control-key">
+                                <p>W</p>
+                            </button><button class="settings-container__control-key">
+                                <p>A</p>
+                            </button><button class="settings-container__control-key">
+                                <p>S</p>
+                            </button><button class="settings-container__control-key">
+                                <p>D</p>
+                            </button></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Grab Item</td>
+                    <td>
+                        <div class="settings-container__key-container"><button class="settings-container__control-key">
+                                <p>Q</p>
+                            </button></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Drop Equiped Item</td>
+                    <td>
+                        <div class="settings-container__key-container"><button class="settings-container__control-key">
+                                <p>X</p>
+                            </button></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Shoot/Attack</td>
+                    <td>Mouse Click</td>
+                </tr>
+                <tr>
+                    <td>Dialogue</td>
+                    <td>
+                        <div class="settings-container__key-container"><button class="settings-container__control-key">
+                                <p>T</p>
+                            </button></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Pause</td>
+                    <td>
+                        <div class="settings-container__key-container"><button class="settings-container__control-key">
+                                <p>P</p>
+                            </button></div>
+                    </td>
+                </tr>
+            </table>
+            <table class="settings-container__controls">
+                <th colspan="2">
+                    <h2>Mobile Controls<h2>
+                </th>
+                <tr>
+                    <td>Interact/Pickup Item</td>
+                    <td>
+                        <div class="settings-container__key-container"><button class="settings-container__control-key">
+                                <p>A</p>
+                            </button></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Grab Item</td>
+                    <td>
+                        <div class="settings-container__key-container"><button class="settings-container__control-key">
+                                <p>G</p>
+                            </button></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Drop Equiped Item</td>
+                    <td>
+                        <div class="settings-container__key-container"><button class="settings-container__control-key">
+                                <p>▼</p>
+                            </button></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Move</td>
+                    <td>Left Joystick</td>
+                </tr>
+                <tr>
+                    <td>Shoot/Attack</td>
+                    <td>Right Joystick</td>
+                </tr>
+                <tr>
+                    <td>Dialogue</td>
+                    <td>
+                        <div class="settings-container__key-container"><button class="settings-container__control-key">
+                                <p>T</p>
+                            </button></div>
+                    </td>
+                </tr>
+            </table>
+            <h1>Credits</h1>
+            <div class="settings-container__control">
+                <p class="setting__name">Created by Deon Rich</p>
+            </div>
+            <div class="settings-container__control">
+                <p class="setting__name">Music by Alejandro Borje</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="console" class="container-window">
+        <h1 class="console__title">Chat/Console<button id="console-close" class="close-button">Close</button></h1>
+        <div class="console__messages">
+
+            <template id="message-template">
+                <div class="console__message--user">
+                    <p><strong></strong><i></i></p>
                 </div>
+            </template>
 
-                <div id="store">
-                    <h1 class="store__title">Store<button id="store-close">Close</button><button id="sell-items">Sell Items</button></h1>
+            <div class="console__message--system">
+                <p><strong>WTRW@System: </strong><i>Welcome to the local game console. Here you can use special cheats and send messages to other players.</i></p>
+            </div>
+        </div>
+        <div class="console__compose">
+            <textarea id="console-input" spellcheck="false" placeholder="Enter a message or cheat command."></textarea><button id="console-send" class="styled-btn">Send</button>
+        </div>
+    </div>
 
-                    <template id="store-item-template">
-                     <div class="store__item">
-                      <img class="item__icon" src="/public/images/icons/glock_20_icon.png"></img><p class="item__name">GLOCK 20</p>
-                     </div> 
+    <div id="main-inventory" class="container-window">
+        <h1 class="main-inventory__title">Inventory<button class="main-inventory__close close-button">Close</button><button class="main-inventory__view-stats">View Stats</button></h1>
+
+        <div class="main-inventory__description">
+            <h2>Description</h2><img class="description__image" src="/public/images/logo1.png" />
+            <p class="main-inventory__description-content">
+                <strong>Pro tip:</strong> Click an item to select it and see a full description of its properties and usage.
+                </br>
+                </br>
+                Oh wait, what items? You're a noob lol.
+            </p>
+        </div>
+
+        <div class="main-inventory__help">
+            <h2>Help</h2>
+            <p class="main-inventory__help-content">Click to select an item and see a full description of its use. Use <strong>View Stats</strong> to view character statistics and money.</br></br>Press <strong>Equip</strong> to equip the selected item, and <strong>Drop</strong> to drop it. Press <strong>Switch</strong> and then click another slot to switch the selected item with another.</p></br>Use the <strong>highlighted slots</strong> to gain quick access to certain items using the in-game access slots.
+        </div>
+
+        <div class="main-inventory__stats">
+            <h2>Stats</h2>
+            <table class="stats__money">
+                <th colspan="2">
+                    <h3>Money</h3>
+                </th>
+                <tr>
+                    <td>Cash:</td>
+                    <td>$0</td>
+                </tr>
+                <tr>
+                    <td>Bank:</td>
+                    <td>$0</td>
+                </tr>
+            </table>
+            </br>
+            <table class="stats__vitals">
+                <th colspan="2">
+                    <h3>Vitals</h3>
+                </th>
+                <tr>
+                    <td>Health:</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>Armour:</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>Water:</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>Food:</td>
+                    <td>0</td>
+                </tr>
+            </table>
+            </br>
+            <table class="stats__characteristics">
+                <th colspan="2">
+                    <h3>Characteristics</h3>
+                </th>
+                <tr>
+                    <td>Strength:</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>Speed:</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>Agility:</td>
+                    <td>0</td>
+                </tr>
+            </table>
+            </br>
+            <table class="stats__personality">
+                <th colspan="2">
+                    <h3>Personality</h3>
+                </th>
+                <tr>
+                    <td>Confidence:</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>Reputation:</td>
+                    <td>0</td>
+                </tr>
+            </table>
+            </br>
+            <table class="stats__intelligence">
+                <th colspan="2">
+                    <h3>Intelligence</h3>
+                </th>
+                <tr>
+                    <td>English:</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>History:</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>Science:</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>Math:</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>Art:</td>
+                    <td>0</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="main-inventory__items">
+            <h2>Items</h2>
+            <div id="main-items-container" class="main-inventory__items-container">
+                <div id="inv-item-1" class="main-inventory__item"></div>
+                <div id="inv-item-2" class="main-inventory__item"></div>
+                <div id="inv-item-3" class="main-inventory__item"></div>
+                <div id="inv-item-4" class="main-inventory__item"></div>
+                <div id="inv-item-5" class="main-inventory__item"></div>
+                <div id="inv-item-6" class="main-inventory__item"></div>
+                <div id="inv-item-7" class="main-inventory__item"></div>
+                <div id="inv-item-8" class="main-inventory__item"></div>
+                <div id="inv-item-9" class="main-inventory__item"></div>
+                <div id="inv-item-10" class="main-inventory__item"></div>
+                <div id="inv-item-11" class="main-inventory__item"></div>
+                <div id="inv-item-12" class="main-inventory__item"></div>
+                <div id="inv-item-13" class="main-inventory__item"></div>
+                <div id="inv-item-14" class="main-inventory__item"></div>
+                <div id="inv-item-15" class="main-inventory__item"></div>
+            </div>
+        </div>
+        <div class="main-inventory__controls">
+            <div class="main-inventory__buttons">
+                <button class="main-inventory__controls-equip styled-btn">Equip</button>
+                <button class="main-inventory__controls-switch styled-btn">Switch</button>
+                <button class="main-inventory__controls-drop styled-btn">Drop</button>
+            </div>
+            <button class="main-inventory__controls-help">?</button>
+        </div>
+    </div>
+
+    <div id="store" class="container-window">
+        <h1 class="store__title">Store<button id="store-close" class="close-button">Close</button><button id="sell-items">Sell Items</button></h1>
+
+        <template id="store-item-template">
+            <div class="store__item">
+                <img class="item__icon" src="/public/images/icons/glock_20_icon.png"></img>
+                <p class="item__name">GLOCK 20</p>
+            </div>
+        </template>
+
+        <div class="store__items">
+            <h2>Items</h2>
+            <div class="store__item">
+                <img class="item__icon" src="/public/images/icons/glock_20_icon.png"></img>
+                <p class="item__name">GLOCK 20</p>
+            </div>
+            <div class="store__item">
+                <img class="item__icon" src="/public/images/icons/glock_20_icon.png"></img>
+                <p class="item__name">GLOCK 20</p>
+            </div>
+            <div class="store__item">
+                <img class="item__icon" src="/public/images/icons/glock_20_icon.png"></img>
+                <p class="item__name">GLOCK 20</p>
+            </div>
+            <div class="store__item">
+                <img class="item__icon" src="/public/images/icons/glock_20_icon.png"></img>
+                <p class="item__name">GLOCK 20</p>
+            </div>
+            <div class="store__item">
+                <img class="item__icon" src="/public/images/icons/glock_20_icon.png"></img>
+                <p class="item__name">GLOCK 20</p>
+            </div>
+            <div class="store__item">
+                <img class="item__icon" src="/public/images/icons/glock_20_icon.png"></img>
+                <p class="item__name">GLOCK 20</p>
+            </div>
+        </div>
+        <div class="store__checkout">
+            <h2>Checkout</h2>
+            <div class="checkout__balance">
+                <p>Cash: <mark id="store-cash">$12.50</mark></p>
+                <p>Bank: <mark id="store-bank">$12.50</mark></p>
+            </div>
+            <div class="checkout__info-box">
+                <div class="info-box__item-info">
+                    <img src="/public/images/icons/remote_explosive_icon.png" class="info-box__icon"></img>
+                    <div class="info-box__item">
+                        <h3 class="item__title"><u>Remote Explosive</u></h3>
+                        <h5 class="item__price">Price: $12.50</h5>
+                    </div>
+                </div>
+                <div class="checkout__controls">
+                    <p class="controls__buy">Buy <input id="item-quantity" type="number" value="1" min="1" max="50"></input> for <b id="item-total">$12.50</b></p><button id="item-purchase">Purchase</button>
+                </div>
+                <details class="info-box__description">
+                    <summary>View item details</summary></br>
+                    <p>The whatever and the thing is that I dont know if the also thing is you are in lorem Ipsum and whatever else for the needed thingy.</p>
+                </details>
+            </div>
+        </div>
+    </div>
+
+    <div id="creative-mode" class="container-window">
+        <h1 class="creative-mode__title">Creative Console<button class="creative-mode__close close-button">Close</button><span>
+                <p>Editing Mode:</p><select name="editing-mode" class="creative-mode__editing-mode">
+                    <option>Off</option>
+                    <option>Move</option>
+                    <option>Delete</option>
+                    <option>Rotate</option>
+                </select>
+            </span></h1>
+        <div class="creative-mode__options-container">
+            <div class="options-container__categories"><button class="categories__category">Asset Library</button><button class="categories__category">Bots</button><button class="categories__category">Misc</button></div>
+            <div class="options-container__asset-library">
+                <div class="asset-library__search-bar"><input class="search-bar__input" placeholder="Search for an asset"></input></div>
+                <template id="library-result">
+                    <div class="library__result">
+                        <p></p>
+                        <div class="result__buttons"><button class="result__insert">Insert</button></div>
+                    </div>
+                </template>
+                <div class="asset-library__library"></div>
+            </div>
+            <div class="options-container__configure">
+                <div class="configure__configure-title">
+                    <h2 class="configure-title__title">Item Properties</h2><button class="configure-title__back">Back</button>
+                </div>
+                <div class="configure__configure-settings">
+                    <template id="configure-setting-template">
+                        <div class="configure-settings__configure-setting">
+                            <p class="configure-setting__name"></p><input class="configure-setting__value" type="text"></input>
+                        </div>
                     </template>
-
-                    <div class="store__items"> 
-                      <h2>Items</h2>
-                     <div class="store__item">
-                      <img class="item__icon" src="/public/images/icons/glock_20_icon.png"></img><p class="item__name">GLOCK 20</p>
-                     </div> 
-                     <div class="store__item">
-                      <img class="item__icon" src="/public/images/icons/glock_20_icon.png"></img><p class="item__name">GLOCK 20</p>
-                     </div> 
-                     <div class="store__item">
-                      <img class="item__icon" src="/public/images/icons/glock_20_icon.png"></img><p class="item__name">GLOCK 20</p>
-                     </div> 
-                     <div class="store__item">
-                      <img class="item__icon" src="/public/images/icons/glock_20_icon.png"></img><p class="item__name">GLOCK 20</p>
-                     </div> 
-                     <div class="store__item">
-                      <img class="item__icon" src="/public/images/icons/glock_20_icon.png"></img><p class="item__name">GLOCK 20</p>
-                     </div> 
-                     <div class="store__item">
-                      <img class="item__icon" src="/public/images/icons/glock_20_icon.png"></img><p class="item__name">GLOCK 20</p>
-                     </div> 
-                    </div>
-                    <div class="store__checkout">
-                      <h2>Checkout</h2>
-                      <div class="checkout__balance">
-                       <p>Cash: <mark id="store-cash">$12.50</mark></p><p>Bank: <mark id="store-bank">$12.50</mark></p>
-                      </div>
-                      <div class="checkout__info-box"> 
-                       <div class="info-box__item-info">
-                       <img src="/public/images/icons/remote_explosive_icon.png" class="info-box__icon"></img>
-                       <div class="info-box__item">
-                       <h3 class="item__title"><u>Remote Explosive</u></h3>
-                       <h5 class="item__price">Price: $12.50</h5>
-                       </div>
-                      </div>
-                      <div class="checkout__controls">
-                       <p class="controls__buy">Buy <input id="item-quantity" type="number" value="1" min="1" max="50"></input> for <b id="item-total">$12.50</b></p><button id="item-purchase">Purchase</button>
-                      </div>
-                       <details class="info-box__description"><summary>View item details</summary></br><p>The whatever and the thing is that I dont know if the also thing is you are in lorem Ipsum and whatever else for the needed thingy.</p></details>
-                      </div>
-                    </div>
                 </div>
-
-               <div class="note-wrapper">
-                <div id="note">
-                  <h1 class="note__title">Note<button id="note-close">Close</button></h1>
-                  <div class="note__content">
-                   <img class="note__logo" src="/public/images/logo1.png"/>
-                   <h1 class="note__content-title"></h1>
-                   <img class="note__image"/>
-                   <p></p>
+            </div>
+            <div class="options-container__configure-bot">
+                <div class="configure-bot__title">
+                    <h2 class="configure-bot-title__title">Configure New Bot</h2><button class="configure-bot-title__insert">Insert</button>
+                </div>
+                <div class="configure-bot__bot-settings">
+                  <div class="configure-bot__bot-setting">
+                    <p class="bot-setting__title">Name</p>
+                    <input type="text" class="bot-setting__bot-name" placeholder="[auto generated]"></input>
+                    <input type="color" class="bot-setting__bot-name-color"></input>
                   </div>
-                </div> 
-               </div>
-                  
- <img class="texture" id="world-map" src="/public/images/textures/WORLD_MAP.png" />
- <img class="texture" id="pinpoint" src="/public/images/textures/PINPOINT.png" />
+                  <div class="configure-bot__bot-setting">
+                    <p class="bot-setting__title">Target ID</p>
+                    <input type="text" class="bot-setting__bot-name" placeholder="[default]"></input>
+                  </div>
+                  <div class="configure-bot__bot-setting">
+                    <p class="bot-setting__title">Type</p>
+                    <select class="bot-setting__bot-type">
+                      <option>Civillian</option>
+                      <option>Criminal</option>
+                      <option>Companion</option>
+                      <option>Killer</option>
+                      <option>Bodygaurd</option>
+                    </select>
+                  </div>
+                  <div class="configure-bot__bot-setting">
+                    <p class="bot-setting__title">Mode</p>
+                    <select class="bot-setting__bot-mode">
+                      <option>Wander</option>
+                      <option>Stationary</option>
+                    </select>
+                  </div>
+                  <div class="configure-bot__bot-setting">
+                    <p class="bot-setting__title">Behavior</p>
+                    <select class="bot-setting__bot-behavior">
+                      <option>Passive</option>
+                      <option>Agressive</option>
+                    </select>
+                  </div>
+                  <div class="configure-bot__bot-setting">
+                    <p class="bot-setting__title">Weapon</p>
+                    <input type="text" class="bot-setting__bot-weapon" placeholder="[KC_357]"></input>
+                  </div>
+                  <div class="configure-bot__bot-setting">
+                    <p class="bot-setting__title">Skill</p>
+                    <select class="bot-setting__bot-skill">
+                      <option>Normal</option>
+                      <option>Basic</option>
+                      <option>Elite</option>
+                      <option>Terminator</option>
+                    </select>
+                  </div>
+                  <div class="configure-bot__bot-setting">
+                    <p class="bot-setting__title">Target</p>
+                    <input type="text" class="bot-setting__bot-target" placeholder="[Name(s), Target ID(s), All]"></input>
+                  </div>
+                  <div class="configure-bot__bot-setting">
+                    <p class="bot-setting__title">Invert Target</p>
+                    <select class="bot-setting__bot-invert-target">
+                      <option>Off</option>
+                      <option>On</option>
+                    </select>
+                  </div>
+                  <div class="configure-bot__bot-setting">
+                    <p class="bot-setting__title">Strength</p>
+                    <input type="number" class="bot-setting__bot-strength" value="5" min="0" max="200"></input>
+                  </div>
+                  <div class="configure-bot__bot-setting">
+                    <p class="bot-setting__title">Speed</p>
+                    <input type="number" class="bot-setting__bot-speed" value="1" min="1" max="10"></input>
+                  </div>
+                  <div class="configure-bot__bot-setting">
+                    <p class="bot-setting__title">Armour</p>
+                    <input type="number" class="bot-setting__bot-armour" value="0" min="0" max="500"></input>
+                  </div>
+                  <div class="configure-bot__bot-setting">
+                    <p class="bot-setting__title">Invinsibility</p>
+                    <select class="bot-setting__bot-invinsibility">
+                      <option>Off</option>
+                      <option>On</option>
+                    </select>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="note-wrapper">
+        <div id="note">
+            <h1 class="note__title">Note<button id="note-close" class="close-button">Close</button></h1>
+            <div class="note__content">
+                <img class="note__logo" src="/public/images/logo1.png" />
+                <h1 class="note__content-title"></h1>
+                <img class="note__image" />
+                <p></p>
+            </div>
+        </div>
+    </div>
+
+    <img class="texture" id="world-map" src="/public/images/textures/WORLD_MAP.png" />
+    <img class="texture" id="pinpoint" src="/public/images/textures/PINPOINT.png" />
 </body>
 <script type="module" src="/dist/main.js"></script>
+
 </html>

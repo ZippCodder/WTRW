@@ -16,11 +16,13 @@
       Inventory,
       fromRGB,
       toRGB,
-      rotate
+      rotate,
+      HexToRGB
   } from "/src/scripts/lib.js";
 
   const {
       _Map_,
+      _Object_,
       Avatar,
       House1,
       UrbanFence,
@@ -100,16 +102,35 @@
       CandyBar,
       StubbyShotgun,
       RobberShotgun,
-      ClassicShotgun, 
-      HeavyShotgun
+      ClassicShotgun,
+      HeavyShotgun,
+      Road,
+      RoadDouble,
+      RoadSign,
+      RoadCorner,
+      RoadTriCorner,
+      RoadQuadCorner,
+      PickupRing,
+      GUS,
+      BS_6,
+      HUSH_19,
+      K9
   } = await import("/src/scripts/objects.js");
 
   import _dialogues from "/src/scripts/dialogue.js";
 
   /* LOGIC FOR INTERACTION BUTTONS */
 
+  document.querySelector(".controls-container__interaction-buttons").style.display = ($IS_MOBILE) ? "block" : "none";
   const grabButton = document.querySelector(".grab-button");
   const actionButton = document.querySelector(".action-button");
+  const onscreenDropButton = document.querySelector("#drop-button");
+
+  onscreenDropButton.onclick = function() {
+      if ($AVATAR.state.equippedItems.mainTool || selectedIndex < 5) {
+          $AVATAR.dropItem(equippedIndex);
+      }
+  }
 
   function toggleGrab(e) {
       e.preventDefault();
@@ -369,17 +390,18 @@
 
   updateOptions();
 
-  /* CRAFTING */
+  /* CRAFTING AND PHONE BUTTONS */
 
-  const openCraftingButton = document.querySelectorAll(".controls-container__button").item(2);
+  const phoneButton = document.querySelectorAll(".controls-container__button").item(2);
 
-  openCraftingButton.addEventListener("click", () => {
-      toggleNote("Sorry, we're working on that! Crafting will be included in newer versions.");
+  phoneButton.addEventListener("click", () => {
+      $AUDIO.playSound("light-switch");
+      toggleNote("Sorry, we're working on that! Contacts will be included in newer versions.");
   });
 
   /* MAP CONTROLS AND MINIMAP RENDERING */
 
-  const mapContainer = document.querySelector("#map");
+  const mapWindow = document.querySelector("#map");
   const closeMapButton = document.querySelector("#map-close");
   const openMapButton = document.querySelectorAll(".controls-container__button").item(1);
   const setWaypointButton = document.querySelector("#set-waypoint");
@@ -394,23 +416,25 @@
   openMapButton.onclick = showMap;
 
   function showMap(e) {
+      $AUDIO.playSound("light-switch");
       e.preventDefault();
       updateMapData();
 
       $MAP_DISPLAY.useInteractiveDisplay = true;
       updateCoordinates($CURRENT_MAP.centerX + $MAP_DISPLAY.displayOffset.x, $CURRENT_MAP.centerY - $MAP_DISPLAY.displayOffset.y);
-      mapContainer.style.display = "grid";
+      mapWindow.style.display = "grid";
 
       updateDisplayViewport();
   }
 
   function hideMap(e) {
-      e.preventDefault();
+      $AUDIO.playSound("light-switch");
+      e?.preventDefault();
       $MAP_DISPLAY.useInteractiveDisplay = false;
       $MAP_DISPLAY.useWorldMap = false;
       $MAP_DISPLAY.displayOffset.x = 0;
       $MAP_DISPLAY.displayOffset.y = 0;
-      mapContainer.style.display = "none";
+      mapWindow.style.display = "none";
   }
 
   const mapDisplay = document.querySelector("#mapDisplay");
@@ -1187,11 +1211,13 @@
   }
 
   function closeInventory(e) {
+      $AUDIO.playSound("light-switch");
       e.preventDefault();
       inventoryWindow.style.display = "none";
   }
 
   function openInventory(e) {
+      $AUDIO.playSound("light-switch");
       e.preventDefault();
       inventoryWindow.style.display = "grid";
       updateDescription();
@@ -1206,7 +1232,7 @@
 
   /* CONSOLE CONTROLS AND COMMAND LOGIC */
 
-  const consoleContainer = document.querySelector("#console");
+  const consoleWindow = document.querySelector("#console");
   const consoleButton = document.querySelector("#console-button");
   const consoleCloseButton = document.querySelector("#console-close");
   const consoleSendButton = document.querySelector("#console-send");
@@ -1215,13 +1241,15 @@
   const consoleMessageTemplate = document.querySelector("#message-template");
 
   function openConsole(e) {
+      $AUDIO.playSound("light-switch");
       e.preventDefault();
-      consoleContainer.style.display = "grid";
+      consoleWindow.style.display = "grid";
   }
 
   function closeConsole(e) {
+      $AUDIO.playSound("light-switch");
       e.preventDefault();
-      consoleContainer.style.display = "none";
+      consoleWindow.style.display = "none";
   }
 
   let holdEnter = false;
@@ -1429,38 +1457,45 @@
       "stubby shotgun": "<h3><u>Stubby Shotgun</u></h3> A heavy-duty shotgun with decent damage and good capacity, making it an excelent choice for a main arm durring a close-quarters gun fight.",
       "robber shotgun": "<h3><u>Robber Shotgun</u></h3> High powered shotgun with reliable aim and minimal recoil. A common and effective weapon for defending against intruders in homes and small-businesse.",
       "classic shotgun": "<h3><u>Classic Shotgun</u></h3> A quick paced high capacity shotgun ideal for intimidating your opponent into submittion. Dont get a black eye, the recoil is crazy.",
-      "heavy shotgun": "<h3><u>Heavy Shotgun</u></h3> Revolver shotgun made for maximum fire power in the hands of someone who knows what they're doing. Good capacity, great damage..A bit on the slow side though."
+      "heavy shotgun": "<h3><u>Heavy Shotgun</u></h3> Revolver shotgun made for maximum fire power in the hands of someone who knows what they're doing. Good capacity, great damage..A bit on the slow side though.",
+      "gus": "<h3><u>GUS</u></h3> Small, compact pistol with very high damage..and very low capacity. Crafted for careful hands that know how to work a trigger. Watch your aim.",
+      "bs 6": "<h3><u>BS_6</u></h3> Strong heavy shotgun with quick reload and a wide range of fire. Best for close combat with enemies in tight quarters. Make each shot count my friend.",
+      "hush 19": "<h3><u>HUSH 19</u></h3> This scilenced shotgun features rapid fire, great accuracy and range as well as a premium high-end scilencer. Also good capacity! Just pray your opponent isn't quicker than you because, the reloads do take a while.",
+      "k9": "<h3><u>K9</u></h3> A modern, manual pump-action shotgun. Used by the likes of S.W.A.T, high level gang members and government officials. With great power comes great responsibility...Spiderman said that. Remember?"
   }
 
   let equippedIndex = Infinity,
+      secondaryEquippedIndex = Infinity,
       selectedIndex = undefined,
       lastIndex = undefined,
       switchMode = false;
 
-  function equipSlot(i, markSlot) {
-      if (!markSlot && !$AVATAR.equipItem(i)) return;
-      if ($IS_MOBILE && $AVATAR.state.equippedItems.mainTool && $AVATAR.state.equippedItems.mainTool.type === "gun") {
-          $AVATAR.drawWeapon();
-      }
-
-      if (equippedIndex < 5) {
-          quickAccessItems.item(equippedIndex).classList.remove("controls-container__item--equipped");
-      }
-      inventoryItems.item(equippedIndex).style.borderBottom = "none";
+  window.equipSlot = function(i) {
+      if (!$AVATAR.equipItem(i)) return;
+      updateDescription();
 
       if (equippedIndex !== i) {
+
+          if (equippedIndex !== Infinity) {
+              if (equippedIndex < 5) {
+                  quickAccessItems.item(equippedIndex).classList.remove("controls-container__item--equipped");
+              }
+              inventoryItems.item(equippedIndex).style.borderBottom = "none";
+          }
+
           if (i < 5) {
               quickAccessItems.item(i).classList.add("controls-container__item--equipped");
           }
           inventoryItems.item(i).style.borderBottom = "3px solid white";
-
           equippedIndex = i;
-      } else {
+      } else if (equippedIndex !== Infinity) {
           $AVATAR.unequipItem(i);
+          if (i < 5) {
+              quickAccessItems.item(equippedIndex).classList.remove("controls-container__item--equipped");
+          }
+          inventoryItems.item(equippedIndex).style.borderBottom = "none";
           equippedIndex = Infinity;
       }
-
-      updateDescription();
   }
 
   const quickAccessItems = document.querySelectorAll(".controls-container__item");
@@ -1541,14 +1576,17 @@
                   damage,
                   fireRate,
                   accuracy,
-                  capacity
+                  capacity,
+                  dualWeild
               } = item.constructor._properties;
 
               d = d + `</br></br><strong>Damage _____ ${(item.shotgun) ? damage*item.constructor._properties.bulletCombo:damage}</strong></br><strong>Fire Rate _____ ${fireRate}</strong></br><strong>Accuracy _____ ${accuracy}</strong></br><strong>Capacity _____ ${capacity}</strong>`;
 
               if (getDescription) return d;
 
-              d = d.concat((item === $AVATAR.state.equippedItems.mainTool || item === $AVATAR.state.equippedItems.accessory1) ? "<br><br><i>Equipped</i>" : "<br><br><i>Not Equipped</i>");
+              if (dualWeild) d = d + "<br><br><i>Dual Wield</i>";
+
+              d = d.concat((item === $AVATAR.state.equippedItems.mainTool || item === $AVATAR.state.equippedItems.accessory1 || item === $AVATAR.state.equippedItems.secondaryMainTool) ? "<br><br><i>Equipped</i>" : "<br><br><i>Not Equipped</i>");
           } else if (item.type === "food") {
               d = d + `</br></br><strong>Nutrition _____ ${item.nutrition}</strong></br><strong>Regain _____ ${item.regain}</strong>`;
               if (getDescription) return d;
@@ -1690,6 +1728,7 @@
   }
 
   viewStatsButton.onclick = function() {
+      $AUDIO.playSound("light-switch");
       if (statsContainer.style.display !== "block") {
           showStats();
           return;
@@ -1700,6 +1739,7 @@
 
   const controlHelpButton = document.querySelector(".main-inventory__controls-help");
   controlHelpButton.onclick = function() {
+      $AUDIO.playSound("light-switch");
       if (helpContainer.style.display !== "block") {
           showHelp();
           return;
@@ -1722,6 +1762,7 @@
 
   controlSwitchButton = document.querySelector(".main-inventory__controls-switch");
   controlSwitchButton.onclick = function() {
+      $AUDIO.playSound("light-switch");
       if (selectedIndex === undefined) return;
 
       if (!switchMode) {
@@ -1768,6 +1809,7 @@
   let highlightedItem = undefined;
 
   closeStoreButton.onclick = function() {
+      $AUDIO.playSound("light-switch");
       toggleStore();
   }
 
@@ -2049,6 +2091,7 @@
   }
 
   closeNoteButton.addEventListener("click", () => {
+      $AUDIO.playSound("light-switch");
       noteContainer.style.display = "none";
       if (noteCallback) noteCallback();
   });
@@ -2109,7 +2152,7 @@
       let mouseDown = false;
 
       window.addEventListener("keydown", (e) => {
-          if (consoleContainer.style.display === "grid") return;
+          if (consoleWindow.style.display === "grid" || creativeModeWindow.style.display === "grid") return;
 
           if (e.code === "KeyR" && $AVATAR.state.equippedItems.mainTool) {
               $AVATAR.reload();
@@ -2117,11 +2160,12 @@
           if (e.code === "KeyQ") {
               toggleGrab(e);
           }
-          if (e.code === "KeyP") {
+          if (e.code === "KeyP" && !$SPECTATING) {
               $PAUSED = !$PAUSED;
           }
           if ($AVATAR.state.equippedItems.mainTool && e.code === "KeyX") {
               $AVATAR.dropItem($AVATAR.state.equippedItems.mainTool.slot);
+              equippedIndex = Infinity;
           }
           if (/\d/.test(e.key.toLowerCase())) {
               equipSlot((Number(e.key)) ? Number(e.key - 1) : 9);
@@ -2182,16 +2226,18 @@
   }
 
 
-  const settings = document.querySelector("#settings");
+  const settingsWindow = document.querySelector("#settings");
   const openSettingsButton = document.querySelector(".settings-icon");
   const closeSettingsButton = document.querySelector("#settings-close");
 
   function openSettings() {
-      settings.style.display = "grid";
+      $AUDIO.playSound("light-switch");
+      settingsWindow.style.display = "grid";
   }
 
   function closeSettings() {
-      settings.style.display = "none";
+      $AUDIO.playSound("light-switch");
+      settingsWindow.style.display = "none";
   }
 
   openSettingsButton.onclick = openSettings;
@@ -2199,22 +2245,37 @@
 
   const onscreenMapStyleSetting = document.querySelector("#onscreen-map-style-setting");
   const zoomSetting = document.querySelector("#zoom-setting");
+  const zoomUpButton = document.querySelector("#zoom-up");
+  const zoomDownButton = document.querySelector("#zoom-down");
   const graphicsQualitySetting = document.querySelector("#graphics-quality-setting");
   const musicSetting = document.querySelector("#music-setting");
   const volumeSetting = document.querySelector("#volume-setting");
+  const volumeUpButton = document.querySelector("#volume-up");
+  const volumeDownButton = document.querySelector("#volume-down");
   const joysticksSetting = document.querySelector("#joysticks-setting");
   const fullscreenSetting = document.querySelector("#fullscreen-setting");
   const pauseSetting = document.querySelector("#pause-setting");
 
-  fullscreenSetting.onchange = function() {
-      if (fullscreenSetting.checked) {
+  fullscreenSetting.onclick = function() {
+      if (!document.fullscreenElement) {
           document.body.requestFullscreen();
+          fullscreenSetting.innerText = "Exit Fullscreen";
           return;
       }
+      fullscreenSetting.innerText = "Enable Fullscreen";
       document.exitFullscreen();
   }
 
+  document.body.onfullscreenchange = function() {
+      if (!document.fullscreenElement) {
+          fullscreenSetting.innerText = "Enable Fullscreen";
+          return;
+      }
+      fullscreenSetting.innerText = "Disable Fullscreen";
+  }
+
   pauseSetting.onchange = function() {
+      $AUDIO.playSound("light-switch");
       $PAUSED = pauseSetting.checked;
   }
 
@@ -2247,13 +2308,36 @@
       saveSettings();
   }
 
+  zoomUpButton.onclick = function() {
+      zoomSetting.value = Math.min(2, Number(zoomSetting.value) + 0.1);
+      zoomSetting.onchange();
+  }
+
+  zoomDownButton.onclick = function() {
+      zoomSetting.value = Math.max(1, Number(zoomSetting.value) - 0.1);
+      zoomSetting.onchange();
+  }
+
   zoomSetting.onchange = function() {
+      $AUDIO.playSound("light-switch");
       $SETTINGS.zoom = zoomSetting.value;
       updateZoom();
       saveSettings();
   }
 
+
+  volumeUpButton.onclick = function() {
+      volumeSetting.value = Math.min(10, Number(volumeSetting.value) + 1);
+      volumeSetting.onchange();
+  }
+
+  volumeDownButton.onclick = function() {
+      volumeSetting.value = Math.max(0, Number(volumeSetting.value) - 1);
+      volumeSetting.onchange();
+  }
+
   volumeSetting.onchange = function() {
+      $AUDIO.playSound("light-switch");
       $SETTINGS.volume = volumeSetting.value / 10;
       $AUDIO.gainNode.gain.setValueAtTime($SETTINGS.volume, $AUDIO.audioContext.currentTime);
       if ($AUDIO.lastTrackPlayed) $AUDIO.lastTrackPlayed.volume = $SETTINGS.volume;
@@ -2296,10 +2380,12 @@
   usernameInput.value = $PLAYER_NAME || "";
   const scoreDisplay = document.querySelector(".content__score");
   const highscoreDisplay = document.querySelector(".content__highscore");
+  const controlsContainer = document.querySelector("#mainControls");
   highscoreDisplay.innerText = `Your current highscore: ${$HIGHSCORE}`;
 
   titlePlayButton.onclick = function() {
       if ($CONTENT_LOADED && !$TRANSITIONING) {
+          controlsContainer.style.display = "block";
           titleCard.style.display = "none";
           localStorage.setItem("player-name", usernameInput.value);
           $AVATAR.nameObj.update(usernameInput.value);
@@ -2318,6 +2404,7 @@
 
   const titleHelpButton = document.querySelector(".buttons__help");
   titleHelpButton.onclick = function() {
+      $AUDIO.playSound("light-switch");
       toggleNote("Use 'E' on desktop or the 'A' button to interact with an object. The 'A' button at the right of the screen will light up with an interaction is avaliable when you're close enough to an object. This works when for things like entering doors or adding items to your inventory.", function() {
           toggleNote("Use 'Q' on desktop or the 'G' button to pick up an item to carry it. Use the key a second time to drop the item.", function() {
               toggleNote("Kill as many enemies as you can to gain the highest score possible. Use the gun store at the top of the map to buy and access more weapons.\n\nGo into settings to see more information on controls.", false, "Objective.", "/public/images/combat.png");
@@ -2326,6 +2413,10 @@
   }
 
   window.returnToTitleScreen = function() {
+
+      hideControlWindows();
+
+      controlsContainer.style.display = "none";
       titleCard.style.display = "flex";
       $SPECTATING = true;
       noclip = true;
@@ -2345,6 +2436,410 @@
       $AVATAR.state.totalDamage = 0;
   }
 
+  document.querySelector(".settings__exit-game").onclick = function() {
+      if (!$SPECTATING) {
+          $AVATAR.die(false);
+          return;
+      }
+      toggleNote("You aren't in a game bro, lmao.");
+  };
+
   window.togglePressEDisplay = function(show) {
       document.querySelector("#press-e").style.display = (show) ? "block" : "none";
+  }
+
+  // CREATIVE MODE
+
+  let creativeModeWindow;
+  creativeModeWindow = document.querySelector("#creative-mode");
+  const creativeModeCloseButton = document.querySelector(".creative-mode__close");
+  const openCraftingButton = document.querySelectorAll(".controls-container__button").item(3);
+  const creativeModeCategories = document.querySelectorAll(".categories__category");
+  const creativeEditingMode = document.querySelector(".creative-mode__editing-mode");
+
+  creativeModeCloseButton.onclick = closeCreativeMode;
+
+  creativeEditingMode.onchange = function() {
+      $CREATIVE_MODE = Boolean(creativeEditingMode.selectedIndex);
+  }
+
+  openCraftingButton.onclick = function() {
+      $AUDIO.playSound("light-switch");
+      creativeModeWindow.style.display = "grid";
+  }
+
+  function closeCreativeMode() {
+      $AUDIO.playSound("light-switch");
+      creativeModeWindow.style.display = "none";
+  }
+
+  let showedBotInsertMessage = false;
+  document.querySelector(".configure-bot-title__insert").onclick = function() {
+      $AUDIO.playSound("light-switch");
+      let bot = new Bot(document.querySelector(".bot-setting__bot-name").value, $MOUSE_POSITION.x, $MOUSE_POSITION.y, 180, HexToRGB(document.querySelector(".bot-setting__bot-name-color").value));
+      let {
+          x,
+          y
+      } = $CURRENT_MAP.GRAPH.getRandomPoint();
+      bot.wander(x, y);
+
+      $CURRENT_MAP.INSERTION_ASSET = bot;
+      insertionDragOffset.x = 0;
+      insertionDragOffset.y = 0;
+
+      if (!showedBotInsertMessage) {
+          toggleNote("Use the mouse to move the bot, click to place the bot.", function() {
+              showedBotInsertMessage = true;
+              closeCreativeMode();
+              $CURRENT_MAP.link($CURRENT_MAP.INSERTION_ASSET);
+          });
+          return;
+      }
+
+      closeCreativeMode();
+      $CURRENT_MAP.link($CURRENT_MAP.INSERTION_ASSET);
+  };
+
+  const PICKUP_LIBRARY = [
+      "Basic Armour",
+      "Mercenary Armour",
+      "Swat Armour",
+      "Kitchen Knife",
+      "Assassins Knife",
+      "Combat Knife",
+      "GLOCK_20",
+      "DX_9",
+      "NOSS_7",
+      "FURS_55",
+      "GP_K100",
+      "NXR_44_MAG",
+      "KC_357",
+      "X6_91",
+      "USP_45",
+      "GUS",
+      "Stubby Shotgun",
+      "Robber Shotgun",
+      "Classic Shotgun",
+      "Heavy Shotgun",
+      "HUSH_19",
+      "BS_6",
+      "K9",
+      "Street Light",
+      "Syringe",
+      "Med Kit",
+      "Remote Detonator",
+      "Proximity Explosive",
+      "Remote Explosive",
+      "Ammo Box",
+      "Multi Ammo Box",
+      "Grey Backpack",
+      "White Backpack",
+      "Black Backpack",
+      "Bullet Shell",
+      "Rocks 1",
+      "Rocks 2",
+      "Black Book",
+      "White Book",
+      "Road Rail",
+      "Road Rail Vertical",
+      "Chair",
+      "Bench",
+      "Tile",
+      "Small Plant",
+      "Road Sign",
+      "Laptop",
+      "Steak And Fries",
+      "Urban Fence",
+      "Urban Fence Vertical",
+      "Urban Fence Half",
+      "Picnic Table",
+      "Road",
+      "Road Double",
+      "Road Corner",
+      "Road Tri Corner",
+      "Road Quad Corner",
+      "Door",
+      "Light Switch",
+      "Table",
+      "Small Table",
+      "Gazebo",
+      "Bush",
+      "Mixed Bush",
+      "Light Bush",
+      "Whiteboard",
+      "Pinboard",
+      "Metal Fence",
+      "Metal Fence Vertical",
+      "Atm",
+      "Stopper",
+      "Convenience Store",
+      "Gun Store",
+      "Shed",
+      "House 1",
+      "House 2",
+      "Money",
+      "Candy Bar"
+  ];
+
+  const itemSearchBar = document.querySelector(".search-bar__input");
+  const assetLibraryWindow = document.querySelector(".options-container__asset-library");
+  const configureWindow = document.querySelector(".options-container__configure");
+  const botConfigureWindow = document.querySelector(".options-container__configure-bot");
+
+  creativeModeCategories.item(0).onclick = function(e) {
+      $AUDIO.playSound("light-switch");
+      assetLibraryWindow.style.display = "block";
+      botConfigureWindow.style.display = "none";
+      configureWindow.style.display = "none";
+      creativeModeCategories.item(1).style.opacity = 0.4;
+      creativeModeCategories.item(2).style.opacity = 0.4;
+      e.target.style.opacity = 1;
+  };
+
+  creativeModeCategories.item(1).onclick = function(e) {
+      $AUDIO.playSound("light-switch");
+      botConfigureWindow.style.display = "grid";
+      assetLibraryWindow.style.display = "none";
+      configureWindow.style.display = "none";
+      creativeModeCategories.item(0).style.opacity = 0.4;
+      e.target.style.opacity = 1;
+  };
+
+
+  itemSearchBar.oninput = filterSearchBar;
+
+  function filterSearchBar(e) {
+      e.preventDefault();
+      document.querySelectorAll(".library__result").forEach((item) => {
+          item.style.display = (RegExp(`${itemSearchBar.value}`, "gi").test(item.getAttribute("data-name")) || !itemSearchBar.value) ? "flex" : "none";
+      });
+  }
+
+  let showedWarning = false;
+
+  function configureItem(i, name) {
+      $AUDIO.playSound("light-switch");
+      assetLibraryWindow.style.display = "none";
+      configureWindow.style.display = "block";
+      document.querySelector(".configure-title__title").innerHTML = `Item Properties (${name})`;
+      filterConfigureSettings(i);
+
+      if (!showedWarning) toggleNote("Any modifications made to an asset will be permanantly reflected across the game until a new game is loaded.", function() {
+          showedWarning = true
+      }, "Warning");
+  }
+
+  document.querySelector(".configure-title__back").onclick = function() {
+      $AUDIO.playSound("light-switch");
+      assetLibraryWindow.style.display = "block";
+      configureWindow.style.display = "none";
+  }
+
+  let showedInsertionMessage = false;
+
+  function insertAsset(assetConstructor) {
+      if ($CURRENT_MAP.INSERTION_ASSET) return;
+      $CURRENT_MAP.INSERTION_ASSET = eval(`new ${assetConstructor.replaceAll(" ","")}(${$MOUSE_POSITION.x},${$MOUSE_POSITION.y}, 0)`);
+      insertionDragOffset.x = 0;
+      insertionDragOffset.y = 0;
+      if (!showedInsertionMessage) {
+          toggleNote("Use the mouse to move the asset, click to place the asset.", function() {
+              showedInsertionMessage = true;
+              closeCreativeMode();
+              $CURRENT_MAP.link($CURRENT_MAP.INSERTION_ASSET);
+          });
+          return;
+      }
+      closeCreativeMode();
+      $CURRENT_MAP.link($CURRENT_MAP.INSERTION_ASSET);
+  }
+
+  const editingModeInput = document.querySelector(".creative-mode__editing-mode");
+  let mode1MessageShowed = false,
+      mode2MessageShowed = false,
+      mode3MessageShowed = false;
+
+  editingModeInput.onchange = function() {
+      $AUDIO.playSound("light-switch");
+      if (editingModeInput.selectedIndex === 2 && !mode3MessageShowed) {
+          toggleNote("Click any asset on the map to permanently delete it.", function() {
+              mode3MessageShowed = true;
+              closeCreativeMode();
+          });
+      } else if (editingModeInput.selectedIndex === 0 && !mode1MessageShowed) {
+          toggleNote("Map editing has been disabled.", function() {
+              mode1MessageShowed = true;
+          });
+      } else if (editingModeInput.selectedIndex === 1 && !mode2MessageShowed) {
+          toggleNote("Click and drag any asset on the map to move it.", function() {
+              mode2MessageShowed = true;
+              closeCreativeMode();
+          });
+      }
+  }
+
+  const insertionDragOffset = {
+      x: 0,
+      y: 0
+  };
+
+  window.addEventListener("mousemove", function(e) {
+      let pageX = e.clientX;
+      let pageY = e.clientY;
+      let pX = (aofb(aisofb(pageX, window.innerWidth), worldWidth) - (worldWidth / 2)) * $SETTINGS.zoom;
+      let pY = (aofb(100 - aisofb(pageY, window.innerHeight), worldHeight) - (worldHeight / 2)) * $SETTINGS.zoom;
+
+      $MOUSE_POSITION.x = pX;
+      $MOUSE_POSITION.y = pY;
+
+      if ($CURRENT_MAP && $CURRENT_MAP.INSERTION_ASSET && $CURRENT_MAP.INSERTION_ASSET.map) {
+          let asset = $CURRENT_MAP.INSERTION_ASSET;
+          asset.translate((pX - asset.trans.offsetX) + insertionDragOffset.x, (pY - asset.trans.offsetY) + insertionDragOffset.y, false, true);
+      }
+  });
+
+  canvas.addEventListener("click", function() {
+
+      let selectedAsset = $CURRENT_MAP.getObjectAtPoint($MOUSE_POSITION.x, $MOUSE_POSITION.y);
+
+      if ($CURRENT_MAP.INSERTION_ASSET) {
+          $CURRENT_MAP.INSERTION_ASSET = undefined;
+          insertionDragOffset.x = 0;
+          insertionDragOffset.y = 0;
+          return;
+      }
+
+      if (editingModeInput.selectedIndex === 2) {
+          selectedAsset?.delete();
+      } else if (editingModeInput.selectedIndex === 3 && selectedAsset) {
+          (selectedAsset instanceof _Object_) ? selectedAsset.translate(0, 0, (selectedAsset.trans.rotation * 180 / Math.PI) + 90): selectedAsset.translate(0, 0, selectedAsset.trans.rotation + 90, true);
+
+          if (selectedAsset instanceof _Object_ && selectedAsset.obstacle) {
+              let [x, y, width, height] = selectedAsset.segments[0];
+              selectedAsset.segments[0][2] = height;
+              selectedAsset.segments[0][3] = width;
+              selectedAsset.segments[0][0] = (x + width / 2) - height / 2;
+              selectedAsset.segments[0][1] = (y + height / 2) - width / 2;
+          }
+
+          let width = selectedAsset.width;
+          selectedAsset.width = selectedAsset.height;
+          selectedAsset.height = width;
+      }
+
+      $MAP_DISPLAY.update();
+  });
+
+  canvas.addEventListener("mousedown", function() {
+      let asset = $CURRENT_MAP.getObjectAtPoint($MOUSE_POSITION.x, $MOUSE_POSITION.y);
+      if (editingModeInput.selectedIndex !== 1 || !asset || asset instanceof PickupRing) return;
+      $CURRENT_MAP.INSERTION_ASSET = asset;
+      insertionDragOffset.x = asset.trans.offsetX - $MOUSE_POSITION.x;
+      insertionDragOffset.y = asset.trans.offsetY - $MOUSE_POSITION.y;
+  });
+
+  function updateItemLibrary(searchText) {
+      const itemTemplate = document.querySelector("#library-result");
+      const itemLibrary = document.querySelector(".asset-library__library");
+
+      for (let i of PICKUP_LIBRARY) {
+          let newItem = itemTemplate.content.cloneNode(true);
+          let assetConstructor = eval(i.replaceAll(" ", ""));
+          newItem.querySelector("p").innerText = i;
+          newItem.querySelector("div").setAttribute("data-name", i);
+          if (assetConstructor._properties && assetConstructor._properties.configure) {
+              let configureButton = document.createElement("button");
+              configureButton.innerText = "Customize";
+              configureButton.onclick = () => {
+                  configureItem(assetConstructor, i);
+              }
+
+              newItem.querySelector(".result__buttons").appendChild(configureButton);
+          }
+
+          newItem.querySelector(".result__insert").onclick = function() {
+              insertAsset(i);
+          };
+
+          itemLibrary.appendChild(newItem);
+      }
+  }
+
+  updateItemLibrary();
+
+  function filterConfigureSettings(asset) {
+      let allProperties = document.querySelectorAll(".configure-settings__configure-setting");
+      allProperties.forEach(function(property) {
+
+          for (let assetProperty in asset._properties) {
+              if (assetProperty.toLowerCase() == property.getAttribute("data-name").toLowerCase().replaceAll(" ", "")) {
+                  property.style.display = "flex";
+                  property.setValue(asset._properties[assetProperty]);
+                  property.updateValue = function(value) {
+                      asset._properties[assetProperty] = value;
+                  }
+                  return;
+              }
+              property.style.display = "none";
+          }
+      });
+  }
+
+  function updateConfigureSettings() {
+      let configureSettingsContainer = document.querySelector(".configure__configure-settings");
+      let configureSettingTemplate = document.querySelector("#configure-setting-template");
+      let properties = [{
+          name: "Strength"
+      }, {
+          name: "Fire Rate"
+      }, {
+          name: "Bullet Speed"
+      }, {
+          name: "Damage"
+      }, {
+          name: "Accuracy"
+      }, {
+          name: "Capacity"
+      }, {
+          name: "Reload Time"
+      }, {
+          name: "Bullet Combo"
+      }, {
+          name: "Light Color",
+          type: "color"
+      }];
+
+      for (let prop of properties) {
+          let {
+              name: settingName,
+              type: settingType
+          } = prop;
+          let newSetting = configureSettingTemplate.content.cloneNode(true).querySelector("div");
+
+          newSetting.querySelector("p").innerText = settingName;
+          newSetting.setAttribute("data-name", settingName);
+          newSetting.setAttribute("id", "configure-setting-" + settingName.toLowerCase());
+
+          let settingInput = newSetting.querySelector("input");
+          settingInput.setAttribute("type", settingType || "number");
+          newSetting.setValue = function(value) {
+              settingInput.value = value;
+          }
+          settingInput.onchange = function() {
+              newSetting.setAttribute("data-value", settingInput.value);
+              newSetting.updateValue(settingInput.value);
+          }
+
+          configureSettingsContainer.appendChild(newSetting);
+      }
+  }
+
+  updateConfigureSettings();
+
+  function hideControlWindows() {
+      inventoryWindow.style.display = "none";
+      hideMap();
+      creativeModeWindow.style.display = "none";
+      consoleWindow.style.display = "none";
+      settingsWindow.style.display = "none";
   }

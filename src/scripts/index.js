@@ -49,11 +49,17 @@ window.onload = async () => {
     window.$MAP = null;
     window.$MAP_DISPLAY = null;
     window.$PAUSED = false;
+    window.$TIME_FACTOR = 1;
     window.$SPECTATING = true;
+    window.$CREATIVE_MODE = false;
     window.$HEALTH_BAR = null;
     window.$TRANSITIONING = false;
     window.$GAME_LOOP = function() {};
     window.$IS_MOBILE = isMobile(navigator.userAgent).any;
+    window.$MOUSE_POSITION = {
+        x: 0,
+        y: 0
+    };
     window.scale = $SETTINGS.zoom;
     window.bulletResolution = 0.001;
     window.movementMultFactor = 0.05;
@@ -121,7 +127,7 @@ window.onload = async () => {
         gl.uniform1f(locations.worldUnitX, worldUnitX);
         gl.uniform1f(locations.worldUnitY, worldUnitY);
 
-        updateDisplayViewport();
+        if (window.updateDisplayViewport) updateDisplayViewport();
     }
 
     let transitionSpeed;
